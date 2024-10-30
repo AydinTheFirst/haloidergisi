@@ -1,4 +1,5 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
+import argon2 from "argon2";
 
 import { PrismaService, User } from "@/prisma";
 
@@ -9,8 +10,15 @@ export class UsersService {
   constructor(private prisma: PrismaService) {}
 
   async create(createUserDto: CreateUserDto) {
+    const hashedPassword = await argon2.hash(
+      createUserDto.password || crypto.randomUUID()
+    );
+
     const user = await this.prisma.user.create({
-      data: createUserDto,
+      data: {
+        ...createUserDto,
+        password: hashedPassword,
+      },
     });
 
     return user;
@@ -74,6 +82,12 @@ export class UsersService {
     });
 
     if (!user) throw new NotFoundException("User not found");
+
+    if (!updateUserDto.password) {
+      delete updateUserDto.password;
+    } else {
+      updateUserDto.password = await argon2.hash(updateUserDto.password);
+    }
 
     await this.prisma.user.update({
       data: updateUserDto,

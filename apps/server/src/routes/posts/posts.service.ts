@@ -22,8 +22,6 @@ export class PostsService {
             id: categoryId,
           },
         },
-        cover: "",
-        file: "",
       },
     });
 
