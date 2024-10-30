@@ -25,7 +25,6 @@ model User {
   password String
 
   displayName String?
-  avatar      String?
   bio         String?
   website     String?
   title       String?
