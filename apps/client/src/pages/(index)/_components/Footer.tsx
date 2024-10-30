@@ -73,12 +73,12 @@ export default function Footer() {
             <h3 className="text-xl font-semibold">İletişim</h3>
             <ul className="mt-3 grid gap-2">
               <li>
-                <Link href={INSTAGRAM_URL} isExternal>
+                <Link color="foreground" href={INSTAGRAM_URL} isExternal>
                   Instagram
                 </Link>
               </li>
               <li>
-                <Link color="foreground" href={LINKEDIN_URL}>
+                <Link color="foreground" href={LINKEDIN_URL} isExternal>
                   Linkedin
                 </Link>
               </li>
