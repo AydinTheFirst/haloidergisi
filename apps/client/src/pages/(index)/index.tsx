@@ -52,12 +52,18 @@ const CategorySection = ({ category }: { category: Category }) => {
 
   if (!magazines) return <Loader />;
 
+  magazines.sort((a, b) => {
+    if (new Date(a.createdAt) < new Date(b.createdAt)) return 1;
+    if (new Date(a.createdAt) > new Date(b.createdAt)) return -1;
+    return 0;
+  });
+
   return (
     <>
       <div className="container">
         <h1 className="mb-3 text-3xl font-bold">{category.title}</h1>
         <div className="grid grid-cols-2 gap-3 md:grid-cols-4 lg:grid-cols-6">
-          {magazines.reverse().map((magazine: Post, i) => (
+          {magazines.map((magazine: Post, i) => (
             <MagazineCard key={i} magazine={magazine} />
           ))}
         </div>

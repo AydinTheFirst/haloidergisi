@@ -12,27 +12,20 @@ import { useEffect, useState } from "react";
 import useSWR from "swr";
 
 import { Loader } from "@/components/Loader";
-import { User as IUser } from "@/types";
+import { User as IUser, Squad } from "@/types";
 import { getGravatar } from "@/utils";
 
 const instagram = "https://www.instagram.com/haloidergisi";
 
-interface ISquad {
-  id: string;
-  name: string;
-}
-
-interface ISquadWithMembers extends ISquad {
+interface ISquadWithMembers extends Squad {
   members: IUser[];
 }
 
 export const Team = () => {
   const { data: users } = useSWR<IUser[]>("/users");
-  const { data: squads } = useSWR<ISquad[]>("/squads");
+  const { data: squads } = useSWR<Squad[]>("/squads");
   const [squadWithMembers, setSquadWithMembers] =
     useState<ISquadWithMembers[]>();
-
-  console.log(squadWithMembers);
 
   useEffect(() => {
     if (users && squads) {
@@ -50,6 +43,10 @@ export const Team = () => {
     (acc, squad) => acc + squad.members.length,
     0,
   );
+
+  if (!squadWithMembers) return <Loader />;
+
+  squadWithMembers.sort((a, b) => a.order - b.order);
 
   return (
     <div className="mx-auto max-w-3xl">
