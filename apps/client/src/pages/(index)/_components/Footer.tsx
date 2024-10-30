@@ -1,12 +1,8 @@
-import {
-  SiFacebook,
-  SiInstagram,
-  SiWhatsapp,
-} from "@icons-pack/react-simple-icons";
+import { SiInstagram, SiLinkedin } from "@icons-pack/react-simple-icons";
 import { Button, Divider, Link } from "@nextui-org/react";
-import { LucideGlobe } from "lucide-react";
 
 import { Logo } from "@/components";
+import { INSTAGRAM_URL, LINKEDIN_URL } from "@/config";
 
 export default function Footer() {
   return (
@@ -28,7 +24,7 @@ export default function Footer() {
             <div className="flex gap-5">
               <Button
                 as={Link}
-                href="#"
+                href={INSTAGRAM_URL}
                 isExternal
                 isIconOnly
                 size="sm"
@@ -38,33 +34,13 @@ export default function Footer() {
               </Button>
               <Button
                 as={Link}
-                href="#"
+                href={LINKEDIN_URL}
                 isExternal
                 isIconOnly
                 size="sm"
                 variant="light"
               >
-                <SiFacebook />
-              </Button>
-              <Button
-                as={Link}
-                href="#"
-                isExternal
-                isIconOnly
-                size="sm"
-                variant="light"
-              >
-                <LucideGlobe />
-              </Button>
-              <Button
-                as={Link}
-                href="#"
-                isExternal
-                isIconOnly
-                size="sm"
-                variant="light"
-              >
-                <SiWhatsapp />
+                <SiLinkedin />
               </Button>
             </div>
           </div>
@@ -72,16 +48,24 @@ export default function Footer() {
             <h3 className="text-xl font-semibold">Hızlı Erişim</h3>
             <ul className="mt-3 grid gap-2">
               <li>
-                <Link href="#">Anasayfa</Link>
+                <Link color="foreground" href="/">
+                  Anasayfa
+                </Link>
               </li>
               <li>
-                <Link href="#">Hakkımızda</Link>
+                <Link color="foreground" href="/about">
+                  Hakkımızda
+                </Link>
               </li>
               <li>
-                <Link href="#">Ürünler</Link>
+                <Link color="foreground" href="/contact">
+                  İletişim
+                </Link>
               </li>
               <li>
-                <Link href="#">İletişim</Link>
+                <Link color="foreground" href="/team">
+                  Ekip
+                </Link>
               </li>
             </ul>
           </div>
@@ -89,7 +73,19 @@ export default function Footer() {
             <h3 className="text-xl font-semibold">İletişim</h3>
             <ul className="mt-3 grid gap-2">
               <li>
-                <Link href="tel:+905555555555">+90 555 555 55 55</Link>
+                <Link href={INSTAGRAM_URL} isExternal>
+                  Instagram
+                </Link>
+              </li>
+              <li>
+                <Link color="foreground" href={LINKEDIN_URL}>
+                  Linkedin
+                </Link>
+              </li>
+              <li>
+                <Link color="foreground" href="/contact">
+                  Mail Gönder
+                </Link>
               </li>
             </ul>
           </div>

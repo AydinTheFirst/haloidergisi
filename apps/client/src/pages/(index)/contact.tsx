@@ -1,10 +1,9 @@
 import { SiInstagram, SiLinkedin } from "@icons-pack/react-simple-icons";
 import { Button, Input, Link, Textarea } from "@nextui-org/react";
 
-const Contact = () => {
-  const instagram = "https://www.instagram.com/haloidergisi";
-  const linkedin = "https://tr.linkedin.com/in/halo-edebiyat-dergisi-8a7bb8273";
+import { INSTAGRAM_URL, LINKEDIN_URL } from "@/config";
 
+const Contact = () => {
   return (
     <div className="mx-auto grid max-w-3xl gap-10">
       <div className="grid gap-3">
@@ -22,7 +21,7 @@ const Contact = () => {
             <Link
               className="flex gap-1"
               color="foreground"
-              href={instagram}
+              href={INSTAGRAM_URL}
               isExternal
             >
               <SiInstagram />
@@ -33,7 +32,7 @@ const Contact = () => {
             <Link
               className="flex gap-1"
               color="foreground"
-              href={linkedin}
+              href={LINKEDIN_URL}
               isExternal
             >
               <SiLinkedin />
