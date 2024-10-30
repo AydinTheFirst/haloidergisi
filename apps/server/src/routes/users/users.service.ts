@@ -1,34 +1,54 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
 
-import { PrismaService } from "@/prisma";
+import { PrismaService, User } from "@/prisma";
 
 import { CreateUserDto, UpdateUserDto } from "./users.dto";
 
 @Injectable()
 export class UsersService {
-  create = async (createUserDto: CreateUserDto) => {
+  constructor(private prisma: PrismaService) {}
+
+  async create(createUserDto: CreateUserDto) {
     const user = await this.prisma.user.create({
       data: createUserDto,
     });
 
     return user;
-  };
-  findAll = async () => {
-    const users = await this.prisma.user.findMany();
-    return users;
-  };
+  }
 
-  findOne = async (id: string) => {
+  async findAll(user: User) {
+    const users = await this.prisma.user.findMany();
+    return this.isAdmin(user) ? users : users.map((user) => this.mutate(user));
+  }
+
+  async findOne(id: string, req?: User) {
     const user = await this.prisma.user.findUnique({
       where: {
         id: id,
       },
     });
 
-    return user;
-  };
+    if (!user) throw new NotFoundException("User not found");
 
-  remove = async (id: string) => {
+    return req ? (this.isAdmin(req) ? user : this.mutate(user)) : user;
+  }
+
+  isAdmin(user: User) {
+    return user.roles.includes("ADMIN");
+  }
+
+  async mutate(user: User) {
+    return {
+      bio: user.bio,
+      displayName: user.displayName,
+      email: user.email,
+      id: user.id,
+      title: user.title,
+      website: user.website,
+    };
+  }
+
+  async remove(id: string) {
     const user = await this.prisma.user.findUnique({
       where: {
         id: id,
@@ -44,9 +64,9 @@ export class UsersService {
     });
 
     return user;
-  };
+  }
 
-  update = async (id: string, updateUserDto: UpdateUserDto) => {
+  async update(id: string, updateUserDto: UpdateUserDto) {
     const user = await this.prisma.user.findUnique({
       where: {
         id: id,
@@ -63,7 +83,5 @@ export class UsersService {
     });
 
     return user;
-  };
-
-  constructor(private prisma: PrismaService) {}
+  }
 }
