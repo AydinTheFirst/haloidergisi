@@ -98,10 +98,10 @@ const UserCard = ({ user }: { user: IUser }) => {
       <div className="h-full w-full">
         <User
           avatarProps={{
-            src: getGravatar(user.email as string),
+            src: getGravatar(user.email),
           }}
           className="flex h-full w-full cursor-pointer justify-start bg-[rgb(248,239,208)] p-3"
-          description={user.title as string}
+          description={user.title}
           name={user.displayName}
           onClick={() => setOpen(true)}
         />
@@ -112,14 +112,14 @@ const UserCard = ({ user }: { user: IUser }) => {
           <ModalHeader>
             <User
               avatarProps={{
-                src: getGravatar(user.email as string),
+                src: getGravatar(user.email),
               }}
-              description={user.title as string}
+              description={user.title}
               name={user.displayName}
             />
           </ModalHeader>
           <ModalBody>
-            <p>{user.bio as string}</p>
+            <p>{user.bio}</p>
           </ModalBody>
           <ModalFooter>
             <Button

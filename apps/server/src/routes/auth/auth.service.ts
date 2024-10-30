@@ -39,7 +39,7 @@ export class AuthService {
   register = async (body: RegisterDto) => {
     const isExist = await this.prisma.user.findFirst({
       where: {
-        OR: [{ username: body.username }, { email: body.email }],
+        OR: [{ email: body.email }],
       },
     });
 

@@ -6,7 +6,8 @@ export const sleep = (ms: number) => {
   return new Promise((resolve) => setTimeout(resolve, ms));
 };
 
-export const getFileUrl = (file: string) => {
+export const getFileUrl = (file?: string) => {
+  if (!file) return "";
   return API_URL + "/files/" + encodeURIComponent(file);
 };
 

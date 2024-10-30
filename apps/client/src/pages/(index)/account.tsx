@@ -31,6 +31,8 @@ export const Profile = () => {
     }
   };
 
+  if (!user) return <div>Loading...</div>;
+
   return (
     <>
       <Card className="mx-auto max-w-xl">
@@ -44,7 +46,7 @@ export const Profile = () => {
             transform: "translateX(-50%)",
           }}
         >
-          <Avatar size="lg" src={getGravatar(user.email as string)} />
+          <Avatar size="lg" src={getGravatar(user.email)} />
         </div>
         <div style={{ height: "25px" }} />
         <div>
@@ -53,31 +55,23 @@ export const Profile = () => {
         <CardBody>
           <form className="grid gap-3" onSubmit={handleSubmit}>
             <Input
-              defaultValue={user.displayName}
+              defaultValue={user.displayName || ""}
               label="Name"
               name="displayName"
             />
 
-            <Input
-              defaultValue={user.email as string}
-              label="Email"
-              name="email"
-            />
+            <Input defaultValue={user.email || ""} label="Email" name="email" />
 
             <Input
-              defaultValue={user.website as string}
+              defaultValue={user.website || ""}
               label="Website"
               name="website"
             />
 
-            <Textarea
-              defaultValue={user.bio as string}
-              label="Bio"
-              name="bio"
-            />
+            <Textarea defaultValue={user.bio || ""} label="Bio" name="bio" />
 
             <Input
-              defaultValue={user.role as string}
+              defaultValue={user.title || ""}
               isReadOnly
               label="Role"
               name="role"
