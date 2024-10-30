@@ -1,2 +1,2 @@
-// Hooks
-export * from "./useHttp";
+// hook exports
+export * from "./useDeviceType";

@@ -1,63 +1,155 @@
-import { useHTTP } from "@/hooks";
-import { ICategory } from "@/types";
 import {
-  Table,
-  TableHeader,
-  TableColumn,
-  TableBody,
-  TableRow,
-  TableCell,
   getKeyValue,
+  Input,
+  Select,
+  SelectItem,
+  Table,
+  TableBody,
+  TableCell,
+  TableColumn,
+  TableHeader,
+  TableRow,
 } from "@nextui-org/react";
-import { Key } from "react";
+import { LucideSearch } from "lucide-react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import useSWR from "swr";
 
-export const CategoryTable = () => {
+import { Category } from "@/types";
+
+const ViewCategories = () => {
   const navigate = useNavigate();
-  const { data: categories } = useHTTP<ICategory[]>("/categories");
-  const { data: magazines } = useHTTP<any[]>("/magazines");
 
-  if (!categories) return <div>Loading...</div>;
+  const [filteredCategories, setFilteredCategories] = useState<Category[]>([]);
+  const { data: categories } = useSWR<Category[]>("/categories");
+
+  useEffect(() => {
+    if (!categories) return;
+    setFilteredCategories(categories);
+  }, [categories]);
+
+  const handleFilter = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value.toLowerCase();
+    if (!categories) return;
+
+    const filtered = categories.filter((category) =>
+      category.title.toLowerCase().includes(value),
+    );
+
+    setFilteredCategories(filtered);
+  };
+
+  const handleSort = (type: string) => {
+    switch (type) {
+      case "date:asc":
+        setFilteredCategories(
+          [...filteredCategories].sort(
+            (a, b) =>
+              new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
+          ),
+        );
+        break;
+
+      case "date:desc":
+        setFilteredCategories(
+          [...filteredCategories].sort(
+            (a, b) =>
+              new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+          ),
+        );
+        break;
+
+      case "title:asc":
+        setFilteredCategories(
+          [...filteredCategories].sort((a, b) =>
+            a.title.localeCompare(b.title),
+          ),
+        );
+        break;
+
+      case "title:desc":
+        setFilteredCategories(
+          [...filteredCategories].sort((a, b) =>
+            b.title.localeCompare(a.title),
+          ),
+        );
+        break;
+
+      default:
+        break;
+    }
+  };
+
+  const handleRowAction = (key: React.Key) => {
+    navigate(`/dashboard/categories/${key.toString()}`);
+  };
 
   const columns = [
     {
       key: "title",
-      label: "NAME",
+      label: "Başlık",
     },
     {
       key: "description",
-      label: "DESC",
+      label: "Açıklama",
     },
     {
-      key: "magazines",
-      label: "MAGAZINES",
+      key: "createdAt",
+      label: "Son Güncelleme",
     },
   ];
 
-  const rows = categories.map((category) => {
-    const magazineCount = magazines?.filter(
-      (magazine) => magazine.categoryId === category.id,
-    ).length;
-    return {
-      key: category.id,
-      id: category.id,
-      title: category.title,
-      description: category.description,
-      magazines: magazineCount || 0,
-    };
-  });
-
-  const handleRowAction = (key: Key) => {
-    navigate(`/dashboard/categories/${key.toString()}`);
-  };
+  const rows = filteredCategories.map((category) => ({
+    createdAt: new Date(category.createdAt).toLocaleString(),
+    description: category.description,
+    key: category.id,
+    title: category.title,
+  }));
 
   return (
-    <div>
+    <section className="grid gap-5">
+      <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
+        <div className="flex items-end justify-start gap-3">
+          <h2 className="text-2xl font-bold">Kategoriler</h2>
+          <span className="text-sm text-gray-500">
+            ({filteredCategories.length}/{categories?.length})
+          </span>
+        </div>
+        <div className="flex flex-wrap items-center justify-end gap-3">
+          <Input
+            className="max-w-xs"
+            endContent={<LucideSearch />}
+            label="Ara"
+            onChange={handleFilter}
+            placeholder="Kullanıcı ara..."
+            variant="faded"
+          />
+          <Select
+            className="max-w-xs"
+            label="Sırala"
+            onSelectionChange={(keys) =>
+              handleSort(Array.from(keys)[0].toString())
+            }
+            placeholder="Sırala"
+            variant="faded"
+          >
+            <SelectItem key="date:asc">Tarihe Göre (Eskiden Yeniye)</SelectItem>
+            <SelectItem key="date:desc">
+              Tarihe Göre (Yeniden Eskiye)
+            </SelectItem>
+            <SelectItem key="name:asc">İsme Göre (A-Z)</SelectItem>
+            <SelectItem key="name:desc">İsme Göre (Z-A)</SelectItem>
+            <SelectItem key="email:asc">E-Postaya Göre (A-Z)</SelectItem>
+            <SelectItem key="email:desc">E-Postaya Göre (Z-A)</SelectItem>
+          </Select>
+        </div>
+      </div>
+
       <Table
-        aria-label="Example static collection table"
+        aria-label="Example table with dynamic content"
         isStriped
-        selectionMode="single"
         onRowAction={handleRowAction}
+        selectionMode="single"
       >
         <TableHeader columns={columns}>
           {(column) => (
@@ -74,8 +166,8 @@ export const CategoryTable = () => {
           )}
         </TableBody>
       </Table>
-    </div>
+    </section>
   );
 };
 
-export default CategoryTable;
+export default ViewCategories;

@@ -3,7 +3,7 @@ export const Loader = () => {
   return (
     <>
       <div className="container grid h-56 place-items-center">
-        <Spinner size="lg" color="warning" />
+        <Spinner color="warning" size="lg" />
       </div>
     </>
   );

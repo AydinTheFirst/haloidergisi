@@ -1,116 +1,162 @@
-import { Loader } from "@/components/Loader";
-import { Wrapper } from "@/components/Wrapper";
-import { useHTTP } from "@/hooks";
-import { http, httpError } from "@/lib";
-import { IUser } from "@/types";
-import { Button, Input, Select, SelectItem } from "@nextui-org/react";
-import { useEffect } from "react";
-import { useParams, Link } from "react-router-dom";
+import {
+  Button,
+  Card,
+  CardBody,
+  CardHeader,
+  Input,
+  Select,
+  Selection,
+  SelectItem,
+} from "@nextui-org/react";
+import { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "sonner";
+import useSWR from "swr";
 
-export const Users = () => {
+import http from "@/http";
+import { User } from "@/types";
+
+const ViewUser = () => {
+  const navigate = useNavigate();
+
   const { userId } = useParams<{ userId: string }>();
-
-  const { data: user, isLoading } = useHTTP<IUser>(
-    userId !== "new" ? `/users/${userId}` : "",
+  const isNew = userId === "new";
+  const { data: user, isLoading } = useSWR<User>(
+    isNew ? null : `/users/${userId}`,
   );
 
-  const { data: squads } = useHTTP<any[]>("/squads");
+  const [userRoles, setUserRoles] = useState<Selection>(new Set());
 
   useEffect(() => {
-    squads?.push({ id: "", name: "None" });
-  }, [squads]);
+    if (!user) return;
+    setUserRoles(new Set(user.roles));
+  }, [user]);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const data: any = Object.fromEntries(new FormData(e.currentTarget));
+    const formData = new FormData(e.currentTarget);
+    const data: Record<string, unknown> = Object.fromEntries(
+      formData.entries(),
+    );
 
-    data.isAdmin = data.isAdmin === "true";
+    data.balance = parseFloat(data.balance as string);
+    data.roles = Array.from(userRoles);
 
     try {
-      user
-        ? await http.put(`/users/${userId}`, data)
-        : await http.post("/users", data);
-      toast.success(user ? "User updated" : "User created");
+      await (isNew
+        ? http.post("/auth/register", data)
+        : http.patch(`/users/${userId}`, data));
+
+      toast.success(
+        isNew
+          ? "Kullanıcı başarıyla oluşturuldu!"
+          : "Kullanıcı başarıyla güncellendi!",
+      );
+      navigate("/dashboard/users");
     } catch (error) {
-      httpError(error);
+      http.handleError(error);
     }
   };
 
-  if (isLoading || !squads) return <Loader />;
+  const handleDelete = async () => {
+    const confirm = window.confirm(
+      "Bu işlem geri alınamaz. Kullanıcıyı silmek istediğinize emin misiniz?",
+    );
+    if (!confirm) return;
+
+    try {
+      await http.delete(`/users/${userId}`);
+      toast.success("Kullanıcı başarıyla silindi!");
+      navigate("/dashboard/users");
+    } catch (error) {
+      http.handleError(error);
+    }
+  };
+
+  if (isLoading) return;
 
   return (
-    <Wrapper>
-      <div className="mb-3">
-        <Button as={Link} to={"/dashboard?tab=users"} variant="light">
-          <strong>← Back</strong>
-        </Button>
-      </div>
-      <div>
-        <h1 className="mb-3 text-center text-3xl font-bold">
-          {user ? "Update" : "Create"} User
-        </h1>
-      </div>
-      <form onSubmit={handleSubmit} className="row g-3">
-        <Input
-          label="Name"
-          type="text"
-          name="displayName"
-          defaultValue={user?.displayName}
-          className="col-md-6"
-        />
+    <section className="grid gap-5">
+      <Card>
+        <CardHeader>
+          <h3 className="text-2xl font-semibold">
+            {isNew
+              ? "Kullanıcı oluştur"
+              : `Kullanıcı: ${user?.username} güncelle`}
+          </h3>
+        </CardHeader>
+        <CardBody>
+          <form className="grid grid-cols-12 gap-3" onSubmit={handleSubmit}>
+            {!isNew && (
+              <Input
+                className="col-span-12 md:col-span-6"
+                defaultValue={user?.username}
+                isRequired
+                label="Kullanıcı adı"
+                name="username"
+              />
+            )}
 
-        <Input
-          label="Email"
-          type="email"
-          name="email"
-          defaultValue={user?.email}
-          className="col-md-6"
-        />
+            <Input
+              className="col-span-12 md:col-span-6"
+              defaultValue={user?.email}
+              isRequired
+              label="Email"
+              name="email"
+              type="email"
+            />
 
-        <Input
-          label="Role"
-          type="text"
-          name="role"
-          className="col-md-6"
-          defaultValue={user?.role}
-        />
+            <Input
+              className="col-span-12 md:col-span-6"
+              defaultValue={user ? user.displayName || "" : ""}
+              isRequired
+              label="İsim"
+              name="displayName"
+            />
 
-        <Select
-          label="Squad"
-          name="squadId"
-          defaultSelectedKeys={[String(user?.squadId || "")]}
-          className="col-md-6"
-        >
-          {squads.map((squad) => (
-            <SelectItem key={squad.id} value={String(squad.id)}>
-              {squad.name}
-            </SelectItem>
-          ))}
-        </Select>
+            {!isNew && (
+              <Select
+                className="col-span-12 md:col-span-6"
+                label="Roller"
+                name="roles"
+                onSelectionChange={setUserRoles}
+                selectedKeys={userRoles}
+                selectionMode="multiple"
+              >
+                {["ADMIN", "USER"].map((role) => (
+                  <SelectItem key={role} value={role}>
+                    {role}
+                  </SelectItem>
+                ))}
+              </Select>
+            )}
 
-        <Select
-          label="Admin ?"
-          name="isAdmin"
-          defaultSelectedKeys={[String(user?.isAdmin || "false")]}
-          className="col-md-6"
-        >
-          <SelectItem key={"true"} value="true">
-            Admin
-          </SelectItem>
-          <SelectItem key={"false"} value="false">
-            User
-          </SelectItem>
-        </Select>
+            <Input
+              className="col-span-12 md:col-span-6"
+              label="Şifre"
+              name="password"
+            />
 
-        <div className="col-12">
-          <Button type="submit" color="secondary" fullWidth>
-            {user ? "Update" : "Create"}
-          </Button>
-        </div>
-      </form>
-    </Wrapper>
+            <Button
+              className="col-span-12"
+              color="primary"
+              fullWidth
+              type="submit"
+            >
+              {isNew ? "Oluştur" : "Güncelle"}
+            </Button>
+          </form>
+          {!isNew && (
+            <div className="mt-3 flex justify-end">
+              <Button color="danger" onClick={handleDelete}>
+                Sil
+              </Button>
+            </div>
+          )}
+        </CardBody>
+      </Card>
+    </section>
   );
 };
 
-export default Users;
+export default ViewUser;

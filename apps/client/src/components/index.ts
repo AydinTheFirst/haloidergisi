@@ -1,5 +1,5 @@
-// components
-
-export * from "./Section/Section";
-export * from "./Box/Box";
-export * from "./Component";
+export * from "./CenteredCard";
+export * from "./Error";
+export * from "./Loader";
+export * from "./Logo";
+export * from "./ThemeToggler";

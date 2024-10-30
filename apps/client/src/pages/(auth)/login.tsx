@@ -1,69 +1,48 @@
-import { http, httpError } from "@/lib";
-import {
-  Button,
-  Card,
-  CardBody,
-  CardHeader,
-  Divider,
-  Input,
-  Link,
-} from "@nextui-org/react";
+import { Button, CardFooter, Input, Link } from "@nextui-org/react";
+import { useState } from "react";
 import { toast } from "sonner";
 
-export const Login = () => {
+import { CenteredCard } from "@/components";
+import { PasswordInput } from "@/components/PasswordInput";
+import http from "@/http";
+import { sleep } from "@/utils";
+
+const Login = () => {
+  const [isLoading, setIsLoading] = useState(false);
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setIsLoading(true);
+
     const form = new FormData(e.currentTarget);
     const data = Object.fromEntries(form.entries());
-    console.log(data);
-
     try {
-      const res = await http.post("/auth/login", data);
-      toast.success("Login success!", {
-        description: "Redirecting...",
-      });
-
-      localStorage.setItem("token", res.data.token);
-
-      setTimeout(() => {
-        window.location.href = "/";
-      }, 3000);
+      const { data: res } = await http.post("/auth/login", data);
+      localStorage.setItem("token", res.token);
+      toast.success("Logged in successfully!");
+      await sleep(1000);
+      location.replace("/");
     } catch (error) {
-      httpError(error);
+      http.handleError(error);
     }
+
+    setIsLoading(false);
   };
 
   return (
-    <>
-      <div className="container flex h-screen items-center justify-center">
-        <Card className="col-md-6 col-lg-4">
-          <CardHeader>
-            <h5 className="w-full text-center text-3xl font-bold">Login</h5>
-          </CardHeader>
-          <CardBody>
-            <form onSubmit={handleSubmit} className="row g-3">
-              <Input label="Email" type="email" name="username" />
-
-              <Input label="Password" type="password" name="password" />
-
-              <div>
-                <Button type="submit" color="success" fullWidth>
-                  Login
-                </Button>
-              </div>
-            </form>
-
-            <Divider className="my-5" />
-
-            <div className="text-center">
-              <Link href="/register" size="sm">
-                Already have an account? <span className="ms-1">Register</span>
-              </Link>
-            </div>
-          </CardBody>
-        </Card>
-      </div>
-    </>
+    <CenteredCard title="Login">
+      <form className="grid gap-3" onSubmit={handleSubmit}>
+        <Input isRequired label="Username" name="username" />
+        <PasswordInput />
+        <Button color="secondary" fullWidth isLoading={isLoading} type="submit">
+          Login
+        </Button>
+      </form>
+      <CardFooter className="flex-col justify-center">
+        <p>Don't have an account?</p>
+        <Link href="/register">Register</Link>
+      </CardFooter>
+    </CenteredCard>
   );
 };
 

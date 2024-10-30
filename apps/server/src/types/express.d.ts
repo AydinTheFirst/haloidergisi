@@ -1,4 +1,4 @@
-import { User } from "@/database/UserSchema"; // User modelinizin olduğu yerden import edin
+import { User } from "@prisma/client";
 
 declare global {
   namespace Express {

@@ -1,71 +1,112 @@
-import { Loader } from "@/components/Loader";
-import { Wrapper } from "@/components/Wrapper";
-import { useHTTP } from "@/hooks";
-import { http, httpError } from "@/lib";
-import { ICategory } from "@/types";
-import { Button, Input, Textarea } from "@nextui-org/react";
-import { useParams, Link } from "react-router-dom";
+import {
+  Button,
+  Card,
+  CardBody,
+  CardHeader,
+  Input,
+  Textarea,
+} from "@nextui-org/react";
+import React from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "sonner";
+import useSWR from "swr";
 
-export const Categories = () => {
+import http from "@/http";
+import { Category } from "@/types";
+
+const ViewCategory = () => {
+  const navigate = useNavigate();
+
   const { categoryId } = useParams<{ categoryId: string }>();
-
-  const { data: category, isLoading } = useHTTP<ICategory>(
-    categoryId !== "new" ? `/categories/${categoryId}` : "",
+  const isNew = categoryId === "new";
+  const { data: category, isLoading } = useSWR<Category>(
+    isNew ? null : `/categories/${categoryId}`,
   );
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const data: any = Object.fromEntries(new FormData(e.currentTarget));
+    const formData = new FormData(e.currentTarget);
+    const data: Record<string, unknown> = Object.fromEntries(
+      formData.entries(),
+    );
 
     try {
-      category
-        ? await http.put(`/categories/${categoryId}`, data)
-        : await http.post("/categories", data);
-      toast.success(category ? "Category updated" : "Category created");
+      await (isNew
+        ? http.post("/categories", data)
+        : http.patch(`/categories/${categoryId}`, data));
+
+      toast.success(
+        isNew
+          ? "Category created successfully!"
+          : "Category updated successfully!",
+      );
+      navigate("/dashboard/categories");
     } catch (error) {
-      httpError(error);
+      http.handleError(error);
     }
   };
 
-  if (isLoading) return <Loader />;
+  const handleDelete = async () => {
+    if (!confirm("Are you sure you want to delete this category?")) return;
+
+    try {
+      await http.delete(`/categories/${categoryId}`);
+      toast.success("Category deleted successfully!");
+      navigate("/dashboard/categories");
+    } catch (error) {
+      http.handleError(error);
+    }
+  };
+
+  if (isLoading) return "Loading...";
 
   return (
-    <Wrapper>
-      <div className="mb-3">
-        <Button as={Link} to={"/dashboard?tab=categories"} variant="light">
-          <strong>← Back</strong>
-        </Button>
-      </div>
-      <div>
-        <h1 className="mb-3 text-center text-3xl font-bold">
-          {category ? "Update" : "Create"} Category
-        </h1>
-      </div>
-      <form onSubmit={handleSubmit} className="row g-3">
-        <Input
-          label="Name"
-          type="text"
-          name="title"
-          defaultValue={category?.title}
-          className="col-md-6"
-        />
+    <section className="grid gap-5">
+      <Card>
+        <CardHeader>
+          <h3 className="text-2xl font-semibold">
+            {!category
+              ? "Yeni Kategori Oluştur"
+              : `Kategori Düzenle: ${category.title}`}
+          </h3>
+        </CardHeader>
+        <CardBody>
+          <form className="grid grid-cols-12 gap-3" onSubmit={handleSubmit}>
+            <Input
+              className="col-span-12"
+              defaultValue={category ? category.title : ""}
+              isRequired
+              label="Başlık"
+              name="title"
+            />
 
-        <Textarea
-          label="Description"
-          name="description"
-          defaultValue={category?.description}
-          className="col-md-6"
-        />
+            <Textarea
+              className="col-span-12"
+              defaultValue={category ? category.description : ""}
+              label="Açıklama"
+              name="description"
+            />
 
-        <div className="col-12">
-          <Button type="submit" color="secondary" fullWidth>
-            {category ? "Update" : "Create"} Category
-          </Button>
-        </div>
-      </form>
-    </Wrapper>
+            <Button
+              className="col-span-12"
+              color="primary"
+              fullWidth
+              type="submit"
+            >
+              {isNew ? "Oluştur" : "Güncelle"}
+            </Button>
+          </form>
+          {!isNew && (
+            <div className="mt-3 flex justify-end">
+              <Button color="danger" onClick={handleDelete}>
+                Sil
+              </Button>
+            </div>
+          )}
+        </CardBody>
+      </Card>
+    </section>
   );
 };
 
-export default Categories;
+export default ViewCategory;
