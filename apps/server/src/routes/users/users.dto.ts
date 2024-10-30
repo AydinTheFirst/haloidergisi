@@ -1,4 +1,11 @@
-import { IsEmail, IsOptional, IsString } from "class-validator";
+import { Role } from "@prisma/client";
+import {
+  IsArray,
+  IsEmail,
+  IsEnum,
+  IsOptional,
+  IsString,
+} from "class-validator";
 
 export class CreateUserDto {
   @IsOptional()
@@ -32,4 +39,8 @@ export class CreateUserDto {
   website: string;
 }
 
-export class UpdateUserDto extends CreateUserDto {}
+export class UpdateUserDto extends CreateUserDto {
+  @IsArray()
+  @IsEnum(Role, { each: true })
+  roles: Role[];
+}

@@ -24,7 +24,7 @@ import React from "react";
 import { useLocation } from "react-router-dom";
 import useSWR from "swr";
 
-import { ThemeToggler } from "@/components";
+import { Logo, ThemeToggler } from "@/components";
 import { useDeviceType } from "@/hooks";
 import { User } from "@/types";
 
@@ -97,9 +97,7 @@ export default function Navbar() {
           className="sm:hidden"
         />
         <NavbarBrand as={Link} href={"/"}>
-          <h1 className="halo cursor-pointer text-5xl font-bold text-foreground">
-            HALO
-          </h1>
+          <Logo className="h-14" />
         </NavbarBrand>
       </NavbarContent>
 
