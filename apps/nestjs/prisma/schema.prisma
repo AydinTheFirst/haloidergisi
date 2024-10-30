@@ -1,0 +1,101 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+model User {
+  id       String @id @default(uuid())
+  username String @unique @default(cuid())
+  email    String @unique
+  password String
+
+  displayName String?
+  avatar      String?
+  bio         String?
+  website     String?
+  title       String?
+  squadId     String?
+
+  roles Role[] @default([USER])
+  squad Squad? @relation(fields: [squadId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("users")
+}
+
+model Token {
+  id        String   @id @default(uuid())
+  userId    String
+  token     String   @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  expiresAt DateTime
+
+  @@map("tokens")
+}
+
+model Category {
+  id          String @id @default(uuid())
+  title       String
+  description String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  posts     Post[]
+
+  @@map("categories")
+}
+
+enum PostStatus {
+  PUBLISHED
+  DRAFT
+}
+
+model Post {
+  id          String     @id @default(uuid())
+  title       String
+  description String
+  status      PostStatus
+
+  cover String? @default("")
+  file  String? @default("")
+
+  categoryId String
+  category   Category @relation(fields: [categoryId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("posts")
+}
+
+model Squad {
+  id          String @id @default(uuid())
+  name        String
+  description String
+  order       Int
+
+  users User[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("squads")
+}
