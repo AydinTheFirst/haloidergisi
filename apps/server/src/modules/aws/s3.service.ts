@@ -1,9 +1,10 @@
-import { S3 } from "@aws-sdk/client-s3";
+import { GetObjectCommandOutput, S3 } from "@aws-sdk/client-s3";
 import { Injectable, Logger, OnModuleInit } from "@nestjs/common";
 import crypto from "node:crypto";
 
 @Injectable()
 export class S3Service implements OnModuleInit {
+  cache = new Map<string, GetObjectCommandOutput>();
   s3: S3;
   constructor() {
     this.s3 = new S3({
@@ -27,11 +28,17 @@ export class S3Service implements OnModuleInit {
   }
 
   async getFile(Key: string) {
+    if (this.cache.has(Key)) {
+      return this.cache.get(Key);
+    }
+
     try {
       const result = await this.s3.getObject({
         Bucket: process.env.AWS_BUCKET_NAME!,
         Key,
       });
+
+      this.cache.set(Key, result);
 
       return result;
     } catch (err) {
