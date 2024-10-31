@@ -14,6 +14,14 @@ const ViewMagazine = () => {
 
   return (
     <div className="mx-auto grid max-w-5xl grid-cols-12 gap-3">
+      <div className="col-span-12 grid place-items-center md:col-span-6">
+        <Image
+          alt="Magazine"
+          className="h-96 w-full object-cover"
+          src={getFileUrl(magazine.cover!)}
+        />
+      </div>
+
       <div className="col-span-12 md:col-span-6">
         <div className="grid gap-5">
           <h2 className="text-3xl font-extrabold">{magazine.title}</h2>
@@ -28,13 +36,6 @@ const ViewMagazine = () => {
             <strong>Dergiyi Göster</strong>
           </Button>
         </div>
-      </div>
-      <div className="col-span-12 grid place-items-center md:col-span-6">
-        <Image
-          alt="Magazine"
-          className="h-96 w-full object-cover"
-          src={getFileUrl(magazine.cover!)}
-        />
       </div>
     </div>
   );
