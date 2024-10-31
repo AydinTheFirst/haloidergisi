@@ -26,7 +26,9 @@ export class UsersService {
 
   async findAll(user: User) {
     const users = await this.prisma.user.findMany();
-    return this.isAdmin(user) ? users : users.map((user) => this.mutate(user));
+
+    if (!user || !this.isAdmin(user)) return users.map(this.mutate);
+    return users;
   }
 
   async findOne(id: string, req?: User) {
@@ -38,19 +40,21 @@ export class UsersService {
 
     if (!user) throw new NotFoundException("User not found");
 
-    return req ? (this.isAdmin(req) ? user : this.mutate(user)) : user;
+    if (!req || !this.isAdmin(req)) return this.mutate(user);
+    return user;
   }
 
   isAdmin(user: User) {
-    return user.roles.includes("ADMIN");
+    return user && user.roles.includes("ADMIN");
   }
 
-  async mutate(user: User) {
+  mutate(user: User) {
     return {
       bio: user.bio,
       displayName: user.displayName,
       email: user.email,
       id: user.id,
+      squadId: user.squadId,
       title: user.title,
       website: user.website,
     };
