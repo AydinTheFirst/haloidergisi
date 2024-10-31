@@ -1,5 +1,3 @@
-@import url("https://fonts.googleapis.com/css2?family=Allura&family=Delius+Swash+Caps&display=swap");
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -9,14 +7,6 @@
   --color-yellow-200: #d9c890;
   --color-yellow-300: #c7b36e;
   --color-yellow-400: #bda657;
-}
-
-body {
-  font-family: "Delius Swash Caps", sans-serif;
-}
-
-.halo {
-  font-family: "Allura", cursive;
 }
 
 .no-reset * {

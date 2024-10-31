@@ -89,8 +89,8 @@ const MagazineCard = ({ magazine }: { magazine: Post }) => {
       onPress={handlePress}
     >
       <Image alt={magazine.title} src={getFileUrl(magazine.cover!)} />
-      <CardFooter className="justify-between text-small">
-        <b>{magazine.title}</b>
+      <CardFooter className="items-end justify-center">
+        <strong>{magazine.title}</strong>
       </CardFooter>
     </Card>
   );
