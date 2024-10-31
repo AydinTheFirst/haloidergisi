@@ -28,17 +28,11 @@ export class S3Service implements OnModuleInit {
   }
 
   async getFile(Key: string) {
-    if (this.cache.has(Key)) {
-      return this.cache.get(Key);
-    }
-
     try {
       const result = await this.s3.getObject({
         Bucket: process.env.AWS_BUCKET_NAME!,
         Key,
       });
-
-      this.cache.set(Key, result);
 
       return result;
     } catch (err) {
