@@ -18,6 +18,12 @@ const Index = () => {
 export default Index;
 
 const Hero = () => {
+  const scrollTo = () => {
+    window.scrollTo({
+      behavior: "smooth",
+      top: window.innerHeight + 10,
+    });
+  };
   return (
     <>
       <img
@@ -27,7 +33,7 @@ const Hero = () => {
       />
       <div className="flex h-[80vh] flex-col items-center justify-end gap-3">
         <Logo className="h-20 w-auto md:h-40" />
-        <Button color="secondary" size="lg">
+        <Button color="secondary" onClick={scrollTo} size="lg">
           <strong>Dergileri Keşfet</strong>
         </Button>
       </div>
@@ -60,7 +66,7 @@ const CategorySection = ({ category }: { category: Category }) => {
 
   return (
     <>
-      <div className="container">
+      <div className="category container">
         <h1 className="mb-3 text-3xl font-bold">{category.title}</h1>
         <div className="grid grid-cols-2 gap-3 md:grid-cols-4 lg:grid-cols-6">
           {magazines.map((magazine: Post, i) => (

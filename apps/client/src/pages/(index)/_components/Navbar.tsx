@@ -17,8 +17,9 @@ import {
   LucideChartPie,
   LucideHome,
   LucideInfo,
-  LucideTag,
+  LucidePhone,
   LucideUser,
+  LucideUsers,
 } from "lucide-react";
 import React from "react";
 import { useLocation } from "react-router-dom";
@@ -45,14 +46,14 @@ const menuItems = [
   },
   {
     href: "/contact",
-    icon: LucideTag,
+    icon: LucidePhone,
     isAdmin: false,
     isAuth: false,
     label: "İletişim",
   },
   {
     href: "/team",
-    icon: LucideUser,
+    icon: LucideUsers,
     isAdmin: false,
     isAuth: false,
     label: "Ekip",
