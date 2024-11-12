@@ -21,7 +21,7 @@ import {
   LucideUser,
   LucideUsers,
 } from "lucide-react";
-import React from "react";
+import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import useSWR from "swr";
 
@@ -71,9 +71,13 @@ export default function Navbar() {
   const { data: me } = useSWR<User>("/auth/me", {
     onError: () => {},
   });
-  const [isMenuOpen, setIsMenuOpen] = React.useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  const pathname = useLocation().pathname;
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    setIsMenuOpen(false);
+  }, [pathname]);
 
   const isLoggedIn = !!me;
   const isAdmin = me && me.roles.includes("ADMIN");
@@ -88,6 +92,7 @@ export default function Navbar() {
     <NextNavbar
       className="bg-content1 bg-opacity-50"
       isBordered
+      isMenuOpen={isMenuOpen}
       maxWidth="2xl"
       onMenuOpenChange={setIsMenuOpen}
       shouldHideOnScroll

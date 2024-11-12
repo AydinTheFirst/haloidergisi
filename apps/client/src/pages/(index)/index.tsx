@@ -94,7 +94,11 @@ const MagazineCard = ({ magazine }: { magazine: Post }) => {
       isPressable
       onPress={handlePress}
     >
-      <Image alt={magazine.title} src={getFileUrl(magazine.cover!)} />
+      <Image
+        alt={magazine.title}
+        loading="lazy"
+        src={getFileUrl(magazine.cover!)}
+      />
       <CardFooter className="items-end justify-center">
         <strong>{magazine.title}</strong>
       </CardFooter>

@@ -14,7 +14,7 @@ import { toast } from "sonner";
 import useSWR from "swr";
 
 import http from "@/http";
-import { User } from "@/types";
+import { Squad, User } from "@/types";
 
 const ViewUser = () => {
   const navigate = useNavigate();
@@ -24,6 +24,7 @@ const ViewUser = () => {
   const { data: user, isLoading } = useSWR<User>(
     isNew ? null : `/users/${userId}`,
   );
+  const { data: squads } = useSWR<Squad[]>("/squads");
 
   const [userRoles, setUserRoles] = useState<Selection>(new Set());
 
@@ -113,6 +114,23 @@ const ViewUser = () => {
               label="İsim"
               name="displayName"
             />
+
+            <Select
+              className="col-span-12 md:col-span-6"
+              defaultSelectedKeys={[user ? user.squadId || "" : ""]}
+              label="Takım"
+              name="squadId"
+            >
+              {squads ? (
+                squads.map((squad) => (
+                  <SelectItem key={squad.id} value={squad.id}>
+                    {squad.name}
+                  </SelectItem>
+                ))
+              ) : (
+                <SelectItem key={""}>Yükleniyor...</SelectItem>
+              )}
+            </Select>
 
             {!isNew && (
               <Select
