@@ -1,7 +1,5 @@
 import gravatar from "gravatar-url";
 
-import { API_URL } from "@/config";
-
 export const sleep = (ms: number) => {
   return new Promise((resolve) => setTimeout(resolve, ms));
 };
