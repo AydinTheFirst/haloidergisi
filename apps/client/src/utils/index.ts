@@ -8,7 +8,7 @@ export const sleep = (ms: number) => {
 
 export const getFileUrl = (file?: string) => {
   if (!file) return "";
-  return API_URL + "/files/" + encodeURIComponent(file);
+  return "https://cdn.haloidergisi.com/" + encodeURIComponent(file);
 };
 
 export const getGravatar = (email: string) => {
