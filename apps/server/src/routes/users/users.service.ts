@@ -1,7 +1,9 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
 import argon2 from "argon2";
+import { Request } from "express";
 
-import { PrismaService, User } from "@/prisma";
+import { PrismaService } from "@/prisma";
+import { getPublicUserSelection } from "@/utils";
 
 import { CreateUserDto, UpdateUserDto } from "./users.dto";
 
@@ -24,15 +26,17 @@ export class UsersService {
     return user;
   }
 
-  async findAll(user: User) {
-    const users = await this.prisma.user.findMany();
+  async findAll(req: Request) {
+    const users = await this.prisma.user.findMany({
+      select: this.isAdmin(req) ? null : getPublicUserSelection(),
+    });
 
-    if (!user || !this.isAdmin(user)) return users.map(this.mutate);
     return users;
   }
 
-  async findOne(id: string, req?: User) {
+  async findOne(id: string, req: Request) {
     const user = await this.prisma.user.findUnique({
+      select: this.isAdmin(req) ? null : getPublicUserSelection(),
       where: {
         id: id,
       },
@@ -40,24 +44,13 @@ export class UsersService {
 
     if (!user) throw new NotFoundException("User not found");
 
-    if (!req || !this.isAdmin(req)) return this.mutate(user);
     return user;
   }
 
-  isAdmin(user: User) {
-    return user && user.roles.includes("ADMIN");
-  }
-
-  mutate(user: User) {
-    return {
-      bio: user.bio,
-      displayName: user.displayName,
-      email: user.email,
-      id: user.id,
-      squadId: user.squadId,
-      title: user.title,
-      website: user.website,
-    };
+  isAdmin(req: Request) {
+    if (!req.user) return false;
+    if (!req.user.roles.includes("ADMIN")) return false;
+    return true;
   }
 
   async remove(id: string) {

@@ -1,4 +1,4 @@
-import { Button, CardFooter, Input, Link } from "@nextui-org/react";
+import { Button, CardFooter, Input, Link } from "@heroui/react";
 import { useState } from "react";
 import { toast } from "sonner";
 

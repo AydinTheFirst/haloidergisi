@@ -1,14 +1,14 @@
-import { NextUIProvider } from "@nextui-org/react";
+import { HeroUIProvider } from "@heroui/react";
 import { ThemeProvider as NextThemesProvider } from "next-themes";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router";
 
 export const Providers = ({ children }: { children: React.ReactNode }) => {
   const navigate = useNavigate();
   return (
-    <NextUIProvider navigate={navigate} validationBehavior="native">
+    <HeroUIProvider navigate={navigate} validationBehavior="native">
       <NextThemesProvider attribute="class" defaultTheme="light">
         {children}
       </NextThemesProvider>
-    </NextUIProvider>
+    </HeroUIProvider>
   );
 };

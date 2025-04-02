@@ -1,5 +1,5 @@
 import { useTheme } from "next-themes";
-import { Outlet } from "react-router-dom";
+import { Outlet } from "react-router";
 import { Toaster } from "sonner";
 import { SWRConfig } from "swr";
 

@@ -12,7 +12,7 @@ import {
   NavbarMenuItem,
   NavbarMenuToggle,
   Navbar as NextNavbar,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import {
   LucideChartPie,
   LucideHome,
@@ -22,7 +22,7 @@ import {
   LucideUsers,
 } from "lucide-react";
 import { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation } from "react-router";
 import useSWR from "swr";
 
 import { Logo, ThemeToggler } from "@/components";

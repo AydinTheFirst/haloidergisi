@@ -5,9 +5,9 @@ import {
   CardHeader,
   Input,
   Textarea,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import React from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router";
 import { toast } from "sonner";
 import useSWR from "swr";
 

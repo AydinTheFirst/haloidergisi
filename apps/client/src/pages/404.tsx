@@ -1,5 +1,5 @@
-import { Button } from "@nextui-org/react";
-import { Link } from "react-router-dom";
+import { Button } from "@heroui/react";
+import { Link } from "react-router";
 
 import { CenteredCard } from "@/components";
 

@@ -1,4 +1,4 @@
-import { cn } from "@nextui-org/react";
+import { cn } from "@heroui/react";
 import { useTheme } from "next-themes";
 
 interface LogoProps {

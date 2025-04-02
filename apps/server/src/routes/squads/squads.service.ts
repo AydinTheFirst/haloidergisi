@@ -1,6 +1,7 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
 
 import { PrismaService } from "@/prisma";
+import { getPublicUserSelection } from "@/utils";
 
 import { CreateSquadDto, UpdateSquadDto } from "./squads.dto";
 
@@ -18,9 +19,12 @@ export class SquadService {
   async findAll() {
     const squads = await this.prisma.squad.findMany({
       include: {
-        users: true,
+        users: {
+          select: getPublicUserSelection(),
+        },
       },
     });
+
     return squads;
   }
 

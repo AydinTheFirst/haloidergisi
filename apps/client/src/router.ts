@@ -1,4 +1,4 @@
-// Generouted, changes to this file will be overriden
+// Generouted, changes to this file will be overridden
 /* eslint-disable */
 
 import { components, hooks, utils } from "@generouted/react-router/client";
@@ -12,6 +12,8 @@ export type Path =
   | `/dashboard`
   | `/dashboard/categories`
   | `/dashboard/categories/:categoryId`
+  | `/dashboard/news`
+  | `/dashboard/news/:newsId`
   | `/dashboard/posts`
   | `/dashboard/posts/:postId`
   | `/dashboard/squads`
@@ -25,6 +27,7 @@ export type Path =
 export type Params = {
   "/:magazines/:magazineId": { magazines: string; magazineId: string };
   "/dashboard/categories/:categoryId": { categoryId: string };
+  "/dashboard/news/:newsId": { newsId: string };
   "/dashboard/posts/:postId": { postId: string };
   "/dashboard/squads/:squadId": { squadId: string };
   "/dashboard/users/:userId": { userId: string };

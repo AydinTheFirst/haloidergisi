@@ -7,9 +7,10 @@ import {
   Select,
   Selection,
   SelectItem,
-} from "@nextui-org/react";
+  Textarea,
+} from "@heroui/react";
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router";
 import { toast } from "sonner";
 import useSWR from "swr";
 
@@ -88,16 +89,6 @@ const ViewUser = () => {
         </CardHeader>
         <CardBody>
           <form className="grid grid-cols-12 gap-3" onSubmit={handleSubmit}>
-            {!isNew && (
-              <Input
-                className="col-span-12 md:col-span-6"
-                defaultValue={user?.username}
-                isRequired
-                label="Kullanıcı adı"
-                name="username"
-              />
-            )}
-
             <Input
               className="col-span-12 md:col-span-6"
               defaultValue={user?.email}
@@ -115,37 +106,42 @@ const ViewUser = () => {
               name="displayName"
             />
 
+            <Input
+              className="col-span-12 md:col-span-6"
+              defaultValue={user ? user.title || "" : ""}
+              isRequired
+              label="Ünvan"
+              name="title"
+            />
+
             <Select
               className="col-span-12 md:col-span-6"
               defaultSelectedKeys={[user ? user.squadId || "" : ""]}
+              items={squads || []}
               label="Takım"
               name="squadId"
             >
-              {squads ? (
-                squads.map((squad) => (
-                  <SelectItem key={squad.id} value={squad.id}>
-                    {squad.name}
-                  </SelectItem>
-                ))
-              ) : (
-                <SelectItem key={""}>Yükleniyor...</SelectItem>
-              )}
+              {(squad) => <SelectItem key={squad.id}>{squad.name}</SelectItem>}
             </Select>
 
             {!isNew && (
               <Select
                 className="col-span-12 md:col-span-6"
+                items={[
+                  { key: "ADMIN", value: "Admin" },
+                  { key: "USER", value: "Kullanıcı" },
+                ]}
                 label="Roller"
                 name="roles"
                 onSelectionChange={setUserRoles}
                 selectedKeys={userRoles}
                 selectionMode="multiple"
               >
-                {["ADMIN", "USER"].map((role) => (
-                  <SelectItem key={role} value={role}>
-                    {role}
+                {(role) => (
+                  <SelectItem key={role.key} textValue={role.value}>
+                    {role.value}
                   </SelectItem>
-                ))}
+                )}
               </Select>
             )}
 
@@ -153,6 +149,14 @@ const ViewUser = () => {
               className="col-span-12 md:col-span-6"
               label="Şifre"
               name="password"
+            />
+
+            <Textarea
+              className="col-span-12"
+              defaultValue={user ? user.bio || "" : ""}
+              isRequired
+              label="Bio"
+              name="bio"
             />
 
             <Button

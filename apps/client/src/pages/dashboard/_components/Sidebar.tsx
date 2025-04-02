@@ -1,6 +1,6 @@
-import { Button, Card, Divider } from "@nextui-org/react";
+import { Button, Card, Divider } from "@heroui/react";
 import { LucidePlus } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link } from "react-router";
 
 import { sidebarItems } from "./sidebarItems";
 import { SidebarToggler } from "./SidebarToggler";

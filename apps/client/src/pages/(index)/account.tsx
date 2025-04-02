@@ -5,7 +5,7 @@ import {
   CardBody,
   Input,
   Textarea,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import { toast } from "sonner";
 import useSWR from "swr";
 

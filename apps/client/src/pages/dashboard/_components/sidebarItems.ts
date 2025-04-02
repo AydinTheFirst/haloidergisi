@@ -1,4 +1,4 @@
-import { BookCheck, Home, Presentation, Users } from "lucide-react";
+import { BookCheck, Home, Newspaper, Presentation, Users } from "lucide-react";
 
 export const sidebarItems = [
   {
@@ -30,5 +30,11 @@ export const sidebarItems = [
     href: "/dashboard/squads",
     icon: Users,
     label: "Takımlar",
+  },
+  {
+    canCreate: true,
+    href: "/dashboard/news",
+    icon: Newspaper,
+    label: "Haberler",
   },
 ];

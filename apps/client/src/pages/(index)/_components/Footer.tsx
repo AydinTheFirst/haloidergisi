@@ -1,5 +1,5 @@
+import { Button, Divider, Link } from "@heroui/react";
 import { SiInstagram, SiLinkedin } from "@icons-pack/react-simple-icons";
-import { Button, Divider, Link } from "@nextui-org/react";
 
 import { Logo } from "@/components";
 import { INSTAGRAM_URL, LINKEDIN_URL } from "@/config";

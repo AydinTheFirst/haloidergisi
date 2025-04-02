@@ -8,9 +8,9 @@ import {
   Selection,
   SelectItem,
   Textarea,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router";
 import { toast } from "sonner";
 import useSWR from "swr";
 
@@ -161,18 +161,18 @@ const ViewAndEditUsers = ({ squad }: ViewAndEditUsersProps) => {
         <form className="grid grid-cols-12 gap-3" onSubmit={handleSubmit}>
           <Select
             className="col-span-12"
+            items={users || []}
             label="Kullanıcılar"
             name="users"
             onSelectionChange={setSelectedUsers}
             selectedKeys={selectedUsers}
             selectionMode="multiple"
           >
-            {users.map((user) => (
-              <SelectItem key={user.id} value={user.id}>
-                {user.displayName}
-              </SelectItem>
-            ))}
+            {(user) => (
+              <SelectItem key={user.id}>{user.displayName}</SelectItem>
+            )}
           </Select>
+
           <Button
             className="col-span-12"
             color="primary"

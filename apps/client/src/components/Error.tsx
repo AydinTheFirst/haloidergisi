@@ -1,6 +1,6 @@
-import { Button } from "@nextui-org/react";
+import { Button } from "@heroui/react";
 import { ErrorBoundary } from "react-error-boundary";
-import { Outlet } from "react-router-dom";
+import { Outlet } from "react-router";
 
 import { CenteredCard } from "./CenteredCard";
 

@@ -7,8 +7,8 @@ import {
   ModalFooter,
   ModalHeader,
   User,
-} from "@nextui-org/react";
-import { useEffect, useState } from "react";
+} from "@heroui/react";
+import { useState } from "react";
 import useSWR from "swr";
 
 import { Loader } from "@/components/Loader";
@@ -17,36 +17,21 @@ import { getGravatar } from "@/utils";
 
 const instagram = "https://www.instagram.com/haloidergisi";
 
-interface ISquadWithMembers extends Squad {
-  members: IUser[];
+interface SquadWithUsers extends Squad {
+  users: IUser[];
 }
 
 export const Team = () => {
-  const { data: users } = useSWR<IUser[]>("/users");
-  const { data: squads } = useSWR<Squad[]>("/squads");
-  const [squadWithMembers, setSquadWithMembers] =
-    useState<ISquadWithMembers[]>();
+  const { data: squads } = useSWR<SquadWithUsers[]>("/squads");
 
-  useEffect(() => {
-    if (users && squads) {
-      const squadWithMembers = squads.map((squad) => ({
-        ...squad,
-        members: users.filter((user) => user.squadId === squad.id),
-      }));
-      setSquadWithMembers(squadWithMembers);
-    }
-  }, [users, squads]);
+  if (!squads) return <Loader />;
 
-  if (!users || !squads) return <Loader />;
-
-  const allMembersCount = squadWithMembers?.reduce(
-    (acc, squad) => acc + squad.members.length,
+  const allMembersCount = squads.reduce(
+    (acc, squad) => acc + squad.users.length,
     0,
   );
 
-  if (!squadWithMembers) return <Loader />;
-
-  squadWithMembers.sort((a, b) => a.order - b.order);
+  squads.sort((a, b) => a.order - b.order);
 
   return (
     <div className="mx-auto max-w-3xl">
@@ -58,9 +43,12 @@ export const Team = () => {
         </p>
       </div>
       <Divider className="my-3" />
-      {squadWithMembers?.map((squad) => (
-        <UserGroup key={squad.id} title={squad.name} users={squad.members} />
-      ))}
+      {squads.map(
+        (squad) =>
+          squad.users.length > 0 && (
+            <UserGroup key={squad.id} title={squad.name} users={squad.users} />
+          ),
+      )}
     </div>
   );
 };

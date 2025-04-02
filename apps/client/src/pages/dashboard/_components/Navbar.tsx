@@ -1,4 +1,4 @@
-import { Card } from "@nextui-org/react";
+import { Card } from "@heroui/react";
 
 import { ThemeToggler } from "@/components";
 import { UserDisplay } from "@/components/UserDisplay";

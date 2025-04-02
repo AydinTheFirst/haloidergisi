@@ -1,6 +1,6 @@
-import { cn } from "@nextui-org/react";
+import { cn } from "@heroui/react";
 import { useEffect, useState } from "react";
-import { Outlet, useLocation } from "react-router-dom";
+import { Outlet, useLocation } from "react-router";
 
 import { useDeviceType } from "@/hooks";
 

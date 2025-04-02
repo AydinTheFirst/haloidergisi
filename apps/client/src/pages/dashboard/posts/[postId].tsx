@@ -11,10 +11,10 @@ import {
   Select,
   SelectItem,
   Textarea,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import { AxiosProgressEvent } from "axios";
 import { useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router";
 import { toast } from "sonner";
 import useSWR, { mutate } from "swr";
 
@@ -88,34 +88,28 @@ const ViewPost = () => {
             <Select
               className="col-span-12"
               defaultSelectedKeys={[post ? post.categoryId : ""]}
+              items={categories || []}
               label="Kategori"
               name="categoryId"
             >
-              {categories ? (
-                categories.map((category) => (
-                  <SelectItem key={category.id} value={category.id}>
-                    {category.title}
-                  </SelectItem>
-                ))
-              ) : (
-                <SelectItem key={""} value="loading">
-                  Yükleniyor...
-                </SelectItem>
+              {(category) => (
+                <SelectItem key={category.id}>{category.title}</SelectItem>
               )}
             </Select>
 
             <Select
               className="col-span-12"
               defaultSelectedKeys={[post ? post.status : ""]}
+              items={[
+                { key: "DRAFT", value: "Taslak" },
+                { key: "PUBLISHED", value: "Yayınlandı" },
+              ]}
               label="Durum"
               name="status"
             >
-              <SelectItem key="DRAFT" value="draft">
-                Taslak
-              </SelectItem>
-              <SelectItem key="PUBLISHED" value="published">
-                Yayınlandı
-              </SelectItem>
+              {(status) => (
+                <SelectItem key={status.key}>{status.value}</SelectItem>
+              )}
             </Select>
 
             <Textarea

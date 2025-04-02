@@ -1,5 +1,5 @@
+import { Button, Input, Link, Textarea } from "@heroui/react";
 import { SiInstagram, SiLinkedin } from "@icons-pack/react-simple-icons";
-import { Button, Input, Link, Textarea } from "@nextui-org/react";
 
 import { INSTAGRAM_URL, LINKEDIN_URL } from "@/config";
 

@@ -1,5 +1,5 @@
-import { Button, Image, Link } from "@nextui-org/react";
-import { useParams } from "react-router-dom";
+import { Button, Image, Link } from "@heroui/react";
+import { useParams } from "react-router";
 import useSWR from "swr";
 
 import { Loader } from "@/components";
@@ -35,6 +35,13 @@ const ViewMagazine = () => {
           >
             <strong>Dergiyi Göster</strong>
           </Button>
+          <small className="text-end">
+            {new Date(magazine.createdAt).toLocaleDateString("tr-TR", {
+              day: "numeric",
+              month: "long",
+              year: "numeric",
+            })}
+          </small>
         </div>
       </div>
     </div>

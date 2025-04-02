@@ -6,12 +6,14 @@ import {
   Param,
   Patch,
   Post,
+  Req,
   UseGuards,
 } from "@nestjs/common";
+import { Request } from "express";
 
-import { GetUser, Roles } from "@/common/decorators";
+import { Roles } from "@/common/decorators";
 import { AuthGuard } from "@/common/guards";
-import { Role, User } from "@/prisma";
+import { Role } from "@/prisma";
 
 import { CreateUserDto, UpdateUserDto } from "./users.dto";
 import { UsersService } from "./users.service";
@@ -28,13 +30,13 @@ export class UsersController {
   }
 
   @Get()
-  findAll(@GetUser() user: User) {
-    return this.usersService.findAll(user);
+  findAll(@Req() req: Request) {
+    return this.usersService.findAll(req);
   }
 
   @Get(":id")
-  findOne(@Param("id") id: string, @GetUser() user: User) {
-    return this.usersService.findOne(id, user);
+  findOne(@Param("id") id: string, @Req() req: Request) {
+    return this.usersService.findOne(id, req);
   }
 
   @Delete(":id")

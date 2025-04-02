@@ -1,5 +1,5 @@
-import { Button, Card, CardFooter, Divider, Image } from "@nextui-org/react";
-import { useNavigate } from "react-router-dom";
+import { Button, Card, CardFooter, Divider, Image } from "@heroui/react";
+import { useNavigate } from "react-router";
 import useSWR from "swr";
 
 import { Loader, Logo } from "@/components";
@@ -99,8 +99,15 @@ const MagazineCard = ({ magazine }: { magazine: Post }) => {
         loading="lazy"
         src={getFileUrl(magazine.cover!)}
       />
-      <CardFooter className="items-end justify-center">
+      <CardFooter className="flex flex-col justify-between">
         <strong>{magazine.title}</strong>
+        <small>
+          {new Date(magazine.createdAt).toLocaleDateString("tr-TR", {
+            day: "numeric",
+            month: "long",
+            year: "numeric",
+          })}
+        </small>
       </CardFooter>
     </Card>
   );
