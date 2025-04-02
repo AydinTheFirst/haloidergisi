@@ -76,7 +76,14 @@ const UserGroup = ({ title, users }: { title: string; users: IUser[] }) => {
 const UserCard = ({ user }: { user: IUser }) => {
   const [isOpen, setOpen] = useState(false);
 
-  if (!user.bio) user.bio = user.displayName;
+  const renderBio = (bio: string) => {
+    return bio.replace(
+      /(https?:\/\/[^\s]+)/g, // URL'yi eşleştiren regex
+      `<a href="$1" target="_blank" class="text-blue-500 underline">$1</a>`,
+    );
+  };
+
+  const bio = user.bio ?? user.displayName ?? "";
 
   return (
     <>
@@ -104,7 +111,7 @@ const UserCard = ({ user }: { user: IUser }) => {
             />
           </ModalHeader>
           <ModalBody>
-            <p>{user.bio}</p>
+            <p dangerouslySetInnerHTML={{ __html: renderBio(bio) }} />
           </ModalBody>
           <ModalFooter>
             <Button
