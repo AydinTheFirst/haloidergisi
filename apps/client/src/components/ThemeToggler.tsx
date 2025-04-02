@@ -14,7 +14,11 @@ export const ThemeToggler = () => {
   return null;
 
   return (
-    <Button isIconOnly onPress={toggleTheme} variant="light">
+    <Button
+      isIconOnly
+      onPress={toggleTheme}
+      variant='light'
+    >
       {icon}
     </Button>
   );

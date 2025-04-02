@@ -37,7 +37,7 @@ http.handleError = (error) => {
   const { errors, message } = error.response.data;
 
   return toast.error(message, {
-    description: JSON.stringify(errors, null, 2),
+    description: JSON.stringify(errors, null, 2)
   });
 };
 

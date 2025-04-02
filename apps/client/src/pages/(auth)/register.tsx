@@ -29,20 +29,37 @@ const Register = () => {
   };
 
   return (
-    <CenteredCard title="Register">
-      <form className="grid gap-3" onSubmit={handleSubmit}>
-        <Input isRequired label="Email" name="email" type="email" />
+    <CenteredCard title='Register'>
+      <form
+        className='grid gap-3'
+        onSubmit={handleSubmit}
+      >
+        <Input
+          isRequired
+          label='Email'
+          name='email'
+          type='email'
+        />
 
-        <Input isRequired label="Display Name" name="displayName" />
+        <Input
+          isRequired
+          label='Display Name'
+          name='displayName'
+        />
 
         <PasswordInput />
-        <Button color="secondary" fullWidth isLoading={isLoading} type="submit">
+        <Button
+          color='secondary'
+          fullWidth
+          isLoading={isLoading}
+          type='submit'
+        >
           Register
         </Button>
       </form>
-      <CardFooter className="flex-col justify-center">
+      <CardFooter className='flex-col justify-center'>
         <p>Already have an account?</p>
-        <Link href="/login">Login</Link>
+        <Link href='/login'>Login</Link>
       </CardFooter>
     </CenteredCard>
   );

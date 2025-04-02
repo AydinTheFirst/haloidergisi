@@ -11,7 +11,7 @@ export const Logo = ({ className }: LogoProps) => {
 
   return (
     <img
-      alt="Halo Logo"
+      alt='Halo Logo'
       className={cn(className)}
       src={theme === "dark" ? darkLogo : lightLogo}
     />

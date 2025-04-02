@@ -13,33 +13,33 @@ const ViewMagazine = () => {
   if (!magazine) return <Loader />;
 
   return (
-    <div className="mx-auto grid max-w-5xl grid-cols-12 gap-3">
-      <div className="col-span-12 grid place-items-center md:col-span-6">
+    <div className='mx-auto grid max-w-5xl grid-cols-12 gap-3'>
+      <div className='col-span-12 grid place-items-center md:col-span-6'>
         <Image
-          alt="Magazine"
-          className="h-96 w-full object-cover"
+          alt='Magazine'
+          className='h-96 w-full object-cover'
           src={getFileUrl(magazine.cover!)}
         />
       </div>
 
-      <div className="col-span-12 md:col-span-6">
-        <div className="grid gap-5">
-          <h2 className="text-3xl font-extrabold">{magazine.title}</h2>
-          <p className="text-lg font-bold">{magazine.description}</p>
+      <div className='col-span-12 md:col-span-6'>
+        <div className='grid gap-5'>
+          <h2 className='text-3xl font-extrabold'>{magazine.title}</h2>
+          <p className='text-lg font-bold'>{magazine.description}</p>
           <Button
             as={Link}
-            color="secondary"
+            color='secondary'
             href={getFileUrl(magazine.file!)}
             isExternal
-            size="sm"
+            size='sm'
           >
             <strong>Dergiyi Göster</strong>
           </Button>
-          <small className="text-end">
+          <small className='text-end'>
             {new Date(magazine.createdAt).toLocaleDateString("tr-TR", {
               day: "numeric",
               month: "long",
-              year: "numeric",
+              year: "numeric"
             })}
           </small>
         </div>

@@ -17,12 +17,15 @@ const Layout = () => {
         <SWRConfig
           value={{
             fetcher: http.fetcher,
-            onError: http.handleError,
+            onError: http.handleError
           }}
         >
           <Outlet />
         </SWRConfig>
-        <Toaster richColors theme={theme as Theme} />
+        <Toaster
+          richColors
+          theme={theme as Theme}
+        />
       </Providers>
     </>
   );

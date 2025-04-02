@@ -7,7 +7,7 @@ import {
   Select,
   Selection,
   SelectItem,
-  Textarea,
+  Textarea
 } from "@heroui/react";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router";
@@ -23,14 +23,14 @@ const ViewSquad = () => {
   const { squadId } = useParams<{ squadId: string }>();
   const isNew = squadId === "new";
   const { data: squad, isLoading } = useSWR<Squad>(
-    isNew ? null : `/squads/${squadId}`,
+    isNew ? null : `/squads/${squadId}`
   );
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
     const data: Record<string, unknown> = Object.fromEntries(
-      formData.entries(),
+      formData.entries()
     );
 
     data.order = parseInt(data.order as string);
@@ -41,7 +41,7 @@ const ViewSquad = () => {
         : http.patch(`/squads/${squadId}`, data));
 
       toast.success(
-        isNew ? "Squad created successfully!" : "Squad updated successfully!",
+        isNew ? "Squad created successfully!" : "Squad updated successfully!"
       );
       navigate("/dashboard/squads");
     } catch (error) {
@@ -64,53 +64,59 @@ const ViewSquad = () => {
   if (isLoading) return "Loading...";
 
   return (
-    <section className="grid gap-5">
+    <section className='grid gap-5'>
       <Card>
         <CardHeader>
-          <h3 className="text-2xl font-semibold">
+          <h3 className='text-2xl font-semibold'>
             {!squad
               ? "Yeni Kategori Oluştur"
               : `Kategori Düzenle: ${squad.name}`}
           </h3>
         </CardHeader>
         <CardBody>
-          <form className="grid grid-cols-12 gap-3" onSubmit={handleSubmit}>
+          <form
+            className='grid grid-cols-12 gap-3'
+            onSubmit={handleSubmit}
+          >
             <Input
-              className="col-span-12"
+              className='col-span-12'
               defaultValue={squad ? squad.name : ""}
               isRequired
-              label="İsim"
-              name="name"
+              label='İsim'
+              name='name'
             />
 
             <Input
-              className="col-span-12"
+              className='col-span-12'
               defaultValue={squad ? squad.order.toString() : ""}
               isRequired
-              label="Sıra"
-              name="order"
-              type="number"
+              label='Sıra'
+              name='order'
+              type='number'
             />
 
             <Textarea
-              className="col-span-12"
+              className='col-span-12'
               defaultValue={squad ? squad.description : ""}
-              label="Açıklama"
-              name="description"
+              label='Açıklama'
+              name='description'
             />
 
             <Button
-              className="col-span-12"
-              color="primary"
+              className='col-span-12'
+              color='primary'
               fullWidth
-              type="submit"
+              type='submit'
             >
               {isNew ? "Oluştur" : "Güncelle"}
             </Button>
           </form>
           {!isNew && (
-            <div className="mt-3 flex justify-end">
-              <Button color="danger" onClick={handleDelete}>
+            <div className='mt-3 flex justify-end'>
+              <Button
+                color='danger'
+                onClick={handleDelete}
+              >
                 Sil
               </Button>
             </div>
@@ -158,15 +164,18 @@ const ViewAndEditUsers = ({ squad }: ViewAndEditUsersProps) => {
   return (
     <Card>
       <CardBody>
-        <form className="grid grid-cols-12 gap-3" onSubmit={handleSubmit}>
+        <form
+          className='grid grid-cols-12 gap-3'
+          onSubmit={handleSubmit}
+        >
           <Select
-            className="col-span-12"
+            className='col-span-12'
             items={users || []}
-            label="Kullanıcılar"
-            name="users"
+            label='Kullanıcılar'
+            name='users'
             onSelectionChange={setSelectedUsers}
             selectedKeys={selectedUsers}
-            selectionMode="multiple"
+            selectionMode='multiple'
           >
             {(user) => (
               <SelectItem key={user.id}>{user.displayName}</SelectItem>
@@ -174,10 +183,10 @@ const ViewAndEditUsers = ({ squad }: ViewAndEditUsersProps) => {
           </Select>
 
           <Button
-            className="col-span-12"
-            color="primary"
+            className='col-span-12'
+            color='primary'
             fullWidth
-            type="submit"
+            type='submit'
           >
             Güncelle
           </Button>

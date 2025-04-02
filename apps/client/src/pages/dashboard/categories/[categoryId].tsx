@@ -4,7 +4,7 @@ import {
   CardBody,
   CardHeader,
   Input,
-  Textarea,
+  Textarea
 } from "@heroui/react";
 import React from "react";
 import { useNavigate, useParams } from "react-router";
@@ -20,14 +20,14 @@ const ViewCategory = () => {
   const { categoryId } = useParams<{ categoryId: string }>();
   const isNew = categoryId === "new";
   const { data: category, isLoading } = useSWR<Category>(
-    isNew ? null : `/categories/${categoryId}`,
+    isNew ? null : `/categories/${categoryId}`
   );
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
     const data: Record<string, unknown> = Object.fromEntries(
-      formData.entries(),
+      formData.entries()
     );
 
     try {
@@ -38,7 +38,7 @@ const ViewCategory = () => {
       toast.success(
         isNew
           ? "Category created successfully!"
-          : "Category updated successfully!",
+          : "Category updated successfully!"
       );
       navigate("/dashboard/categories");
     } catch (error) {
@@ -61,44 +61,50 @@ const ViewCategory = () => {
   if (isLoading) return "Loading...";
 
   return (
-    <section className="grid gap-5">
+    <section className='grid gap-5'>
       <Card>
         <CardHeader>
-          <h3 className="text-2xl font-semibold">
+          <h3 className='text-2xl font-semibold'>
             {!category
               ? "Yeni Kategori Oluştur"
               : `Kategori Düzenle: ${category.title}`}
           </h3>
         </CardHeader>
         <CardBody>
-          <form className="grid grid-cols-12 gap-3" onSubmit={handleSubmit}>
+          <form
+            className='grid grid-cols-12 gap-3'
+            onSubmit={handleSubmit}
+          >
             <Input
-              className="col-span-12"
+              className='col-span-12'
               defaultValue={category ? category.title : ""}
               isRequired
-              label="Başlık"
-              name="title"
+              label='Başlık'
+              name='title'
             />
 
             <Textarea
-              className="col-span-12"
+              className='col-span-12'
               defaultValue={category ? category.description : ""}
-              label="Açıklama"
-              name="description"
+              label='Açıklama'
+              name='description'
             />
 
             <Button
-              className="col-span-12"
-              color="primary"
+              className='col-span-12'
+              color='primary'
               fullWidth
-              type="submit"
+              type='submit'
             >
               {isNew ? "Oluştur" : "Güncelle"}
             </Button>
           </form>
           {!isNew && (
-            <div className="mt-3 flex justify-end">
-              <Button color="danger" onClick={handleDelete}>
+            <div className='mt-3 flex justify-end'>
+              <Button
+                color='danger'
+                onClick={handleDelete}
+              >
                 Sil
               </Button>
             </div>

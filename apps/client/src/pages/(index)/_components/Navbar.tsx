@@ -11,7 +11,7 @@ import {
   NavbarMenu,
   NavbarMenuItem,
   NavbarMenuToggle,
-  Navbar as NextNavbar,
+  Navbar as NextNavbar
 } from "@heroui/react";
 import {
   LucideChartPie,
@@ -19,7 +19,7 @@ import {
   LucideInfo,
   LucidePhone,
   LucideUser,
-  LucideUsers,
+  LucideUsers
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router";
@@ -35,41 +35,41 @@ const menuItems = [
     icon: LucideHome,
     isAdmin: false,
     isAuth: false,
-    label: "Anasayfa",
+    label: "Anasayfa"
   },
   {
     href: "/about",
     icon: LucideInfo,
     isAdmin: false,
     isAuth: false,
-    label: "Hakkımızda",
+    label: "Hakkımızda"
   },
   {
     href: "/contact",
     icon: LucidePhone,
     isAdmin: false,
     isAuth: false,
-    label: "İletişim",
+    label: "İletişim"
   },
   {
     href: "/team",
     icon: LucideUsers,
     isAdmin: false,
     isAuth: false,
-    label: "Ekip",
+    label: "Ekip"
   },
   {
     href: "/dashboard",
     icon: LucideChartPie,
     isAdmin: true,
     isAuth: true,
-    label: "Yönetim Paneli",
-  },
+    label: "Yönetim Paneli"
+  }
 ];
 
 export default function Navbar() {
   const { data: me } = useSWR<User>("/auth/me", {
-    onError: () => {},
+    onError: () => {}
   });
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
@@ -90,38 +90,50 @@ export default function Navbar() {
 
   return (
     <NextNavbar
-      className="bg-content1 bg-opacity-50"
+      className='bg-content1 bg-opacity-50'
       isBordered
       isMenuOpen={isMenuOpen}
-      maxWidth="2xl"
+      maxWidth='2xl'
       onMenuOpenChange={setIsMenuOpen}
       shouldHideOnScroll
     >
       <NavbarContent>
         <NavbarMenuToggle
           aria-label={isMenuOpen ? "Close menu" : "Open menu"}
-          className="sm:hidden"
+          className='sm:hidden'
         />
-        <NavbarBrand as={Link} href={"/"}>
-          <Logo className="h-14" />
+        <NavbarBrand
+          as={Link}
+          href={"/"}
+        >
+          <Logo className='h-14' />
         </NavbarBrand>
       </NavbarContent>
 
-      <NavbarContent className="hidden gap-4 sm:flex" justify="center">
+      <NavbarContent
+        className='hidden gap-4 sm:flex'
+        justify='center'
+      >
         {filteredMenuItems.map((item, index) => (
-          <NavbarItem isActive={pathname === item.href} key={index}>
-            <Link color="foreground" href={item.href}>
+          <NavbarItem
+            isActive={pathname === item.href}
+            key={index}
+          >
+            <Link
+              color='foreground'
+              href={item.href}
+            >
               {item.label}
             </Link>
           </NavbarItem>
         ))}
       </NavbarContent>
 
-      <NavbarContent justify="end">
+      <NavbarContent justify='end'>
         <NavbarItem>
           <ThemeToggler />
         </NavbarItem>
-        <NavbarItem className="flex gap-1">
+        <NavbarItem className='flex gap-1'>
           <AuthItem />
         </NavbarItem>
       </NavbarContent>
@@ -131,11 +143,11 @@ export default function Navbar() {
           <NavbarMenuItem key={`${item}-${index}`}>
             <Button
               as={Link}
-              className="justify-start"
+              className='justify-start'
               fullWidth
               href={item.href}
               startContent={<item.icon />}
-              variant="light"
+              variant='light'
             >
               <strong>{item.label}</strong>
             </Button>
@@ -148,7 +160,7 @@ export default function Navbar() {
 
 const AuthItem = () => {
   const { data: me } = useSWR<User>("/auth/me", {
-    onError: () => {},
+    onError: () => {}
   });
 
   const { isMobile } = useDeviceType();
@@ -156,15 +168,19 @@ const AuthItem = () => {
   if (!me) {
     return (
       <>
-        <Button as={Link} color="secondary" href="/login">
+        <Button
+          as={Link}
+          color='secondary'
+          href='/login'
+        >
           <strong>Giriş Yap</strong>
         </Button>
         <Button
           as={Link}
-          className="hidden md:flex"
-          color="secondary"
-          href="/register"
-          variant="flat"
+          className='hidden md:flex'
+          color='secondary'
+          href='/register'
+          variant='flat'
         >
           <strong>Kayıt Ol</strong>
         </Button>
@@ -181,21 +197,24 @@ const AuthItem = () => {
     <Dropdown>
       <DropdownTrigger>
         <Button
-          color="secondary"
+          color='secondary'
           isIconOnly={isMobile}
           startContent={<LucideUser />}
         >
-          <strong className="mt-1 hidden md:block">{me.displayName}</strong>
+          <strong className='mt-1 hidden md:block'>{me.displayName}</strong>
         </Button>
       </DropdownTrigger>
-      <DropdownMenu aria-label="Static Actions">
-        <DropdownItem href="/account" key="account">
+      <DropdownMenu aria-label='Static Actions'>
+        <DropdownItem
+          href='/account'
+          key='account'
+        >
           Hesabım
         </DropdownItem>
         <DropdownItem
-          className="text-danger"
-          color="danger"
-          key="delete"
+          className='text-danger'
+          color='danger'
+          key='delete'
           onClick={logout}
         >
           Çıkış Yap

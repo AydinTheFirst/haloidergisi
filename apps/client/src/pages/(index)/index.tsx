@@ -8,7 +8,7 @@ import { getFileUrl, sleep } from "@/utils";
 
 const Index = () => {
   return (
-    <div className="grid gap-10">
+    <div className='grid gap-10'>
       <Hero />
       <Categories />
     </div>
@@ -21,19 +21,23 @@ const Hero = () => {
   const scrollTo = () => {
     window.scrollTo({
       behavior: "smooth",
-      top: window.innerHeight + 10,
+      top: window.innerHeight + 10
     });
   };
   return (
     <>
       <img
-        alt="Banner"
-        className="fixed left-0 top-0 -z-10 h-full w-full object-cover"
-        src="/banner.png"
+        alt='Banner'
+        className='fixed left-0 top-0 -z-10 h-full w-full object-cover'
+        src='/banner.png'
       />
-      <div className="flex h-[80vh] flex-col items-center justify-end gap-3">
-        <Logo className="h-20 w-auto md:h-40" />
-        <Button color="secondary" onClick={scrollTo} size="lg">
+      <div className='flex h-[80vh] flex-col items-center justify-end gap-3'>
+        <Logo className='h-20 w-auto md:h-40' />
+        <Button
+          color='secondary'
+          onClick={scrollTo}
+          size='lg'
+        >
           <strong>Dergileri Keşfet</strong>
         </Button>
       </div>
@@ -47,13 +51,16 @@ const Categories = () => {
   if (!categories) return <Loader />;
 
   return categories.map((category, i) => (
-    <CategorySection category={category} key={i} />
+    <CategorySection
+      category={category}
+      key={i}
+    />
   ));
 };
 
 const CategorySection = ({ category }: { category: Category }) => {
   const { data: magazines } = useSWR<Post[]>(
-    `/categories/${category.id}/posts`,
+    `/categories/${category.id}/posts`
   );
 
   if (!magazines) return <Loader />;
@@ -66,16 +73,19 @@ const CategorySection = ({ category }: { category: Category }) => {
 
   return (
     <>
-      <div className="category container">
-        <h1 className="mb-3 text-3xl font-bold">{category.title}</h1>
-        <div className="grid grid-cols-2 gap-3 md:grid-cols-4 lg:grid-cols-6">
+      <div className='category container'>
+        <h1 className='mb-3 text-3xl font-bold'>{category.title}</h1>
+        <div className='grid grid-cols-2 gap-3 md:grid-cols-4 lg:grid-cols-6'>
           {magazines.map((magazine: Post, i) => (
-            <MagazineCard key={i} magazine={magazine} />
+            <MagazineCard
+              key={i}
+              magazine={magazine}
+            />
           ))}
         </div>
       </div>
 
-      <Divider className="my-10" />
+      <Divider className='my-10' />
     </>
   );
 };
@@ -89,23 +99,23 @@ const MagazineCard = ({ magazine }: { magazine: Post }) => {
 
   return (
     <Card
-      className="bg-[#F8EFD0]"
+      className='bg-[#F8EFD0]'
       id={magazine.id}
       isPressable
       onPress={handlePress}
     >
       <Image
         alt={magazine.title}
-        loading="lazy"
+        loading='lazy'
         src={getFileUrl(magazine.cover!)}
       />
-      <CardFooter className="flex flex-col justify-between">
+      <CardFooter className='flex flex-col justify-between'>
         <strong>{magazine.title}</strong>
         <small>
           {new Date(magazine.createdAt).toLocaleDateString("tr-TR", {
             day: "numeric",
             month: "long",
-            year: "numeric",
+            year: "numeric"
           })}
         </small>
       </CardFooter>

@@ -6,22 +6,29 @@ import { CenteredCard } from "./CenteredCard";
 
 function fallbackRender({
   error,
-  resetErrorBoundary,
+  resetErrorBoundary
 }: {
   error: Error;
   resetErrorBoundary: () => void;
 }) {
   return (
-    <CenteredCard title="Something went wrong">
-      <p className="text-center">
+    <CenteredCard title='Something went wrong'>
+      <p className='text-center'>
         There was an error while rendering this component.
       </p>
       <br />
-      <pre className="text-sm text-red-500" style={{ whiteSpace: "normal" }}>
+      <pre
+        className='text-sm text-red-500'
+        style={{ whiteSpace: "normal" }}
+      >
         {error.message}
       </pre>
       <br />
-      <Button color="danger" fullWidth onClick={resetErrorBoundary}>
+      <Button
+        color='danger'
+        fullWidth
+        onClick={resetErrorBoundary}
+      >
         Reload
       </Button>
     </CenteredCard>

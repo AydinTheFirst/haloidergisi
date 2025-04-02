@@ -11,22 +11,22 @@ export default tseslint.config(
     extends: [
       js.configs.recommended,
       ...tseslint.configs.recommended,
-      perfectionist.configs["recommended-natural"],
+      perfectionist.configs["recommended-natural"]
     ],
     files: ["**/*.{ts,tsx}"],
     languageOptions: {
       ecmaVersion: 2020,
-      globals: globals.browser,
+      globals: globals.browser
     },
     plugins: {
       "react-hooks": reactHooks,
-      "react-refresh": reactRefresh,
+      "react-refresh": reactRefresh
     },
     rules: {
       ...reactHooks.configs.recommended.rules,
       "react-refresh/only-export-components": [
         "warn",
-        { allowConstantExport: true },
+        { allowConstantExport: true }
       ],
       "perfectionist/sort-imports": [
         "error",
@@ -45,12 +45,12 @@ export default tseslint.config(
             ["parent-type", "sibling-type", "index-type"],
             ["parent", "sibling", "index"],
             "object",
-            "unknown",
+            "unknown"
           ],
           customGroups: { type: {}, value: {} },
-          environment: "node",
-        },
-      ],
-    },
-  },
+          environment: "node"
+        }
+      ]
+    }
+  }
 );

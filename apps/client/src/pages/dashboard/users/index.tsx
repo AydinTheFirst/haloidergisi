@@ -8,7 +8,7 @@ import {
   TableCell,
   TableColumn,
   TableHeader,
-  TableRow,
+  TableRow
 } from "@heroui/react";
 import { LucideSearch } from "lucide-react";
 import { Key, useEffect, useState } from "react";
@@ -33,7 +33,7 @@ const ViewUsers = () => {
     if (!users) return;
 
     const filtered = users.filter((user) =>
-      user.email.toLowerCase().includes(value),
+      user.email.toLowerCase().includes(value)
     );
 
     setFilteredUsers(filtered);
@@ -45,8 +45,8 @@ const ViewUsers = () => {
         setFilteredUsers(
           [...filteredUsers].sort(
             (a, b) =>
-              new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
-          ),
+              new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+          )
         );
         break;
 
@@ -54,20 +54,20 @@ const ViewUsers = () => {
         setFilteredUsers(
           [...filteredUsers].sort(
             (a, b) =>
-              new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
-          ),
+              new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+          )
         );
         break;
 
       case "email:asc":
         setFilteredUsers(
-          [...filteredUsers].sort((a, b) => a.email.localeCompare(b.email)),
+          [...filteredUsers].sort((a, b) => a.email.localeCompare(b.email))
         );
         break;
 
       case "email:desc":
         setFilteredUsers(
-          [...filteredUsers].sort((a, b) => b.email.localeCompare(a.email)),
+          [...filteredUsers].sort((a, b) => b.email.localeCompare(a.email))
         );
         break;
 
@@ -83,20 +83,20 @@ const ViewUsers = () => {
   const columns = [
     {
       key: "name",
-      label: "İsim",
+      label: "İsim"
     },
     {
       key: "email",
-      label: "Email",
+      label: "Email"
     },
     {
       key: "roles",
-      label: "Roller",
+      label: "Roller"
     },
     {
       key: "updatedAt",
-      label: "Son Güncelleme",
-    },
+      label: "Son Güncelleme"
+    }
   ];
 
   const rows = filteredUsers.map((user) => {
@@ -105,54 +105,54 @@ const ViewUsers = () => {
       key: user.id,
       name: user.displayName,
       roles: user.roles ? user.roles.join(", ") : "Yok",
-      updatedAt: new Date(user.updatedAt).toLocaleDateString(),
+      updatedAt: new Date(user.updatedAt).toLocaleDateString()
     };
   });
 
   return (
-    <section className="grid gap-5">
-      <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
-        <div className="flex items-end justify-start gap-3">
-          <h2 className="text-2xl font-bold">Kullanıcılar</h2>
-          <span className="text-sm text-gray-500">
+    <section className='grid gap-5'>
+      <div className='grid grid-cols-1 gap-3 md:grid-cols-2'>
+        <div className='flex items-end justify-start gap-3'>
+          <h2 className='text-2xl font-bold'>Kullanıcılar</h2>
+          <span className='text-sm text-gray-500'>
             ({filteredUsers.length}/{users?.length})
           </span>
         </div>
-        <div className="flex flex-wrap items-center justify-end gap-3">
+        <div className='flex flex-wrap items-center justify-end gap-3'>
           <Input
-            className="max-w-xs"
+            className='max-w-xs'
             endContent={<LucideSearch />}
-            label="Ara"
+            label='Ara'
             onChange={handleFilter}
-            placeholder="Kullanıcı ara..."
-            variant="faded"
+            placeholder='Kullanıcı ara...'
+            variant='faded'
           />
           <Select
-            className="max-w-xs"
-            label="Sırala"
+            className='max-w-xs'
+            label='Sırala'
             onSelectionChange={(keys) =>
               handleSort(Array.from(keys)[0].toString())
             }
-            placeholder="Sırala"
-            variant="faded"
+            placeholder='Sırala'
+            variant='faded'
           >
-            <SelectItem key="date:asc">Tarihe Göre (Eskiden Yeniye)</SelectItem>
-            <SelectItem key="date:desc">
+            <SelectItem key='date:asc'>Tarihe Göre (Eskiden Yeniye)</SelectItem>
+            <SelectItem key='date:desc'>
               Tarihe Göre (Yeniden Eskiye)
             </SelectItem>
-            <SelectItem key="name:asc">İsme Göre (A-Z)</SelectItem>
-            <SelectItem key="name:desc">İsme Göre (Z-A)</SelectItem>
-            <SelectItem key="email:asc">E-Postaya Göre (A-Z)</SelectItem>
-            <SelectItem key="email:desc">E-Postaya Göre (Z-A)</SelectItem>
+            <SelectItem key='name:asc'>İsme Göre (A-Z)</SelectItem>
+            <SelectItem key='name:desc'>İsme Göre (Z-A)</SelectItem>
+            <SelectItem key='email:asc'>E-Postaya Göre (A-Z)</SelectItem>
+            <SelectItem key='email:desc'>E-Postaya Göre (Z-A)</SelectItem>
           </Select>
         </div>
       </div>
 
       <Table
-        aria-label="Example table with dynamic content"
+        aria-label='Example table with dynamic content'
         isStriped
         onRowAction={handleRowAction}
-        selectionMode="single"
+        selectionMode='single'
       >
         <TableHeader columns={columns}>
           {(column) => (

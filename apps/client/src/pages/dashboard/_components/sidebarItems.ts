@@ -5,36 +5,36 @@ export const sidebarItems = [
     canCreate: false,
     href: "/dashboard",
     icon: Home,
-    label: "Yönetim Paneli",
+    label: "Yönetim Paneli"
   },
   {
     canCreate: true,
     href: "/dashboard/users",
     icon: Users,
-    label: "Kullanıcılar",
+    label: "Kullanıcılar"
   },
   {
     canCreate: true,
     href: "/dashboard/categories",
     icon: BookCheck,
-    label: "Katagoriler",
+    label: "Katagoriler"
   },
   {
     canCreate: true,
     href: "/dashboard/posts",
     icon: Presentation,
-    label: "Dergiler",
+    label: "Dergiler"
   },
   {
     canCreate: true,
     href: "/dashboard/squads",
     icon: Users,
-    label: "Takımlar",
+    label: "Takımlar"
   },
   {
     canCreate: true,
     href: "/dashboard/news",
     icon: Newspaper,
-    label: "Haberler",
-  },
+    label: "Haberler"
+  }
 ];

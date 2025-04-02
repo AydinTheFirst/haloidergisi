@@ -3,7 +3,7 @@ import {
   Dropdown,
   DropdownItem,
   DropdownMenu,
-  DropdownTrigger,
+  DropdownTrigger
 } from "@heroui/react";
 import { UserIcon } from "lucide-react";
 import useSWR from "swr";
@@ -12,7 +12,7 @@ import { User } from "@/types";
 
 export const UserDisplay = () => {
   const { data: me } = useSWR<User>("/auth/me", {
-    onError: () => {},
+    onError: () => {}
   });
 
   const logout = () => {
@@ -25,13 +25,19 @@ export const UserDisplay = () => {
   return (
     <Dropdown>
       <DropdownTrigger>
-        <Button startContent={<UserIcon />} variant="faded">
-          <strong className="mt-1">{me.displayName}</strong>
+        <Button
+          startContent={<UserIcon />}
+          variant='faded'
+        >
+          <strong className='mt-1'>{me.displayName}</strong>
         </Button>
       </DropdownTrigger>
-      <DropdownMenu aria-label="Static Actions">
-        <DropdownItem href="/account">Hesap Ayarları</DropdownItem>
-        <DropdownItem color="danger" onPress={logout}>
+      <DropdownMenu aria-label='Static Actions'>
+        <DropdownItem href='/account'>Hesap Ayarları</DropdownItem>
+        <DropdownItem
+          color='danger'
+          onPress={logout}
+        >
           Çıkış Yap
         </DropdownItem>
       </DropdownMenu>

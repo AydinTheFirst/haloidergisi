@@ -7,7 +7,7 @@ export default defineConfig({
   plugins: [react(), Generouted()],
   resolve: {
     alias: {
-      "@": "/src",
-    },
-  },
+      "@": "/src"
+    }
+  }
 });

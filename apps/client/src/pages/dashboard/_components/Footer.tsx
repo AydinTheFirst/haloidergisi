@@ -2,8 +2,11 @@ import { Card } from "@heroui/react";
 
 export const Footer = () => {
   return (
-    <Card className="p-3" radius="none">
-      <div className="flex justify-between">
+    <Card
+      className='p-3'
+      radius='none'
+    >
+      <div className='flex justify-between'>
         <p>
           <strong>Yönetim Paneli</strong>
         </p>

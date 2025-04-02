@@ -10,7 +10,10 @@ export const PasswordInput = (props: InputProps) => {
   };
 
   const endContent = (
-    <button onClick={toggleVisibility} type="button">
+    <button
+      onClick={toggleVisibility}
+      type='button'
+    >
       {isVisible ? <EyeOffIcon /> : <EyeIcon />}
     </button>
   );
@@ -20,7 +23,7 @@ export const PasswordInput = (props: InputProps) => {
       endContent={endContent}
       isRequired
       label={props.label || "Password"}
-      name="password"
+      name='password'
       type={isVisible ? "text" : "password"}
       {...props}
     />

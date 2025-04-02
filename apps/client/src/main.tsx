@@ -9,12 +9,12 @@ import "@/styles/globals.css";
 const router = createBrowserRouter([
   {
     children: routes,
-    element: <ErrorBoundaryLayout />,
-  },
+    element: <ErrorBoundaryLayout />
+  }
 ]);
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <RouterProvider router={router} />
-  </StrictMode>,
+  </StrictMode>
 );

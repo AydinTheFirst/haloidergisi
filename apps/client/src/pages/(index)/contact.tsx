@@ -5,22 +5,22 @@ import { INSTAGRAM_URL, LINKEDIN_URL } from "@/config";
 
 const Contact = () => {
   return (
-    <div className="mx-auto grid max-w-3xl gap-10">
-      <div className="grid gap-3">
-        <h2 className="text-3xl font-extrabold">Bize Ulaşın!</h2>
-        <p className="text-lg font-bold">
+    <div className='mx-auto grid max-w-3xl gap-10'>
+      <div className='grid gap-3'>
+        <h2 className='text-3xl font-extrabold'>Bize Ulaşın!</h2>
+        <p className='text-lg font-bold'>
           Bir sorunuz ya da öneriniz mi var? Bizimle iletişime geçin! Aşağıdaki
           iletişim bilgilerini kullanarak çekinmeden bize ulaşın veya formu
           kullanarak mail gönderin.
         </p>
       </div>
-      <div className="grid gap-3">
-        <h4 className="text-2xl font-bold">Sosyal Medya Hesaplarımız:</h4>
-        <ul className="flex list-none flex-col gap-5">
+      <div className='grid gap-3'>
+        <h4 className='text-2xl font-bold'>Sosyal Medya Hesaplarımız:</h4>
+        <ul className='flex list-none flex-col gap-5'>
           <li>
             <Link
-              className="flex gap-1"
-              color="foreground"
+              className='flex gap-1'
+              color='foreground'
               href={INSTAGRAM_URL}
               isExternal
             >
@@ -30,8 +30,8 @@ const Contact = () => {
           </li>
           <li>
             <Link
-              className="flex gap-1"
-              color="foreground"
+              className='flex gap-1'
+              color='foreground'
               href={LINKEDIN_URL}
               isExternal
             >
@@ -41,8 +41,8 @@ const Contact = () => {
           </li>
         </ul>
       </div>
-      <div className="grid gap-3">
-        <h4 className="text-2xl font-bold">Mail Gönderme Formu</h4>
+      <div className='grid gap-3'>
+        <h4 className='text-2xl font-bold'>Mail Gönderme Formu</h4>
         <MailForm />
       </div>
     </div>
@@ -59,37 +59,41 @@ const MailForm = () => {
 
     window.open(
       `mailto:haloidergisipau@gmail.com?subject=${data.subject}&body=${data.body}`,
-      "_blank",
+      "_blank"
     );
   };
 
   return (
     <form
-      className="grid grid-cols-12 gap-3 rounded-lg bg-content1 p-3"
+      className='grid grid-cols-12 gap-3 rounded-lg bg-content1 p-3'
       onSubmit={handleSubmit}
     >
       <Input
-        className="col-span-12 md:col-span-6"
-        color="warning"
+        className='col-span-12 md:col-span-6'
+        color='warning'
         isRequired
-        label="Adınız"
-        placeholder="Adınız"
+        label='Adınız'
+        placeholder='Adınız'
       />
       <Input
-        className="col-span-12 md:col-span-6"
-        color="warning"
+        className='col-span-12 md:col-span-6'
+        color='warning'
         isRequired
-        label="Konu"
-        placeholder="konu"
+        label='Konu'
+        placeholder='konu'
       />
       <Textarea
-        className="col-span-12"
-        color="warning"
+        className='col-span-12'
+        color='warning'
         isRequired
-        label="Mesajınız"
-        placeholder="Mesajınız"
+        label='Mesajınız'
+        placeholder='Mesajınız'
       />
-      <Button className="col-span-12" color="secondary" type="submit">
+      <Button
+        className='col-span-12'
+        color='secondary'
+        type='submit'
+      >
         Gönder
       </Button>
     </form>

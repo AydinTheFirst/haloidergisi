@@ -7,7 +7,7 @@ import {
   Select,
   Selection,
   SelectItem,
-  Textarea,
+  Textarea
 } from "@heroui/react";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router";
@@ -23,7 +23,7 @@ const ViewUser = () => {
   const { userId } = useParams<{ userId: string }>();
   const isNew = userId === "new";
   const { data: user, isLoading } = useSWR<User>(
-    isNew ? null : `/users/${userId}`,
+    isNew ? null : `/users/${userId}`
   );
   const { data: squads } = useSWR<Squad[]>("/squads");
 
@@ -38,7 +38,7 @@ const ViewUser = () => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
     const data: Record<string, unknown> = Object.fromEntries(
-      formData.entries(),
+      formData.entries()
     );
 
     data.balance = parseFloat(data.balance as string);
@@ -52,7 +52,7 @@ const ViewUser = () => {
       toast.success(
         isNew
           ? "Kullanıcı başarıyla oluşturuldu!"
-          : "Kullanıcı başarıyla güncellendi!",
+          : "Kullanıcı başarıyla güncellendi!"
       );
       navigate("/dashboard/users");
     } catch (error) {
@@ -62,7 +62,7 @@ const ViewUser = () => {
 
   const handleDelete = async () => {
     const confirm = window.confirm(
-      "Bu işlem geri alınamaz. Kullanıcıyı silmek istediğinize emin misiniz?",
+      "Bu işlem geri alınamaz. Kullanıcıyı silmek istediğinize emin misiniz?"
     );
     if (!confirm) return;
 
@@ -78,67 +78,73 @@ const ViewUser = () => {
   if (isLoading) return;
 
   return (
-    <section className="grid gap-5">
+    <section className='grid gap-5'>
       <Card>
         <CardHeader>
-          <h3 className="text-2xl font-semibold">
+          <h3 className='text-2xl font-semibold'>
             {isNew
               ? "Kullanıcı oluştur"
               : `Kullanıcı: ${user?.username} güncelle`}
           </h3>
         </CardHeader>
         <CardBody>
-          <form className="grid grid-cols-12 gap-3" onSubmit={handleSubmit}>
+          <form
+            className='grid grid-cols-12 gap-3'
+            onSubmit={handleSubmit}
+          >
             <Input
-              className="col-span-12 md:col-span-6"
+              className='col-span-12 md:col-span-6'
               defaultValue={user?.email}
               isRequired
-              label="Email"
-              name="email"
-              type="email"
+              label='Email'
+              name='email'
+              type='email'
             />
 
             <Input
-              className="col-span-12 md:col-span-6"
+              className='col-span-12 md:col-span-6'
               defaultValue={user ? user.displayName || "" : ""}
               isRequired
-              label="İsim"
-              name="displayName"
+              label='İsim'
+              name='displayName'
             />
 
             <Input
-              className="col-span-12 md:col-span-6"
+              className='col-span-12 md:col-span-6'
               defaultValue={user ? user.title || "" : ""}
               isRequired
-              label="Ünvan"
-              name="title"
+              label='Ünvan'
+              name='title'
             />
 
             <Select
-              className="col-span-12 md:col-span-6"
+              className='col-span-12 md:col-span-6'
               defaultSelectedKeys={[user ? user.squadId || "" : ""]}
               items={squads || []}
-              label="Takım"
-              name="squadId"
+              label='Takım'
+              name='squadId'
             >
               {(squad) => <SelectItem key={squad.id}>{squad.name}</SelectItem>}
             </Select>
 
             {!isNew && (
               <Select
-                className="col-span-12 md:col-span-6"
+                className='col-span-12 md:col-span-6'
                 items={[
                   { key: "ADMIN", value: "Admin" },
-                  { key: "USER", value: "Kullanıcı" },
+                  { key: "USER", value: "Kullanıcı" }
                 ]}
-                label="Roller"
-                name="roles"
+                label='Roller'
+                name='roles'
                 onSelectionChange={setUserRoles}
                 selectedKeys={userRoles}
-                selectionMode="multiple"
+                selectionMode='multiple'
               >
                 {(role) => (
-                  <SelectItem key={role.key} textValue={role.value}>
+                  <SelectItem
+                    key={role.key}
+                    textValue={role.value}
+                  >
                     {role.value}
                   </SelectItem>
                 )}
@@ -146,31 +152,34 @@ const ViewUser = () => {
             )}
 
             <Input
-              className="col-span-12 md:col-span-6"
-              label="Şifre"
-              name="password"
+              className='col-span-12 md:col-span-6'
+              label='Şifre'
+              name='password'
             />
 
             <Textarea
-              className="col-span-12"
+              className='col-span-12'
               defaultValue={user ? user.bio || "" : ""}
               isRequired
-              label="Bio"
-              name="bio"
+              label='Bio'
+              name='bio'
             />
 
             <Button
-              className="col-span-12"
-              color="primary"
+              className='col-span-12'
+              color='primary'
               fullWidth
-              type="submit"
+              type='submit'
             >
               {isNew ? "Oluştur" : "Güncelle"}
             </Button>
           </form>
           {!isNew && (
-            <div className="mt-3 flex justify-end">
-              <Button color="danger" onClick={handleDelete}>
+            <div className='mt-3 flex justify-end'>
+              <Button
+                color='danger'
+                onClick={handleDelete}
+              >
                 Sil
               </Button>
             </div>

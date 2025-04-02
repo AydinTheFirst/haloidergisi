@@ -11,31 +11,37 @@ interface SidebarProps {
 
 export const Sidebar = ({ toggleSidebar }: SidebarProps) => {
   return (
-    <Card className="h-full min-h-screen p-3" radius="none">
-      <div className="flex h-10 justify-between">
-        <div className="flex w-full items-center">
+    <Card
+      className='h-full min-h-screen p-3'
+      radius='none'
+    >
+      <div className='flex h-10 justify-between'>
+        <div className='flex w-full items-center'>
           <Link to={"/"}>
-            <h1 className="text-xl font-bold">Yönetim Paneli</h1>
+            <h1 className='text-xl font-bold'>Yönetim Paneli</h1>
           </Link>
         </div>
-        <div className="block md:hidden">
+        <div className='block md:hidden'>
           <SidebarToggler toggleSidebar={toggleSidebar} />
         </div>
       </div>
-      <Divider className="my-3" />
-      <div className="grid gap-1">
+      <Divider className='my-3' />
+      <div className='grid gap-1'>
         {sidebarItems.map((item, index) => (
-          <div className="flex justify-between" key={index}>
+          <div
+            className='flex justify-between'
+            key={index}
+          >
             <Button
               as={Link}
-              className="justify-start"
+              className='justify-start'
               fullWidth
-              radius="none"
+              radius='none'
               startContent={<item.icon size={20} />}
               to={item.href}
-              variant="light"
+              variant='light'
             >
-              <div className="mt-1">
+              <div className='mt-1'>
                 <strong>{item.label}</strong>
               </div>
             </Button>
@@ -43,9 +49,9 @@ export const Sidebar = ({ toggleSidebar }: SidebarProps) => {
               <Button
                 as={Link}
                 isIconOnly
-                radius="none"
+                radius='none'
                 to={`${item.href}/new`}
-                variant="light"
+                variant='light'
               >
                 <LucidePlus />
               </Button>

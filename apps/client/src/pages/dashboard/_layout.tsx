@@ -22,7 +22,7 @@ const Layout = () => {
 
   useEffect(() => {
     const isSidebarOpen = JSON.parse(
-      localStorage.getItem("isSidebarOpen") || "false",
+      localStorage.getItem("isSidebarOpen") || "false"
     );
 
     if (isMobile) return setIsSidebarOpen(false);
@@ -43,7 +43,7 @@ const Layout = () => {
     : "col-span-12 md:col-span-12";
 
   return (
-    <div className="grid grid-cols-12">
+    <div className='grid grid-cols-12'>
       {/* Sidebar */}
       <div className={sidebarClassName}>
         <Sidebar toggleSidebar={toggleSidebar} />
@@ -54,7 +54,7 @@ const Layout = () => {
         <Navbar toggleSidebar={toggleSidebar} />
 
         {/* Main Content */}
-        <main className="container my-5 flex-1 overflow-auto p-3">
+        <main className='container my-5 flex-1 overflow-auto p-3'>
           <Outlet />
         </main>
 

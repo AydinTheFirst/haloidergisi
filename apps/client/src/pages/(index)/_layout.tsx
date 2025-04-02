@@ -7,7 +7,7 @@ const Layout = () => {
   return (
     <>
       <Navbar />
-      <main className="container px-3 py-16 md:px-10">
+      <main className='container px-3 py-16 md:px-10'>
         <Outlet />
       </main>
       <Footer />

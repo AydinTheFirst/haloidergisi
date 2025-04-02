@@ -30,17 +30,29 @@ const Login = () => {
   };
 
   return (
-    <CenteredCard title="Login">
-      <form className="grid gap-3" onSubmit={handleSubmit}>
-        <Input isRequired label="Username" name="username" />
+    <CenteredCard title='Login'>
+      <form
+        className='grid gap-3'
+        onSubmit={handleSubmit}
+      >
+        <Input
+          isRequired
+          label='Username'
+          name='username'
+        />
         <PasswordInput />
-        <Button color="secondary" fullWidth isLoading={isLoading} type="submit">
+        <Button
+          color='secondary'
+          fullWidth
+          isLoading={isLoading}
+          type='submit'
+        >
           Login
         </Button>
       </form>
-      <CardFooter className="flex-col justify-center">
+      <CardFooter className='flex-col justify-center'>
         <p>Don't have an account?</p>
-        <Link href="/register">Register</Link>
+        <Link href='/register'>Register</Link>
       </CardFooter>
     </CenteredCard>
   );

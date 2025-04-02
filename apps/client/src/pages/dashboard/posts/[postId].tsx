@@ -10,7 +10,7 @@ import {
   Progress,
   Select,
   SelectItem,
-  Textarea,
+  Textarea
 } from "@heroui/react";
 import { AxiosProgressEvent } from "axios";
 import { useState } from "react";
@@ -28,7 +28,7 @@ const ViewPost = () => {
   const { postId } = useParams<{ postId: string }>();
   const isNew = postId === "new";
   const { data: post, isLoading } = useSWR<Post>(
-    isNew ? null : `/posts/${postId}`,
+    isNew ? null : `/posts/${postId}`
   );
   const { data: categories } = useSWR<Category[]>("/categories");
 
@@ -36,7 +36,7 @@ const ViewPost = () => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
     const data: Record<string, unknown> = Object.fromEntries(
-      formData.entries(),
+      formData.entries()
     );
 
     try {
@@ -45,7 +45,7 @@ const ViewPost = () => {
         : http.patch(`/posts/${postId}`, data));
 
       toast.success(
-        isNew ? "Post created successfully!" : "Post updated successfully!",
+        isNew ? "Post created successfully!" : "Post updated successfully!"
       );
       navigate("/dashboard/posts");
     } catch (error) {
@@ -68,29 +68,32 @@ const ViewPost = () => {
   if (isLoading) return "Loading...";
 
   return (
-    <section className="grid gap-5">
+    <section className='grid gap-5'>
       <Card>
         <CardHeader>
-          <h3 className="text-2xl font-semibold">
+          <h3 className='text-2xl font-semibold'>
             {!post ? "Yeni Dergi Oluştur" : `Dergiyi Düzenle: ${post.title}`}
           </h3>
         </CardHeader>
         <CardBody>
-          <form className="grid grid-cols-12 gap-3" onSubmit={handleSubmit}>
+          <form
+            className='grid grid-cols-12 gap-3'
+            onSubmit={handleSubmit}
+          >
             <Input
-              className="col-span-12"
+              className='col-span-12'
               defaultValue={post ? post.title : ""}
               isRequired
-              label="Başlık"
-              name="title"
+              label='Başlık'
+              name='title'
             />
 
             <Select
-              className="col-span-12"
+              className='col-span-12'
               defaultSelectedKeys={[post ? post.categoryId : ""]}
               items={categories || []}
-              label="Kategori"
-              name="categoryId"
+              label='Kategori'
+              name='categoryId'
             >
               {(category) => (
                 <SelectItem key={category.id}>{category.title}</SelectItem>
@@ -98,14 +101,14 @@ const ViewPost = () => {
             </Select>
 
             <Select
-              className="col-span-12"
+              className='col-span-12'
               defaultSelectedKeys={[post ? post.status : ""]}
               items={[
                 { key: "DRAFT", value: "Taslak" },
-                { key: "PUBLISHED", value: "Yayınlandı" },
+                { key: "PUBLISHED", value: "Yayınlandı" }
               ]}
-              label="Durum"
-              name="status"
+              label='Durum'
+              name='status'
             >
               {(status) => (
                 <SelectItem key={status.key}>{status.value}</SelectItem>
@@ -113,24 +116,27 @@ const ViewPost = () => {
             </Select>
 
             <Textarea
-              className="col-span-12"
+              className='col-span-12'
               defaultValue={post ? post.description : ""}
-              label="Açıklama"
-              name="description"
+              label='Açıklama'
+              name='description'
             />
 
             <Button
-              className="col-span-12"
-              color="primary"
+              className='col-span-12'
+              color='primary'
               fullWidth
-              type="submit"
+              type='submit'
             >
               {isNew ? "Oluştur" : "Güncelle"}
             </Button>
           </form>
           {!isNew && (
-            <div className="mt-3 flex justify-end">
-              <Button color="danger" onClick={handleDelete}>
+            <div className='mt-3 flex justify-end'>
+              <Button
+                color='danger'
+                onClick={handleDelete}
+              >
                 Sil
               </Button>
             </div>
@@ -167,42 +173,45 @@ const EditCover = ({ post }: EditCoverProps) => {
   return (
     <Card>
       <CardHeader>
-        <h3 className="text-2xl font-semibold">Kapak Düzenle</h3>
+        <h3 className='text-2xl font-semibold'>Kapak Düzenle</h3>
       </CardHeader>
-      <CardBody className="grid grid-cols-12 gap-3">
-        <div className="col-span-12 md:col-span-8">
-          <form className="grid grid-cols-12 gap-3" onSubmit={handleSubmit}>
+      <CardBody className='grid grid-cols-12 gap-3'>
+        <div className='col-span-12 md:col-span-8'>
+          <form
+            className='grid grid-cols-12 gap-3'
+            onSubmit={handleSubmit}
+          >
             <Input
-              accept="image/*"
-              className="col-span-12"
+              accept='image/*'
+              className='col-span-12'
               isRequired
-              label="Kapak Resmi"
-              name="cover"
-              type="file"
+              label='Kapak Resmi'
+              name='cover'
+              type='file'
             />
 
             <Button
-              className="col-span-12"
-              color="primary"
+              className='col-span-12'
+              color='primary'
               fullWidth
-              type="submit"
+              type='submit'
             >
               Güncelle
             </Button>
           </form>
         </div>
-        <div className="col-span-12 grid place-items-center md:col-span-4">
+        <div className='col-span-12 grid place-items-center md:col-span-4'>
           {post.cover && (
             <>
               <Image
-                alt="Cover"
-                className="h-52 w-full object-cover"
+                alt='Cover'
+                className='h-52 w-full object-cover'
                 src={getFileUrl(post.cover)}
               />
               <Button
                 as={Link}
-                className="mt-3"
-                color="primary"
+                className='mt-3'
+                color='primary'
                 href={getFileUrl(post.cover)}
                 isExternal
               >
@@ -230,7 +239,7 @@ const EditFile = ({ post }: EditFileProps) => {
 
     try {
       await http.patch(`/posts/${post.id}/file`, formData, {
-        onUploadProgress: setUploadProgress,
+        onUploadProgress: setUploadProgress
       });
       toast.success("File updated successfully!");
       mutate(`/posts/${post.id}`);
@@ -243,19 +252,19 @@ const EditFile = ({ post }: EditFileProps) => {
 
   if (uploadProgress) {
     const percent = Math.round(
-      (uploadProgress.loaded / uploadProgress.total!) * 100,
+      (uploadProgress.loaded / uploadProgress.total!) * 100
     );
 
     return (
       <Card>
         <CardHeader>
-          <h3 className="text-2xl font-semibold">Dosya Yükleniyor...</h3>
+          <h3 className='text-2xl font-semibold'>Dosya Yükleniyor...</h3>
         </CardHeader>
         <CardBody>
-          <div className="grid grid-cols-12 gap-3">
+          <div className='grid grid-cols-12 gap-3'>
             <Progress
-              className="col-span-12"
-              color="primary"
+              className='col-span-12'
+              color='primary'
               showValueLabel
               value={percent}
             />
@@ -268,24 +277,27 @@ const EditFile = ({ post }: EditFileProps) => {
   return (
     <Card>
       <CardHeader>
-        <h3 className="text-2xl font-semibold">File Edit</h3>
+        <h3 className='text-2xl font-semibold'>File Edit</h3>
       </CardHeader>
       <CardBody>
-        <form className="grid grid-cols-12 gap-3" onSubmit={handleSubmit}>
+        <form
+          className='grid grid-cols-12 gap-3'
+          onSubmit={handleSubmit}
+        >
           <Input
-            accept="application/pdf"
-            className="col-span-12"
+            accept='application/pdf'
+            className='col-span-12'
             isRequired
-            label="File"
-            name="file"
-            type="file"
+            label='File'
+            name='file'
+            type='file'
           />
 
           <Button
-            className="col-span-12"
-            color="primary"
+            className='col-span-12'
+            color='primary'
             fullWidth
-            type="submit"
+            type='submit'
           >
             Update
           </Button>
@@ -293,7 +305,11 @@ const EditFile = ({ post }: EditFileProps) => {
       </CardBody>
       <CardFooter>
         {post.file && (
-          <Button as={Link} href={getFileUrl(post.file)} isExternal={true}>
+          <Button
+            as={Link}
+            href={getFileUrl(post.file)}
+            isExternal={true}
+          >
             Görüntüle
           </Button>
         )}

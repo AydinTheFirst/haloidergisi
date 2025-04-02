@@ -1,11 +1,4 @@
-import {
-  Avatar,
-  Button,
-  Card,
-  CardBody,
-  Input,
-  Textarea,
-} from "@heroui/react";
+import { Avatar, Button, Card, CardBody, Input, Textarea } from "@heroui/react";
 import { toast } from "sonner";
 import useSWR from "swr";
 
@@ -35,50 +28,68 @@ export const Profile = () => {
 
   return (
     <>
-      <Card className="mx-auto max-w-xl">
-        <div className="to--500 h-[100px] rounded-lg bg-gradient-to-tr from-yellow-500 to-red-500" />
+      <Card className='mx-auto max-w-xl'>
+        <div className='to--500 h-[100px] rounded-lg bg-gradient-to-tr from-yellow-500 to-red-500' />
         <div
-          className="flex justify-center"
+          className='flex justify-center'
           style={{
             left: "50%",
             position: "absolute",
             top: "70px",
-            transform: "translateX(-50%)",
+            transform: "translateX(-50%)"
           }}
         >
-          <Avatar size="lg" src={getGravatar(user.email)} />
+          <Avatar
+            size='lg'
+            src={getGravatar(user.email)}
+          />
         </div>
         <div style={{ height: "25px" }} />
         <div>
-          <h1 className="text-3lg text-center font-bold">{user.displayName}</h1>
+          <h1 className='text-3lg text-center font-bold'>{user.displayName}</h1>
         </div>
         <CardBody>
-          <form className="grid gap-3" onSubmit={handleSubmit}>
+          <form
+            className='grid gap-3'
+            onSubmit={handleSubmit}
+          >
             <Input
               defaultValue={user.displayName || ""}
-              label="Name"
-              name="displayName"
+              label='Name'
+              name='displayName'
             />
 
-            <Input defaultValue={user.email || ""} label="Email" name="email" />
+            <Input
+              defaultValue={user.email || ""}
+              label='Email'
+              name='email'
+            />
 
             <Input
               defaultValue={user.website || ""}
-              label="Website"
-              name="website"
+              label='Website'
+              name='website'
             />
 
-            <Textarea defaultValue={user.bio || ""} label="Bio" name="bio" />
+            <Textarea
+              defaultValue={user.bio || ""}
+              label='Bio'
+              name='bio'
+            />
 
             <Input
               defaultValue={user.title || ""}
               isReadOnly
-              label="Role"
-              name="role"
+              label='Role'
+              name='role'
             />
 
-            <div className="col-12">
-              <Button color="secondary" fullWidth type="submit">
+            <div className='col-12'>
+              <Button
+                color='secondary'
+                fullWidth
+                type='submit'
+              >
                 Update
               </Button>
             </div>
