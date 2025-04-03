@@ -1,16 +1,10 @@
 import { MailerModule } from "@nestjs-modules/mailer";
 import { MiddlewareConsumer, Module, NestModule } from "@nestjs/common";
 import { MulterModule } from "@nestjs/platform-express";
-import { ServeStaticModule } from "@nestjs/serve-static";
 import { ThrottlerModule } from "@nestjs/throttler";
 
 import { AuthMiddleware, LoggerMiddleware } from "@/common/middlewares";
-import {
-  mailerConfig,
-  multerConfig,
-  serveStaticConfig,
-  throttlerConfig,
-} from "@/config";
+import { mailerConfig, multerConfig, throttlerConfig } from "@/config";
 import { AwsModule, NetgsmModule } from "@/modules";
 import { PrismaModule } from "@/prisma";
 import { AppRoutes } from "@/routes";
@@ -37,7 +31,6 @@ const modules = () => {
     WebsocketModule,
     ...modules(),
     ThrottlerModule.forRoot(throttlerConfig),
-    ServeStaticModule.forRoot(serveStaticConfig),
     MulterModule.register(multerConfig),
   ],
   providers: [AppService],

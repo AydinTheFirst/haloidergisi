@@ -15,7 +15,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import useSWR from "swr";
 
-import { Squad } from "@/types";
+import type { Squad } from "@/types";
 
 const ViewSquads = () => {
   const navigate = useNavigate();

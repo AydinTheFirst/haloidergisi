@@ -1,7 +1,7 @@
 {
   "private": true,
   "scripts": {
-    "start": "cd apps/server && npm run start",
+    "start": "turbo start",
     "build": "turbo build",
     "dev": "turbo dev",
     "lint": "turbo lint",
@@ -13,5 +13,5 @@
     "turbo": "^2.4.4"
   },
   "packageManager": "pnpm@10.7.1",
-  "name": "with-vite"
+  "name": "haloidergisi"
 }

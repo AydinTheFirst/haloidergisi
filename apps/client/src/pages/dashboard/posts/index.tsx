@@ -15,7 +15,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import useSWR from "swr";
 
-import { Post } from "@/types";
+import type { Post } from "@/types";
 
 const ViewPosts = () => {
   const navigate = useNavigate();

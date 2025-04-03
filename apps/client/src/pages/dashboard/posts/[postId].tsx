@@ -1,3 +1,5 @@
+import type { AxiosProgressEvent } from "axios";
+
 import {
   Button,
   Card,
@@ -12,14 +14,14 @@ import {
   SelectItem,
   Textarea
 } from "@heroui/react";
-import { AxiosProgressEvent } from "axios";
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router";
 import { toast } from "sonner";
 import useSWR, { mutate } from "swr";
 
+import type { Category, Post } from "@/types";
+
 import http from "@/http";
-import { Category, Post } from "@/types";
 import { getFileUrl } from "@/utils";
 
 const ViewPost = () => {

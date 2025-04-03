@@ -6,7 +6,7 @@ import globals from "globals";
 import tseslint from "typescript-eslint";
 
 export default tseslint.config(
-  { ignores: ["dist"] },
+  { ignores: ["dist", ".react-router"] },
   {
     extends: [
       js.configs.recommended,
@@ -19,14 +19,13 @@ export default tseslint.config(
       globals: globals.browser
     },
     plugins: {
-      "react-hooks": reactHooks,
-      "react-refresh": reactRefresh
+      "react-hooks": reactHooks
     },
     rules: {
       ...reactHooks.configs.recommended.rules,
-      "react-refresh/only-export-components": [
-        "warn",
-        { allowConstantExport: true }
+      "@typescript-eslint/consistent-type-imports": [
+        "error",
+        { prefer: "type-imports" }
       ],
       "perfectionist/sort-imports": [
         "error",

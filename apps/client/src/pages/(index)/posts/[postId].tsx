@@ -1,14 +1,32 @@
+import type { MetaFunction } from "react-router";
+
 import { Button, Image, Link } from "@heroui/react";
-import { useParams } from "react-router";
-import useSWR from "swr";
+import { useLoaderData } from "react-router";
+
+import type { Post } from "@/types";
 
 import { Loader } from "@/components";
-import { Post } from "@/types";
+import http from "@/http";
 import { getFileUrl } from "@/utils";
 
+export const loader = async ({ params }: { params: { postId: string } }) => {
+  const { postId } = params;
+  if (!postId) throw new Error("Post ID is required");
+  const post = http.fetcher<Post>(`/posts/${postId}`);
+  if (!post) throw new Error("Post not found");
+  return post;
+};
+
+export const meta: MetaFunction = ({ data }) => {
+  const magazine = data as Post;
+  return [
+    { title: magazine.title },
+    { content: magazine.description, name: "description" }
+  ];
+};
+
 const ViewMagazine = () => {
-  const { magazineId } = useParams<{ magazineId: string }>();
-  const { data: magazine } = useSWR<Post>(`/posts/${magazineId}`);
+  const magazine = useLoaderData<typeof loader>();
 
   if (!magazine) return <Loader />;
 

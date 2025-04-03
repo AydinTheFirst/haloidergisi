@@ -15,7 +15,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import useSWR from "swr";
 
-import { Category } from "@/types";
+import type { Category } from "@/types";
 
 const ViewCategories = () => {
   const navigate = useNavigate();

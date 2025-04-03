@@ -1,3 +1,5 @@
+import type { MetaFunction } from "react-router";
+
 import {
   Button,
   Divider,
@@ -9,22 +11,34 @@ import {
   User
 } from "@heroui/react";
 import { useState } from "react";
-import useSWR from "swr";
+import { useLoaderData } from "react-router";
 
-import { Loader } from "@/components/Loader";
-import { User as IUser, Squad } from "@/types";
+import type { User as IUser } from "@/types";
+import type { SquadWithUsers } from "@/types/extended";
+
+import http from "@/http";
 import { getGravatar } from "@/utils";
 
 const instagram = "https://www.instagram.com/haloidergisi";
 
-interface SquadWithUsers extends Squad {
-  users: IUser[];
-}
+export const loader = async () => {
+  const squads = await http.fetcher<SquadWithUsers[]>("/squads");
+  return squads;
+};
+
+export const meta: MetaFunction = () => {
+  return [
+    { title: "HALO Ekibi" },
+    {
+      content:
+        "HALO Ekibi, HALO Dergisi'nin arkasındaki yaratıcı güçtür. Ekibimiz, dergiyi oluşturmak ve geliştirmek için bir araya gelmiştir.",
+      name: "description"
+    }
+  ];
+};
 
 export const Team = () => {
-  const { data: squads } = useSWR<SquadWithUsers[]>("/squads");
-
-  if (!squads) return <Loader />;
+  const squads = useLoaderData<typeof loader>();
 
   const allMembersCount = squads.reduce(
     (acc, squad) => acc + squad.users.length,
@@ -57,7 +71,13 @@ export const Team = () => {
   );
 };
 
-const UserGroup = ({ title, users }: { title: string; users: IUser[] }) => {
+const UserGroup = ({
+  title,
+  users
+}: {
+  title: string;
+  users: SquadWithUsers["users"];
+}) => {
   const className =
     title === "Yönetim"
       ? "grid grid-cols-1 gap-3 md:grid-cols-3 lg:grid-cols-3"

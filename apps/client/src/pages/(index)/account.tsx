@@ -2,8 +2,9 @@ import { Avatar, Button, Card, CardBody, Input, Textarea } from "@heroui/react";
 import { toast } from "sonner";
 import useSWR from "swr";
 
+import type { User as IUser } from "@/types";
+
 import http from "@/http";
-import { User as IUser } from "@/types";
 import { getGravatar } from "@/utils";
 
 export const Profile = () => {

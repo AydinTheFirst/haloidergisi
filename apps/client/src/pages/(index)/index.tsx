@@ -1,9 +1,11 @@
 import { Button, Card, CardFooter, Divider, Image } from "@heroui/react";
-import { useNavigate } from "react-router";
+import { useLoaderData, useNavigate } from "react-router";
 import useSWR from "swr";
 
+import type { Category, Post } from "@/types";
+
 import { Loader, Logo } from "@/components";
-import { Category, Post } from "@/types";
+import http from "@/http";
 import { getFileUrl, sleep } from "@/utils";
 
 const Index = () => {
@@ -35,7 +37,7 @@ const Hero = () => {
         <Logo className='h-20 w-auto md:h-40' />
         <Button
           color='secondary'
-          onClick={scrollTo}
+          onPress={scrollTo}
           size='lg'
         >
           <strong>Dergileri Keşfet</strong>
@@ -45,10 +47,13 @@ const Hero = () => {
   );
 };
 
-const Categories = () => {
-  const { data: categories } = useSWR<Category[]>("/categories");
+export const loader = async () => {
+  const categories = await http.fetcher<Category[]>("/categories");
+  return categories;
+};
 
-  if (!categories) return <Loader />;
+const Categories = () => {
+  const categories = useLoaderData<typeof loader>();
 
   return categories.map((category, i) => (
     <CategorySection
@@ -94,7 +99,7 @@ const MagazineCard = ({ magazine }: { magazine: Post }) => {
   const navigate = useNavigate();
   const handlePress = async () => {
     await sleep(350);
-    navigate(`/post/${magazine.id}`);
+    navigate(`/posts/${magazine.id}`);
   };
 
   return (

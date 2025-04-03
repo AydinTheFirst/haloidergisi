@@ -11,8 +11,9 @@ import { useNavigate, useParams } from "react-router";
 import { toast } from "sonner";
 import useSWR from "swr";
 
+import type { Category } from "@/types";
+
 import http from "@/http";
-import { Category } from "@/types";
 
 const ViewCategory = () => {
   const navigate = useNavigate();
