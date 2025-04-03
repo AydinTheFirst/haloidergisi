@@ -26,12 +26,12 @@ const modules = () => {
 @Module({
   controllers: [AppController],
   imports: [
-    ...AppRoutes,
+    ...modules(),
     PrismaModule,
     WebsocketModule,
-    ...modules(),
     ThrottlerModule.forRoot(throttlerConfig),
     MulterModule.register(multerConfig),
+    ...AppRoutes,
   ],
   providers: [AppService],
 })
