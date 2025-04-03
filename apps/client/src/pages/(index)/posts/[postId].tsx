@@ -21,7 +21,9 @@ export const meta: MetaFunction = ({ data }) => {
   const magazine = data as Post;
   return [
     { title: magazine.title },
-    { content: magazine.description, name: "description" }
+    { content: magazine.title, property: "og:title" },
+    { content: magazine.description, property: "og:description" },
+    { content: getFileUrl(magazine.cover!), property: "og:image" }
   ];
 };
 
