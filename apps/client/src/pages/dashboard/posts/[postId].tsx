@@ -6,6 +6,7 @@ import {
   CardBody,
   CardFooter,
   CardHeader,
+  DatePicker,
   Image,
   Input,
   Link,
@@ -14,6 +15,7 @@ import {
   SelectItem,
   Textarea
 } from "@heroui/react";
+import { parseAbsoluteToLocal, parseDate } from "@internationalized/date";
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router";
 import { toast } from "sonner";
@@ -40,6 +42,8 @@ const ViewPost = () => {
     const data: Record<string, unknown> = Object.fromEntries(
       formData.entries()
     );
+
+    data.createdAt = new Date(data.createdAt as string).toISOString();
 
     try {
       await (isNew
@@ -122,6 +126,18 @@ const ViewPost = () => {
               defaultValue={post ? post.description : ""}
               label='Açıklama'
               name='description'
+            />
+
+            <DatePicker
+              className='col-span-12'
+              defaultValue={
+                post
+                  ? parseDate(post.createdAt.toString().split("T")[0])
+                  : parseAbsoluteToLocal(new Date().toISOString().split("T")[0])
+              }
+              isRequired
+              label='Yayın Tarihi'
+              name='createdAt'
             />
 
             <Button

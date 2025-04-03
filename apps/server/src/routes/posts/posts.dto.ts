@@ -1,5 +1,6 @@
+import { PartialType } from "@nestjs/swagger";
 import { PostStatus } from "@prisma/client";
-import { IsEnum, IsOptional, IsString } from "class-validator";
+import { IsEnum, IsISO8601, IsOptional, IsString } from "class-validator";
 
 export class CreatePostDto {
   @IsString()
@@ -8,6 +9,10 @@ export class CreatePostDto {
   @IsString()
   @IsOptional()
   cover: string;
+
+  @IsOptional()
+  @IsISO8601()
+  createdAt: Date;
 
   @IsString()
   description: string;
@@ -23,4 +28,4 @@ export class CreatePostDto {
   title: string;
 }
 
-export class UpdatePostDto extends CreatePostDto {}
+export class UpdatePostDto extends PartialType(CreatePostDto) {}
