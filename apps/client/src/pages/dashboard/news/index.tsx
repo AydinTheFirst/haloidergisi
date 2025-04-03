@@ -1,3 +1,5 @@
+import type { Key } from "react";
+
 import {
   getKeyValue,
   Table,
@@ -7,11 +9,10 @@ import {
   TableHeader,
   TableRow
 } from "@heroui/react";
-import { Key } from "react";
 import { useNavigate } from "react-router";
 import useSWR from "swr";
 
-import { News } from "@/types";
+import type { News } from "@/types";
 
 export default function ViewNews() {
   const navigate = useNavigate();

@@ -1,3 +1,6 @@
+import type {
+  Selection} from "@heroui/react";
+
 import {
   Button,
   Card,
@@ -5,7 +8,6 @@ import {
   CardHeader,
   Input,
   Select,
-  Selection,
   SelectItem,
   Textarea
 } from "@heroui/react";
@@ -14,8 +16,9 @@ import { useNavigate, useParams } from "react-router";
 import { toast } from "sonner";
 import useSWR from "swr";
 
+import type { Squad, User } from "@/types";
+
 import http from "@/http";
-import { Squad, User } from "@/types";
 
 const ViewUser = () => {
   const navigate = useNavigate();

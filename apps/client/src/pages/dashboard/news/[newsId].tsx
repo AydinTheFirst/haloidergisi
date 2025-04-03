@@ -11,8 +11,9 @@ import { useNavigate, useParams } from "react-router";
 import { toast } from "sonner";
 import useSWR from "swr";
 
+import type { News } from "@/types";
+
 import http from "@/http";
-import { News } from "@/types";
 
 export default function CreateOrEditNews() {
   const navigate = useNavigate();

@@ -1,3 +1,5 @@
+import type { Key} from "react";
+
 import {
   getKeyValue,
   Input,
@@ -11,11 +13,11 @@ import {
   TableRow
 } from "@heroui/react";
 import { LucideSearch } from "lucide-react";
-import { Key, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import useSWR from "swr";
 
-import { User } from "@/types";
+import type { User } from "@/types";
 
 const ViewUsers = () => {
   const navigate = useNavigate();

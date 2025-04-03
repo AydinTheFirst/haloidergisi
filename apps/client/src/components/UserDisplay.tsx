@@ -8,7 +8,7 @@ import {
 import { UserIcon } from "lucide-react";
 import useSWR from "swr";
 
-import { User } from "@/types";
+import type { User } from "@/types";
 
 export const UserDisplay = () => {
   const { data: me } = useSWR<User>("/auth/me", {
@@ -33,9 +33,15 @@ export const UserDisplay = () => {
         </Button>
       </DropdownTrigger>
       <DropdownMenu aria-label='Static Actions'>
-        <DropdownItem href='/account'>Hesap Ayarları</DropdownItem>
+        <DropdownItem
+          href='/account'
+          key={"account"}
+        >
+          Hesap Ayarları
+        </DropdownItem>
         <DropdownItem
           color='danger'
+          key={"logout"}
           onPress={logout}
         >
           Çıkış Yap

@@ -1,4 +1,6 @@
-import { Input, InputProps } from "@heroui/react";
+import type { InputProps } from "@heroui/react";
+
+import { Input } from "@heroui/react";
 import { EyeIcon, EyeOffIcon } from "lucide-react";
 import { useState } from "react";
 

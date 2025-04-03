@@ -25,9 +25,10 @@ import { useEffect, useState } from "react";
 import { useLocation } from "react-router";
 import useSWR from "swr";
 
+import type { User } from "@/types";
+
 import { Logo, ThemeToggler } from "@/components";
 import { useDeviceType } from "@/hooks";
-import { User } from "@/types";
 
 const menuItems = [
   {
