@@ -95,7 +95,7 @@ const MagazineCard = ({ magazine }: { magazine: Post }) => {
   const navigate = useNavigate();
   const handlePress = async () => {
     await sleep(350);
-    navigate(`/posts/${magazine.id}`);
+    navigate(`/posts/${magazine.slug}`);
   };
 
   return (

@@ -1,4 +1,5 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
+import slugify from "slugify";
 
 import { S3Service } from "@/modules";
 import { PrismaService } from "@/prisma";
@@ -12,16 +13,13 @@ export class PostsService {
     private s3: S3Service
   ) {}
   async create(createPostDto: CreatePostDto) {
-    const { categoryId, ...data } = createPostDto;
-
     const post = await this.prisma.post.create({
       data: {
-        ...data,
-        category: {
-          connect: {
-            id: categoryId,
-          },
-        },
+        slug: slugify(createPostDto.title, {
+          lower: true,
+          strict: true,
+        }),
+        ...createPostDto,
       },
     });
 
@@ -34,8 +32,8 @@ export class PostsService {
   }
 
   async findOne(id: string) {
-    const post = await this.prisma.post.findUnique({
-      where: { id },
+    const post = await this.prisma.post.findFirst({
+      where: { OR: [{ id }, { slug: id }] },
     });
 
     if (!post) {
@@ -56,10 +54,21 @@ export class PostsService {
   }
 
   async update(id: string, updatePostDto: UpdatePostDto) {
-    await this.findOne(id);
+    const existing = await this.findOne(id);
+
+    const slug =
+      updatePostDto.title !== existing.title
+        ? slugify(updatePostDto.title, {
+            lower: true,
+            strict: true,
+          })
+        : existing.slug;
 
     const post = await this.prisma.post.update({
-      data: updatePostDto,
+      data: {
+        slug,
+        ...updatePostDto,
+      },
       where: { id },
     });
 

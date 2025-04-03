@@ -72,6 +72,7 @@ model Post {
   title       String
   description String
   status      PostStatus
+  slug        String     @unique
 
   cover String? @default("")
   file  String? @default("")
