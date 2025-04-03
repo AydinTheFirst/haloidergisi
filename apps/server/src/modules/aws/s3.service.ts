@@ -1,26 +1,32 @@
 import { GetObjectCommandOutput, S3 } from "@aws-sdk/client-s3";
 import { Injectable, Logger, OnModuleInit } from "@nestjs/common";
+import { ConfigService } from "@nestjs/config";
 import crypto from "node:crypto";
 
 @Injectable()
 export class S3Service implements OnModuleInit {
+  bucketName: string;
   cache = new Map<string, GetObjectCommandOutput>();
   s3: S3;
-  constructor() {
+
+  // Constructor
+  constructor(private configService: ConfigService) {
     this.s3 = new S3({
       credentials: {
-        accessKeyId: process.env.AWS_ACCESS_KEY_ID!,
-        secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY!,
+        accessKeyId: configService.get("AWS_ACCESS_KEY_ID"),
+        secretAccessKey: configService.get("AWS_SECRET_ACCESS_KEY"),
       },
-      endpoint: process.env.AWS_ENDPOINT,
+      endpoint: configService.get("AWS_ENDPOINT"),
       maxAttempts: 3,
       region: "auto",
     });
+
+    this.bucketName = configService.get("AWS_BUCKET_NAME")!;
   }
 
   async deleteFile(Key: string) {
     const result = await this.s3.deleteObject({
-      Bucket: process.env.AWS_BUCKET_NAME!,
+      Bucket: this.bucketName,
       Key,
     });
 
@@ -30,7 +36,7 @@ export class S3Service implements OnModuleInit {
   async getFile(Key: string) {
     try {
       const result = await this.s3.getObject({
-        Bucket: process.env.AWS_BUCKET_NAME!,
+        Bucket: this.bucketName,
         Key,
       });
 
@@ -43,7 +49,7 @@ export class S3Service implements OnModuleInit {
 
   async getFiles() {
     const result = await this.s3.listObjects({
-      Bucket: process.env.AWS_BUCKET_NAME!,
+      Bucket: this.bucketName,
     });
 
     return result.Contents;
@@ -52,7 +58,7 @@ export class S3Service implements OnModuleInit {
   async onModuleInit() {
     try {
       await this.s3.headBucket({
-        Bucket: process.env.AWS_BUCKET_NAME!,
+        Bucket: this.bucketName,
       });
       Logger.debug("AWS S3 bucket is ready", "AWS");
     } catch (err) {
@@ -65,7 +71,7 @@ export class S3Service implements OnModuleInit {
 
     await this.s3.putObject({
       Body: file.buffer,
-      Bucket: process.env.AWS_BUCKET_NAME!,
+      Bucket: this.bucketName,
       ContentType: file.mimetype,
       Key: key,
     });

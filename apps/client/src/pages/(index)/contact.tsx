@@ -1,7 +1,16 @@
+import type { MetaFunction } from "react-router";
+
 import { Button, Input, Link, Textarea } from "@heroui/react";
 import { SiInstagram, SiLinkedin } from "@icons-pack/react-simple-icons";
 
 import { INSTAGRAM_URL, LINKEDIN_URL } from "@/config";
+
+export const meta: MetaFunction = () => {
+  return [
+    { title: "HALO Dergisi | İletişim" },
+    { content: "HALO Dergisi İletişim", name: "description" }
+  ];
+};
 
 const Contact = () => {
   return (

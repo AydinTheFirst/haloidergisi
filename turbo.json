@@ -8,10 +8,12 @@
     },
     "lint": {},
     "start": {
+      "inputs": ["$TURBO_DEFAULT$", ".env*"],
       "cache": false,
       "persistent": true
     },
     "dev": {
+      "inputs": ["$TURBO_DEFAULT$", ".env*"],
       "cache": false,
       "persistent": true
     },

@@ -1,6 +1,15 @@
+import type { MetaFunction } from "react-router";
+
 import axios from "axios";
 import Markdown from "react-markdown";
 import useSWR from "swr";
+
+export const meta: MetaFunction = () => {
+  return [
+    { title: "HALO Dergisi | Hakkında" },
+    { content: "HALO Dergisi Hakkında", name: "description" }
+  ];
+};
 
 const fetcher = (url: string) => axios.get(url).then((res) => res.data);
 

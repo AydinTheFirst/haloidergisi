@@ -1,10 +1,10 @@
 import { Button, Card, CardFooter, Divider, Image } from "@heroui/react";
 import { useLoaderData, useNavigate } from "react-router";
-import useSWR from "swr";
 
-import type { Category, Post } from "@/types";
+import type { Post } from "@/types";
+import type { CategoryWithPosts } from "@/types/extended";
 
-import { Loader, Logo } from "@/components";
+import { Logo } from "@/components";
 import http from "@/http";
 import { getFileUrl, sleep } from "@/utils";
 
@@ -48,7 +48,9 @@ const Hero = () => {
 };
 
 export const loader = async () => {
-  const categories = await http.fetcher<Category[]>("/categories");
+  const categories = await http.fetcher<CategoryWithPosts[]>(
+    "/categories?posts=true"
+  );
   return categories;
 };
 
@@ -63,14 +65,8 @@ const Categories = () => {
   ));
 };
 
-const CategorySection = ({ category }: { category: Category }) => {
-  const { data: magazines } = useSWR<Post[]>(
-    `/categories/${category.id}/posts`
-  );
-
-  if (!magazines) return <Loader />;
-
-  magazines.sort((a, b) => {
+const CategorySection = ({ category }: { category: CategoryWithPosts }) => {
+  const magazines = category.posts.sort((a, b) => {
     if (new Date(a.createdAt) < new Date(b.createdAt)) return 1;
     if (new Date(a.createdAt) > new Date(b.createdAt)) return -1;
     return 0;

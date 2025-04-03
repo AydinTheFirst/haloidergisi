@@ -1,5 +1,6 @@
 import { MailerModule } from "@nestjs-modules/mailer";
 import { MiddlewareConsumer, Module, NestModule } from "@nestjs/common";
+import { ConfigModule } from "@nestjs/config";
 import { MulterModule } from "@nestjs/platform-express";
 import { ThrottlerModule } from "@nestjs/throttler";
 
@@ -26,12 +27,16 @@ const modules = () => {
 @Module({
   controllers: [AppController],
   imports: [
-    ...modules(),
+    ConfigModule.forRoot({
+      envFilePath: ".env",
+      isGlobal: true,
+    }),
+    ...AppRoutes,
     PrismaModule,
     WebsocketModule,
+    ...modules(),
     ThrottlerModule.forRoot(throttlerConfig),
     MulterModule.register(multerConfig),
-    ...AppRoutes,
   ],
   providers: [AppService],
 })
