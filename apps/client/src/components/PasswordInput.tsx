@@ -24,7 +24,7 @@ export const PasswordInput = (props: InputProps) => {
     <Input
       endContent={endContent}
       isRequired
-      label={props.label || "Password"}
+      label={props.label || "Şifre"}
       name='password'
       type={isVisible ? "text" : "password"}
       {...props}

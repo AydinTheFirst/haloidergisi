@@ -6,21 +6,24 @@ import {
   DropdownTrigger
 } from "@heroui/react";
 import { UserIcon } from "lucide-react";
-import useSWR from "swr";
+import { useLoaderData } from "react-router";
 
 import type { User } from "@/types";
 
+import http from "@/http";
+
+export const clientLoader = async () => {
+  const { data: user } = await http.get<User>("/auth/me");
+  return user;
+};
+
 export const UserDisplay = () => {
-  const { data: me } = useSWR<User>("/auth/me", {
-    onError: () => {}
-  });
+  const me = useLoaderData<typeof clientLoader>();
 
   const logout = () => {
     localStorage.removeItem("token");
-    location.reload();
+    location.replace("/");
   };
-
-  if (!me) return null;
 
   return (
     <Dropdown>

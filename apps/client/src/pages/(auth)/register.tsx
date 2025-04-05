@@ -18,7 +18,9 @@ const Register = () => {
     const data = Object.fromEntries(form.entries());
     try {
       await http.post("/auth/register", data);
-      toast.success("Account created successfully!");
+      toast.success("Hesap başarıyla oluşturuldu!", {
+        description: "Giriş yapmak için yönlendiriliyorsunuz..."
+      });
       await sleep(1000);
       location.replace("/login");
     } catch (error) {
@@ -29,7 +31,7 @@ const Register = () => {
   };
 
   return (
-    <CenteredCard title='Register'>
+    <CenteredCard title='Kayıt Ol'>
       <form
         className='grid gap-3'
         onSubmit={handleSubmit}
@@ -43,7 +45,7 @@ const Register = () => {
 
         <Input
           isRequired
-          label='Display Name'
+          label='Gösterilecek Ad'
           name='displayName'
         />
 
@@ -54,12 +56,12 @@ const Register = () => {
           isLoading={isLoading}
           type='submit'
         >
-          Register
+          Kayıt Ol
         </Button>
       </form>
       <CardFooter className='flex-col justify-center'>
-        <p>Already have an account?</p>
-        <Link href='/login'>Login</Link>
+        <p>Zaten bir hesabın var mı?</p>
+        <Link href='/login'>Giriş Yap</Link>
       </CardFooter>
     </CenteredCard>
   );

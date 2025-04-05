@@ -38,14 +38,12 @@ export const Profile = () => {
 
     try {
       await http.put("/users/me", data);
-      toast.success("Profile updated!");
+      toast.success("Profil güncellendi!");
       revalidate();
     } catch (error) {
       http.handleError(error);
     }
   };
-
-  if (!user) return <div>Loading...</div>;
 
   return (
     <>
@@ -91,7 +89,7 @@ export const Profile = () => {
           >
             <Input
               defaultValue={user.displayName || ""}
-              label='Name'
+              label='İsim'
               name='displayName'
             />
 
@@ -116,19 +114,17 @@ export const Profile = () => {
             <Input
               defaultValue={user.title || ""}
               isReadOnly
-              label='Role'
+              label='Rol'
               name='role'
             />
 
-            <div className='col-12'>
-              <Button
-                color='secondary'
-                fullWidth
-                type='submit'
-              >
-                Update
-              </Button>
-            </div>
+            <Button
+              color='secondary'
+              fullWidth
+              type='submit'
+            >
+              Güncelle
+            </Button>
           </form>
         </CardBody>
       </Card>
@@ -154,7 +150,7 @@ function UpdateAvatarModal({ isOpen, setIsOpen }: ModalProps) {
       await http.put("/users/me", {
         avatar: files[0]
       });
-      toast.success("Avatar updated!");
+      toast.success("Avatar güncellendi!");
       revalidate();
     } catch (error) {
       http.handleError(error);

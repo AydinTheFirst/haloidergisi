@@ -19,7 +19,7 @@ const Login = () => {
     try {
       const { data: res } = await http.post("/auth/login", data);
       localStorage.setItem("token", res.token);
-      toast.success("Logged in successfully!");
+      toast.success("Başarıyla Giriş Yapıldı!");
       await sleep(1000);
       location.replace("/");
     } catch (error) {
@@ -30,14 +30,15 @@ const Login = () => {
   };
 
   return (
-    <CenteredCard title='Login'>
+    <CenteredCard title='Giriş Yap'>
       <form
         className='grid gap-3'
         onSubmit={handleSubmit}
       >
         <Input
+          description='Kullanıcı adı veya email adresi'
           isRequired
-          label='Username'
+          label='Kullanıcı Adı'
           name='username'
         />
         <PasswordInput />
@@ -47,12 +48,12 @@ const Login = () => {
           isLoading={isLoading}
           type='submit'
         >
-          Login
+          Giriş Yap
         </Button>
       </form>
       <CardFooter className='flex-col justify-center'>
-        <p>Don't have an account?</p>
-        <Link href='/register'>Register</Link>
+        <p>Bir hesabın yok mu?</p>
+        <Link href='/register'>Kayıt Ol</Link>
       </CardFooter>
     </CenteredCard>
   );
