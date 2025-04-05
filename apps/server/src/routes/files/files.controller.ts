@@ -1,30 +1,40 @@
-import { Controller, Get, NotFoundException, Param, Res } from "@nestjs/common";
+import {
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Res,
+  UploadedFiles,
+  UseInterceptors,
+} from "@nestjs/common";
+import { FilesInterceptor } from "@nestjs/platform-express";
 import { Response } from "express";
 
-import { S3Service } from "@/modules";
+import { FilesService } from "./files.service";
 
 @Controller("files")
 export class FilesController {
-  constructor(private s3: S3Service) {}
-  @Get(":key")
-  async findOne(@Param("key") key: string, @Res() res: Response) {
-    const file = await this.s3.getFile(key);
+  constructor(private readonly filesService: FilesService) {}
 
-    if (!file) {
-      throw new NotFoundException("File not found");
-    }
+  @Post()
+  @UseInterceptors(FilesInterceptor("files"))
+  create(@UploadedFiles() files: Express.Multer.File[]) {
+    return this.filesService.create(files);
+  }
 
-    if (!file.Body) {
-      throw new NotFoundException("File not found");
-    }
+  @Get()
+  findAll() {
+    return this.filesService.findAll();
+  }
 
-    res.set({
-      "Content-Length": file.ContentLength,
-      "Content-Type": file.ContentType,
-      //"Content-Disposition": `attachment; filename="${key}"`, // Makes the browser download the file
-    });
+  @Get(":id")
+  findOne(@Param("id") id: string, @Res() res: Response) {
+    return this.filesService.findOne(id, res);
+  }
 
-    const fileStream = file.Body as NodeJS.ReadableStream;
-    fileStream.pipe(res);
+  @Delete(":id")
+  remove(@Param("id") id: string) {
+    return this.filesService.remove(id);
   }
 }

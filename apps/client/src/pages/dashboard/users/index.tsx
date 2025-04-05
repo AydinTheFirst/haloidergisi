@@ -1,4 +1,4 @@
-import type { Key} from "react";
+import type { Key } from "react";
 
 import {
   getKeyValue,

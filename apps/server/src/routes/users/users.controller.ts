@@ -6,6 +6,7 @@ import {
   Param,
   Patch,
   Post,
+  Put,
   Req,
   UseGuards,
 } from "@nestjs/common";
@@ -15,7 +16,7 @@ import { Roles } from "@/common/decorators";
 import { AuthGuard } from "@/common/guards";
 import { Role } from "@/prisma";
 
-import { CreateUserDto, UpdateUserDto } from "./users.dto";
+import { CreateUserDto, UpdateUserDto, UpdateUserSelfDto } from "./users.dto";
 import { UsersService } from "./users.service";
 
 @Controller("users")
@@ -51,5 +52,11 @@ export class UsersController {
   @Roles([Role.ADMIN])
   update(@Param("id") id: string, @Body() updateUserDto: UpdateUserDto) {
     return this.usersService.update(id, updateUserDto);
+  }
+
+  @Put("me")
+  @UseGuards(AuthGuard)
+  updateSelf(@Req() req: Request, @Body() updateUserDto: UpdateUserSelfDto) {
+    return this.usersService.updateSelf(req, updateUserDto);
   }
 }

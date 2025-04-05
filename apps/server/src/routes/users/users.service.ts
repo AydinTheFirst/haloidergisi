@@ -1,11 +1,15 @@
-import { Injectable, NotFoundException } from "@nestjs/common";
+import {
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from "@nestjs/common";
 import argon2 from "argon2";
 import { Request } from "express";
 
 import { PrismaService } from "@/prisma";
 import { getPublicUserSelection } from "@/utils";
 
-import { CreateUserDto, UpdateUserDto } from "./users.dto";
+import { CreateUserDto, UpdateUserDto, UpdateUserSelfDto } from "./users.dto";
 
 @Injectable()
 export class UsersService {
@@ -37,9 +41,7 @@ export class UsersService {
   async findOne(id: string, req: Request) {
     const user = await this.prisma.user.findUnique({
       select: this.isAdmin(req) ? null : getPublicUserSelection(),
-      where: {
-        id: id,
-      },
+      where: { id },
     });
 
     if (!user) throw new NotFoundException("User not found");
@@ -94,5 +96,18 @@ export class UsersService {
     });
 
     return user;
+  }
+
+  async updateSelf(req: Request, updateUserDto: UpdateUserSelfDto) {
+    if (!req.user) throw new UnauthorizedException();
+
+    await this.findOne(req.user.id, req);
+
+    const updated = await this.prisma.user.update({
+      data: updateUserDto,
+      where: { id: req.user.id },
+    });
+
+    return updated;
   }
 }

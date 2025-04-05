@@ -1,3 +1,4 @@
+import { PartialType } from "@nestjs/swagger";
 import { Role } from "@prisma/client";
 import {
   IsArray,
@@ -44,3 +45,25 @@ export class UpdateUserDto extends CreateUserDto {
   @IsEnum(Role, { each: true })
   roles: Role[];
 }
+
+export class UpdateUserSelf {
+  @IsString()
+  avatar: string;
+
+  @IsString()
+  bio: string;
+
+  @IsString()
+  displayName: string;
+
+  @IsString()
+  title: string;
+
+  @IsString()
+  username: string;
+
+  @IsString()
+  website: string;
+}
+
+export class UpdateUserSelfDto extends PartialType(UpdateUserSelf) {}

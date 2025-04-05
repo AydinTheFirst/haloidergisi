@@ -1,5 +1,4 @@
-import type {
-  Selection} from "@heroui/react";
+import type { Selection } from "@heroui/react";
 
 import {
   Button,
@@ -31,11 +30,22 @@ const ViewUser = () => {
   const { data: squads } = useSWR<Squad[]>("/squads");
 
   const [userRoles, setUserRoles] = useState<Selection>(new Set());
+  const [password, setPassword] = useState<string>("");
 
   useEffect(() => {
     if (!user) return;
     setUserRoles(new Set(user.roles));
   }, [user]);
+
+  const randomPassword = () => {
+    const chars =
+      "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    let password = "";
+    for (let i = 0; i < 10; i++) {
+      password += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    setPassword(password);
+  };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -156,8 +166,20 @@ const ViewUser = () => {
 
             <Input
               className='col-span-12 md:col-span-6'
+              description='Şifreyi değiştirmek için yeni bir şifre girin. Şifreyi değiştirmek istemiyorsanız, bu alanı boş bırakın.'
+              endContent={
+                <Button
+                  color='secondary'
+                  onPress={randomPassword}
+                  size='sm'
+                >
+                  Rastgele
+                </Button>
+              }
               label='Şifre'
               name='password'
+              onChange={(e) => setPassword(e.target.value)}
+              value={password}
             />
 
             <Textarea

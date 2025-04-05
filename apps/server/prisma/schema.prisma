@@ -28,10 +28,12 @@ model User {
   bio         String?
   website     String?
   title       String?
-  squadId     String?
+  avatar      String?
+
+  squadId String?
+  squad   Squad?  @relation(fields: [squadId], references: [id])
 
   roles Role[] @default([USER])
-  squad Squad? @relation(fields: [squadId], references: [id])
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

@@ -1,4 +1,5 @@
 import { Avatar, Button, Card, CardBody, Input, Textarea } from "@heroui/react";
+import { LucideEdit } from "lucide-react";
 import { toast } from "sonner";
 import useSWR from "swr";
 
@@ -18,7 +19,7 @@ export const Profile = () => {
     const data = Object.fromEntries(form.entries());
 
     try {
-      await http.put("/users", data);
+      await http.put("/users/me", data);
       toast.success("Profile updated!");
     } catch (error) {
       http.handleError(error);
@@ -30,7 +31,7 @@ export const Profile = () => {
   return (
     <>
       <Card className='mx-auto max-w-xl'>
-        <div className='to--500 h-[100px] rounded-lg bg-gradient-to-tr from-yellow-500 to-red-500' />
+        <div className='h-[100px] rounded-lg bg-gradient-to-tr from-yellow-500 to-red-500' />
         <div
           className='flex justify-center'
           style={{
@@ -40,10 +41,15 @@ export const Profile = () => {
             transform: "translateX(-50%)"
           }}
         >
-          <Avatar
-            size='lg'
-            src={getGravatar(user.email)}
-          />
+          <div className='relative'>
+            <Avatar
+              size='lg'
+              src={getGravatar(user.email)}
+            />
+            <Button className='absolute bottom-0 right-0'>
+              <LucideEdit />
+            </Button>
+          </div>
         </div>
         <div style={{ height: "25px" }} />
         <div>
