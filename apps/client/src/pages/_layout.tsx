@@ -1,11 +1,10 @@
-import type { MetaFunction} from "react-router";
+import type { MetaFunction } from "react-router";
 
 import { useTheme } from "next-themes";
 import { Outlet } from "react-router";
 import { Toaster } from "sonner";
 import { SWRConfig } from "swr";
 
-import "@/styles/globals.css";
 import http from "@/http";
 import { Providers } from "@/provider";
 
