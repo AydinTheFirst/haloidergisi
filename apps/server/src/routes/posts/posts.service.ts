@@ -3,7 +3,7 @@ import { Request } from "express";
 import slugify from "slugify";
 
 import { S3Service } from "@/modules";
-import { Prisma, PrismaService } from "@/prisma";
+import { Prisma, PrismaService, User } from "@/prisma";
 
 import { CreatePostDto, UpdatePostDto } from "./posts.dto";
 
@@ -13,6 +13,7 @@ export class PostsService {
     private prisma: PrismaService,
     private s3: S3Service
   ) {}
+
   async create(createPostDto: CreatePostDto) {
     const post = await this.prisma.post.create({
       data: {
@@ -28,12 +29,9 @@ export class PostsService {
   }
 
   async findAll(req: Request) {
-    const where: Prisma.PostScalarWhereInput =
-      req.user && req.user.roles.includes("ADMIN")
-        ? {}
-        : { status: "PUBLISHED" };
-
-    const posts = await this.prisma.post.findMany({ where });
+    const posts = await this.prisma.post.findMany({
+      where: this.getPostWhereClause(req.user),
+    });
 
     return posts;
   }
@@ -48,6 +46,16 @@ export class PostsService {
     }
 
     return post;
+  }
+
+  getPostWhereClause(user?: User): Prisma.PostWhereInput {
+    if (user && user.roles.includes("ADMIN")) {
+      return {};
+    }
+
+    return {
+      status: "PUBLISHED",
+    };
   }
 
   async remove(id: string) {

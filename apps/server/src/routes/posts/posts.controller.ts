@@ -8,13 +8,10 @@ import {
   Post,
   Req,
   UploadedFile,
-  UseGuards,
   UseInterceptors,
 } from "@nestjs/common";
 import { FileInterceptor } from "@nestjs/platform-express";
 import { Request } from "express";
-
-import { AuthGuard } from "@/common/guards";
 
 import { CreatePostDto, UpdatePostDto } from "./posts.dto";
 import { PostsService } from "./posts.service";
@@ -29,7 +26,6 @@ export class PostsController {
   }
 
   @Get()
-  @UseGuards(AuthGuard)
   findAll(@Req() req: Request) {
     return this.postsService.findAll(req);
   }

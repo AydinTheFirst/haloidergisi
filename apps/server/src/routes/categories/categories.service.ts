@@ -1,4 +1,5 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
+import { Request } from "express";
 
 import { PrismaService } from "@/prisma";
 
@@ -15,17 +16,14 @@ export class CategoriesService {
     return cateogry;
   }
 
-  async findAll(query?: Record<string, string>) {
-    console.log(query);
+  async findAll(req: Request) {
+    const includePosts = req.query.posts === "true";
     const categories = await this.prisma.category.findMany({
       include: {
-        posts: {
-          where: {
-            status: "PUBLISHED",
-          },
-        },
+        posts: includePosts ? { where: { status: "PUBLISHED" } } : false,
       },
     });
+
     return categories;
   }
 

@@ -78,10 +78,22 @@ const ViewPost = () => {
   return (
     <section className='grid gap-5'>
       <Card>
-        <CardHeader>
+        <CardHeader className='justify-between'>
           <h3 className='text-2xl font-semibold'>
             {!post ? "Yeni Dergi Oluştur" : `Dergiyi Düzenle: ${post.title}`}
           </h3>
+          <div>
+            {post && (
+              <Button
+                as={Link}
+                color='primary'
+                href={`/posts/${post.slug}`}
+                isExternal
+              >
+                Görüntüle
+              </Button>
+            )}
+          </div>
         </CardHeader>
         <CardBody>
           <form

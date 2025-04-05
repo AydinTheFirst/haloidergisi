@@ -6,9 +6,10 @@ import {
   Param,
   Patch,
   Post,
-  Query,
+  Req,
   UseGuards,
 } from "@nestjs/common";
+import { Request } from "express";
 
 import { Roles } from "@/common/decorators";
 import { AuthGuard } from "@/common/guards";
@@ -28,8 +29,8 @@ export class CategoriesController {
   }
 
   @Get()
-  findAll(@Query() query: Record<string, string>) {
-    return this.categoriesService.findAll(query);
+  findAll(@Req() req: Request) {
+    return this.categoriesService.findAll(req);
   }
 
   @Get(":id")
