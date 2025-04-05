@@ -16,9 +16,14 @@ export class CategoriesService {
   }
 
   async findAll(query?: Record<string, string>) {
+    console.log(query);
     const categories = await this.prisma.category.findMany({
       include: {
-        posts: query?.posts === "true",
+        posts: {
+          where: {
+            status: "PUBLISHED",
+          },
+        },
       },
     });
     return categories;
