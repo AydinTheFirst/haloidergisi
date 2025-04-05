@@ -1,8 +1,9 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
+import { Request } from "express";
 import slugify from "slugify";
 
 import { S3Service } from "@/modules";
-import { PrismaService } from "@/prisma";
+import { Prisma, PrismaService } from "@/prisma";
 
 import { CreatePostDto, UpdatePostDto } from "./posts.dto";
 
@@ -26,8 +27,14 @@ export class PostsService {
     return post;
   }
 
-  async findAll() {
-    const posts = await this.prisma.post.findMany();
+  async findAll(req: Request) {
+    const where: Prisma.PostScalarWhereInput =
+      req.user && req.user.roles.includes("ADMIN")
+        ? {}
+        : { status: "PUBLISHED" };
+
+    const posts = await this.prisma.post.findMany({ where });
+
     return posts;
   }
 
