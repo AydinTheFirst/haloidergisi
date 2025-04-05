@@ -43,7 +43,9 @@ const ViewPost = () => {
       formData.entries()
     );
 
-    data.createdAt = new Date(data.createdAt as string).toISOString();
+    if (data.createdAt) {
+      data.createdAt = new Date(data.createdAt as string).toISOString();
+    }
 
     try {
       await (isNew
