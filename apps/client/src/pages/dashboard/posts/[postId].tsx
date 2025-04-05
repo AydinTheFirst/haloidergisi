@@ -15,7 +15,7 @@ import {
   SelectItem,
   Textarea
 } from "@heroui/react";
-import { parseAbsoluteToLocal, parseDate } from "@internationalized/date";
+import { parseDate } from "@internationalized/date";
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router";
 import { toast } from "sonner";
@@ -127,18 +127,17 @@ const ViewPost = () => {
               label='Açıklama'
               name='description'
             />
-
-            <DatePicker
-              className='col-span-12'
-              defaultValue={
-                post
-                  ? parseDate(post.createdAt.toString().split("T")[0])
-                  : parseAbsoluteToLocal(new Date().toISOString().split("T")[0])
-              }
-              isRequired
-              label='Yayın Tarihi'
-              name='createdAt'
-            />
+            {post && (
+              <DatePicker
+                className='col-span-12'
+                defaultValue={parseDate(
+                  post.createdAt.toString().split("T")[0]
+                )}
+                isRequired
+                label='Yayın Tarihi'
+                name='createdAt'
+              />
+            )}
 
             <Button
               className='col-span-12'
