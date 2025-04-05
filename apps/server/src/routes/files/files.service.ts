@@ -15,7 +15,9 @@ export class FilesService {
       })
     );
 
-    return uploadedFiles;
+    return uploadedFiles.map((r) =>
+      r.status === "fulfilled" ? r.value : null
+    );
   }
 
   async findAll() {

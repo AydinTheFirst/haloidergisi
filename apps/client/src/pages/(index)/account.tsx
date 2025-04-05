@@ -1,17 +1,35 @@
-import { Avatar, Button, Card, CardBody, Input, Textarea } from "@heroui/react";
+import {
+  Avatar,
+  Button,
+  Card,
+  CardBody,
+  Input,
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalHeader,
+  Textarea
+} from "@heroui/react";
 import { LucideEdit } from "lucide-react";
+import { useState } from "react";
+import { useLoaderData, useRevalidator } from "react-router";
 import { toast } from "sonner";
-import useSWR from "swr";
 
-import type { User as IUser } from "@/types";
+import type { User } from "@/types";
 
 import http from "@/http";
-import { getGravatar } from "@/utils";
+import { getAvatar } from "@/utils";
+
+export const clientLoader = async () => {
+  const { data: user } = await http.get<User>("/auth/me");
+  return user;
+};
 
 export const Profile = () => {
-  const { data: user } = useSWR<IUser>("/auth/me");
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
-  if (!user) return <div>Loading...</div>;
+  const user = useLoaderData<typeof clientLoader>();
+  const { revalidate } = useRevalidator();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -21,6 +39,7 @@ export const Profile = () => {
     try {
       await http.put("/users/me", data);
       toast.success("Profile updated!");
+      revalidate();
     } catch (error) {
       http.handleError(error);
     }
@@ -30,6 +49,10 @@ export const Profile = () => {
 
   return (
     <>
+      <UpdateAvatarModal
+        isOpen={isModalOpen}
+        setIsOpen={setIsModalOpen}
+      />
       <Card className='mx-auto max-w-xl'>
         <div className='h-[100px] rounded-lg bg-gradient-to-tr from-yellow-500 to-red-500' />
         <div
@@ -43,15 +66,21 @@ export const Profile = () => {
         >
           <div className='relative'>
             <Avatar
-              size='lg'
-              src={getGravatar(user.email)}
+              className='h-20 w-20'
+              src={getAvatar(user)}
             />
-            <Button className='absolute bottom-0 right-0'>
+            <Button
+              className='absolute bottom-0 end-0 -m-3'
+              isIconOnly
+              onPress={() => setIsModalOpen(true)}
+              radius='full'
+              size='sm'
+            >
               <LucideEdit />
             </Button>
           </div>
         </div>
-        <div style={{ height: "25px" }} />
+        <div className='h-16' />
         <div>
           <h1 className='text-3lg text-center font-bold'>{user.displayName}</h1>
         </div>
@@ -108,3 +137,62 @@ export const Profile = () => {
 };
 
 export default Profile;
+
+interface ModalProps {
+  isOpen: boolean;
+  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
+}
+function UpdateAvatarModal({ isOpen, setIsOpen }: ModalProps) {
+  const { revalidate } = useRevalidator();
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const form = new FormData(e.currentTarget);
+
+    try {
+      const { data: files } = await http.post<string>("/files", form);
+      await http.put("/users/me", {
+        avatar: files[0]
+      });
+      toast.success("Avatar updated!");
+      revalidate();
+    } catch (error) {
+      http.handleError(error);
+    }
+  };
+
+  return (
+    <Modal
+      isOpen={isOpen}
+      onOpenChange={setIsOpen}
+    >
+      <ModalContent>
+        <ModalHeader className='flex flex-col gap-1'>
+          Profil Resmini Güncelle
+        </ModalHeader>
+        <ModalBody>
+          <form
+            className='grid gap-3'
+            onSubmit={handleSubmit}
+          >
+            <Input
+              accept='image/*'
+              className='mb-3'
+              isRequired
+              label='Yeni Profil Resmi'
+              name='files'
+              type='file'
+            />
+
+            <Button
+              color='primary'
+              type='submit'
+            >
+              Güncelle
+            </Button>
+          </form>
+        </ModalBody>
+      </ModalContent>
+    </Modal>
+  );
+}
