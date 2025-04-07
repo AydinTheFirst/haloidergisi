@@ -17,7 +17,7 @@ import type { User as IUser } from "@/types";
 import type { SquadWithUsers } from "@/types/extended";
 
 import http from "@/http";
-import { getGravatar } from "@/utils";
+import { getAvatar, getGravatar } from "@/utils";
 
 const instagram = "https://www.instagram.com/haloidergisi";
 
@@ -26,13 +26,33 @@ export const loader = async () => {
   return squads;
 };
 
-export const meta: MetaFunction = () => {
+export const meta: MetaFunction = ({ data }) => {
+  const squads = data as SquadWithUsers[];
+  const allMembers = squads.reduce<IUser[]>(
+    (acc, squad) => acc.concat(squad.users),
+    []
+  );
+
+  const desc =
+    "HALO Ekibi, HALO Dergisi'nin arkasındaki yaratıcı güçtür. Ekibimiz, dergiyi oluşturmak ve geliştirmek için bir araya gelmiştir.";
+
   return [
     { title: "HALO Ekibi" },
     {
-      content:
-        "HALO Ekibi, HALO Dergisi'nin arkasındaki yaratıcı güçtür. Ekibimiz, dergiyi oluşturmak ve geliştirmek için bir araya gelmiştir.",
+      content: desc,
       name: "description"
+    },
+    {
+      content: allMembers.map((user) => user.displayName).join(", "),
+      name: "keywords"
+    },
+    {
+      content: "HALO Ekibi",
+      property: "og:title"
+    },
+    {
+      content: desc,
+      property: "og:description"
     }
   ];
 };
@@ -48,7 +68,7 @@ export const Team = () => {
   squads.sort((a, b) => a.order - b.order);
 
   return (
-    <div className='mx-auto max-w-3xl'>
+    <div className='container my-10 max-w-3xl'>
       <div>
         <h1 className='text-3xl font-bold'>HALO Ekibi</h1>
         <p className='text-lg text-neutral-500'>
@@ -119,7 +139,7 @@ const UserCard = ({ user }: { user: IUser }) => {
           avatarProps={{
             src: getGravatar(user.email)
           }}
-          className='flex h-full w-full cursor-pointer justify-start bg-[rgb(248,239,208)] p-3'
+          className='flex h-full w-full cursor-pointer justify-start bg-content2 p-3'
           description={user.title}
           name={user.displayName}
           onClick={() => setOpen(true)}
@@ -134,7 +154,7 @@ const UserCard = ({ user }: { user: IUser }) => {
           <ModalHeader>
             <User
               avatarProps={{
-                src: getGravatar(user.email)
+                src: getAvatar(user)
               }}
               description={user.title}
               name={user.displayName}
@@ -144,15 +164,17 @@ const UserCard = ({ user }: { user: IUser }) => {
             <p dangerouslySetInnerHTML={{ __html: renderBio(bio) }} />
           </ModalBody>
           <ModalFooter>
-            <Button
-              color='primary'
-              onClick={() => window.open(instagram, "_blank")}
-            >
-              İnternet Sitesi
-            </Button>
+            {user.website && (
+              <Button
+                color='primary'
+                onPress={() => window.open(instagram, "_blank")}
+              >
+                İnternet Sitesi
+              </Button>
+            )}
             <Button
               color='danger'
-              onClick={() => setOpen(false)}
+              onPress={() => setOpen(false)}
             >
               Kapat
             </Button>

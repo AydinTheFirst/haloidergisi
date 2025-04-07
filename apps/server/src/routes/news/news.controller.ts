@@ -6,11 +6,13 @@ import {
   Param,
   Patch,
   Post,
+  Query,
   UseGuards,
 } from "@nestjs/common";
 import { Role } from "@prisma/client";
 
 import { Roles } from "@/common/decorators";
+import { BaseQueryDto } from "@/common/dto/query.dto";
 import { AuthGuard } from "@/common/guards";
 
 import { CreateNewsDto, UpdateNewsDto } from "./news.dto";
@@ -28,8 +30,8 @@ export class NewsController {
   }
 
   @Get()
-  findAll() {
-    return this.newsService.findAll();
+  findAll(@Query() query: BaseQueryDto) {
+    return this.newsService.findAllNews(query);
   }
 
   @Get(":id")

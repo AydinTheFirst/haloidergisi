@@ -1,35 +1,51 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
+import slugify from "slugify";
 
-import { PrismaService } from "@/prisma";
+import { BaseQueryDto } from "@/common/dto/query.dto";
+import { BaseService } from "@/common/services/base.service";
+import { News, PrismaService } from "@/prisma";
 
 import { CreateNewsDto, UpdateNewsDto } from "./news.dto";
 
 @Injectable()
-export class NewsService {
-  constructor(private prisma: PrismaService) {}
+export class NewsService extends BaseService<News> {
+  constructor(private prisma: PrismaService) {
+    super(prisma.news);
+  }
 
   async create(createNewsDto: CreateNewsDto) {
     const news = await this.prisma.news.create({
-      data: createNewsDto,
+      data: {
+        slug: this.makeSlug(createNewsDto.title),
+        ...createNewsDto,
+      },
     });
 
     return news;
   }
 
-  async findAll() {
-    const news = await this.prisma.news.findMany();
+  async findAllNews(query: BaseQueryDto) {
+    const news = await this.findAll(query, ["title", "description"]);
 
     return news;
   }
 
   async findOne(id: string) {
-    const news = await this.prisma.news.findUnique({
-      where: { id },
+    const news = await this.prisma.news.findFirst({
+      where: { OR: [{ id }, { slug: id }] },
     });
 
     if (!news) throw new NotFoundException("News not found");
 
     return news;
+  }
+
+  makeSlug(title: string) {
+    const slug = slugify(title, {
+      lower: true,
+      strict: true,
+    });
+    return slug + "-" + Date.now();
   }
 
   async remove(id: string) {
@@ -43,13 +59,17 @@ export class NewsService {
   }
 
   async update(id: string, updateNewsDto: UpdateNewsDto) {
-    await this.findOne(id);
+    const news = await this.findOne(id);
 
-    const news = await this.prisma.news.update({
-      data: updateNewsDto,
+    const slug = updateNewsDto.title
+      ? this.makeSlug(updateNewsDto.title)
+      : news.slug;
+
+    const updated = await this.prisma.news.update({
+      data: { ...updateNewsDto, slug },
       where: { id },
     });
 
-    return news;
+    return updated;
   }
 }

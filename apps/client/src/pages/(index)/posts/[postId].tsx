@@ -1,6 +1,8 @@
 import type { MetaFunction } from "react-router";
 
 import { Button, Image, Link } from "@heroui/react";
+import { LucideExternalLink } from "lucide-react";
+import { useState } from "react";
 import { useLoaderData } from "react-router";
 
 import type { Post } from "@/types";
@@ -30,38 +32,54 @@ export const meta: MetaFunction = ({ data }) => {
 const ViewMagazine = () => {
   const magazine = useLoaderData<typeof loader>();
 
+  const [isDescriptionVisible, setIsDescriptionVisible] = useState(false);
+
   if (!magazine) return <Loader />;
 
   return (
-    <div className='mx-auto grid max-w-5xl grid-cols-12 gap-3'>
-      <div className='col-span-12 grid place-items-center md:col-span-6'>
-        <Image
-          alt='Magazine'
-          className='h-96 w-full object-cover'
-          src={getFileUrl(magazine.cover!)}
-        />
-      </div>
+    <div className='container my-20 max-w-5xl'>
+      <div className='grid gap-10'>
+        <div className='grid grid-cols-12 gap-10'>
+          <div className='col-span-12 md:col-span-4'>
+            <Image
+              alt='Magazine'
+              className='mx-auto h-96 w-full object-cover'
+              src={getFileUrl(magazine.cover!)}
+            />
+          </div>
+          <div className='col-span-12 grid gap-3 md:col-span-8'>
+            <h2 className='text-3xl font-extrabold'>{magazine.title}</h2>
+            <p className='font-semibold'>
+              {isDescriptionVisible
+                ? magazine.description
+                : magazine.description.substring(0, 255)}
+              <button
+                className='mx-3 text-gray-500'
+                onClick={() => setIsDescriptionVisible(!isDescriptionVisible)}
+              >
+                {isDescriptionVisible ? "Daha Az Göster" : "Devamını Oku"}
+              </button>
+            </p>
 
-      <div className='col-span-12 md:col-span-6'>
-        <div className='grid gap-5'>
-          <h2 className='text-3xl font-extrabold'>{magazine.title}</h2>
-          <p className='text-lg font-bold'>{magazine.description}</p>
-          <Button
-            as={Link}
-            color='secondary'
-            href={getFileUrl(magazine.file!)}
-            isExternal
-            size='sm'
-          >
-            <strong>Dergiyi Göster</strong>
-          </Button>
-          <small className='text-end'>
-            {new Date(magazine.createdAt).toLocaleDateString("tr-TR", {
-              day: "numeric",
-              month: "long",
-              year: "numeric"
-            })}
-          </small>
+            <div>
+              <Button
+                as={Link}
+                href={getFileUrl(magazine.file!)}
+                isExternal
+                startContent={<LucideExternalLink size={14} />}
+                variant='shadow'
+              >
+                <strong>Dergiyi Göster</strong>
+              </Button>
+            </div>
+            <small className='text-end'>
+              {new Date(magazine.createdAt).toLocaleDateString("tr-TR", {
+                day: "numeric",
+                month: "long",
+                year: "numeric"
+              })}
+            </small>
+          </div>
         </div>
       </div>
     </div>

@@ -1,4 +1,5 @@
 import type { MetaFunction } from "react-router";
+import type { ToasterProps } from "sonner";
 
 import { useTheme } from "next-themes";
 import { Outlet } from "react-router";
@@ -7,8 +8,7 @@ import { SWRConfig } from "swr";
 
 import http from "@/http";
 import { Providers } from "@/provider";
-
-type Theme = "dark" | "light" | "system";
+import { AuthProvider } from "@/providers/AuthProvider";
 
 export const meta: MetaFunction = () => {
   return [
@@ -28,11 +28,13 @@ export default function Layout() {
           onError: http.handleError
         }}
       >
-        <Outlet />
+        <AuthProvider>
+          <Outlet />
+        </AuthProvider>
       </SWRConfig>
       <Toaster
         richColors
-        theme={theme as Theme}
+        theme={theme as ToasterProps["theme"]}
       />
     </Providers>
   );

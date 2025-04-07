@@ -75,6 +75,8 @@ model Post {
   description String
   status      PostStatus
   slug        String     @unique
+  tags        String[]
+  isFeatured  Boolean    @default(false)
 
   cover String? @default("")
   file  String? @default("")
@@ -103,10 +105,13 @@ model Squad {
 }
 
 model News {
-  id          String @id @default(uuid())
-  title       String
-  description String
-  files       Json[] // name, source
+  id            String   @id @default(uuid())
+  slug          String   @unique
+  title         String
+  description   String
+  featuredImage String
+  files         String[]
+  tags          String[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

@@ -3,50 +3,76 @@ import {
   Dropdown,
   DropdownItem,
   DropdownMenu,
-  DropdownTrigger
+  DropdownTrigger,
+  Link
 } from "@heroui/react";
-import { UserIcon } from "lucide-react";
-import useSWR from "swr";
+import { LucideUser } from "lucide-react";
 
-import type { User } from "@/types";
+import { useDeviceType } from "@/hooks";
+import { useAuth } from "@/providers/AuthProvider";
 
-export const UserDisplay = () => {
-  const { data: me } = useSWR<User>("/auth/me", {
-    onError: () => {}
-  });
+export function UserDisplay() {
+  const { isLoggedIn, logout, user } = useAuth();
+  const { isMobile } = useDeviceType();
 
-  const logout = () => {
-    localStorage.removeItem("token");
-    location.reload();
-  };
+  if (!isLoggedIn) {
+    return (
+      <div className='flex gap-1'>
+        <Button
+          as={Link}
+          href='/login'
+        >
+          <strong>Giriş Yap</strong>
+        </Button>
+        <Button
+          as={Link}
+          className='hidden md:flex'
+          href='/register'
+          variant='light'
+        >
+          <strong>Kayıt Ol</strong>
+        </Button>
+      </div>
+    );
+  }
 
-  if (!me) return null;
+  if (!user) return null;
 
   return (
     <Dropdown>
       <DropdownTrigger>
         <Button
-          startContent={<UserIcon />}
-          variant='faded'
+          isIconOnly={isMobile}
+          startContent={<LucideUser />}
         >
-          <strong className='mt-1'>{me.displayName}</strong>
+          <strong className='mt-1 hidden md:block'>{user.displayName}</strong>
         </Button>
       </DropdownTrigger>
       <DropdownMenu aria-label='Static Actions'>
         <DropdownItem
-          href='/account'
-          key={"account"}
+          className={user.roles.includes("ADMIN") ? "" : "hidden"}
+          href='/dashboard'
+          key='dashboard'
         >
-          Hesap Ayarları
+          Yönetim Paneli
         </DropdownItem>
+
         <DropdownItem
+          href='/account'
+          key='account'
+        >
+          Hesabım
+        </DropdownItem>
+
+        <DropdownItem
+          className='text-danger'
           color='danger'
-          key={"logout"}
-          onPress={logout}
+          key='delete'
+          onClick={logout}
         >
           Çıkış Yap
         </DropdownItem>
       </DropdownMenu>
     </Dropdown>
   );
-};
+}

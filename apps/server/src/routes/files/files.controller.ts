@@ -6,14 +6,20 @@ import {
   Post,
   Res,
   UploadedFiles,
+  UseGuards,
   UseInterceptors,
 } from "@nestjs/common";
 import { FilesInterceptor } from "@nestjs/platform-express";
 import { Response } from "express";
 
+import { Roles } from "@/common/decorators";
+import { AuthGuard } from "@/common/guards";
+
 import { FilesService } from "./files.service";
 
 @Controller("files")
+@UseGuards(AuthGuard)
+@Roles(["ADMIN"])
 export class FilesController {
   constructor(private readonly filesService: FilesService) {}
 

@@ -19,7 +19,9 @@ const About = () => {
   });
 
   return (
-    <Markdown className='no-reset mx-auto max-w-3xl text-lg'>{readme}</Markdown>
+    <div className='container my-10 max-w-3xl'>
+      <Markdown className='no-reset text-lg'>{readme}</Markdown>
+    </div>
   );
 };
 

@@ -43,4 +43,20 @@ http.handleError = (error) => {
 
 http.fetcher = (url) => http.get(url).then((res) => res.data);
 
+http.uploadFiles = async (files: File[]) => {
+  const formData = new FormData();
+
+  files.forEach((file) => {
+    formData.append("files", file);
+  });
+
+  const { data } = await http.post<string[]>("/files", formData, {
+    headers: {
+      "Content-Type": "multipart/form-data"
+    }
+  });
+
+  return data;
+};
+
 export default http;

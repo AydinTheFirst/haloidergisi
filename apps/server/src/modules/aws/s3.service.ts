@@ -1,12 +1,13 @@
 import { GetObjectCommandOutput, S3 } from "@aws-sdk/client-s3";
 import { Injectable, Logger, OnModuleInit } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
-import crypto from "node:crypto";
+import slugify from "slugify";
 
 @Injectable()
 export class S3Service implements OnModuleInit {
   bucketName: string;
   cache = new Map<string, GetObjectCommandOutput>();
+
   s3: S3;
 
   // Constructor
@@ -31,6 +32,18 @@ export class S3Service implements OnModuleInit {
     });
 
     return result;
+  }
+
+  generateFileKey(file: Express.Multer.File): string {
+    const ext = file.originalname.split(".").pop();
+    const slugifiedName = slugify(file.originalname, {
+      lower: true,
+      strict: true,
+    });
+    const timestamp = Date.now();
+    const fileExtension = ext ? `.${ext}` : "";
+
+    return `${slugifiedName}_${timestamp}${fileExtension}`;
   }
 
   async getFile(Key: string) {
@@ -67,7 +80,7 @@ export class S3Service implements OnModuleInit {
   }
 
   async uploadFile(file: Express.Multer.File) {
-    const key = crypto.randomUUID();
+    const key = this.generateFileKey(file);
 
     await this.s3.putObject({
       Body: file.buffer,

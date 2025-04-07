@@ -6,12 +6,15 @@ import {
   Param,
   Patch,
   Post,
+  Query,
   Req,
   UploadedFile,
   UseInterceptors,
 } from "@nestjs/common";
 import { FileInterceptor } from "@nestjs/platform-express";
 import { Request } from "express";
+
+import { BaseQueryDto } from "@/common/dto/query.dto";
 
 import { CreatePostDto, UpdatePostDto } from "./posts.dto";
 import { PostsService } from "./posts.service";
@@ -26,8 +29,8 @@ export class PostsController {
   }
 
   @Get()
-  findAll(@Req() req: Request) {
-    return this.postsService.findAll(req);
+  findAll(@Query() query: BaseQueryDto, @Req() req: Request) {
+    return this.postsService.findAllPosts(query, req);
   }
 
   @Get(":id")
