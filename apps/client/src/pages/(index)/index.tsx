@@ -1,4 +1,4 @@
-import { Button, Card, CardBody, Input } from "@heroui/react";
+import { Button, Card, CardBody, Input, Link } from "@heroui/react";
 import {
   LucideBook,
   LucidePen,
@@ -43,12 +43,16 @@ export const meta: MetaFunction = ({ data }) => {
 export default function Home() {
   return (
     <div className='grid'>
-      <HeroSection />
-      <div className='bg-content1'>
+      <div>
+        <HeroSection />
+      </div>
+      <div>
         <FeaturedSection />
       </div>
-      <NewsSection />
       <div className='bg-content1'>
+        <NewsSection />
+      </div>
+      <div>
         <StatsSection />
       </div>
     </div>
@@ -60,9 +64,14 @@ function FeaturedSection() {
 
   return (
     <div className='container py-10'>
-      <div>
-        <h2 className='text-2xl font-semibold'>Öne Çıkan Dergiler</h2>
-        <p className='text-gray-500'>Son güncellenen dergiler</p>
+      <div className='grid grid-cols-1 gap-3 md:grid-cols-2'>
+        <div>
+          <h2 className='text-2xl font-semibold'>Öne Çıkan Dergiler</h2>
+          <p className='text-gray-500'>Son güncellenen dergiler</p>
+        </div>
+        <div className='flex justify-end'>
+          <Link href='/posts'>Devamını Gör</Link>
+        </div>
       </div>
       <br />
       <div className='grid w-full grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5'>
@@ -149,9 +158,14 @@ function NewsSection() {
 
   return (
     <div className='container my-10'>
-      <div>
-        <h2 className='text-2xl font-semibold'>Son Duyurular</h2>
-        <p className='text-gray-500'>Son güncellenen duyurular</p>
+      <div className='grid grid-cols-1 gap-3 md:grid-cols-2'>
+        <div>
+          <h2 className='text-2xl font-semibold'>Son Duyurular</h2>
+          <p className='text-gray-500'>Son güncellenen duyurular</p>
+        </div>
+        <div className='flex justify-end'>
+          <Link href='/news'>Devamını Gör</Link>
+        </div>
       </div>
       <br />
       <div className='grid w-full grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5'>
