@@ -3,10 +3,15 @@
 @tailwind utilities;
 
 :root {
+  --color-yellow-50: #fef9e6;
   --color-yellow-100: #f8efd0;
   --color-yellow-200: #d9c890;
   --color-yellow-300: #c7b36e;
   --color-yellow-400: #bda657;
+}
+
+body {
+  overflow-x: hidden;
 }
 
 .no-reset * {
