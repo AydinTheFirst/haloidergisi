@@ -16,5 +16,20 @@ export default {
     }
   },
   darkMode: "class",
-  plugins: [heroui({})]
+  plugins: [
+    heroui({
+      themes: {
+        light: {
+          colors: {
+            content1: "#f8efd0",
+            content2: "#d9c890",
+            content3: "#c7b36e",
+            content4: "#bda657",
+            default: "#fade9b",
+            background: "#f8e9b1"
+          }
+        }
+      }
+    })
+  ]
 };

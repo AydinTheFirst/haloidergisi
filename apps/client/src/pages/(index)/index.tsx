@@ -42,11 +42,15 @@ export const meta: MetaFunction = ({ data }) => {
 
 export default function Home() {
   return (
-    <div className='grid gap-20'>
+    <div className='grid'>
       <HeroSection />
-      <FeaturedSection />
+      <div className='bg-content1'>
+        <FeaturedSection />
+      </div>
       <NewsSection />
-      <StatsSection />
+      <div className='bg-content1'>
+        <StatsSection />
+      </div>
     </div>
   );
 }
@@ -55,7 +59,7 @@ function FeaturedSection() {
   const posts = useLoaderData<typeof loader>();
 
   return (
-    <div className='container'>
+    <div className='container py-10'>
       <div>
         <h2 className='text-2xl font-semibold'>Öne Çıkan Dergiler</h2>
         <p className='text-gray-500'>Son güncellenen dergiler</p>
@@ -79,7 +83,7 @@ function HeroSection() {
   return (
     <div
       className='relative'
-      style={{ height: `calc(90vh - ${navbarHeight}px)` }}
+      style={{ height: `calc(100vh - ${navbarHeight}px)` }}
     >
       {/** Background Image */}
       <div
@@ -144,7 +148,7 @@ function NewsSection() {
   if (!news) return null;
 
   return (
-    <div className='container'>
+    <div className='container my-10'>
       <div>
         <h2 className='text-2xl font-semibold'>Son Duyurular</h2>
         <p className='text-gray-500'>Son güncellenen duyurular</p>
@@ -187,55 +191,53 @@ function StatsSection() {
   };
 
   return (
-    <div className='bg-content1'>
-      <div className='container my-10'>
-        <div>
-          <h2 className='text-2xl font-semibold'>İstatistikler</h2>
-          <p className='text-gray-500'>Sitemizin güncel istatistikleri</p>
-        </div>
-        <br />
-        <div className='grid grid-cols-1 gap-5 md:grid-cols-4'>
-          <StatCloud
-            count={stats.posts}
-            description='Sizler için hazırladığımız içerikler'
-            icon={
-              <div className='rounded-full bg-yellow-500 p-3 text-white'>
-                <LucideBook size={40} />
-              </div>
-            }
-            title='Toplam Dergi'
-          />
-          <StatCloud
-            count={99}
-            description='Sitemizin günlük ziyaretçi sayısı'
-            icon={
-              <div className='rounded-full bg-lime-500 p-3 text-white'>
-                <LucideUsers2 size={40} />
-              </div>
-            }
-            title='Günlük Ziyaretçi'
-          />
-          <StatCloud
-            count={stats.users}
-            description='Sitemize kayıt olan kullanıcı sayısı'
-            icon={
-              <div className='rounded-full bg-orange-500 p-3 text-white'>
-                <LucideUsers size={40} />
-              </div>
-            }
-            title='Toplam Kullanıcı'
-          />
-          <StatCloud
-            count={stats.authors}
-            description='Sitemizde yazar olarak görev alan kullanıcı sayısı'
-            icon={
-              <div className='rounded-full bg-amber-500 p-3 text-white'>
-                <LucidePen size={40} />
-              </div>
-            }
-            title='Toplam Yazar'
-          />
-        </div>
+    <div className='container my-10'>
+      <div>
+        <h2 className='text-2xl font-semibold'>İstatistikler</h2>
+        <p className='text-gray-500'>Sitemizin güncel istatistikleri</p>
+      </div>
+      <br />
+      <div className='grid grid-cols-1 gap-5 md:grid-cols-4'>
+        <StatCloud
+          count={stats.posts}
+          description='Sizler için hazırladığımız içerikler'
+          icon={
+            <div className='rounded-full bg-yellow-500 p-3 text-white'>
+              <LucideBook size={40} />
+            </div>
+          }
+          title='Toplam Dergi'
+        />
+        <StatCloud
+          count={99}
+          description='Sitemizin günlük ziyaretçi sayısı'
+          icon={
+            <div className='rounded-full bg-lime-500 p-3 text-white'>
+              <LucideUsers2 size={40} />
+            </div>
+          }
+          title='Günlük Ziyaretçi'
+        />
+        <StatCloud
+          count={stats.users}
+          description='Sitemize kayıt olan kullanıcı sayısı'
+          icon={
+            <div className='rounded-full bg-orange-500 p-3 text-white'>
+              <LucideUsers size={40} />
+            </div>
+          }
+          title='Toplam Kullanıcı'
+        />
+        <StatCloud
+          count={stats.authors}
+          description='Sitemizde yazar olarak görev alan kullanıcı sayısı'
+          icon={
+            <div className='rounded-full bg-amber-500 p-3 text-white'>
+              <LucidePen size={40} />
+            </div>
+          }
+          title='Toplam Yazar'
+        />
       </div>
     </div>
   );

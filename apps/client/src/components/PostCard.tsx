@@ -38,7 +38,15 @@ export function PostCard({ post }: { post: Post }) {
           </Chip>
         </div>
       )}
-      <CardHeader className='justify-center'>
+      <CardHeader
+        className='justify-center'
+        style={{
+          backgroundImage: "url(/banner.png)",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
+          backgroundSize: "cover"
+        }}
+      >
         <Image
           alt={post.title}
           className='h-64 w-full rounded-lg object-contain'
@@ -48,7 +56,6 @@ export function PostCard({ post }: { post: Post }) {
       <Divider />
       <CardBody className='grid gap-3 text-center'>
         <h2 className='text-lg font-semibold text-gray-900'>{post.title}</h2>
-        <p className='truncate text-sm text-gray-500'>{post.description}</p>
       </CardBody>
       <Divider />
       <CardFooter className='justify-end'>

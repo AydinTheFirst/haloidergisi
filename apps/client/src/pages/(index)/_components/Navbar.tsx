@@ -79,7 +79,7 @@ export default function Navbar() {
 
   return (
     <NextNavbar
-      className='bg-content2'
+      className='bg-content1'
       id='navbar'
       isBordered={scrollY > 20}
       isMenuOpen={isMenuOpen}

@@ -118,6 +118,7 @@ export default function ViewPosts() {
                   isClearable
                   label='Ara'
                   name='search'
+                  variant='faded'
                 />
 
                 <Select
@@ -125,6 +126,7 @@ export default function ViewPosts() {
                   items={categories || []}
                   label='Dergi Kategorisi'
                   name='categoryId'
+                  variant='faded'
                 >
                   {(item) => (
                     <SelectItem
@@ -136,11 +138,8 @@ export default function ViewPosts() {
                   )}
                 </Select>
 
-                <Button
-                  color='primary'
-                  type='submit'
-                >
-                  Ara
+                <Button type='submit'>
+                  <strong>Ara</strong>
                 </Button>
               </form>
             </CardBody>
