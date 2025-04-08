@@ -41,6 +41,14 @@ export default function FilesTable(props: FilesTableProps) {
     return <LucideFile className='h-10 w-10' />;
   };
 
+  const handleFileClick = (file: string) => {
+    if (onFileClick) {
+      onFileClick(file);
+    } else {
+      window.open(getFileUrl(file), "_blank");
+    }
+  };
+
   return (
     <Table>
       <TableHeader>
@@ -60,14 +68,12 @@ export default function FilesTable(props: FilesTableProps) {
             <TableCell>{previewFile(file)}</TableCell>
             <TableCell>{file}</TableCell>
             <TableCell className='flex gap-3'>
-              {onFileClick && (
-                <button
-                  onClick={() => onFileClick(file)}
-                  type='button'
-                >
-                  <LucideView />
-                </button>
-              )}
+              <button
+                onClick={() => handleFileClick(file)}
+                type='button'
+              >
+                <LucideView />
+              </button>
               {onFileDownload && (
                 <button
                   onClick={() => onFileDownload(file)}

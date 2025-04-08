@@ -11,10 +11,6 @@ import { User } from "@/prisma";
 
 @Injectable()
 export class RolesGuard implements CanActivate {
-  matchRoles = (roles: string[], userRoles: string[]): boolean => {
-    return roles.some((role) => userRoles.includes(role));
-  };
-
   constructor(private reflector: Reflector) {}
 
   canActivate(context: ExecutionContext): boolean {
@@ -34,10 +30,14 @@ export class RolesGuard implements CanActivate {
 
     if (!isAllowed) {
       throw new ForbiddenException(
-        "You don't have permission to access this resource"
+        "You don't have permission to access this resource",
       );
     }
 
     return isAllowed;
   }
+
+  matchRoles = (roles: string[], userRoles: string[]): boolean => {
+    return roles.some((role) => userRoles.includes(role));
+  };
 }

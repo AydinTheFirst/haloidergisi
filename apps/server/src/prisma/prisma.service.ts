@@ -12,7 +12,7 @@ export class PrismaService extends PrismaClient implements OnModuleInit {
       search?: string;
       sort?: string;
     },
-    searchableFields: (keyof T)[] = []
+    searchableFields: (keyof T)[] = [],
   ) {
     const { fields, limit, offset, order, search, sort } = query;
 

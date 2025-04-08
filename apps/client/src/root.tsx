@@ -22,36 +22,6 @@ import {
 
 import "@/styles/globals.css";
 
-export function Layout({ children }: { children: React.ReactNode }) {
-  return (
-    <html lang='tr'>
-      <head>
-        <meta charSet='UTF-8' />
-        <meta
-          content='width=device-width, initial-scale=1.0'
-          name='viewport'
-        />
-        <link
-          href='/logo.png'
-          rel='shortcut icon'
-          type='image/x-icon'
-        />
-        <Meta />
-        <Links />
-      </head>
-      <body>
-        {children}
-        <ScrollRestoration />
-        <Scripts />
-      </body>
-    </html>
-  );
-}
-
-export default function Root() {
-  return <Outlet />;
-}
-
 export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
   let message = "Oops!";
   let details = "An unexpected error occurred. Please try again later.";
@@ -108,4 +78,34 @@ export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
       </Card>
     </main>
   );
+}
+
+export function Layout({ children }: { children: React.ReactNode }) {
+  return (
+    <html lang='tr'>
+      <head>
+        <meta charSet='UTF-8' />
+        <meta
+          content='width=device-width, initial-scale=1.0'
+          name='viewport'
+        />
+        <link
+          href='/logo.png'
+          rel='shortcut icon'
+          type='image/x-icon'
+        />
+        <Meta />
+        <Links />
+      </head>
+      <body>
+        {children}
+        <ScrollRestoration />
+        <Scripts />
+      </body>
+    </html>
+  );
+}
+
+export default function Root() {
+  return <Outlet />;
 }

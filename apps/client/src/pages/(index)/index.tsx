@@ -10,6 +10,7 @@ import { type MetaFunction, useLoaderData } from "react-router";
 import useSWR from "swr";
 
 import type { News, Post, Stats } from "@/types";
+import type { PaginatedResponse } from "@/types/extended";
 
 import { NewsCard } from "@/components/NewsCard";
 import { PostCard } from "@/components/PostCard";
@@ -17,13 +18,13 @@ import { useNavbarHeight } from "@/hooks";
 import http from "@/http";
 
 export const loader = async () => {
-  const { data } = await http.get<Post[]>("posts", {
+  const { data: posts } = await http.get<PaginatedResponse<Post>>("posts", {
     params: {
       limit: 5
     }
   });
 
-  return data;
+  return posts.data;
 };
 
 export const meta: MetaFunction = ({ data }) => {
@@ -41,11 +42,33 @@ export const meta: MetaFunction = ({ data }) => {
 
 export default function Home() {
   return (
-    <div className='mb-10 grid gap-20'>
+    <div className='grid gap-20'>
       <HeroSection />
       <FeaturedSection />
       <NewsSection />
       <StatsSection />
+    </div>
+  );
+}
+
+function FeaturedSection() {
+  const posts = useLoaderData<typeof loader>();
+
+  return (
+    <div className='container'>
+      <div>
+        <h2 className='text-2xl font-semibold'>Öne Çıkan Dergiler</h2>
+        <p className='text-gray-500'>Son güncellenen dergiler</p>
+      </div>
+      <br />
+      <div className='grid w-full grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5'>
+        {posts.map((post) => (
+          <PostCard
+            key={post.id}
+            post={post}
+          />
+        ))}
+      </div>
     </div>
   );
 }
@@ -55,7 +78,7 @@ function HeroSection() {
 
   return (
     <div
-      className='relative hidden md:block'
+      className='relative'
       style={{ height: `calc(90vh - ${navbarHeight}px)` }}
     >
       {/** Background Image */}
@@ -115,21 +138,23 @@ function HeroSection() {
   );
 }
 
-function FeaturedSection() {
-  const posts = useLoaderData<typeof loader>();
+function NewsSection() {
+  const { data: news } = useSWR<PaginatedResponse<News>>("/news?limit=5");
+
+  if (!news) return null;
 
   return (
     <div className='container'>
       <div>
-        <h2 className='text-2xl font-semibold'>Öne Çıkan Dergiler</h2>
-        <p className='text-gray-500'>Son güncellenen dergiler</p>
+        <h2 className='text-2xl font-semibold'>Son Duyurular</h2>
+        <p className='text-gray-500'>Son güncellenen duyurular</p>
       </div>
       <br />
       <div className='grid w-full grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5'>
-        {posts.map((post) => (
-          <PostCard
-            key={post.id}
-            post={post}
+        {news.data.map((news) => (
+          <NewsCard
+            key={news.id}
+            news={news}
           />
         ))}
       </div>
@@ -211,30 +236,6 @@ function StatsSection() {
             title='Toplam Yazar'
           />
         </div>
-      </div>
-    </div>
-  );
-}
-
-function NewsSection() {
-  const { data: news } = useSWR<News[]>("/news?limit=5");
-
-  if (!news) return null;
-
-  return (
-    <div className='container'>
-      <div>
-        <h2 className='text-2xl font-semibold'>Son Duyurular</h2>
-        <p className='text-gray-500'>Son güncellenen duyurular</p>
-      </div>
-      <br />
-      <div className='grid w-full grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5'>
-        {news.map((news) => (
-          <NewsCard
-            key={news.id}
-            news={news}
-          />
-        ))}
       </div>
     </div>
   );

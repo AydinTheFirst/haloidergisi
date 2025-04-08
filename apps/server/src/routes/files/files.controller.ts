@@ -18,8 +18,8 @@ import { AuthGuard } from "@/common/guards";
 import { FilesService } from "./files.service";
 
 @Controller("files")
-@UseGuards(AuthGuard)
 @Roles(["ADMIN"])
+@UseGuards(AuthGuard)
 export class FilesController {
   constructor(private readonly filesService: FilesService) {}
 

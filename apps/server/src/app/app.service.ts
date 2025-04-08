@@ -39,7 +39,7 @@ export class AppService {
       () => {
         this.cachedStats = undefined;
       },
-      60 * 60 * 1000
+      60 * 60 * 1000,
     );
 
     return this.cachedStats;

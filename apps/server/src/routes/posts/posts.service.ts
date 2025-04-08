@@ -2,18 +2,17 @@ import { Injectable, NotFoundException } from "@nestjs/common";
 import { Request } from "express";
 import slugify from "slugify";
 
-import { BaseQueryDto } from "@/common/dto/query.dto";
 import { BaseService } from "@/common/services/base.service";
 import { S3Service } from "@/modules";
 import { Post, Prisma, PrismaService, User } from "@/prisma";
 
-import { CreatePostDto, UpdatePostDto } from "./posts.dto";
+import { CreatePostDto, PostQueryDto, UpdatePostDto } from "./posts.dto";
 
 @Injectable()
 export class PostsService extends BaseService<Post> {
   constructor(
     private prisma: PrismaService,
-    private s3: S3Service
+    private s3: S3Service,
   ) {
     super(prisma.post);
   }
@@ -29,12 +28,14 @@ export class PostsService extends BaseService<Post> {
     return post;
   }
 
-  async findAllPosts(query: BaseQueryDto, req: Request) {
-    const posts = await this.findAll(
-      query,
-      ["title", "description"],
-      this.getPostWhereClause(req.user)
-    );
+  async findAllPosts(query: PostQueryDto, req: Request) {
+    const where = this.getPostWhereClause(req.user);
+
+    if (query.categoryId) {
+      where.categoryId = query.categoryId;
+    }
+
+    const posts = await this.findAll(query, ["title", "description"], where);
 
     return posts;
   }

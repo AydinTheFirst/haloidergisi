@@ -57,7 +57,7 @@ export default function ViewNews() {
                 {isDescriptionVisible ? "Daha Az Göster" : "Devamını Oku"}
               </button>
             </p>
-            <FilesTable files={news.files} />
+            {news.files.length > 0 && <FilesTable files={news.files} />}
             <small className='text-end'>
               {new Date(news.createdAt).toLocaleDateString("tr-TR", {
                 day: "numeric",

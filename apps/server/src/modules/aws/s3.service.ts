@@ -96,7 +96,7 @@ export class S3Service implements OnModuleInit {
     const keys = await Promise.all(
       files.map(async (file) => {
         return await this.uploadFile(file);
-      })
+      }),
     );
 
     return keys;

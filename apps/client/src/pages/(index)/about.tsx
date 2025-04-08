@@ -20,7 +20,9 @@ const About = () => {
 
   return (
     <div className='container my-10 max-w-3xl'>
-      <Markdown className='no-reset text-lg'>{readme}</Markdown>
+      <div className='no-reset text-lg'>
+        <Markdown>{readme}</Markdown>
+      </div>
     </div>
   );
 };

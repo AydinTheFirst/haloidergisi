@@ -6,18 +6,31 @@ export class BaseService<T> {
   async findAll(
     query: any,
     searchableFields: (keyof T)[] = [],
-    customWhere: any = {}
+    customWhere: any = {},
   ) {
     const baseQuery = PrismaService.buildPrismaQuery<T>(
       query,
-      searchableFields
+      searchableFields,
     );
 
+    // extra filtreleri where'e ekle
     baseQuery.where = {
       ...(baseQuery.where || {}),
       ...(customWhere || {}),
     };
 
-    return this.prismaModel.findMany(baseQuery);
+    const [data, total] = await Promise.all([
+      this.prismaModel.findMany(baseQuery),
+      this.prismaModel.count({ where: baseQuery.where }),
+    ]);
+
+    return {
+      data,
+      meta: {
+        page: Math.floor((baseQuery.skip ?? 0) / (baseQuery.take ?? 10)) + 1,
+        pageCount: Math.ceil(total / (baseQuery.take ?? 10)),
+        total,
+      },
+    };
   }
 }

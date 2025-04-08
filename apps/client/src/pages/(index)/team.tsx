@@ -17,7 +17,7 @@ import type { User as IUser } from "@/types";
 import type { SquadWithUsers } from "@/types/extended";
 
 import http from "@/http";
-import { getAvatar, getGravatar } from "@/utils";
+import { getAvatar } from "@/utils";
 
 const instagram = "https://www.instagram.com/haloidergisi";
 
@@ -137,7 +137,7 @@ const UserCard = ({ user }: { user: IUser }) => {
       <div className='h-full w-full'>
         <User
           avatarProps={{
-            src: getGravatar(user.email)
+            src: getAvatar(user)
           }}
           className='flex h-full w-full cursor-pointer justify-start bg-content2 p-3'
           description={user.title}

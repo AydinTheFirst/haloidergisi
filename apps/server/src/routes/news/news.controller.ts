@@ -23,8 +23,8 @@ export class NewsController {
   constructor(private readonly newsService: NewsService) {}
 
   @Post()
-  @UseGuards(AuthGuard)
   @Roles([Role.ADMIN])
+  @UseGuards(AuthGuard)
   create(@Body() createNewsDto: CreateNewsDto) {
     return this.newsService.create(createNewsDto);
   }
@@ -40,15 +40,15 @@ export class NewsController {
   }
 
   @Delete(":id")
-  @UseGuards(AuthGuard)
   @Roles([Role.ADMIN])
+  @UseGuards(AuthGuard)
   remove(@Param("id") id: string) {
     return this.newsService.remove(id);
   }
 
   @Patch(":id")
-  @UseGuards(AuthGuard)
   @Roles([Role.ADMIN])
+  @UseGuards(AuthGuard)
   update(@Param("id") id: string, @Body() updateNewsDto: UpdateNewsDto) {
     return this.newsService.update(id, updateNewsDto);
   }

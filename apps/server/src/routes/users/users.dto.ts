@@ -19,8 +19,8 @@ export class CreateUserDto {
   @IsEmail()
   email: string;
 
-  @IsString()
   @IsOptional()
+  @IsString()
   password: string;
 
   @IsOptional()
@@ -31,8 +31,8 @@ export class CreateUserDto {
   @IsString()
   title: string;
 
-  @IsString()
   @IsOptional()
+  @IsString()
   username: string;
 
   @IsOptional()

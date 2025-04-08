@@ -2,8 +2,8 @@ import { PartialType } from "@nestjs/swagger";
 import { IsArray, IsISO8601, IsOptional, IsString } from "class-validator";
 
 export class CreateNewsDto {
-  @IsOptional()
   @IsISO8601()
+  @IsOptional()
   createdAt: Date;
 
   @IsString()

@@ -6,18 +6,18 @@ export class BaseQueryDto {
   @IsString()
   fields?: string;
 
+  @IsInt()
   @IsOptional()
   @Type(() => Number)
-  @IsInt()
   limit?: number = 10;
 
+  @IsInt()
   @IsOptional()
   @Type(() => Number)
-  @IsInt()
   offset?: number = 0;
 
-  @IsOptional()
   @IsIn(["asc", "desc"])
+  @IsOptional()
   order?: "asc" | "desc" = "desc";
 
   @IsOptional()

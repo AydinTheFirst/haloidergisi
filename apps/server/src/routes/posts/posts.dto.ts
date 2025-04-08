@@ -1,30 +1,26 @@
 import { PartialType } from "@nestjs/swagger";
 import { PostStatus } from "@prisma/client";
-import {
-  IsEnum,
-  IsISO8601,
-  IsNumber,
-  IsOptional,
-  IsString,
-} from "class-validator";
+import { IsEnum, IsISO8601, IsOptional, IsString } from "class-validator";
+
+import { BaseQueryDto } from "@/common/dto/query.dto";
 
 export class CreatePostDto {
   @IsString()
   categoryId: string;
 
-  @IsString()
   @IsOptional()
+  @IsString()
   cover: string;
 
-  @IsOptional()
   @IsISO8601()
+  @IsOptional()
   createdAt: Date;
 
   @IsString()
   description: string;
 
-  @IsString()
   @IsOptional()
+  @IsString()
   file: string;
 
   @IsEnum(PostStatus)
@@ -34,26 +30,10 @@ export class CreatePostDto {
   title: string;
 }
 
-export class UpdatePostDto extends PartialType(CreatePostDto) {}
-
-export class FindPostsQueryDto {
-  @IsOptional()
-  @IsNumber()
-  limit? = 10;
-
-  @IsOptional()
-  @IsNumber()
-  offset? = 0;
-
+export class PostQueryDto extends BaseQueryDto {
   @IsOptional()
   @IsString()
-  search? = "";
-
-  @IsOptional()
-  @IsString()
-  sortBy? = "createdAt";
-
-  @IsOptional()
-  @IsString()
-  sortOrder? = "desc";
+  categoryId?: string;
 }
+
+export class UpdatePostDto extends PartialType(CreatePostDto) {}
