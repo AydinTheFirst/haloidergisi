@@ -1,6 +1,7 @@
 import { Button, Divider, Link } from "@heroui/react";
 
 import { Logo } from "@/components";
+import { LocalIcon } from "@/components/LocalIcon";
 import { INSTAGRAM_URL, LINKEDIN_URL } from "@/config";
 
 export default function Footer() {
@@ -25,7 +26,7 @@ export default function Footer() {
                 size='sm'
                 variant='light'
               >
-                Instagram
+                <LocalIcon name='instagram' />
               </Button>
               <Button
                 as={Link}
@@ -35,7 +36,7 @@ export default function Footer() {
                 size='sm'
                 variant='light'
               >
-                LinkedIn
+                <LocalIcon name='linkedin' />
               </Button>
             </div>
           </div>

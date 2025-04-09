@@ -26,5 +26,5 @@
       "@react-router/*": [".react-router/types/*"]
     }
   },
-  "include": ["src", ".react-router/types/**/*"]
+  "include": ["src", ".react-router/types/**/*", "public/icons"]
 }

@@ -2,6 +2,7 @@ import type { MetaFunction } from "react-router";
 
 import { Button, Input, Link, Textarea } from "@heroui/react";
 
+import { LocalIcon } from "@/components/LocalIcon";
 import { INSTAGRAM_URL, LINKEDIN_URL } from "@/config";
 
 export const meta: MetaFunction = () => {
@@ -32,6 +33,7 @@ const Contact = () => {
               href={INSTAGRAM_URL}
               isExternal
             >
+              <LocalIcon name='instagram' />
               Instagram
             </Link>
           </li>
@@ -42,6 +44,7 @@ const Contact = () => {
               href={LINKEDIN_URL}
               isExternal
             >
+              <LocalIcon name='linkedin' />
               Linkedin
             </Link>
           </li>
