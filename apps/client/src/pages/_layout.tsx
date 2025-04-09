@@ -6,6 +6,7 @@ import { Outlet } from "react-router";
 import { Toaster } from "sonner";
 import { SWRConfig } from "swr";
 
+import { Loader } from "@/components";
 import http from "@/http";
 import { Providers } from "@/provider";
 import { AuthProvider } from "@/providers/AuthProvider";
@@ -16,6 +17,10 @@ export const meta: MetaFunction = () => {
     { content: "HALO Dergisi", name: "description" }
   ];
 };
+
+export function HydrateFallback() {
+  return <Loader />;
+}
 
 export default function Layout() {
   const { theme } = useTheme();

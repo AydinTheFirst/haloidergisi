@@ -23,7 +23,7 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["src/*"],
-      "@react-router/*": [".react-router/types/*"]
+      "@react-router/*": [".react-router/types/src/*"]
     }
   },
   "include": ["src", ".react-router/types/**/*", "public/icons"]

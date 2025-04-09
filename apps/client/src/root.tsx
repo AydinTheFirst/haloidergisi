@@ -1,4 +1,4 @@
-import type { Route } from "@react-router/src/+types/root";
+import type { Route } from "@react-router/+types/root";
 
 import {
   Accordion,
@@ -10,6 +10,9 @@ import {
   CardHeader
 } from "@heroui/react";
 import { LucideXOctagon } from "lucide-react";
+
+import "@/styles/globals.css";
+
 import {
   isRouteErrorResponse,
   Link,
@@ -19,8 +22,6 @@ import {
   Scripts,
   ScrollRestoration
 } from "react-router";
-
-import "@/styles/globals.css";
 
 export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
   let message = "Oops!";
