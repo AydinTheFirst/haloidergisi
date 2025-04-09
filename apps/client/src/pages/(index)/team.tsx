@@ -139,7 +139,7 @@ const UserCard = ({ user }: { user: IUser }) => {
           avatarProps={{
             src: getAvatar(user)
           }}
-          className='flex h-full w-full cursor-pointer justify-start bg-content2 p-3'
+          className='flex h-full w-full cursor-pointer justify-start bg-content1 p-3'
           description={user.title}
           name={user.displayName}
           onClick={() => setOpen(true)}

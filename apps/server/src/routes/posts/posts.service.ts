@@ -12,7 +12,7 @@ import { CreatePostDto, PostQueryDto, UpdatePostDto } from "./posts.dto";
 export class PostsService extends BaseService<Post> {
   constructor(
     private prisma: PrismaService,
-    private s3: S3Service,
+    private s3: S3Service
   ) {
     super(prisma.post);
   }

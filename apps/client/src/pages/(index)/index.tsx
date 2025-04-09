@@ -13,7 +13,7 @@ import type { News, Post, Stats } from "@/types";
 import type { PaginatedResponse } from "@/types/extended";
 
 import { NewsCard } from "@/components/NewsCard";
-import { PostCard } from "@/components/PostCard";
+import { PostCard2 } from "@/components/PostCard";
 import { useNavbarHeight } from "@/hooks";
 import http from "@/http";
 
@@ -70,13 +70,13 @@ function FeaturedSection() {
           <p className='text-gray-500'>Son güncellenen dergiler</p>
         </div>
         <div className='flex justify-end'>
-          <Link href='/posts'>Devamını Gör</Link>
+          <Link href='/posts'>Tamamını Gör</Link>
         </div>
       </div>
       <br />
       <div className='grid w-full grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5'>
         {posts.map((post) => (
-          <PostCard
+          <PostCard2
             key={post.id}
             post={post}
           />
@@ -164,7 +164,7 @@ function NewsSection() {
           <p className='text-gray-500'>Son güncellenen duyurular</p>
         </div>
         <div className='flex justify-end'>
-          <Link href='/news'>Devamını Gör</Link>
+          <Link href='/news'>Tamamını Gör</Link>
         </div>
       </div>
       <br />

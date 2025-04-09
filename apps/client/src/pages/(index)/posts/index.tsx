@@ -20,7 +20,7 @@ import useSWR from "swr";
 import type { Category } from "@/types";
 import type { PaginatedResponse } from "@/types/extended";
 
-import { PostCard } from "@/components/PostCard";
+import { PostCard2 } from "@/components/PostCard";
 import http from "@/http";
 import { type Post } from "@/types";
 
@@ -100,7 +100,7 @@ export default function ViewPosts() {
     <div className='container my-20'>
       <div className='grid grid-cols-12 gap-10'>
         <div className='col-span-12 md:col-span-4'>
-          <Card className='sticky top-20'>
+          <Card>
             <CardHeader className='flex flex-col items-start gap-3'>
               <h2 className='text-2xl font-extrabold'>Dergi Ara</h2>
               <p className='text-sm text-gray-500'>
@@ -147,16 +147,27 @@ export default function ViewPosts() {
         </div>
         <div className='col-span-12 md:col-span-8'>
           <div className='grid gap-10'>
-            <div>
-              <h2 className='text-3xl font-extrabold'>Tüm Dergiler</h2>
-              <p className='font-semibold'>
-                Tüm dergileri burada bulabilirsiniz. Dergileri inceleyebilir ve
-                indirebilirsiniz.
-              </p>
+            <div className='grid grid-cols-1 md:grid-cols-2'>
+              <div>
+                <h2 className='text-3xl font-extrabold'>Tüm Dergiler</h2>
+                <p className='font-semibold'>
+                  Tüm dergileri burada bulabilirsiniz. Dergileri inceleyebilir
+                  ve indirebilirsiniz.
+                </p>
+              </div>
+              <div className='flex items-end justify-end'>
+                <Pagination
+                  color='warning'
+                  onChange={handlePageChange}
+                  page={posts.meta.page}
+                  total={posts.meta.pageCount}
+                  variant='faded'
+                />
+              </div>
             </div>
-            <div className='grid grid-cols-1 gap-10 md:grid-cols-2 lg:grid-cols-3'>
+            <div className='grid grid-cols-1 gap-10 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>
               {posts.data.map((post) => (
-                <PostCard
+                <PostCard2
                   key={post.id}
                   post={post}
                 />
@@ -169,13 +180,6 @@ export default function ViewPosts() {
                 </h2>
               </div>
             )}
-            <div className='grid place-items-center'>
-              <Pagination
-                onChange={handlePageChange}
-                page={posts.meta.page}
-                total={posts.meta.pageCount}
-              />
-            </div>
           </div>
         </div>
       </div>

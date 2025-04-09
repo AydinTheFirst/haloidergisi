@@ -70,3 +70,47 @@ export function PostCard({ post }: { post: Post }) {
     </Card>
   );
 }
+
+export const PostCard2 = ({ post }: { post: Post }) => {
+  const oneMonthAgo = new Date();
+  oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
+  const isNew = new Date(post.createdAt) > oneMonthAgo;
+  return (
+    <Card
+      as={Link}
+      className={cn("relative", isNew && "new-post")}
+      id={post.id}
+      isHoverable
+      isPressable
+      to={`/posts/${post.slug}`}
+    >
+      {isNew && (
+        <div className='absolute end-0 top-0 z-50'>
+          <Chip
+            color='danger'
+            radius='none'
+            size='lg'
+          >
+            <strong>Yeni</strong>
+          </Chip>
+        </div>
+      )}
+
+      <Image
+        alt={post.title}
+        loading='lazy'
+        src={getFileUrl(post.cover!)}
+      />
+      <CardFooter className='flex flex-col justify-between text-center'>
+        <strong>{post.title}</strong>
+        <small>
+          {new Date(post.createdAt).toLocaleDateString("tr-TR", {
+            day: "numeric",
+            month: "long",
+            year: "numeric"
+          })}
+        </small>
+      </CardFooter>
+    </Card>
+  );
+};

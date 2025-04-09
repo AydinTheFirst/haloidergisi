@@ -79,22 +79,24 @@ const MailForm = () => {
         isRequired
         label='Adınız'
         placeholder='Adınız'
+        variant='underlined'
       />
       <Input
         className='col-span-12 md:col-span-6'
         isRequired
         label='Konu'
         placeholder='konu'
+        variant='underlined'
       />
       <Textarea
         className='col-span-12'
         isRequired
         label='Mesajınız'
         placeholder='Mesajınız'
+        variant='underlined'
       />
       <Button
         className='col-span-12'
-        color='secondary'
         type='submit'
       >
         Gönder
