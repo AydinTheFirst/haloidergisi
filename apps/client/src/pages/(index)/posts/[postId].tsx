@@ -1,4 +1,4 @@
-import type { MetaFunction } from "react-router";
+import type { LoaderFunctionArgs, MetaFunction } from "react-router";
 
 import { Button, Image, Link } from "@heroui/react";
 import { LucideDownload, LucideFile } from "lucide-react";
@@ -11,7 +11,7 @@ import { Loader } from "@/components";
 import http from "@/http";
 import { getFileUrl } from "@/utils";
 
-export const loader = async ({ params }: { params: { postId: string } }) => {
+export const loader = async ({ params }: LoaderFunctionArgs) => {
   const { postId } = params;
   if (!postId) throw new Error("Post ID is required");
   const post = http.fetcher<Post>(`/posts/${postId}`);
