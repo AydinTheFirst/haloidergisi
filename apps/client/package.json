@@ -14,6 +14,8 @@
   "dependencies": {
     "@heroui/react": "2.7.6",
     "@internationalized/date": "^3.7.0",
+    "@react-pdf-viewer/core": "^3.12.0",
+    "@react-pdf-viewer/default-layout": "^3.12.0",
     "@react-router/node": "^7.5.0",
     "@react-router/serve": "^7.5.0",
     "axios": "^1.8.4",

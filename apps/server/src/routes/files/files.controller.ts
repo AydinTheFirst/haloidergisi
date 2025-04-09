@@ -39,6 +39,11 @@ export class FilesController {
     return this.filesService.findOne(id, res);
   }
 
+  @Get("signed-url/:id")
+  getSignedUrl(@Param("id") id: string) {
+    return this.filesService.getSignedUrl(id);
+  }
+
   @Delete(":id")
   remove(@Param("id") id: string) {
     return this.filesService.remove(id);

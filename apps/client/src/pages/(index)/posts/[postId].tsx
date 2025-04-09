@@ -1,7 +1,7 @@
 import type { MetaFunction } from "react-router";
 
 import { Button, Image, Link } from "@heroui/react";
-import { LucideExternalLink } from "lucide-react";
+import { LucideDownload, LucideFile } from "lucide-react";
 import { useState } from "react";
 import { useLoaderData } from "react-router";
 
@@ -61,15 +61,24 @@ const ViewMagazine = () => {
               </button>
             </p>
 
-            <div>
+            <div className='flex gap-3'>
               <Button
                 as={Link}
                 href={getFileUrl(magazine.file!)}
                 isExternal
-                startContent={<LucideExternalLink size={14} />}
+                startContent={<LucideDownload />}
                 variant='shadow'
               >
-                <strong>Dergiyi Göster</strong>
+                <strong>İndir</strong>
+              </Button>
+              <Button
+                as={Link}
+                href={`/view?postId=${magazine.id}`}
+                isExternal
+                startContent={<LucideFile />}
+                variant='shadow'
+              >
+                <strong>İncele</strong>
               </Button>
             </div>
             <small className='text-end'>

@@ -1,4 +1,9 @@
-import { GetObjectCommandOutput, S3 } from "@aws-sdk/client-s3";
+import {
+  GetObjectCommandOutput,
+  PutObjectCommand,
+  S3,
+} from "@aws-sdk/client-s3";
+import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import { Injectable, Logger, OnModuleInit } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import slugify from "slugify";
@@ -68,6 +73,21 @@ export class S3Service implements OnModuleInit {
     return result.Contents;
   }
 
+  async getSignedUrl(Key: string) {
+    const url = await getSignedUrl(
+      this.s3,
+      new PutObjectCommand({
+        Bucket: this.bucketName,
+        Key,
+      }),
+      {
+        expiresIn: 60 * 60 * 24 * 7, // 7d
+      }
+    );
+
+    return url;
+  }
+
   async onModuleInit() {
     try {
       await this.s3.headBucket({
@@ -96,7 +116,7 @@ export class S3Service implements OnModuleInit {
     const keys = await Promise.all(
       files.map(async (file) => {
         return await this.uploadFile(file);
-      }),
+      })
     );
 
     return keys;

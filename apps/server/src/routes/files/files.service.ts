@@ -12,11 +12,11 @@ export class FilesService {
       file.map(async (f) => {
         const key = await this.s3.uploadFile(f);
         return key;
-      }),
+      })
     );
 
     return uploadedFiles.map((r) =>
-      r.status === "fulfilled" ? r.value : null,
+      r.status === "fulfilled" ? r.value : null
     );
   }
 
@@ -45,6 +45,11 @@ export class FilesService {
 
     const fileStream = file.Body as NodeJS.ReadableStream;
     fileStream.pipe(res);
+  }
+
+  async getSignedUrl(key: string) {
+    const url = await this.s3.getSignedUrl(key);
+    return url;
   }
 
   async remove(key: string) {
