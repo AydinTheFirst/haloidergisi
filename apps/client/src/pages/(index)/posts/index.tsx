@@ -97,90 +97,88 @@ export default function ViewPosts() {
   };
 
   return (
-    <div className='container my-20'>
-      <div className='grid grid-cols-12 gap-10'>
-        <div className='col-span-12 md:col-span-4'>
-          <Card>
-            <CardHeader className='flex flex-col items-start gap-3'>
-              <h2 className='text-2xl font-extrabold'>Dergi Ara</h2>
-              <p className='text-sm text-gray-500'>
-                Dergi başlığı veya anahtar kelimeleri girerek arama
-                yapabilirsiniz.
-              </p>
-            </CardHeader>
-            <CardBody>
-              <form
-                className='grid gap-3'
-                onSubmit={handleSubmit}
+    <div className='grid grid-cols-12 gap-5'>
+      <div className='col-span-12 md:col-span-4'>
+        <Card>
+          <CardHeader className='flex flex-col items-start gap-3'>
+            <h2 className='text-2xl font-extrabold'>Dergi Ara</h2>
+            <p className='text-sm text-gray-500'>
+              Dergi başlığı veya anahtar kelimeleri girerek arama
+              yapabilirsiniz.
+            </p>
+          </CardHeader>
+          <CardBody>
+            <form
+              className='grid gap-3'
+              onSubmit={handleSubmit}
+            >
+              <Input
+                defaultValue={searchParams.get("search") || ""}
+                isClearable
+                label='Ara'
+                name='search'
+                variant='faded'
+              />
+
+              <Select
+                defaultSelectedKeys={[searchParams.get("categoryId") || ""]}
+                items={categories || []}
+                label='Dergi Kategorisi'
+                name='categoryId'
+                variant='faded'
               >
-                <Input
-                  defaultValue={searchParams.get("search") || ""}
-                  isClearable
-                  label='Ara'
-                  name='search'
-                  variant='faded'
-                />
+                {(item) => (
+                  <SelectItem
+                    key={item.id}
+                    textValue={item.title}
+                  >
+                    {item.title}
+                  </SelectItem>
+                )}
+              </Select>
 
-                <Select
-                  defaultSelectedKeys={[searchParams.get("categoryId") || ""]}
-                  items={categories || []}
-                  label='Dergi Kategorisi'
-                  name='categoryId'
-                  variant='faded'
-                >
-                  {(item) => (
-                    <SelectItem
-                      key={item.id}
-                      textValue={item.title}
-                    >
-                      {item.title}
-                    </SelectItem>
-                  )}
-                </Select>
-
-                <Button type='submit'>
-                  <strong>Ara</strong>
-                </Button>
-              </form>
-            </CardBody>
-          </Card>
-        </div>
-        <div className='col-span-12 md:col-span-8'>
-          <div className='grid gap-10'>
-            <div className='grid grid-cols-1 md:grid-cols-2'>
-              <div>
-                <h2 className='text-3xl font-extrabold'>Tüm Dergiler</h2>
-                <p className='font-semibold'>
-                  Tüm dergileri burada bulabilirsiniz. Dergileri inceleyebilir
-                  ve indirebilirsiniz.
-                </p>
-              </div>
-              <div className='flex items-end justify-end'>
-                <Pagination
-                  color='warning'
-                  onChange={handlePageChange}
-                  page={posts.meta.page}
-                  total={posts.meta.pageCount}
-                  variant='faded'
-                />
-              </div>
+              <Button type='submit'>
+                <strong>Ara</strong>
+              </Button>
+            </form>
+          </CardBody>
+        </Card>
+      </div>
+      <div className='col-span-12 md:col-span-8'>
+        <div className='grid gap-10'>
+          <div className='grid grid-cols-1 md:grid-cols-2'>
+            <div>
+              <h2 className='text-3xl font-extrabold'>Tüm Dergiler</h2>
+              <p className='font-semibold'>
+                Tüm dergileri burada bulabilirsiniz. Dergileri inceleyebilir ve
+                indirebilirsiniz.
+              </p>
             </div>
-            <div className='grid grid-cols-1 gap-10 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>
-              {posts.data.map((post) => (
-                <PostCard2
-                  key={post.id}
-                  post={post}
-                />
-              ))}
+            <div className='flex items-end justify-end'>
+              <Pagination
+                color='warning'
+                onChange={handlePageChange}
+                page={posts.meta.page}
+                total={posts.meta.pageCount}
+                variant='faded'
+              />
             </div>
-            {posts.data.length === 0 && (
-              <div className='grid place-items-center'>
-                <h2 className='text-2xl font-semibold text-gray-500'>
-                  Dergi bulunamadı.
-                </h2>
-              </div>
-            )}
           </div>
+          <div className='grid grid-cols-2 gap-10 md:grid-cols-3 lg:grid-cols-4'>
+            {posts.data.map((post) => (
+              <PostCard2
+                key={post.id}
+                post={post}
+              />
+            ))}
+          </div>
+          {posts.data.length === 0 && (
+            <div className='grid place-items-center'>
+              <h2 className='text-2xl font-semibold text-gray-500'>
+                Dergi bulunamadı.
+              </h2>
+            </div>
+          )}
         </div>
       </div>
     </div>

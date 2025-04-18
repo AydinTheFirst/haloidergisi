@@ -51,7 +51,7 @@ export const Profile = () => {
         isOpen={isModalOpen}
         setIsOpen={setIsModalOpen}
       />
-      <div className='container my-10 max-w-3xl'>
+      <div className='container max-w-3xl'>
         <Card className='mx-auto max-w-xl'>
           <div className='h-[100px] rounded-lg bg-gradient-to-tr from-yellow-500 to-red-500' />
           <div

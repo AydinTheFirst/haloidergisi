@@ -25,7 +25,10 @@ export default {
             content2: "#d9c890",
             content3: "#c7b36e",
             content4: "#bda657",
-            default: "#fade9b",
+            default: {
+              DEFAULT: "#fade9b",
+              foreground: "#000"
+            },
             background: "#fef9e6"
           }
         }

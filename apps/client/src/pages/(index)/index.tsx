@@ -42,18 +42,86 @@ export const meta: MetaFunction = ({ data }) => {
 
 export default function Home() {
   return (
-    <div className='grid'>
+    <div className='grid gap-20'>
+      <HeroSection />
+      <FeaturedSection />
+      <NewsSection />
+    </div>
+  );
+}
+
+export function StatsSection() {
+  const { data: stats } = useSWR<Stats>("/stats");
+  if (!stats) return null;
+
+  interface StatCloudProps {
+    count: number;
+    description?: string;
+    icon: React.ReactNode;
+    title: string;
+  }
+
+  const StatCloud = ({ count, description, icon, title }: StatCloudProps) => {
+    return (
+      <Card>
+        <CardBody className='grid place-items-center gap-5 text-center'>
+          {icon}
+          <p className='text-5xl font-bold'>{count}</p>
+          <h3 className='text-lg font-semibold'>{title}</h3>
+          {description && <p className='text-gray-500'>{description}</p>}
+        </CardBody>
+      </Card>
+    );
+  };
+
+  return (
+    <div className='container'>
       <div>
-        <HeroSection />
+        <h2 className='text-2xl font-semibold'>İstatistikler</h2>
+        <p className='text-gray-500'>Sitemizin güncel istatistikleri</p>
       </div>
-      <div>
-        <FeaturedSection />
-      </div>
-      <div className='bg-content1'>
-        <NewsSection />
-      </div>
-      <div>
-        <StatsSection />
+      <br />
+      <div className='grid grid-cols-2 gap-5 md:grid-cols-4'>
+        <StatCloud
+          count={stats.posts}
+          description='Sizler için hazırladığımız içerikler'
+          icon={
+            <div className='rounded-full bg-yellow-500 p-3 text-white'>
+              <LucideBook size={40} />
+            </div>
+          }
+          title='Toplam Dergi'
+        />
+        <StatCloud
+          count={99}
+          description='Sitemizin günlük ziyaretçi sayısı'
+          icon={
+            <div className='rounded-full bg-lime-500 p-3 text-white'>
+              <LucideUsers2 size={40} />
+            </div>
+          }
+          title='Günlük Ziyaretçi'
+        />
+        <StatCloud
+          count={stats.users}
+          description='Sitemize kayıt olan kullanıcı sayısı'
+          icon={
+            <div className='rounded-full bg-orange-500 p-3 text-white'>
+              <LucideUsers size={40} />
+            </div>
+          }
+          title='Toplam Kullanıcı'
+        />
+        <StatCloud
+          count={stats.authors}
+          description='Sitemizde yazar olarak görev alan kullanıcı sayısı'
+          icon={
+            <div className='rounded-full bg-amber-500 p-3 text-white'>
+              <LucidePen size={40} />
+            </div>
+          }
+          title='Toplam Yazar'
+        />
       </div>
     </div>
   );
@@ -74,7 +142,6 @@ function FeaturedSection() {
         </div>
       </div>
       <br />
-
       <div className='grid w-full grid-cols-2 gap-5 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5'>
         {posts.map((post) => (
           <PostCard2
@@ -93,11 +160,11 @@ function HeroSection() {
   return (
     <div
       className='relative'
-      style={{ height: `calc(100vh - ${navbarHeight}px)` }}
+      style={{ height: `calc(80vh - ${navbarHeight}px)` }}
     >
       {/** Background Image */}
       <div
-        className='absolute inset-0 border-b'
+        className='absolute inset-0 rounded border-b'
         style={{
           backgroundImage: "url(/banner.png)",
           backgroundPosition: "center",
@@ -158,7 +225,7 @@ function NewsSection() {
   if (!news) return null;
 
   return (
-    <div className='container my-10'>
+    <div className='container'>
       <div className='grid grid-cols-1 gap-3 md:grid-cols-2'>
         <div>
           <h2 className='text-2xl font-semibold'>Son Duyurular</h2>
@@ -176,83 +243,6 @@ function NewsSection() {
             news={news}
           />
         ))}
-      </div>
-    </div>
-  );
-}
-
-function StatsSection() {
-  const { data: stats } = useSWR<Stats>("/stats");
-  if (!stats) return null;
-
-  interface StatCloudProps {
-    count: number;
-    description?: string;
-    icon: React.ReactNode;
-    title: string;
-  }
-
-  const StatCloud = ({ count, description, icon, title }: StatCloudProps) => {
-    return (
-      <Card>
-        <CardBody className='grid place-items-center gap-5 text-center'>
-          {icon}
-          <p className='text-5xl font-bold'>{count}</p>
-          <h3 className='text-lg font-semibold'>{title}</h3>
-          {description && <p className='text-gray-500'>{description}</p>}
-        </CardBody>
-      </Card>
-    );
-  };
-
-  return (
-    <div className='container my-10'>
-      <div>
-        <h2 className='text-2xl font-semibold'>İstatistikler</h2>
-        <p className='text-gray-500'>Sitemizin güncel istatistikleri</p>
-      </div>
-      <br />
-      <div className='grid grid-cols-1 gap-5 md:grid-cols-4'>
-        <StatCloud
-          count={stats.posts}
-          description='Sizler için hazırladığımız içerikler'
-          icon={
-            <div className='rounded-full bg-yellow-500 p-3 text-white'>
-              <LucideBook size={40} />
-            </div>
-          }
-          title='Toplam Dergi'
-        />
-        <StatCloud
-          count={99}
-          description='Sitemizin günlük ziyaretçi sayısı'
-          icon={
-            <div className='rounded-full bg-lime-500 p-3 text-white'>
-              <LucideUsers2 size={40} />
-            </div>
-          }
-          title='Günlük Ziyaretçi'
-        />
-        <StatCloud
-          count={stats.users}
-          description='Sitemize kayıt olan kullanıcı sayısı'
-          icon={
-            <div className='rounded-full bg-orange-500 p-3 text-white'>
-              <LucideUsers size={40} />
-            </div>
-          }
-          title='Toplam Kullanıcı'
-        />
-        <StatCloud
-          count={stats.authors}
-          description='Sitemizde yazar olarak görev alan kullanıcı sayısı'
-          icon={
-            <div className='rounded-full bg-amber-500 p-3 text-white'>
-              <LucidePen size={40} />
-            </div>
-          }
-          title='Toplam Yazar'
-        />
       </div>
     </div>
   );

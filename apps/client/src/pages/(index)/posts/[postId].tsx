@@ -1,13 +1,12 @@
 import type { LoaderFunctionArgs, MetaFunction } from "react-router";
 
 import { Button, Image, Link } from "@heroui/react";
-import { LucideDownload } from "lucide-react";
-import { useState } from "react";
 import { useLoaderData } from "react-router";
 
 import type { Post } from "@/types";
 
 import { Loader } from "@/components";
+import { CollapsibleText } from "@/components/CollapsibleText";
 import http from "@/http";
 import { getFileUrl } from "@/utils";
 
@@ -32,53 +31,34 @@ export const meta: MetaFunction = ({ data }) => {
 const ViewMagazine = () => {
   const magazine = useLoaderData<typeof loader>();
 
-  const [isDescriptionVisible, setIsDescriptionVisible] = useState(false);
-
   if (!magazine) return <Loader />;
 
   return (
-    <div className='container my-20 max-w-5xl'>
-      <div className='grid gap-10'>
-        <div className='grid grid-cols-12 gap-10'>
-          <div className='col-span-12 md:col-span-4'>
+    <div className='container max-w-5xl'>
+      <div className='grid grid-cols-12 gap-5'>
+        <div className='col-span-12 md:col-span-4'>
+          <div className='grid place-items-center'>
             <Image
               alt='Magazine'
               className='mx-auto h-96 w-full object-cover'
               src={getFileUrl(magazine.cover!)}
             />
           </div>
-          <div className='col-span-12 grid gap-3 md:col-span-8'>
-            <h2 className='text-3xl font-extrabold'>{magazine.title}</h2>
-            <p className='font-semibold'>
-              {isDescriptionVisible
-                ? magazine.description
-                : magazine.description.substring(0, 255)}
-              <button
-                className='mx-3 text-gray-500'
-                onClick={() => setIsDescriptionVisible(!isDescriptionVisible)}
-              >
-                {isDescriptionVisible ? "Daha Az Göster" : "Devamını Oku"}
-              </button>
+        </div>
+        <div className='col-span-12 md:col-span-8'>
+          <div className='grid gap-3'>
+            <h2 className='text-xl font-extrabold'>{magazine.title}</h2>
+            <CollapsibleText text={magazine.description} />
+            <Button
+              as={Link}
+              href={getFileUrl(magazine.file!)}
+              isExternal
+            >
+              Dergiyi Görüntüle
+            </Button>
+            <p className='text-end text-sm font-medium text-gray-500'>
+              Yayın Tarihi: {new Date(magazine.createdAt).toLocaleDateString()}
             </p>
-
-            <div className='flex gap-3'>
-              <Button
-                as={Link}
-                href={getFileUrl(magazine.file!)}
-                isExternal
-                startContent={<LucideDownload />}
-                variant='shadow'
-              >
-                <strong>İndir</strong>
-              </Button>
-            </div>
-            <small className='text-end'>
-              {new Date(magazine.createdAt).toLocaleDateString("tr-TR", {
-                day: "numeric",
-                month: "long",
-                year: "numeric"
-              })}
-            </small>
           </div>
         </div>
       </div>

@@ -68,7 +68,7 @@ export const Team = () => {
   squads.sort((a, b) => a.order - b.order);
 
   return (
-    <div className='container my-10 max-w-3xl'>
+    <div className='container max-w-3xl'>
       <div>
         <h1 className='text-3xl font-bold'>HALO Ekibi</h1>
         <p className='text-lg text-neutral-500'>

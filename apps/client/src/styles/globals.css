@@ -8,10 +8,14 @@
   --color-yellow-200: #d9c890;
   --color-yellow-300: #c7b36e;
   --color-yellow-400: #bda657;
+  --animate-marquee: marquee var(--duration) infinite linear;
+  --animate-marquee-vertical: marquee-vertical var(--duration) linear infinite;
 }
 
-body {
-  overflow-x: hidden;
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
 .no-reset * {
@@ -33,5 +37,24 @@ body {
   }
   100% {
     transform: translateY(0);
+  }
+}
+
+
+ 
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(calc(-100% - var(--gap)));
+  }
+}
+@keyframes marquee-vertical {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(calc(-100% - var(--gap)));
   }
 }

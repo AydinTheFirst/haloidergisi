@@ -14,7 +14,12 @@ import type { Post } from "@/types";
 
 import { getFileUrl } from "@/utils";
 
-export function PostCard({ post }: { post: Post }) {
+export interface PostCardProps {
+  className?: string;
+  post: Post;
+}
+
+export function PostCard({ post }: PostCardProps) {
   const oneMonthAgo = new Date();
   oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
   const isNew = new Date(post.createdAt) > oneMonthAgo;
@@ -71,14 +76,14 @@ export function PostCard({ post }: { post: Post }) {
   );
 }
 
-export const PostCard2 = ({ post }: { post: Post }) => {
+export const PostCard2 = ({ className, post }: PostCardProps) => {
   const oneMonthAgo = new Date();
   oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
   const isNew = new Date(post.createdAt) > oneMonthAgo;
   return (
     <Card
       as={Link}
-      className={cn("relative", isNew && "new-post")}
+      className={cn("relative", isNew && "new-post", className)}
       id={post.id}
       isHoverable
       isPressable

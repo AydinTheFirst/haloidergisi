@@ -14,7 +14,7 @@ export const meta: MetaFunction = () => {
 
 const Contact = () => {
   return (
-    <div className='container my-10 grid max-w-3xl gap-10'>
+    <div className='container grid max-w-3xl gap-10'>
       <div className='grid gap-3'>
         <h2 className='text-3xl font-extrabold'>Bize Ulaşın!</h2>
         <p className='text-lg font-bold'>
