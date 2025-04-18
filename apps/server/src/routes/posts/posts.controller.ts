@@ -6,6 +6,7 @@ import {
   Param,
   Patch,
   Post,
+  Query,
   Req,
   UploadedFile,
   UseInterceptors,
@@ -13,7 +14,7 @@ import {
 import { FileInterceptor } from "@nestjs/platform-express";
 import { Request } from "express";
 
-import { CreatePostDto, UpdatePostDto } from "./posts.dto";
+import { CreatePostDto, PostQueryDto, UpdatePostDto } from "./posts.dto";
 import { PostsService } from "./posts.service";
 
 @Controller("posts")
@@ -26,8 +27,8 @@ export class PostsController {
   }
 
   @Get()
-  findAll(@Req() req: Request) {
-    return this.postsService.findAll(req);
+  findAll(@Query() query: PostQueryDto, @Req() req: Request) {
+    return this.postsService.findAllPosts(query, req);
   }
 
   @Get(":id")
@@ -49,7 +50,7 @@ export class PostsController {
   @UseInterceptors(FileInterceptor("cover"))
   updateCover(
     @Param("id") id: string,
-    @UploadedFile() cover: Express.Multer.File
+    @UploadedFile() cover: Express.Multer.File,
   ) {
     return this.postsService.updateCover(id, cover);
   }
@@ -58,7 +59,7 @@ export class PostsController {
   @UseInterceptors(FileInterceptor("file"))
   updateFile(
     @Param("id") id: string,
-    @UploadedFile() file: Express.Multer.File
+    @UploadedFile() file: Express.Multer.File,
   ) {
     return this.postsService.updateFile(id, file);
   }

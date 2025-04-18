@@ -16,7 +16,7 @@ async function bootstrap() {
   await swagger(app);
 
   app.useGlobalPipes(
-    new CustomValidationPipe({ transform: true, whitelist: true })
+    new CustomValidationPipe({ transform: true, whitelist: true }),
   );
 
   await app.listen(config.port);

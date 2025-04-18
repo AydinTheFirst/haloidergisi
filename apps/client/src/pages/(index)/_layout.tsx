@@ -5,13 +5,13 @@ import Navbar from "./_components/Navbar";
 
 const Layout = () => {
   return (
-    <>
+    <div className='flex min-h-screen flex-col gap-10'>
       <Navbar />
-      <main className='container px-3 py-16 md:px-10'>
+      <main className='container flex-1'>
         <Outlet />
       </main>
       <Footer />
-    </>
+    </div>
   );
 };
 

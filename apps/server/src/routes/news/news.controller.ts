@@ -6,11 +6,13 @@ import {
   Param,
   Patch,
   Post,
+  Query,
   UseGuards,
 } from "@nestjs/common";
 import { Role } from "@prisma/client";
 
 import { Roles } from "@/common/decorators";
+import { BaseQueryDto } from "@/common/dto/query.dto";
 import { AuthGuard } from "@/common/guards";
 
 import { CreateNewsDto, UpdateNewsDto } from "./news.dto";
@@ -21,15 +23,15 @@ export class NewsController {
   constructor(private readonly newsService: NewsService) {}
 
   @Post()
-  @UseGuards(AuthGuard)
   @Roles([Role.ADMIN])
+  @UseGuards(AuthGuard)
   create(@Body() createNewsDto: CreateNewsDto) {
     return this.newsService.create(createNewsDto);
   }
 
   @Get()
-  findAll() {
-    return this.newsService.findAll();
+  findAll(@Query() query: BaseQueryDto) {
+    return this.newsService.findAllNews(query);
   }
 
   @Get(":id")
@@ -38,15 +40,15 @@ export class NewsController {
   }
 
   @Delete(":id")
-  @UseGuards(AuthGuard)
   @Roles([Role.ADMIN])
+  @UseGuards(AuthGuard)
   remove(@Param("id") id: string) {
     return this.newsService.remove(id);
   }
 
   @Patch(":id")
-  @UseGuards(AuthGuard)
   @Roles([Role.ADMIN])
+  @UseGuards(AuthGuard)
   update(@Param("id") id: string, @Body() updateNewsDto: UpdateNewsDto) {
     return this.newsService.update(id, updateNewsDto);
   }

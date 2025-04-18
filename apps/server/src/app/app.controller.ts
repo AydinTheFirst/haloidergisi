@@ -10,4 +10,9 @@ export class AppController {
   index() {
     return this.appService.index();
   }
+
+  @Get("/stats")
+  stats() {
+    return this.appService.stats();
+  }
 }

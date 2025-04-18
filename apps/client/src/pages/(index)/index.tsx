@@ -1,125 +1,249 @@
-import { Button, Card, CardFooter, Divider, Image } from "@heroui/react";
-import { useLoaderData, useNavigate } from "react-router";
+import { Button, Card, CardBody, Input, Link } from "@heroui/react";
+import {
+  LucideBook,
+  LucidePen,
+  LucideSearch,
+  LucideUsers,
+  LucideUsers2
+} from "lucide-react";
+import { type MetaFunction, useLoaderData } from "react-router";
+import useSWR from "swr";
 
-import type { Post } from "@/types";
-import type { CategoryWithPosts } from "@/types/extended";
+import type { News, Post, Stats } from "@/types";
+import type { PaginatedResponse } from "@/types/extended";
 
-import { Logo } from "@/components";
+import { NewsCard } from "@/components/NewsCard";
+import { PostCard2 } from "@/components/PostCard";
+import { useNavbarHeight } from "@/hooks";
 import http from "@/http";
-import { getFileUrl, sleep } from "@/utils";
-
-const Index = () => {
-  return (
-    <div className='grid gap-10'>
-      <Hero />
-      <Categories />
-    </div>
-  );
-};
-
-export default Index;
-
-const Hero = () => {
-  const scrollTo = () => {
-    window.scrollTo({
-      behavior: "smooth",
-      top: window.innerHeight + 10
-    });
-  };
-  return (
-    <>
-      <img
-        alt='Banner'
-        className='fixed left-0 top-0 -z-10 h-full w-full object-cover'
-        src='/banner.png'
-      />
-      <div className='flex h-[80vh] flex-col items-center justify-end gap-3'>
-        <Logo className='h-20 w-auto md:h-40' />
-        <Button
-          color='secondary'
-          onPress={scrollTo}
-          size='lg'
-        >
-          <strong>Dergileri Keşfet</strong>
-        </Button>
-      </div>
-    </>
-  );
-};
 
 export const loader = async () => {
-  const categories = await http.fetcher<CategoryWithPosts[]>(
-    "/categories?posts=true"
-  );
-  return categories;
-};
-
-const Categories = () => {
-  const categories = useLoaderData<typeof loader>();
-
-  return categories.map((category, i) => (
-    <CategorySection
-      category={category}
-      key={i}
-    />
-  ));
-};
-
-const CategorySection = ({ category }: { category: CategoryWithPosts }) => {
-  const magazines = category.posts.sort((a, b) => {
-    if (new Date(a.createdAt) < new Date(b.createdAt)) return 1;
-    if (new Date(a.createdAt) > new Date(b.createdAt)) return -1;
-    return 0;
+  const { data: posts } = await http.get<PaginatedResponse<Post>>("posts", {
+    params: {
+      limit: 5
+    }
   });
 
-  return (
-    <>
-      <div className='category container'>
-        <h1 className='mb-3 text-3xl font-bold'>{category.title}</h1>
-        <div className='grid grid-cols-2 gap-3 md:grid-cols-4 lg:grid-cols-6'>
-          {magazines.map((magazine: Post, i) => (
-            <MagazineCard
-              key={i}
-              magazine={magazine}
-            />
-          ))}
-        </div>
-      </div>
-
-      <Divider className='my-10' />
-    </>
-  );
+  return posts.data;
 };
 
-const MagazineCard = ({ magazine }: { magazine: Post }) => {
-  const navigate = useNavigate();
-  const handlePress = async () => {
-    await sleep(350);
-    navigate(`/posts/${magazine.slug}`);
+export const meta: MetaFunction = ({ data }) => {
+  const posts = data as Post[];
+
+  return [
+    { title: "HALO Dergisi - Anasayfa" },
+    { description: "HALO Dergisi - Anasayfa" },
+    { content: "HALO Dergisi - Anasayfa", property: "og:title" },
+    { content: "HALO Dergisi - Anasayfa", property: "og:description" },
+    { content: "/banner.png", property: "og:image" },
+    { content: posts.map((c) => c.title).join(", "), property: "keywords" }
+  ];
+};
+
+export default function Home() {
+  return (
+    <div className='grid gap-20'>
+      <HeroSection />
+      <FeaturedSection />
+      <NewsSection />
+    </div>
+  );
+}
+
+export function StatsSection() {
+  const { data: stats } = useSWR<Stats>("/stats");
+  if (!stats) return null;
+
+  interface StatCloudProps {
+    count: number;
+    description?: string;
+    icon: React.ReactNode;
+    title: string;
+  }
+
+  const StatCloud = ({ count, description, icon, title }: StatCloudProps) => {
+    return (
+      <Card>
+        <CardBody className='grid place-items-center gap-5 text-center'>
+          {icon}
+          <p className='text-5xl font-bold'>{count}</p>
+          <h3 className='text-lg font-semibold'>{title}</h3>
+          {description && <p className='text-gray-500'>{description}</p>}
+        </CardBody>
+      </Card>
+    );
   };
 
   return (
-    <Card
-      className='bg-[#F8EFD0]'
-      id={magazine.id}
-      isPressable
-      onPress={handlePress}
-    >
-      <Image
-        alt={magazine.title}
-        loading='lazy'
-        src={getFileUrl(magazine.cover!)}
-      />
-      <CardFooter className='flex flex-col justify-between'>
-        <strong>{magazine.title}</strong>
-        <small>
-          {new Date(magazine.createdAt).toLocaleDateString("tr-TR", {
-            day: "numeric",
-            month: "long",
-            year: "numeric"
-          })}
-        </small>
-      </CardFooter>
-    </Card>
+    <div className='container'>
+      <div>
+        <h2 className='text-2xl font-semibold'>İstatistikler</h2>
+        <p className='text-gray-500'>Sitemizin güncel istatistikleri</p>
+      </div>
+      <br />
+      <div className='grid grid-cols-2 gap-5 md:grid-cols-4'>
+        <StatCloud
+          count={stats.posts}
+          description='Sizler için hazırladığımız içerikler'
+          icon={
+            <div className='rounded-full bg-yellow-500 p-3 text-white'>
+              <LucideBook size={40} />
+            </div>
+          }
+          title='Toplam Dergi'
+        />
+        <StatCloud
+          count={99}
+          description='Sitemizin günlük ziyaretçi sayısı'
+          icon={
+            <div className='rounded-full bg-lime-500 p-3 text-white'>
+              <LucideUsers2 size={40} />
+            </div>
+          }
+          title='Günlük Ziyaretçi'
+        />
+        <StatCloud
+          count={stats.users}
+          description='Sitemize kayıt olan kullanıcı sayısı'
+          icon={
+            <div className='rounded-full bg-orange-500 p-3 text-white'>
+              <LucideUsers size={40} />
+            </div>
+          }
+          title='Toplam Kullanıcı'
+        />
+        <StatCloud
+          count={stats.authors}
+          description='Sitemizde yazar olarak görev alan kullanıcı sayısı'
+          icon={
+            <div className='rounded-full bg-amber-500 p-3 text-white'>
+              <LucidePen size={40} />
+            </div>
+          }
+          title='Toplam Yazar'
+        />
+      </div>
+    </div>
   );
-};
+}
+
+function FeaturedSection() {
+  const posts = useLoaderData<typeof loader>();
+
+  return (
+    <div className='container py-10'>
+      <div className='grid grid-cols-1 gap-3 md:grid-cols-2'>
+        <div>
+          <h2 className='text-2xl font-semibold'>Öne Çıkan Dergiler</h2>
+          <p className='text-gray-500'>Son güncellenen dergiler</p>
+        </div>
+        <div className='flex justify-end'>
+          <Link href='/posts'>Tamamını Gör</Link>
+        </div>
+      </div>
+      <br />
+      <div className='grid w-full grid-cols-2 gap-5 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5'>
+        {posts.map((post) => (
+          <PostCard2
+            key={post.id}
+            post={post}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function HeroSection() {
+  const navbarHeight = useNavbarHeight();
+
+  return (
+    <div
+      className='relative'
+      style={{ height: `calc(80vh - ${navbarHeight}px)` }}
+    >
+      {/** Background Image */}
+      <div
+        className='absolute inset-0 rounded border-b'
+        style={{
+          backgroundImage: "url(/banner.png)",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
+          backgroundSize: "cover"
+        }}
+      >
+        {/** Content */}
+        <div className='flex h-full flex-col items-center justify-end gap-3 pb-5'>
+          <img
+            alt='Halo Logo'
+            className='h-20 w-auto md:h-32'
+            src='/halo-light.png'
+          />
+          <form
+            action=''
+            className='hidden w-full max-w-2xl items-center gap-2 px-4'
+          >
+            <Input
+              className='w-full'
+              color='secondary'
+              description={
+                <div>
+                  <p className='text-sm text-gray-500'>
+                    Dergi ismi veya kategori ismi ile arama yapabilirsiniz.
+                  </p>
+                  <p className='text-sm text-gray-500'>
+                    Örnek: <strong>Aylık Dergiler</strong>,{" "}
+                    <strong>Mart Sayısı</strong>
+                  </p>
+                </div>
+              }
+              endContent={
+                <Button
+                  color='secondary'
+                  isIconOnly
+                  radius='full'
+                  size='sm'
+                >
+                  <LucideSearch size={16} />
+                </Button>
+              }
+              placeholder='Dergi Ara'
+              radius='full'
+              type='text'
+              variant='underlined'
+            />
+          </form>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function NewsSection() {
+  const { data: news } = useSWR<PaginatedResponse<News>>("/news?limit=5");
+
+  if (!news) return null;
+
+  return (
+    <div className='container'>
+      <div className='grid grid-cols-1 gap-3 md:grid-cols-2'>
+        <div>
+          <h2 className='text-2xl font-semibold'>Son Duyurular</h2>
+          <p className='text-gray-500'>Son güncellenen duyurular</p>
+        </div>
+        <div className='flex justify-end'>
+          <Link href='/news'>Tamamını Gör</Link>
+        </div>
+      </div>
+      <br />
+      <div className='grid w-full grid-cols-2 gap-5 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5'>
+        {news.data.map((news) => (
+          <NewsCard
+            key={news.id}
+            news={news}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}

@@ -22,8 +22,8 @@ export class CategoriesController {
   constructor(private readonly categoriesService: CategoriesService) {}
 
   @Post()
-  @UseGuards(AuthGuard)
   @Roles(["ADMIN"])
+  @UseGuards(AuthGuard)
   create(@Body() createCategoryDto: CreateCategoryDto) {
     return this.categoriesService.create(createCategoryDto);
   }
@@ -44,18 +44,18 @@ export class CategoriesController {
   }
 
   @Delete(":id")
-  @UseGuards(AuthGuard)
   @Roles(["ADMIN"])
+  @UseGuards(AuthGuard)
   remove(@Param("id") id: string) {
     return this.categoriesService.remove(id);
   }
 
   @Patch(":id")
-  @UseGuards(AuthGuard)
   @Roles(["ADMIN"])
+  @UseGuards(AuthGuard)
   update(
     @Param("id") id: string,
-    @Body() updateCategoryDto: UpdateCategoryDto
+    @Body() updateCategoryDto: UpdateCategoryDto,
   ) {
     return this.categoriesService.update(id, updateCategoryDto);
   }

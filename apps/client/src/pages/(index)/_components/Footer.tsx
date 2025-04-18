@@ -1,21 +1,17 @@
 import { Button, Divider, Link } from "@heroui/react";
-import { SiInstagram, SiLinkedin } from "@icons-pack/react-simple-icons";
 
 import { Logo } from "@/components";
+import { LocalIcon } from "@/components/LocalIcon";
 import { INSTAGRAM_URL, LINKEDIN_URL } from "@/config";
 
 export default function Footer() {
   return (
-    <footer className='backdrop-blur'>
+    <footer className='border-t bg-content1'>
       <div className='container px-10 py-16'>
         <div className='grid grid-cols-12 gap-5'>
           <div className='col-span-12 flex max-w-lg flex-col gap-3 md:col-span-6'>
-            <div className='flex items-center gap-3'>
-              <Logo className='h-20 w-auto md:h-40' />
-              <div className='text-center'>
-                <h1 className='text-3xl font-bold'>HALO Dergisi</h1>
-              </div>
-            </div>
+            <Logo className='h-40 w-min' />
+            <h1 className='text-3xl font-bold'>HALO Dergisi</h1>
             <p>
               Bölümümüze ve öğrencilerine katkı sağlamak amacıyla, diğer
               fakülteler dahil olmak üzere; ortaya bir fikir- edebiyat dergisi
@@ -30,7 +26,7 @@ export default function Footer() {
                 size='sm'
                 variant='light'
               >
-                <SiInstagram />
+                <LocalIcon name='instagram' />
               </Button>
               <Button
                 as={Link}
@@ -40,7 +36,7 @@ export default function Footer() {
                 size='sm'
                 variant='light'
               >
-                <SiLinkedin />
+                <LocalIcon name='linkedin' />
               </Button>
             </div>
           </div>

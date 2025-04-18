@@ -2,25 +2,25 @@ import { Injectable, NotFoundException } from "@nestjs/common";
 import { Request } from "express";
 import slugify from "slugify";
 
+import { BaseService } from "@/common/services/base.service";
 import { S3Service } from "@/modules";
-import { Prisma, PrismaService, User } from "@/prisma";
+import { Post, Prisma, PrismaService, User } from "@/prisma";
 
-import { CreatePostDto, UpdatePostDto } from "./posts.dto";
+import { CreatePostDto, PostQueryDto, UpdatePostDto } from "./posts.dto";
 
 @Injectable()
-export class PostsService {
+export class PostsService extends BaseService<Post> {
   constructor(
     private prisma: PrismaService,
     private s3: S3Service
-  ) {}
+  ) {
+    super(prisma.post);
+  }
 
   async create(createPostDto: CreatePostDto) {
     const post = await this.prisma.post.create({
       data: {
-        slug: slugify(createPostDto.title, {
-          lower: true,
-          strict: true,
-        }),
+        slug: this.makeSlug(createPostDto.title),
         ...createPostDto,
       },
     });
@@ -28,10 +28,14 @@ export class PostsService {
     return post;
   }
 
-  async findAll(req: Request) {
-    const posts = await this.prisma.post.findMany({
-      where: this.getPostWhereClause(req.user),
-    });
+  async findAllPosts(query: PostQueryDto, req: Request) {
+    const where = this.getPostWhereClause(req.user);
+
+    if (query.categoryId) {
+      where.categoryId = query.categoryId;
+    }
+
+    const posts = await this.findAll(query, ["title", "description"], where);
 
     return posts;
   }
@@ -58,6 +62,14 @@ export class PostsService {
     };
   }
 
+  makeSlug(title: string) {
+    const slug = slugify(title, {
+      lower: true,
+      strict: true,
+    });
+    return slug + "-" + Date.now();
+  }
+
   async remove(id: string) {
     await this.findOne(id);
 
@@ -73,10 +85,7 @@ export class PostsService {
 
     const slug =
       updatePostDto.title !== existing.title
-        ? slugify(updatePostDto.title, {
-            lower: true,
-            strict: true,
-          })
+        ? this.makeSlug(updatePostDto.title)
         : existing.slug;
 
     const post = await this.prisma.post.update({

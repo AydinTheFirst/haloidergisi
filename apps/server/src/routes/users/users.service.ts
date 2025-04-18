@@ -17,7 +17,7 @@ export class UsersService {
 
   async create(createUserDto: CreateUserDto) {
     const hashedPassword = await argon2.hash(
-      createUserDto.password || crypto.randomUUID()
+      createUserDto.password || crypto.randomUUID(),
     );
 
     const user = await this.prisma.user.create({

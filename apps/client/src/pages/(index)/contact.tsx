@@ -1,8 +1,8 @@
 import type { MetaFunction } from "react-router";
 
 import { Button, Input, Link, Textarea } from "@heroui/react";
-import { SiInstagram, SiLinkedin } from "@icons-pack/react-simple-icons";
 
+import { LocalIcon } from "@/components/LocalIcon";
 import { INSTAGRAM_URL, LINKEDIN_URL } from "@/config";
 
 export const meta: MetaFunction = () => {
@@ -14,7 +14,7 @@ export const meta: MetaFunction = () => {
 
 const Contact = () => {
   return (
-    <div className='mx-auto grid max-w-3xl gap-10'>
+    <div className='container grid max-w-3xl gap-10'>
       <div className='grid gap-3'>
         <h2 className='text-3xl font-extrabold'>Bize Ulaşın!</h2>
         <p className='text-lg font-bold'>
@@ -33,7 +33,7 @@ const Contact = () => {
               href={INSTAGRAM_URL}
               isExternal
             >
-              <SiInstagram />
+              <LocalIcon name='instagram' />
               Instagram
             </Link>
           </li>
@@ -44,7 +44,7 @@ const Contact = () => {
               href={LINKEDIN_URL}
               isExternal
             >
-              <SiLinkedin />
+              <LocalIcon name='linkedin' />
               Linkedin
             </Link>
           </li>
@@ -74,33 +74,32 @@ const MailForm = () => {
 
   return (
     <form
-      className='grid grid-cols-12 gap-3 rounded-lg bg-content1 p-3'
+      className='grid grid-cols-12 gap-3'
       onSubmit={handleSubmit}
     >
       <Input
         className='col-span-12 md:col-span-6'
-        color='warning'
         isRequired
         label='Adınız'
         placeholder='Adınız'
+        variant='underlined'
       />
       <Input
         className='col-span-12 md:col-span-6'
-        color='warning'
         isRequired
         label='Konu'
         placeholder='konu'
+        variant='underlined'
       />
       <Textarea
         className='col-span-12'
-        color='warning'
         isRequired
         label='Mesajınız'
         placeholder='Mesajınız'
+        variant='underlined'
       />
       <Button
         className='col-span-12'
-        color='secondary'
         type='submit'
       >
         Gönder

@@ -5,15 +5,6 @@ import {
 } from "@nestjs/common";
 
 export class CustomValidationPipe extends ValidationPipe {
-  // Hata mesajlarını düzleştirip, tek bir dizide topluyoruz.
-  protected flattenValidationErrors(
-    validationErrors: ValidationError[]
-  ): string[] {
-    return validationErrors.map((error) =>
-      Object.values(error.constraints).join(", ")
-    );
-  }
-
   // Hataları oluştururken doğrudan bir BadRequestException fırlatıyoruz
   createExceptionFactory() {
     return (validationErrors: ValidationError[] = []) => {
@@ -25,5 +16,14 @@ export class CustomValidationPipe extends ValidationPipe {
         statusCode: 400,
       });
     };
+  }
+
+  // Hata mesajlarını düzleştirip, tek bir dizide topluyoruz.
+  protected flattenValidationErrors(
+    validationErrors: ValidationError[],
+  ): string[] {
+    return validationErrors.map((error) =>
+      Object.values(error.constraints).join(", "),
+    );
   }
 }

@@ -5,7 +5,7 @@ export const sleep = (ms: number) => {
 };
 
 export const getPublicUserSelection = (
-  extraFields?: (keyof Prisma.UserSelect)[]
+  extraFields?: (keyof Prisma.UserSelect)[],
 ): Prisma.UserSelect => {
   const baseFields: Prisma.UserSelect = {
     bio: true,

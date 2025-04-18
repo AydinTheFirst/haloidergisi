@@ -25,8 +25,11 @@ export default {
             content2: "#d9c890",
             content3: "#c7b36e",
             content4: "#bda657",
-            secondary: "#fade9b",
-            background: "#f8e9b1"
+            default: {
+              DEFAULT: "#fade9b",
+              foreground: "#000"
+            },
+            background: "#fef9e6"
           }
         }
       }

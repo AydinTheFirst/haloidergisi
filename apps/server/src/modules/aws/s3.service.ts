@@ -1,12 +1,18 @@
-import { GetObjectCommandOutput, S3 } from "@aws-sdk/client-s3";
+import {
+  GetObjectCommandOutput,
+  PutObjectCommand,
+  S3,
+} from "@aws-sdk/client-s3";
+import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import { Injectable, Logger, OnModuleInit } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
-import crypto from "node:crypto";
+import slugify from "slugify";
 
 @Injectable()
 export class S3Service implements OnModuleInit {
   bucketName: string;
   cache = new Map<string, GetObjectCommandOutput>();
+
   s3: S3;
 
   // Constructor
@@ -33,6 +39,18 @@ export class S3Service implements OnModuleInit {
     return result;
   }
 
+  generateFileKey(file: Express.Multer.File): string {
+    const ext = file.originalname.split(".").pop();
+    const slugifiedName = slugify(file.originalname, {
+      lower: true,
+      strict: true,
+    });
+    const timestamp = Date.now();
+    const fileExtension = ext ? `.${ext}` : "";
+
+    return `${slugifiedName}_${timestamp}${fileExtension}`;
+  }
+
   async getFile(Key: string) {
     try {
       const result = await this.s3.getObject({
@@ -55,6 +73,21 @@ export class S3Service implements OnModuleInit {
     return result.Contents;
   }
 
+  async getSignedUrl(Key: string) {
+    const url = await getSignedUrl(
+      this.s3,
+      new PutObjectCommand({
+        Bucket: this.bucketName,
+        Key,
+      }),
+      {
+        expiresIn: 60 * 60 * 24 * 7, // 7d
+      }
+    );
+
+    return url;
+  }
+
   async onModuleInit() {
     try {
       await this.s3.headBucket({
@@ -67,7 +100,7 @@ export class S3Service implements OnModuleInit {
   }
 
   async uploadFile(file: Express.Multer.File) {
-    const key = crypto.randomUUID();
+    const key = this.generateFileKey(file);
 
     await this.s3.putObject({
       Body: file.buffer,

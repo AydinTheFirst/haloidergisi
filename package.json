@@ -5,13 +5,14 @@
     "build": "turbo build",
     "dev": "turbo dev",
     "lint": "turbo lint",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\""
+    "format": "turbo format"
   },
   "devDependencies": {
-    "eslint": "^8.57.1",
-    "prettier": "^3.5.3",
-    "turbo": "^2.4.4"
+    "turbo": "^2.5.0"
   },
   "packageManager": "pnpm@10.7.1",
-  "name": "haloidergisi"
+  "name": "haloidergisi",
+  "engines": {
+    "node": "22.x"
+  }
 }

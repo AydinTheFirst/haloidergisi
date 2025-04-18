@@ -1,4 +1,4 @@
-import type { Route } from "@react-router/src/+types/root";
+import type { Route } from "@react-router/+types/root";
 
 import {
   Accordion,
@@ -10,6 +10,9 @@ import {
   CardHeader
 } from "@heroui/react";
 import { LucideXOctagon } from "lucide-react";
+
+import "@/styles/globals.css";
+
 import {
   isRouteErrorResponse,
   Link,
@@ -19,38 +22,6 @@ import {
   Scripts,
   ScrollRestoration
 } from "react-router";
-
-import "@/styles/globals.css";
-
-export function Layout({ children }: { children: React.ReactNode }) {
-  return (
-    <html lang='tr'>
-      <head>
-        <meta charSet='UTF-8' />
-        <meta
-          content='width=device-width, initial-scale=1.0'
-          name='viewport'
-        />
-        <link
-          href='/logo.png'
-          rel='shortcut icon'
-          type='image/x-icon'
-        />
-        <Meta />
-        <Links />
-      </head>
-      <body>
-        {children}
-        <ScrollRestoration />
-        <Scripts />
-      </body>
-    </html>
-  );
-}
-
-export default function Root() {
-  return <Outlet />;
-}
 
 export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
   let message = "Oops!";
@@ -108,4 +79,34 @@ export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
       </Card>
     </main>
   );
+}
+
+export function Layout({ children }: { children: React.ReactNode }) {
+  return (
+    <html lang='tr'>
+      <head>
+        <meta charSet='UTF-8' />
+        <meta
+          content='width=device-width, initial-scale=1.0'
+          name='viewport'
+        />
+        <link
+          href='/logo.png'
+          rel='shortcut icon'
+          type='image/x-icon'
+        />
+        <Meta />
+        <Links />
+      </head>
+      <body>
+        {children}
+        <ScrollRestoration />
+        <Scripts />
+      </body>
+    </html>
+  );
+}
+
+export default function Root() {
+  return <Outlet />;
 }

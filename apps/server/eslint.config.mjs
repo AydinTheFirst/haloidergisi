@@ -23,7 +23,7 @@ export default tseslint.config(
       "perfectionist/sort-imports": [
         "error",
         {
-          internalPattern: ["@/**"],
+          internalPattern: ["^@/.+"],
         },
       ],
     },

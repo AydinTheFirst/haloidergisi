@@ -10,10 +10,10 @@ import { Server } from "socket.io";
   transports: ["websocket"],
 })
 export class WebsocketGateway implements OnModuleInit {
-  private connectedSockets = new Map<string, any>();
-
   @WebSocketServer()
   io: Server;
+
+  private connectedSockets = new Map<string, any>();
 
   onModuleInit() {
     this.io.on("connection", (socket) => {

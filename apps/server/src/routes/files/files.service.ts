@@ -47,6 +47,11 @@ export class FilesService {
     fileStream.pipe(res);
   }
 
+  async getSignedUrl(key: string) {
+    const url = await this.s3.getSignedUrl(key);
+    return url;
+  }
+
   async remove(key: string) {
     const result = await this.s3.deleteFile(key);
     return result;

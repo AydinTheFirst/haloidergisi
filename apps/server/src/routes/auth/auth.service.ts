@@ -11,6 +11,8 @@ import { LoginDto, RegisterDto } from "./auth.dto";
 
 @Injectable()
 export class AuthService {
+  constructor(private prisma: PrismaService) {}
+
   login = async (body: LoginDto) => {
     const user = await this.prisma.user.findFirst({
       where: {
@@ -58,6 +60,4 @@ export class AuthService {
 
     return user;
   };
-
-  constructor(private prisma: PrismaService) {}
 }

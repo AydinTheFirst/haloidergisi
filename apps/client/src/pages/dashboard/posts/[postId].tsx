@@ -141,6 +141,7 @@ const ViewPost = () => {
               label='Açıklama'
               name='description'
             />
+
             {post && (
               <DatePicker
                 className='col-span-12'

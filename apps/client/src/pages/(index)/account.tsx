@@ -51,83 +51,87 @@ export const Profile = () => {
         isOpen={isModalOpen}
         setIsOpen={setIsModalOpen}
       />
-      <Card className='mx-auto max-w-xl'>
-        <div className='h-[100px] rounded-lg bg-gradient-to-tr from-yellow-500 to-red-500' />
-        <div
-          className='flex justify-center'
-          style={{
-            left: "50%",
-            position: "absolute",
-            top: "70px",
-            transform: "translateX(-50%)"
-          }}
-        >
-          <div className='relative'>
-            <Avatar
-              className='h-20 w-20'
-              src={getAvatar(user)}
-            />
-            <Button
-              className='absolute bottom-0 end-0 -m-3'
-              isIconOnly
-              onPress={() => setIsModalOpen(true)}
-              radius='full'
-              size='sm'
-            >
-              <LucideEdit />
-            </Button>
-          </div>
-        </div>
-        <div className='h-16' />
-        <div>
-          <h1 className='text-3lg text-center font-bold'>{user.displayName}</h1>
-        </div>
-        <CardBody>
-          <form
-            className='grid gap-3'
-            onSubmit={handleSubmit}
+      <div className='container max-w-3xl'>
+        <Card className='mx-auto max-w-xl'>
+          <div className='h-[100px] rounded-lg bg-gradient-to-tr from-yellow-500 to-red-500' />
+          <div
+            className='flex justify-center'
+            style={{
+              left: "50%",
+              position: "absolute",
+              top: "70px",
+              transform: "translateX(-50%)"
+            }}
           >
-            <Input
-              defaultValue={user.displayName || ""}
-              label='İsim'
-              name='displayName'
-            />
-
-            <Input
-              defaultValue={user.email || ""}
-              label='Email'
-              name='email'
-            />
-
-            <Input
-              defaultValue={user.website || ""}
-              label='Website'
-              name='website'
-            />
-
-            <Textarea
-              defaultValue={user.bio || ""}
-              label='Bio'
-              name='bio'
-            />
-
-            <Input
-              defaultValue={user.title || ""}
-              isReadOnly
-              label='Rol'
-              name='role'
-            />
-
-            <Button
-              color='secondary'
-              fullWidth
-              type='submit'
+            <div className='relative'>
+              <Avatar
+                className='h-20 w-20'
+                src={getAvatar(user)}
+              />
+              <Button
+                className='absolute bottom-0 end-0 -m-3'
+                isIconOnly
+                onPress={() => setIsModalOpen(true)}
+                radius='full'
+                size='sm'
+              >
+                <LucideEdit />
+              </Button>
+            </div>
+          </div>
+          <div className='h-16' />
+          <div>
+            <h1 className='text-3lg text-center font-bold'>
+              {user.displayName}
+            </h1>
+          </div>
+          <CardBody>
+            <form
+              className='grid gap-3'
+              onSubmit={handleSubmit}
             >
-              Güncelle
-            </Button>
-          </form>
-        </CardBody>
-      </Card>
+              <Input
+                defaultValue={user.displayName || ""}
+                label='İsim'
+                name='displayName'
+              />
+
+              <Input
+                defaultValue={user.email || ""}
+                label='Email'
+                name='email'
+              />
+
+              <Input
+                defaultValue={user.website || ""}
+                label='Website'
+                name='website'
+              />
+
+              <Textarea
+                defaultValue={user.bio || ""}
+                label='Bio'
+                name='bio'
+              />
+
+              <Input
+                defaultValue={user.title || ""}
+                isReadOnly
+                label='Rol'
+                name='role'
+              />
+
+              <Button
+                color='secondary'
+                fullWidth
+                type='submit'
+              >
+                Güncelle
+              </Button>
+            </form>
+          </CardBody>
+        </Card>
+      </div>
     </>
   );
 };
