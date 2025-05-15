@@ -16,6 +16,7 @@
     "@internationalized/date": "^3.7.0",
     "@react-router/node": "^7.5.0",
     "@react-router/serve": "^7.5.0",
+    "@types/react-dom": "^19.1.5",
     "axios": "^1.8.4",
     "embla-carousel-react": "^8.6.0",
     "framer-motion": "^12.6.3",

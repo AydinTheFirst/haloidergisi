@@ -1,8 +1,9 @@
 import type { MetaFunction } from "react-router";
 import type { ToasterProps } from "sonner";
 
+import { Progress } from "@heroui/react";
 import { useTheme } from "next-themes";
-import { Outlet } from "react-router";
+import { Outlet, useNavigation } from "react-router";
 import { Toaster } from "sonner";
 import { SWRConfig } from "swr";
 
@@ -24,6 +25,8 @@ export function HydrateFallback() {
 
 export default function Layout() {
   const { theme } = useTheme();
+  const navigation = useNavigation();
+  const isLoading = navigation.state === "loading";
 
   return (
     <Providers>
@@ -34,6 +37,14 @@ export default function Layout() {
         }}
       >
         <AuthProvider>
+          {isLoading && (
+            <Progress
+              className='fixed top-0 z-50 w-full'
+              color='warning'
+              isIndeterminate
+              size='sm'
+            />
+          )}
           <Outlet />
         </AuthProvider>
       </SWRConfig>
