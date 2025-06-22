@@ -5,6 +5,7 @@ import { useAuth } from "~/hooks/use-auth";
 import { handleError, http } from "~/lib/http";
 import { ReactionType } from "~/models/enums";
 import { LucideThumbsDown, LucideThumbsUp } from "lucide-react";
+import { toast } from "sonner";
 import useSWR from "swr";
 
 interface ReactionButtonsProps {
@@ -25,6 +26,10 @@ export function ReactionButtons({ postId }: ReactionButtonsProps) {
   );
 
   const onReact = async (type: ReactionType) => {
+    if (!user) {
+      return toast.error("Lütfen önce giriş yapın.");
+    }
+
     const existingReaction = myReaction?.type === type;
     try {
       if (existingReaction) {
