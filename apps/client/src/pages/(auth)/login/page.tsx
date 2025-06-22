@@ -1,3 +1,5 @@
+import type { MetaFunction } from "react-router";
+
 import {
   Button,
   Card,
@@ -12,6 +14,17 @@ import { handleError, http } from "~/lib/http";
 import { LucideChevronLeft } from "lucide-react";
 import React from "react";
 import { toast } from "sonner";
+
+export const meta: MetaFunction = () => {
+  return [
+    { title: "HALO Dergisi - Giriş Yap" },
+    {
+      content:
+        "HALO Dergisi'ne giriş yaparak en son haberleri, makaleleri ve etkinlikleri takip edebilirsiniz.",
+      name: "description"
+    }
+  ];
+};
 
 export default function LoginPage() {
   const [isLoading, setIsLoading] = React.useState(false);

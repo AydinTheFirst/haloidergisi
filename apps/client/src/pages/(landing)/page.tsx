@@ -3,7 +3,7 @@ import type { Post } from "~/models/Post";
 import type { PaginatedResponse } from "~/types";
 
 import { http } from "~/lib/http";
-import { useLoaderData } from "react-router";
+import { type MetaFunction, useLoaderData } from "react-router";
 
 import FeaturedNews from "./featured-news";
 import FeaturedPosts from "./featured-posts";
@@ -19,6 +19,16 @@ export const loader = async () => {
   });
 
   return { news, posts };
+};
+
+export const meta: MetaFunction = () => {
+  return [
+    {
+      description:
+        "HALO Dergisi, edebiyat dünyasındaki en son haberleri ve makaleleri burada bulabilirsiniz. Dergiler, edebiyat dünyasındaki en önemli yayın organlarından biridir.",
+      title: "HALO Dergisi - Anasayfa"
+    }
+  ];
 };
 
 export default function Page() {

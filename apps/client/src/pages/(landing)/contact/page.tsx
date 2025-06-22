@@ -1,6 +1,19 @@
+import type { MetaFunction } from "react-router";
+
 import { Link } from "@heroui/react";
 import { links } from "~/data/links";
 import { LucideInstagram, LucideLinkedin, LucideMail } from "lucide-react";
+
+export const meta: MetaFunction = () => {
+  return [
+    { title: "HALO Dergisi - İletişim" },
+    {
+      content:
+        "HALO Dergisi ile iletişime geçmek için sosyal medya hesaplarımızı ve e-posta adresimizi kullanabilirsiniz.",
+      name: "description"
+    }
+  ];
+};
 
 export default function Contact() {
   return (

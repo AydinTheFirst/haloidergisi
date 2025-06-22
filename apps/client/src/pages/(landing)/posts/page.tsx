@@ -24,6 +24,20 @@ import useSWR from "swr";
 
 import type { Route } from "./+types/page";
 
+export const meta: Route.MetaFunction = ({ data }) => {
+  return [
+    {
+      description:
+        "Dergiler, HALO Dergisinin paylaşılan en son dergilerini incleyebilir ve indirebilirsiniz.",
+      title: `HALO Dergisi - Dergiler`
+    },
+    {
+      content: data?.posts.items.map((post) => post.title).join(", "),
+      name: "keywords"
+    }
+  ];
+};
+
 export const loader = async ({ request }: Route.LoaderArgs) => {
   const { searchParams } = new URL(request.url);
 

@@ -1,3 +1,5 @@
+import type { MetaFunction } from "react-router";
+
 import {
   Button,
   Card,
@@ -13,6 +15,17 @@ import { sleep } from "~/lib/utils";
 import { LucideChevronLeft } from "lucide-react";
 import React from "react";
 import { toast } from "sonner";
+
+export const meta: MetaFunction = () => {
+  return [
+    { title: "HALO Dergisi - Kayıt Ol" },
+    {
+      content:
+        "HALO Dergisi platformuna kayıt olarak en son haberleri, makaleleri ve etkinlikleri takip edebilirsiniz.",
+      name: "description"
+    }
+  ];
+};
 
 export default function RegisterPage() {
   const [isLoading, setIsLoading] = React.useState(false);

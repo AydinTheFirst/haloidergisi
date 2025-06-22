@@ -11,6 +11,7 @@ import {
 } from "@heroui/react";
 import CdnImage from "~/components/cdn-image";
 import { http } from "~/lib/http";
+import { createMetaTags } from "~/lib/seo";
 import { cdnSource } from "~/lib/utils";
 import { LucideShare2 } from "lucide-react";
 import { useLoaderData } from "react-router";
@@ -23,6 +24,21 @@ import PostComments from "./post-comments";
 import PublisherComment from "./publisher-comment";
 import { ReactionButtons } from "./reaction-buttons";
 import RelatedPosts from "./related-posts";
+
+export const meta: Route.MetaFunction = ({ data }) => {
+  return createMetaTags({
+    author: "HALO Dergisi",
+    canonical: `/posts/${data?.post.slug}`,
+    category: data?.post.category?.title || "Dergi",
+    description: data?.post.description || "HALO Dergisi - Dergi Detayları",
+    image: data?.post.cover && cdnSource(data.post.cover),
+    keywords:
+      data?.post.tags.join(", ") || "HALO, Dergi, Edebiyat, Dergi Detayları",
+    robots: "index, follow",
+    title: data?.post.title || "HALO Dergisi - Dergi Detayları",
+    url: `https://haloidergisi.com/posts/${data?.post.slug}`
+  });
+};
 
 export const loader = async ({ params }: Route.LoaderArgs) => {
   const { postId } = params;

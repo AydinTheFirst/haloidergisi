@@ -4,9 +4,23 @@ import type { PaginatedResponse } from "~/types";
 import { Button, Pagination } from "@heroui/react";
 import NewsCard from "~/components/news-card";
 import { http } from "~/lib/http";
-import { useLoaderData, useSearchParams } from "react-router";
+import {
+  type MetaFunction,
+  useLoaderData,
+  useSearchParams
+} from "react-router";
 
 import type { Route } from "./+types/page";
+
+export const meta: MetaFunction = () => {
+  return [
+    {
+      description:
+        "Edebiyat Dergisi hakkında ki en son haberleri ve makaleleri burada bulabilirsiniz. Dergiler, edebiyat dünyasındaki en önemli yayın organlarından biridir.",
+      title: `HALO Dergisi - Haberler`
+    }
+  ];
+};
 
 export const loader = async ({ request }: Route.LoaderArgs) => {
   const { searchParams } = new URL(request.url);

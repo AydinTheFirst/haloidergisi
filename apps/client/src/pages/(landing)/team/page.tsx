@@ -17,6 +17,19 @@ import { http } from "~/lib/http";
 import { cdnSource } from "~/lib/utils";
 import { LucideExternalLink } from "lucide-react";
 import { useLoaderData } from "react-router";
+
+import type { Route } from "./+types/page";
+
+export const meta: Route.MetaFunction = () => {
+  return [
+    {
+      description:
+        "HALO Dergisi ekibi, edebiyat dünyasına katkıda bulunan yetenekli bireylerden oluşmaktadır. Ekibimiz hakkında daha fazla bilgi edinebilirsiniz.",
+      title: "HALO Dergisi - Ekibimiz"
+    }
+  ];
+};
+
 export const loader = async () => {
   const { data: squads } = await http.get<Squad[]>("/squads");
 
