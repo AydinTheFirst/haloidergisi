@@ -1,10 +1,9 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
-import { Request } from "express";
 import slugify from "slugify";
 
 import { BaseService } from "@/common/services/base.service";
+import { Post, Prisma, PrismaService } from "@/database";
 import { S3Service } from "@/modules";
-import { Post, Prisma, PrismaService, User } from "@/prisma";
 
 import { CreatePostDto, PostQueryDto, UpdatePostDto } from "./posts.dto";
 
@@ -28,20 +27,53 @@ export class PostsService extends BaseService<Post> {
     return post;
   }
 
-  async findAllPosts(query: PostQueryDto, req: Request) {
-    const where = this.getPostWhereClause(req.user);
+  findAllAdminPosts(query: PostQueryDto) {
+    const where: Prisma.PostWhereInput = {};
 
     if (query.categoryId) {
       where.categoryId = query.categoryId;
     }
 
-    const posts = await this.findAll(query, ["title", "description"], where);
+    return this.queryAll(query, ["title", "description"], where);
+  }
+
+  async findAllPosts(query: PostQueryDto) {
+    const where: Prisma.PostWhereInput = {
+      status: "PUBLISHED",
+    };
+
+    if (query.categoryId) {
+      where.categoryId = query.categoryId;
+    }
+
+    const posts = await this.queryAll(query, ["title", "description"], where);
 
     return posts;
   }
 
+  async findAllReactionsByPostId(postId: string) {
+    const reactions = await this.prisma.reaction.findMany({
+      include: {
+        user: {
+          select: { id: true, profile: true, username: true },
+        },
+      },
+      where: { postId },
+    });
+
+    return {
+      items: reactions,
+      meta: {
+        dislikes: reactions.filter((r) => r.type === "DISLIKE").length,
+        likes: reactions.filter((r) => r.type === "LIKE").length,
+        total: reactions.length,
+      },
+    };
+  }
+
   async findOne(id: string) {
     const post = await this.prisma.post.findFirst({
+      include: { category: true },
       where: { OR: [{ id }, { slug: id }] },
     });
 
@@ -52,14 +84,25 @@ export class PostsService extends BaseService<Post> {
     return post;
   }
 
-  getPostWhereClause(user?: User): Prisma.PostWhereInput {
-    if (user && user.roles.includes("ADMIN")) {
-      return {};
-    }
+  async findRelated(id: string, limit = 3) {
+    const post = await this.findOne(id);
 
-    return {
+    const where: Prisma.PostWhereInput = {
+      categoryId: post.categoryId,
+      id: {
+        not: id,
+      },
       status: "PUBLISHED",
     };
+
+    const relatedPosts = await this.prisma.post.findMany({
+      include: { category: true },
+      orderBy: { createdAt: "desc" },
+      take: limit,
+      where,
+    });
+
+    return relatedPosts;
   }
 
   makeSlug(title: string) {

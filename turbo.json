@@ -8,6 +8,7 @@
     },
     "lint": {},
     "format": {},
+    "type-check": {},
     "start": {
       "inputs": ["$TURBO_DEFAULT$", ".env*"],
       "cache": false,
@@ -15,6 +16,7 @@
     },
     "dev": {
       "inputs": ["$TURBO_DEFAULT$", ".env*"],
+      "dependsOn": ["^dev", "db:generate"],
       "cache": false,
       "persistent": true
     },

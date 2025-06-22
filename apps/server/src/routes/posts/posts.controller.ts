@@ -7,28 +7,47 @@ import {
   Patch,
   Post,
   Query,
-  Req,
-  UploadedFile,
-  UseInterceptors,
+  UseGuards,
 } from "@nestjs/common";
-import { FileInterceptor } from "@nestjs/platform-express";
-import { Request } from "express";
 
+import { AdminGuard, AuthGuard } from "@/common/guards";
+
+import { CommentsService } from "../comments/comments.service";
 import { CreatePostDto, PostQueryDto, UpdatePostDto } from "./posts.dto";
 import { PostsService } from "./posts.service";
 
 @Controller("posts")
 export class PostsController {
-  constructor(private readonly postsService: PostsService) {}
+  constructor(
+    private readonly postsService: PostsService,
+    private readonly commentsService: CommentsService
+  ) {}
 
   @Post()
+  @UseGuards(AuthGuard, AdminGuard)
   create(@Body() createPostDto: CreatePostDto) {
     return this.postsService.create(createPostDto);
   }
 
   @Get()
-  findAll(@Query() query: PostQueryDto, @Req() req: Request) {
-    return this.postsService.findAllPosts(query, req);
+  findAll(@Query() query: PostQueryDto) {
+    return this.postsService.findAllPosts(query);
+  }
+
+  @Get("admin")
+  @UseGuards(AuthGuard, AdminGuard)
+  findAllByAdmin(@Query() query: PostQueryDto) {
+    return this.postsService.findAllAdminPosts(query);
+  }
+
+  @Get(":postId/comments")
+  findAllCommentsByPostId(@Param("postId") postId: string) {
+    return this.commentsService.findByPostId(postId);
+  }
+
+  @Get(":id/reactions")
+  findAllReactionsByPostId(@Param("id") id: string) {
+    return this.postsService.findAllReactionsByPostId(id);
   }
 
   @Get(":id")
@@ -36,31 +55,20 @@ export class PostsController {
     return this.postsService.findOne(id);
   }
 
+  @Get(":id/related")
+  findRelated(@Param("id") id: string, @Query("limit") limit: number) {
+    return this.postsService.findRelated(id, limit);
+  }
+
   @Delete(":id")
+  @UseGuards(AuthGuard, AdminGuard)
   remove(@Param("id") id: string) {
     return this.postsService.remove(id);
   }
 
   @Patch(":id")
+  @UseGuards(AuthGuard, AdminGuard)
   update(@Param("id") id: string, @Body() updatePostDto: UpdatePostDto) {
     return this.postsService.update(id, updatePostDto);
-  }
-
-  @Patch(":id/cover")
-  @UseInterceptors(FileInterceptor("cover"))
-  updateCover(
-    @Param("id") id: string,
-    @UploadedFile() cover: Express.Multer.File,
-  ) {
-    return this.postsService.updateCover(id, cover);
-  }
-
-  @Patch(":id/file")
-  @UseInterceptors(FileInterceptor("file"))
-  updateFile(
-    @Param("id") id: string,
-    @UploadedFile() file: Express.Multer.File,
-  ) {
-    return this.postsService.updateFile(id, file);
   }
 }

@@ -1,0 +1,56 @@
+html,
+body {
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+}
+
+.scene {
+  position: relative;
+  overflow: hidden;
+  background: radial-gradient(#fffcef, #fff9de);
+}
+
+.el {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  opacity: 0;
+  height: 100%;
+  width: 100%;
+}
+
+.halo,
+.halo-text {
+  position: absolute;
+  opacity: 0;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.el-left {
+  left: -650px;
+}
+
+.el-right {
+  right: -650px;
+}
+
+@media (max-width: 768px) {
+  .el {
+    height: 200px;
+  }
+
+  .el-left {
+    left: 50%;
+    top: -200px;
+    transform: translateX(-50%);
+  }
+
+  .el-right {
+    left: 50%;
+    bottom: -200px;
+    top: auto;
+    transform: translateX(-50%);
+  }
+}

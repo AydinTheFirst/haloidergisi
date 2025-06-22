@@ -5,7 +5,7 @@ import {
 } from "@nestjs/common";
 import argon from "argon2";
 
-import { PrismaService } from "@/prisma";
+import { PrismaService } from "@/database";
 
 import { LoginDto, RegisterDto } from "./auth.dto";
 
@@ -13,7 +13,7 @@ import { LoginDto, RegisterDto } from "./auth.dto";
 export class AuthService {
   constructor(private prisma: PrismaService) {}
 
-  login = async (body: LoginDto) => {
+  async login(body: LoginDto) {
     const user = await this.prisma.user.findFirst({
       where: {
         OR: [{ username: body.username }, { email: body.username }],
@@ -36,9 +36,9 @@ export class AuthService {
       ...user,
       token: token.token,
     };
-  };
+  }
 
-  register = async (body: RegisterDto) => {
+  async register(body: RegisterDto) {
     const isExist = await this.prisma.user.findFirst({
       where: {
         OR: [{ email: body.email }],
@@ -53,11 +53,16 @@ export class AuthService {
 
     const user = this.prisma.user.create({
       data: {
-        ...body,
+        email: body.email,
         password: hashedPassword,
+        profile: {
+          create: {
+            displayName: body.displayName,
+          },
+        },
       },
     });
 
     return user;
-  };
+  }
 }

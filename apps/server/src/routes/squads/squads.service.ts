@@ -1,12 +1,15 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
 
-import { PrismaService } from "@/prisma";
-import { getPublicUserSelection } from "@/utils";
+import { Prisma, PrismaService } from "@/database";
 
 import { CreateSquadDto, UpdateSquadDto } from "./squads.dto";
 
 @Injectable()
 export class SquadService {
+  userArgs: Prisma.UserDefaultArgs = {
+    select: { id: true, profile: true, username: true },
+  };
+
   constructor(private readonly prisma: PrismaService) {}
   async create(createSquadDto: CreateSquadDto) {
     const squad = await this.prisma.squad.create({
@@ -19,9 +22,7 @@ export class SquadService {
   async findAll() {
     const squads = await this.prisma.squad.findMany({
       include: {
-        users: {
-          select: getPublicUserSelection(),
-        },
+        users: this.userArgs,
       },
     });
 
@@ -31,7 +32,7 @@ export class SquadService {
   async findOne(id: string) {
     const squad = await this.prisma.squad.findUnique({
       include: {
-        users: true,
+        users: this.userArgs,
       },
       where: { id },
     });

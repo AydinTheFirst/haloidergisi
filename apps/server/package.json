@@ -15,7 +15,8 @@
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
     "db:generate": "prisma generate",
     "db:push": "prisma db push",
-    "db": "npm run db:generate && npm run db:push"
+    "db": "npm run db:generate && npm run db:push",
+    "type-check": "tsc --noEmit"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.782.0",

@@ -9,11 +9,9 @@ import {
   Query,
   UseGuards,
 } from "@nestjs/common";
-import { Role } from "@prisma/client";
 
-import { Roles } from "@/common/decorators";
 import { BaseQueryDto } from "@/common/dto/query.dto";
-import { AuthGuard } from "@/common/guards";
+import { AdminGuard, AuthGuard } from "@/common/guards";
 
 import { CreateNewsDto, UpdateNewsDto } from "./news.dto";
 import { NewsService } from "./news.service";
@@ -23,8 +21,7 @@ export class NewsController {
   constructor(private readonly newsService: NewsService) {}
 
   @Post()
-  @Roles([Role.ADMIN])
-  @UseGuards(AuthGuard)
+  @UseGuards(AuthGuard, AdminGuard)
   create(@Body() createNewsDto: CreateNewsDto) {
     return this.newsService.create(createNewsDto);
   }
@@ -40,15 +37,13 @@ export class NewsController {
   }
 
   @Delete(":id")
-  @Roles([Role.ADMIN])
-  @UseGuards(AuthGuard)
+  @UseGuards(AuthGuard, AdminGuard)
   remove(@Param("id") id: string) {
     return this.newsService.remove(id);
   }
 
   @Patch(":id")
-  @Roles([Role.ADMIN])
-  @UseGuards(AuthGuard)
+  @UseGuards(AuthGuard, AdminGuard)
   update(@Param("id") id: string, @Body() updateNewsDto: UpdateNewsDto) {
     return this.newsService.update(id, updateNewsDto);
   }

@@ -3,7 +3,7 @@ import slugify from "slugify";
 
 import { BaseQueryDto } from "@/common/dto/query.dto";
 import { BaseService } from "@/common/services/base.service";
-import { News, PrismaService } from "@/prisma";
+import { News, PrismaService } from "@/database";
 
 import { CreateNewsDto, UpdateNewsDto } from "./news.dto";
 
@@ -25,7 +25,7 @@ export class NewsService extends BaseService<News> {
   }
 
   async findAllNews(query: BaseQueryDto) {
-    const news = await this.findAll(query, ["title", "description"]);
+    const news = await this.queryAll(query, ["title", "description"]);
 
     return news;
   }

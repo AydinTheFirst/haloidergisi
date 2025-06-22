@@ -1,13 +1,20 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
-import { Request } from "express";
 
-import { PrismaService } from "@/prisma";
+import { BaseService } from "@/common/services/base.service";
+import { Category, PrismaService } from "@/database";
 
-import { CreateCategoryDto, UpdateCategoryDto } from "./categories.dto";
+import {
+  CreateCategoryDto,
+  QueryCategoryDto,
+  UpdateCategoryDto,
+} from "./categories.dto";
 
 @Injectable()
-export class CategoriesService {
-  constructor(private prisma: PrismaService) {}
+export class CategoriesService extends BaseService<Category> {
+  constructor(private prisma: PrismaService) {
+    super(prisma.category);
+  }
+
   async create(createCategoryDto: CreateCategoryDto) {
     const cateogry = await this.prisma.category.create({
       data: createCategoryDto,
@@ -16,13 +23,8 @@ export class CategoriesService {
     return cateogry;
   }
 
-  async findAll(req: Request) {
-    const includePosts = req.query.posts === "true";
-    const categories = await this.prisma.category.findMany({
-      include: {
-        posts: includePosts ? { where: { status: "PUBLISHED" } } : false,
-      },
-    });
+  async findAll(query: QueryCategoryDto) {
+    const categories = await this.queryAll(query, ["title", "description"]);
 
     return categories;
   }

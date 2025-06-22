@@ -6,6 +6,14 @@ export class BaseQueryDto {
   @IsString()
   fields?: string;
 
+  @IsOptional()
+  @IsString()
+  ids?: string;
+
+  @IsOptional()
+  @IsString()
+  include?: string;
+
   @IsInt()
   @IsOptional()
   @Type(() => Number)

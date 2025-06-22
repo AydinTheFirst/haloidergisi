@@ -4,6 +4,8 @@ import reactHooks from "eslint-plugin-react-hooks";
 import globals from "globals";
 import tseslint from "typescript-eslint";
 
+// pnpm add -D eslint @eslint/js eslint-plugin-perfectionist eslint-plugin-react-hooks typescript-eslint
+
 export default tseslint.config(
   { ignores: ["dist", ".react-router"] },
   {

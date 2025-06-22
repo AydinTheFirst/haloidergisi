@@ -4,11 +4,11 @@ import { ConfigModule } from "@nestjs/config";
 import { MulterModule } from "@nestjs/platform-express";
 import { ThrottlerModule } from "@nestjs/throttler";
 
-import { AuthMiddleware, LoggerMiddleware } from "@/common/middlewares";
+import { LoggerMiddleware } from "@/common/middlewares";
 import { mailerConfig, multerConfig, throttlerConfig } from "@/config";
+import { PrismaModule } from "@/database";
 import { AwsModule, NetgsmModule } from "@/modules";
-import { PrismaModule } from "@/prisma";
-import { AppRoutes } from "@/routes";
+import AppRoutes from "@/routes";
 import { WebsocketModule } from "@/websocket";
 
 import { AppController } from "./app.controller";
@@ -42,6 +42,6 @@ const modules = () => {
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(LoggerMiddleware, AuthMiddleware).forRoutes("*");
+    consumer.apply(LoggerMiddleware).forRoutes("*");
   }
 }

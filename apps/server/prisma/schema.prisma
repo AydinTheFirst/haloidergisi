@@ -24,27 +24,48 @@ model User {
   email    String @unique
   password String
 
-  displayName String?
-  bio         String?
-  website     String?
-  title       String?
-  avatar      String?
+  profile Profile?
 
-  squadId String?
-  squad   Squad?  @relation(fields: [squadId], references: [id])
+  squadId   String?
+  squad     Squad?     @relation(fields: [squadId], references: [id])
+  comments  Comment[]
+  reactions Reaction[]
 
-  roles Role[] @default([USER])
+  roles  Role[]  @default([USER])
+  tokens Token[]
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  emailVerifiedAt DateTime?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
 
   @@map("users")
 }
 
+model Profile {
+  id String @id @default(uuid())
+
+  userId String @unique
+  user   User   @relation(fields: [userId], references: [id])
+
+  displayName String?
+  bio         String?
+  website     String?
+  title       String?
+  avatarUrl   String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("profiles")
+}
+
 model Token {
-  id        String   @id @default(uuid())
-  userId    String
-  token     String   @default(cuid())
+  id    String @id @default(uuid())
+  token String @default(cuid())
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   expiresAt DateTime
@@ -82,7 +103,9 @@ model Post {
   file  String? @default("")
 
   categoryId String
-  category   Category @relation(fields: [categoryId], references: [id])
+  category   Category   @relation(fields: [categoryId], references: [id])
+  comments   Comment[]
+  reactions  Reaction[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -117,4 +140,48 @@ model News {
   updatedAt DateTime @updatedAt
 
   @@map("news")
+}
+
+model Comment {
+  id      String @id @default(uuid())
+  content String
+
+  postId String
+  post   Post   @relation(fields: [postId], references: [id])
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+
+  replyToId String?
+  replyTo   Comment? @relation("CommentReplies", fields: [replyToId], references: [id])
+
+  replies Comment[] @relation("CommentReplies")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("comments")
+}
+
+model Reaction {
+  id String @id @default(uuid())
+
+  postId String
+  post   Post   @relation(fields: [postId], references: [id])
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+
+  type ReactionType @default(LIKE)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([postId, userId])
+  @@map("reactions")
+}
+
+enum ReactionType {
+  LIKE
+  DISLIKE
 }

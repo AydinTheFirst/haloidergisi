@@ -1,24 +1,19 @@
-import {
-  Injectable,
-  NotFoundException,
-  UnauthorizedException,
-} from "@nestjs/common";
+import { Injectable, NotFoundException } from "@nestjs/common";
 import argon2 from "argon2";
-import { Request } from "express";
 
-import { PrismaService } from "@/prisma";
-import { getPublicUserSelection } from "@/utils";
+import { BaseService } from "@/common/services/base.service";
+import { PrismaService, User } from "@/database";
 
-import { CreateUserDto, UpdateUserDto, UpdateUserSelfDto } from "./users.dto";
+import { CreateUserDto, QueryUsersDto, UpdateUserDto } from "./users.dto";
 
 @Injectable()
-export class UsersService {
-  constructor(private prisma: PrismaService) {}
+export class UsersService extends BaseService<User> {
+  constructor(private prisma: PrismaService) {
+    super(prisma.user);
+  }
 
   async create(createUserDto: CreateUserDto) {
-    const hashedPassword = await argon2.hash(
-      createUserDto.password || crypto.randomUUID(),
-    );
+    const hashedPassword = await argon2.hash(createUserDto.password);
 
     const user = await this.prisma.user.create({
       data: {
@@ -30,17 +25,14 @@ export class UsersService {
     return user;
   }
 
-  async findAll(req: Request) {
-    const users = await this.prisma.user.findMany({
-      select: this.isAdmin(req) ? null : getPublicUserSelection(),
-    });
-
+  async findAll(query: QueryUsersDto) {
+    const users = await this.queryAll(query, ["username", "email"]);
     return users;
   }
 
-  async findOne(id: string, req: Request) {
+  async findOne(id: string) {
     const user = await this.prisma.user.findUnique({
-      select: this.isAdmin(req) ? null : getPublicUserSelection(),
+      include: { profile: true },
       where: { id },
     });
 
@@ -49,65 +41,29 @@ export class UsersService {
     return user;
   }
 
-  isAdmin(req: Request) {
-    if (!req.user) return false;
-    if (!req.user.roles.includes("ADMIN")) return false;
-    return true;
-  }
-
   async remove(id: string) {
-    const user = await this.prisma.user.findUnique({
-      where: {
-        id: id,
-      },
-    });
-
-    if (!user) throw new NotFoundException("User not found");
+    await this.findOne(id);
 
     await this.prisma.user.delete({
-      where: {
-        id: id,
-      },
+      where: { id },
     });
 
-    return user;
+    return { success: true };
   }
 
   async update(id: string, updateUserDto: UpdateUserDto) {
-    const user = await this.prisma.user.findUnique({
-      where: {
-        id: id,
-      },
-    });
+    await this.findOne(id);
 
-    if (!user) throw new NotFoundException("User not found");
-
-    if (!updateUserDto.password) {
-      delete updateUserDto.password;
-    } else {
-      updateUserDto.password = await argon2.hash(updateUserDto.password);
+    if (updateUserDto.password) {
+      const hashedPassword = await argon2.hash(updateUserDto.password);
+      updateUserDto.password = hashedPassword;
     }
 
-    await this.prisma.user.update({
+    const updatedUser = await this.prisma.user.update({
       data: updateUserDto,
-      where: {
-        id: id,
-      },
+      where: { id },
     });
 
-    return user;
-  }
-
-  async updateSelf(req: Request, updateUserDto: UpdateUserSelfDto) {
-    if (!req.user) throw new UnauthorizedException();
-
-    await this.findOne(req.user.id, req);
-
-    const updated = await this.prisma.user.update({
-      data: updateUserDto,
-      where: { id: req.user.id },
-    });
-
-    return updated;
+    return updatedUser;
   }
 }

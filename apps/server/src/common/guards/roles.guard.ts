@@ -7,7 +7,7 @@ import {
 import { Reflector } from "@nestjs/core";
 
 import { Roles } from "@/common/decorators";
-import { User } from "@/prisma";
+import { User } from "@/database";
 
 @Injectable()
 export class RolesGuard implements CanActivate {
@@ -30,7 +30,7 @@ export class RolesGuard implements CanActivate {
 
     if (!isAllowed) {
       throw new ForbiddenException(
-        "You don't have permission to access this resource",
+        "You don't have permission to access this resource"
       );
     }
 

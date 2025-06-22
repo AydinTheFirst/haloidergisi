@@ -6,15 +6,18 @@ import {
   Param,
   Patch,
   Post,
-  Req,
+  Query,
   UseGuards,
 } from "@nestjs/common";
-import { Request } from "express";
 
 import { Roles } from "@/common/decorators";
 import { AuthGuard } from "@/common/guards";
 
-import { CreateCategoryDto, UpdateCategoryDto } from "./categories.dto";
+import {
+  CreateCategoryDto,
+  QueryCategoryDto,
+  UpdateCategoryDto,
+} from "./categories.dto";
 import { CategoriesService } from "./categories.service";
 
 @Controller("categories")
@@ -29,8 +32,8 @@ export class CategoriesController {
   }
 
   @Get()
-  findAll(@Req() req: Request) {
-    return this.categoriesService.findAll(req);
+  findAll(@Query() query: QueryCategoryDto) {
+    return this.categoriesService.findAll(query);
   }
 
   @Get(":id")
@@ -55,7 +58,7 @@ export class CategoriesController {
   @UseGuards(AuthGuard)
   update(
     @Param("id") id: string,
-    @Body() updateCategoryDto: UpdateCategoryDto,
+    @Body() updateCategoryDto: UpdateCategoryDto
   ) {
     return this.categoriesService.update(id, updateCategoryDto);
   }
