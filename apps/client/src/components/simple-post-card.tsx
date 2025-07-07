@@ -1,6 +1,6 @@
 import type { Post } from "~/models/Post";
 
-import { Card, CardFooter, CardHeader, cn } from "@heroui/react";
+import { Card, CardFooter, CardHeader, cn, Link } from "@heroui/react";
 
 import CdnImage from "./cdn-image";
 
@@ -15,7 +15,9 @@ export default function SimplePostCard({
 }: SimplePostCardProps) {
   return (
     <Card
+      as={Link}
       className={cn(className)}
+      href={`/posts/${post.id}`}
       isHoverable
       isPressable
       shadow='none'
