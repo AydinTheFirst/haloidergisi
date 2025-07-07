@@ -4,7 +4,7 @@
     "build": {
       "dependsOn": ["^build", "db:generate"],
       "inputs": ["$TURBO_DEFAULT$", ".env*"],
-      "outputs": ["dist/**"]
+      "outputs": ["dist/**", ".react-router/**", "build/**"]
     },
     "lint": {},
     "format": {},
