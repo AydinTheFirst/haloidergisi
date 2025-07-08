@@ -2,21 +2,22 @@
   "name": "server",
   "version": "0.0.1",
   "description": "",
-  "author": "",
   "private": true,
-  "license": "UNLICENSED",
+  "packageManager": "pnpm@10.0.0",
+  "engines": {
+    "node": "22.x"
+  },
   "scripts": {
+    "postinstall": "npm run db:generate",
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
-    "prebuild": "npm run db:generate",
     "dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/main",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
     "db:generate": "prisma generate",
     "db:push": "prisma db push",
-    "db": "npm run db:generate && npm run db:push",
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
