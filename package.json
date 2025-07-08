@@ -3,11 +3,9 @@
   "name": "haloidergisi",
   "scripts": {
     "copy-env": "cp .env apps/client/.env && cp .env apps/server/.env",
-    "predev": "pnpm copy-env",
-    "prebuild": "pnpm copy-env",
-    "prestart": "pnpm copy-env",
+    "preinstall": "pnpm copy-env",
     "start": "turbo run start",
-    "build": "pnpm prebuild && turbo run build",
+    "build": "turbo run build",
     "dev": "turbo run dev",
     "lint": "turbo run lint",
     "format": "turbo run format",
