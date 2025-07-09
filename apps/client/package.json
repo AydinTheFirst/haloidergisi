@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "@heroui/react": "2.8.0-beta.9",
+    "@iconify/react": "^6.0.0",
     "@react-router/node": "^7.6.3",
     "@react-router/serve": "^7.6.3",
     "@tailwindcss/typography": "^0.5.16",

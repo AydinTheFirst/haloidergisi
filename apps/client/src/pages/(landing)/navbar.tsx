@@ -13,15 +13,11 @@ import {
   NavbarItem,
   useDisclosure
 } from "@heroui/react";
+import { Icon } from "@iconify/react";
 import Logo from "~/components/logo";
 import { links } from "~/data/links";
 import { useLayoutStore } from "~/store/layout-store";
-import {
-  LucideInstagram,
-  LucideLinkedin,
-  LucideMenu,
-  LucideX
-} from "lucide-react";
+import { LucideMenu, LucideX } from "lucide-react";
 import { useEffect, useRef } from "react";
 
 import AuthItems from "./auth-items";
@@ -106,14 +102,20 @@ export default function Navbar() {
               href={links.instagram}
               isExternal
             >
-              <LucideInstagram size={16} />
+              <Icon
+                className='h-4 w-4'
+                icon='logos:instagram-icon'
+              />
             </Button>
             <Button
               as={Link}
               href={links.mail}
               isExternal
             >
-              <LucideLinkedin size={16} />
+              <Icon
+                className='h-4 w-4'
+                icon='logos:google-gmail'
+              />
             </Button>
           </ButtonGroup>
           <AuthItems />
