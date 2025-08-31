@@ -2,9 +2,6 @@
   "private": true,
   "name": "haloidergisi",
   "scripts": {
-    "copy-env": "cp .env apps/client/.env && cp .env apps/server/.env",
-    "prestart": "pnpm copy-env",
-    "start": "cd apps/server && pnpm start",
     "build": "turbo run build",
     "dev": "turbo run dev",
     "lint": "turbo run lint",
