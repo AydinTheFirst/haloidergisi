@@ -8,21 +8,25 @@ Bu proje [Semantic Versioning](https://semver.org/spec/v2.0.0.html) kullanır.
 ## [Unreleased]
 
 ### Eklendi
+
 - Modern ve responsive tasarım
 - Hero section animasyonları
 - Gelişmiş post detay sayfası
 
 ### Değiştirildi
+
 - UI component'ları HeroUI ile güncellendi
 - Tailwind CSS ile styling iyileştirildi
 
 ### Düzeltildi
+
 - TypeScript type hatları
 - Responsive tasarım sorunları
 
 ## [1.0.0] - 2025-01-26
 
 ### Eklendi
+
 - 🎉 İlk release
 - 📚 Dijital dergi okuma platformu
 - 🔐 Kullanıcı authentication sistemi
@@ -41,6 +45,7 @@ Bu proje [Semantic Versioning](https://semver.org/spec/v2.0.0.html) kullanır.
 - 🌐 SEO optimizasyonu
 
 ### Teknik Özellikler
+
 - **Frontend**: React Router v7, TypeScript, Tailwind CSS, HeroUI
 - **Backend**: NestJS, Prisma, PostgreSQL
 - **DevOps**: Turborepo, pnpm, Docker ready
@@ -49,6 +54,7 @@ Bu proje [Semantic Versioning](https://semver.org/spec/v2.0.0.html) kullanır.
 - **Code Quality**: ESLint, Prettier
 
 ### API Endpoints
+
 - `/api/auth/*` - Authentication endpoints
 - `/api/posts/*` - Post management
 - `/api/comments/*` - Comment system
@@ -57,6 +63,7 @@ Bu proje [Semantic Versioning](https://semver.org/spec/v2.0.0.html) kullanır.
 - `/api/upload/*` - File upload
 
 ### Database Schema
+
 - Users table with roles
 - Posts table with relationships
 - Comments with nested structure
@@ -69,11 +76,13 @@ Bu proje [Semantic Versioning](https://semver.org/spec/v2.0.0.html) kullanır.
 ## Version Format Açıklaması
 
 ### [Semantic Versioning](https://semver.org/)
+
 - **MAJOR** version: Uyumsuz API değişiklikleri
 - **MINOR** version: Geriye uyumlu yeni özellikler
 - **PATCH** version: Geriye uyumlu bug düzeltmeleri
 
 ### Change Types
+
 - **Eklendi** (Added): Yeni özellikler
 - **Değiştirildi** (Changed): Mevcut functionality'deki değişiklikler
 - **Kullanımdan Kaldırıldı** (Deprecated): Gelecekte kaldırılacak özellikler
@@ -86,6 +95,7 @@ Bu proje [Semantic Versioning](https://semver.org/spec/v2.0.0.html) kullanır.
 ## Gelecek Sürümler için Planlanan Özellikler
 
 ### v1.1.0 - Planlanan Özellikler
+
 - [ ] 🔔 Real-time notifications
 - [ ] 📊 Advanced analytics dashboard
 - [ ] 🌙 Dark mode support
@@ -95,6 +105,7 @@ Bu proje [Semantic Versioning](https://semver.org/spec/v2.0.0.html) kullanır.
 - [ ] 📈 Performance optimizations
 
 ### v1.2.0 - Planlanan Özellikler
+
 - [ ] 🤖 AI-powered content recommendations
 - [ ] 📝 Rich text editor for comments
 - [ ] 🎥 Video content support
@@ -104,6 +115,7 @@ Bu proje [Semantic Versioning](https://semver.org/spec/v2.0.0.html) kullanır.
 - [ ] 🎨 Customizable themes
 
 ### v2.0.0 - Major Update
+
 - [ ] 🏗️ Microservices architecture
 - [ ] ☁️ Cloud deployment (AWS/Azure)
 - [ ] 📱 Mobile app (React Native)

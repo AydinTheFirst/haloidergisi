@@ -14,12 +14,14 @@ HALO Dergisi projesine katkıda bulunmak istediğiniz için teşekkür ederiz! B
 ## 💻 Kod Standartları
 
 ### TypeScript
+
 - Tüm kod TypeScript ile yazılmalıdır
 - `any` tipini kullanmaktan kaçının
 - Interface ve type tanımlarını uygun şekilde kullanın
 - Nullable değerler için optional chaining (`?.`) kullanın
 
 ### Kod Formatı
+
 ```bash
 # Kod formatını kontrol edin
 pnpm lint
@@ -29,12 +31,14 @@ pnpm format
 ```
 
 ### ESLint Kuralları
+
 - ESLint kurallarına uygun kod yazın
 - `console.log` kullanmaktan kaçının (development hariç)
 - Unused variables bırakmayın
 - Proper error handling yapın
 
 ### CSS/Styling
+
 - Tailwind CSS utility classes kullanın
 - Custom CSS gerektiğinde CSS Modules tercih edin
 - Responsive tasarımı unutmayın
@@ -43,6 +47,7 @@ pnpm format
 ## 🔄 Geliştirme Süreci
 
 ### 1. Fork ve Clone
+
 ```bash
 # Projeyi fork edin (GitHub'da)
 # Clone edin
@@ -51,6 +56,7 @@ cd haloidergisi
 ```
 
 ### 2. Branch Oluşturma
+
 ```bash
 # Yeni feature branch oluşturun
 git checkout -b feature/your-feature-name
@@ -63,6 +69,7 @@ git checkout -b docs/improvement-description
 ```
 
 ### 3. Development Setup
+
 ```bash
 # Dependencies install
 pnpm install
@@ -82,6 +89,7 @@ pnpm dev
 ```
 
 ### 4. Testing
+
 ```bash
 # Type checking
 pnpm check-types
@@ -97,11 +105,13 @@ pnpm lint
 ## 🐛 Issue ve Bug Raporlama
 
 ### Bug Report Template
+
 ```markdown
 **Bug Açıklaması**
 Kısa ve net bug açıklaması
 
 **Tekrar Etme Adımları**
+
 1. '...' sayfasına git
 2. '...' butonuna tıkla
 3. Hata oluşuyor
@@ -113,12 +123,14 @@ Ne olması gerektiğini açıklayın
 Mümkünse ekran görüntüsü ekleyin
 
 **Ortam Bilgileri**
+
 - OS: [e.g. macOS, Windows, Linux]
 - Browser: [e.g. Chrome, Safari, Firefox]
 - Node.js: [e.g. 22.0.0]
 ```
 
 ### Feature Request Template
+
 ```markdown
 **Özellik Açıklaması**
 Yeni özelliğin net açıklaması
@@ -136,6 +148,7 @@ Başka hangi çözümler düşünüldü?
 ## 🔀 Pull Request Süreci
 
 ### PR Checklist
+
 - [ ] Kod TypeScript standartlarına uygun
 - [ ] ESLint kurallarına uygun
 - [ ] Test edildi (manual)
@@ -145,11 +158,14 @@ Başka hangi çözümler düşünüldü?
 - [ ] Meaningful PR title ve description
 
 ### PR Template
+
 ```markdown
 ## 📝 Açıklama
+
 Bu PR'da yapılan değişikliklerin açıklaması
 
 ## 🎯 Tip
+
 - [ ] Bug fix
 - [ ] New feature
 - [ ] Documentation
@@ -157,21 +173,25 @@ Bu PR'da yapılan değişikliklerin açıklaması
 - [ ] Performance improvement
 
 ## 🧪 Test Edilenler
+
 - [ ] Frontend çalışıyor
 - [ ] Backend API'ler çalışıyor
 - [ ] Responsive tasarım
 - [ ] Error handling
 
 ## 📸 Ekran Görüntüleri
+
 Değişikliklerin ekran görüntüsü (UI değişikliği varsa)
 
 ## 📋 İlgili Issue
+
 Closes #issue_number
 ```
 
 ## 💬 Commit Mesaj Kuralları
 
 ### Format
+
 ```
 type(scope): description
 
@@ -181,6 +201,7 @@ type(scope): description
 ```
 
 ### Types
+
 - `feat`: Yeni özellik
 - `fix`: Bug fix
 - `docs`: Documentation
@@ -191,6 +212,7 @@ type(scope): description
 - `chore`: Build, dependencies, etc.
 
 ### Örnekler
+
 ```bash
 feat(auth): add user login functionality
 fix(posts): resolve pagination bug
@@ -203,6 +225,7 @@ chore(deps): update dependencies
 ```
 
 ### Scope'lar
+
 - `auth`: Authentication/Authorization
 - `posts`: Post/Article related
 - `comments`: Comment system
@@ -215,6 +238,7 @@ chore(deps): update dependencies
 ## 🏗️ Proje Yapısı
 
 ### Frontend (apps/client)
+
 ```
 src/
 ├── components/          # Reusable components
@@ -231,6 +255,7 @@ src/
 ```
 
 ### Backend (apps/server)
+
 ```
 src/
 ├── modules/            # Feature modules
@@ -250,6 +275,7 @@ src/
 ## 🔍 Code Review Süreci
 
 ### Reviewer Checklist
+
 - [ ] Kod okunabilir ve anlaşılır
 - [ ] TypeScript best practices
 - [ ] Security açıkları yok
@@ -258,6 +284,7 @@ src/
 - [ ] Documentation yeterli
 
 ### Review Comments
+
 - Constructive ve helpful olun
 - Kod örnekleri verin
 - Reasoning açıklayın
@@ -266,11 +293,13 @@ src/
 ## 🚀 Release Süreci
 
 ### Version Numbering
+
 - Major: Breaking changes (1.0.0 -> 2.0.0)
 - Minor: New features (1.0.0 -> 1.1.0)
 - Patch: Bug fixes (1.0.0 -> 1.0.1)
 
 ### Release Checklist
+
 - [ ] Tüm testler geçiyor
 - [ ] Documentation güncel
 - [ ] CHANGELOG.md güncellendi
@@ -280,12 +309,14 @@ src/
 ## 🎨 UI/UX Guidelines
 
 ### Design Principles
+
 - **Minimal**: Sade ve temiz tasarım
 - **Accessible**: Tüm kullanıcılar için erişilebilir
 - **Responsive**: Tüm cihazlarda çalışır
 - **Consistent**: Tutarlı design language
 
 ### Color Palette
+
 - Primary: Yellow/Orange gradients
 - Secondary: Gray tones
 - Success: Green
@@ -293,6 +324,7 @@ src/
 - Warning: Orange
 
 ### Typography
+
 - Headers: Bold, large
 - Body: Readable, moderate size
 - Code: Monospace font
@@ -319,7 +351,7 @@ A: Şu anda manual deploy. CI/CD gelecekte eklenecek.
 
 ## 🏆 Teşekkürler
 
-Katkıda bulunan herkese teşekkür ederiz! 
+Katkıda bulunan herkese teşekkür ederiz!
 
 - İlk kez katkıda bulunuyorsanız, çekinmeyin
 - Küçük katkılar da çok değerlidir

@@ -2,17 +2,21 @@
   "private": true,
   "name": "haloidergisi",
   "scripts": {
-    "build": "turbo run build",
-    "dev": "turbo run dev",
+    "start": "dotenvx run -- turbo start",
+    "build": "dotenvx run -- turbo run build",
+    "dev": "dotenvx run -- turbo run dev",
+    "db:push": "dotenvx run -- turbo run push",
     "lint": "turbo run lint",
     "format": "turbo run format",
     "check-types": "turbo run check-types"
   },
   "devDependencies": {
-    "turbo": "^2.5.4"
+    "turbo": "^2.5.4",
+    "@dotenvx/dotenvx": "^1.51.0"
   },
-  "packageManager": "pnpm@10.0.0",
+  "packageManager": "pnpm@10.17.0",
   "engines": {
     "node": "22.x"
-  }
+  },
+  "dependencies": {}
 }

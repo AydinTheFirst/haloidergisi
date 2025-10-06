@@ -1,6 +1,13 @@
 {
   "$schema": "https://turbo.build/schema.json",
+  "ui": "stream",
+  "globalDependencies": ["**/.env*"],
+  "globalEnv": ["*"],
   "tasks": {
+    "start": {
+      "cache": false,
+      "persistent": true
+    },
     "build": {
       "dependsOn": ["^build", "db:generate"],
       "inputs": ["$TURBO_DEFAULT$", ".env*"],
@@ -9,7 +16,6 @@
     "lint": {},
     "format": {},
     "type-check": {},
-    "start": {},
     "dev": {
       "dependsOn": ["^dev", "db:generate"],
       "cache": false,
