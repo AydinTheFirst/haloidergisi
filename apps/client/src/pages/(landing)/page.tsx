@@ -7,7 +7,7 @@ import { type MetaFunction, useLoaderData } from "react-router";
 
 import FeaturedNews from "./featured-news";
 import FeaturedPosts from "./featured-posts";
-import HeroSection from "./hero";
+import HeroFeatured from "./hero-featured";
 
 export const loader = async () => {
   const { data: posts } = await http.get<PaginatedResponse<Post>>("/posts", {
@@ -36,7 +36,7 @@ export default function Page() {
 
   return (
     <>
-      <HeroSection />
+      <HeroFeatured />
       <div className='h-20' />
       <div className='container flex flex-col gap-10'>
         <FeaturedPosts posts={posts.items} />

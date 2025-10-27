@@ -58,6 +58,7 @@ export default function Navbar() {
     window.addEventListener("resize", updateHeight);
     return () => window.removeEventListener("resize", updateHeight);
   }, [setNavbarHeight]);
+
   return (
     <HeroNavbar
       maxWidth='2xl'
