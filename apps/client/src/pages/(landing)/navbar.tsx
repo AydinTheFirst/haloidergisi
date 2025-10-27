@@ -1,6 +1,5 @@
 import {
   Button,
-  ButtonGroup,
   Divider,
   Drawer,
   DrawerBody,
@@ -13,9 +12,7 @@ import {
   NavbarItem,
   useDisclosure
 } from "@heroui/react";
-import { Icon } from "@iconify/react";
 import Logo from "~/components/logo";
-import { links } from "~/data/links";
 import { useLayoutStore } from "~/store/layout-store";
 import { LucideMenu, LucideX } from "lucide-react";
 import { useEffect, useRef } from "react";
@@ -94,31 +91,6 @@ export default function Navbar() {
           orientation='vertical'
         />
         <div className='flex gap-2'>
-          <ButtonGroup
-            isIconOnly
-            variant='light'
-          >
-            <Button
-              as={Link}
-              href={links.instagram}
-              isExternal
-            >
-              <Icon
-                className='h-4 w-4'
-                icon='logos:instagram-icon'
-              />
-            </Button>
-            <Button
-              as={Link}
-              href={links.mail}
-              isExternal
-            >
-              <Icon
-                className='h-4 w-4'
-                icon='logos:google-gmail'
-              />
-            </Button>
-          </ButtonGroup>
           <AuthItems />
         </div>
         <div className='md:hidden'>

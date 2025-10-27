@@ -1,21 +1,30 @@
-export default function HeroFeatured() {
-  return (
-    <div className='relative h-screen w-full'>
-      <img
-        alt='29 Ekim'
-        className='absolute inset-0 h-full w-full blur-2xl'
-        src='banner-29oct.png'
-      />
-      <img
-        alt='29 Ekim'
-        className='absolute inset-0 h-full w-full object-cover md:object-contain'
-        src='banner-29oct.png'
-      />
-      <div className='absolute inset-0 bg-black/40' />
+import { useLayoutStore } from "~/store/layout-store";
 
-      <div className='relative z-10 container flex h-full items-center justify-center p-4 text-center text-3xl font-bold text-white md:text-5xl'>
-        🇹🇷 Cumhuriyet Bayramımız Kutlu Olsun! 🎉
-      </div>
+export default function HeroFeatured() {
+  const navbarHeight = useLayoutStore((s) => s.navbarHeight);
+
+  return (
+    <div
+      className='relative w-full'
+      style={{
+        height: `calc(100vh - ${navbarHeight}px)`
+      }}
+    >
+      <img
+        alt='29 Ekim Blurred'
+        className='absolute inset-0 h-full w-full blur'
+        src='banner-29oct.png'
+      />
+      <img
+        alt='29 Ekim Desktop'
+        className='absolute inset-0 h-full w-full object-contain'
+        src='banner-29oct.png'
+      />
+      <img
+        alt='29 Ekim Mobile'
+        className='absolute inset-0 h-full w-full object-contain md:hidden'
+        src='banner-29oct-mobile.png'
+      />
     </div>
   );
 }
