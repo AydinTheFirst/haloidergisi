@@ -13,17 +13,17 @@ export default function HeroFeatured() {
       <img
         alt='29 Ekim Blurred'
         className='absolute inset-0 h-full w-full blur'
-        src='banner-29oct.png'
+        src='hero.png'
       />
       <img
         alt='29 Ekim Desktop'
         className='absolute inset-0 h-full w-full object-contain'
-        src='banner-29oct.png'
+        src='hero.png'
       />
       <img
         alt='29 Ekim Mobile'
         className='absolute inset-0 h-full w-full object-contain md:hidden'
-        src='banner-29oct-mobile.png'
+        src='hero-mobile.png'
       />
     </div>
   );

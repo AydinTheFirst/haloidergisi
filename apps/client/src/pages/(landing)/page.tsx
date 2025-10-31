@@ -2,6 +2,7 @@ import type { News } from "~/models/News";
 import type { Post } from "~/models/Post";
 import type { PaginatedResponse } from "~/types";
 
+import HalloweenScene from "~/components/halloween-scene";
 import { http } from "~/lib/http";
 import { type MetaFunction, useLoaderData } from "react-router";
 
@@ -36,6 +37,7 @@ export default function Page() {
 
   return (
     <>
+      <HalloweenScene />
       <HeroFeatured />
       <div className='h-20' />
       <div className='container flex flex-col gap-10'>
