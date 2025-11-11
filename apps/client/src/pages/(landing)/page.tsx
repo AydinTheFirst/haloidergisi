@@ -2,13 +2,12 @@ import type { News } from "~/models/News";
 import type { Post } from "~/models/Post";
 import type { PaginatedResponse } from "~/types";
 
-import HalloweenScene from "~/components/halloween-scene";
 import { http } from "~/lib/http";
 import { type MetaFunction, useLoaderData } from "react-router";
 
 import FeaturedNews from "./featured-news";
 import FeaturedPosts from "./featured-posts";
-import HeroFeatured from "./hero-featured";
+import Hero from "./hero";
 
 export const loader = async () => {
   const { data: posts } = await http.get<PaginatedResponse<Post>>("/posts", {
@@ -37,8 +36,7 @@ export default function Page() {
 
   return (
     <>
-      <HalloweenScene />
-      <HeroFeatured />
+      <Hero />
       <div className='h-20' />
       <div className='container flex flex-col gap-10'>
         <FeaturedPosts posts={posts.items} />
