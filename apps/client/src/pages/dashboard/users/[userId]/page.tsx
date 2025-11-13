@@ -154,6 +154,8 @@ export default function ViewUser() {
             </form>
           </CardBody>
         </Card>
+
+        {user && <ViewProfile {...user} />}
       </div>
 
       <ConfirmModal
@@ -162,5 +164,71 @@ export default function ViewUser() {
         onConfirm={handleDelete}
       />
     </>
+  );
+}
+
+function ViewProfile(user: ClientUser) {
+  const [isLoading, setIsLoading] = React.useState(false);
+
+  const handleUpdateProfile = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+    const data = Object.fromEntries(formData.entries()) as Record<
+      string,
+      unknown
+    >;
+
+    if (isLoading) return;
+
+    try {
+      setIsLoading(true);
+      await http.patch(`/profiles/${user.profile?.id}`, data);
+      toast.success("Profil başarıyla güncellendi.");
+    } catch (error) {
+      handleError(error);
+    }
+    setIsLoading(false);
+  };
+
+  return (
+    <Card>
+      <CardHeader>
+        <h2 className='text-xl font-bold'>Profil Bilgileri</h2>
+      </CardHeader>
+      <CardBody>
+        <form
+          className='grid gap-3'
+          onSubmit={handleUpdateProfile}
+        >
+          <Input
+            defaultValue={user.profile?.displayName || ""}
+            label='Görünen İsim'
+            name='displayName'
+          />
+
+          <Input
+            defaultValue={user.profile?.title || ""}
+            label='Unvan'
+            name='title'
+            type='text'
+          />
+
+          <Input
+            defaultValue={user.profile?.bio || ""}
+            label='Biyografi'
+            name='bio'
+            type='text'
+          />
+
+          <Button
+            color='primary'
+            isLoading={isLoading}
+            type='submit'
+          >
+            Profili Güncelle
+          </Button>
+        </form>
+      </CardBody>
+    </Card>
   );
 }
