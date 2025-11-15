@@ -59,6 +59,10 @@ export class UsersService extends BaseService<User> {
       updateUserDto.password = hashedPassword;
     }
 
+    if (updateUserDto.squadId === "") {
+      updateUserDto.squadId = null;
+    }
+
     const updatedUser = await this.prisma.user.update({
       data: updateUserDto,
       where: { id },
