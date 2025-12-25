@@ -7,7 +7,7 @@ import { type MetaFunction, useLoaderData } from "react-router";
 
 import FeaturedNews from "./featured-news";
 import FeaturedPosts from "./featured-posts";
-import Hero from "./hero";
+import Hero from "./hero-featured";
 
 export const loader = async () => {
   const { data: posts } = await http.get<PaginatedResponse<Post>>("/posts", {
