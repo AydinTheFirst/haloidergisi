@@ -7,7 +7,7 @@ import Navbar from "./navbar";
 export default function LandingLayout() {
   return (
     <>
-        <Snowfall color="#2c3e50" count={100}/>
+        <Snowfall color="#bddeec" count={100}/>
     
       <Navbar />
       <div className='flex min-h-screen flex-col'>
