@@ -4,11 +4,11 @@
   "type": "module",
   "scripts": {
     "build": "react-router build",
+    "check-types": "react-router typegen && tsc --noEmit",
     "dev": "react-router dev",
     "format": "oxfmt",
     "lint": "oxlint --fix",
-    "start": "react-router-serve ./build/server/index.js",
-    "check-types": "react-router typegen && tsc --noEmit"
+    "start": "react-router-serve ./build/server/index.js"
   },
   "dependencies": {
     "@fontsource/poppins": "^5.2.7",
