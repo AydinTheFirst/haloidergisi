@@ -1,5 +1,3 @@
-import type { Reaction } from "~/models/Reaction";
-
 import {
   Button,
   Card,
@@ -9,19 +7,18 @@ import {
   Link,
   Select,
   SelectItem,
-  useDisclosure
+  useDisclosure,
 } from "@heroui/react";
-import ConfirmModal from "~/components/confirm-modal";
-import { handleError, http } from "~/lib/http";
 import React from "react";
 import { useLoaderData, useNavigate } from "react-router";
 import { toast } from "sonner";
 
-export const clientLoader = async ({
-  params
-}: {
-  params: { reactionId?: string };
-}) => {
+import type { Reaction } from "~/models/Reaction";
+
+import ConfirmModal from "~/components/confirm-modal";
+import { handleError, http } from "~/lib/http";
+
+export const clientLoader = async ({ params }: { params: { reactionId?: string } }) => {
   const { reactionId } = params;
 
   if (!reactionId || reactionId === "create") {
@@ -29,7 +26,7 @@ export const clientLoader = async ({
   }
 
   const { data: reaction } = await http.get<Reaction>(
-    `/admin/reactions/${reactionId}?include=user,post`
+    `/admin/reactions/${reactionId}?include=user,post`,
   );
   return { reaction };
 };
@@ -75,54 +72,34 @@ export default function ViewReaction() {
 
   return (
     <>
-      <div className='grid gap-3'>
+      <div className="grid gap-3">
         {reaction && (
-          <div className='text-muted flex items-center justify-between text-sm'>
+          <div className="text-muted flex items-center justify-between text-sm">
             <span>Kullanıcı: {reaction.user?.profile?.displayName}</span>
-            <Link
-              color='foreground'
-              href={`/posts/${reaction.post?.id}`}
-              isExternal
-            >
+            <Link color="foreground" href={`/posts/${reaction.post?.id}`} isExternal>
               Gönderiye Git
             </Link>
           </div>
         )}
 
         <Card>
-          <CardHeader className='justify-between'>
-            <h2 className='text-xl font-bold'>
+          <CardHeader className="justify-between">
+            <h2 className="text-xl font-bold">
               {reaction ? "Reaksiyonu Güncelle" : "Yeni Reaksiyon"}
             </h2>
             {reaction && (
-              <Button
-                color='danger'
-                onPress={confirmDeleteModal.onOpen}
-              >
+              <Button color="danger" onPress={confirmDeleteModal.onOpen}>
                 Sil
               </Button>
             )}
           </CardHeader>
 
           <CardBody>
-            <form
-              className='grid gap-3'
-              onSubmit={handleSubmit}
-            >
+            <form className="grid gap-3" onSubmit={handleSubmit}>
               {!reaction && (
                 <>
-                  <Input
-                    isRequired
-                    label='Post ID'
-                    name='postId'
-                    placeholder='UUID'
-                  />
-                  <Input
-                    isRequired
-                    label='Kullanıcı ID'
-                    name='userId'
-                    placeholder='UUID'
-                  />
+                  <Input isRequired label="Post ID" name="postId" placeholder="UUID" />
+                  <Input isRequired label="Kullanıcı ID" name="userId" placeholder="UUID" />
                 </>
               )}
               <Select
@@ -130,19 +107,15 @@ export default function ViewReaction() {
                 isRequired
                 items={[
                   { key: "LIKE", label: "Like" },
-                  { key: "DISLIKE", label: "Dislike" }
+                  { key: "DISLIKE", label: "Dislike" },
                 ]}
-                label='Tepki Türü'
-                name='type'
+                label="Tepki Türü"
+                name="type"
               >
                 {(item) => <SelectItem key={item.key}>{item.label}</SelectItem>}
               </Select>
 
-              <Button
-                color='primary'
-                isLoading={isLoading}
-                type='submit'
-              >
+              <Button color="primary" isLoading={isLoading} type="submit">
                 {reaction ? "Güncelle" : "Oluştur"}
               </Button>
             </form>
@@ -152,7 +125,7 @@ export default function ViewReaction() {
 
       <ConfirmModal
         {...confirmDeleteModal}
-        message='Bu reaksiyonu silmek istediğinize emin misiniz?'
+        message="Bu reaksiyonu silmek istediğinize emin misiniz?"
         onConfirm={handleDelete}
       />
     </>

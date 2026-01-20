@@ -1,12 +1,13 @@
-import type { ReactionResponse } from "~/types";
-
 import { Button, ButtonGroup } from "@heroui/react";
-import { useAuth } from "~/hooks/use-auth";
-import { handleError, http } from "~/lib/http";
-import { ReactionType } from "~/models/enums";
 import { LucideThumbsDown, LucideThumbsUp } from "lucide-react";
 import { toast } from "sonner";
 import useSWR from "swr";
+
+import type { ReactionResponse } from "~/types";
+
+import { useAuth } from "~/hooks/use-auth";
+import { handleError, http } from "~/lib/http";
+import { ReactionType } from "~/models/enums";
 
 interface ReactionButtonsProps {
   postId: string;
@@ -18,12 +19,10 @@ export function ReactionButtons({ postId }: ReactionButtonsProps) {
   const {
     data: reactions,
     isValidating,
-    mutate
+    mutate,
   } = useSWR<ReactionResponse>(`/posts/${postId}/reactions`);
 
-  const myReaction = reactions?.items.find(
-    (reaction) => reaction.userId === user?.id
-  );
+  const myReaction = reactions?.items.find((reaction) => reaction.userId === user?.id);
 
   const onReact = async (type: ReactionType) => {
     if (!user) {
@@ -44,17 +43,14 @@ export function ReactionButtons({ postId }: ReactionButtonsProps) {
   };
 
   return (
-    <ButtonGroup
-      isDisabled={isValidating}
-      variant='light'
-    >
+    <ButtonGroup isDisabled={isValidating} variant="light">
       <Button onPress={() => onReact(ReactionType.LIKE)}>
         <LucideThumbsUp size={20} />
-        <span className='text-lg'>{reactions?.meta.likes}</span>
+        <span className="text-lg">{reactions?.meta.likes}</span>
       </Button>
       <Button onPress={() => onReact(ReactionType.DISLIKE)}>
         <LucideThumbsDown size={20} />
-        <span className='text-lg'>{reactions?.meta.dislikes}</span>
+        <span className="text-lg">{reactions?.meta.dislikes}</span>
       </Button>
     </ButtonGroup>
   );

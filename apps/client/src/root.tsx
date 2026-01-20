@@ -14,12 +14,12 @@ export const links: Route.LinksFunction = () => [
   {
     crossOrigin: "anonymous",
     href: "https://fonts.gstatic.com",
-    rel: "preconnect"
+    rel: "preconnect",
   },
   {
     href: "https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap",
-    rel: "stylesheet"
-  }
+    rel: "stylesheet",
+  },
 ];
 
 export default function App() {
@@ -28,20 +28,11 @@ export default function App() {
 
 export function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <html
-      lang='tr'
-      suppressHydrationWarning
-    >
+    <html lang="tr" suppressHydrationWarning>
       <head>
-        <meta charSet='utf-8' />
-        <meta
-          content='width=device-width, initial-scale=1'
-          name='viewport'
-        />
-        <link
-          href='/logo.png'
-          rel='icon'
-        />
+        <meta charSet="utf-8" />
+        <meta content="width=device-width, initial-scale=1" name="viewport" />
+        <link href="/logo.png" rel="icon" />
         <Meta />
         <Links />
       </head>

@@ -6,7 +6,7 @@ import {
   DrawerFooter,
   DrawerHeader,
   Input,
-  useDisclosure
+  useDisclosure,
 } from "@heroui/react";
 import { LucideFilter } from "lucide-react";
 import { useSearchParams } from "react-router";
@@ -35,54 +35,33 @@ export default function FilterDrawer() {
 
   return (
     <>
-      <Button
-        isIconOnly
-        onPress={onOpen}
-        variant='light'
-      >
+      <Button isIconOnly onPress={onOpen} variant="light">
         <LucideFilter />
       </Button>
-      <Drawer
-        isOpen={isOpen}
-        onOpenChange={onOpenChange}
-      >
+      <Drawer isOpen={isOpen} onOpenChange={onOpenChange}>
         <DrawerContent>
-          <DrawerHeader className='flex flex-col gap-1'>
-            <h2 className='font-semibold'>Filtreleme</h2>
+          <DrawerHeader className="flex flex-col gap-1">
+            <h2 className="font-semibold">Filtreleme</h2>
           </DrawerHeader>
           <DrawerBody>
-            <form
-              className='grid gap-3'
-              onSubmit={handleSubmit}
-            >
+            <form className="grid gap-3" onSubmit={handleSubmit}>
               <Input
                 defaultValue={searchParams.get("search") || ""}
                 isClearable
-                label='Ara...'
-                name='search'
+                label="Ara..."
+                name="search"
               />
 
-              <Button
-                color='primary'
-                type='submit'
-              >
+              <Button color="primary" type="submit">
                 Filtrele
               </Button>
             </form>
           </DrawerBody>
           <DrawerFooter>
-            <Button
-              color='danger'
-              onPress={() => setSearchParams({})}
-              variant='light'
-            >
+            <Button color="danger" onPress={() => setSearchParams({})} variant="light">
               Filtreleri Temizle
             </Button>
-            <Button
-              color='danger'
-              onPress={onClose}
-              variant='light'
-            >
+            <Button color="danger" onPress={onClose} variant="light">
               Kapat
             </Button>
           </DrawerFooter>

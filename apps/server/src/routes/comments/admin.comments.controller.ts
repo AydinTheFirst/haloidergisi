@@ -1,13 +1,4 @@
-import {
-  Body,
-  Controller,
-  Delete,
-  Get,
-  Param,
-  Patch,
-  Query,
-  UseGuards,
-} from "@nestjs/common";
+import { Body, Controller, Delete, Get, Param, Patch, Query, UseGuards } from "@nestjs/common";
 
 import { AdminGuard, AuthGuard } from "@/common/guards";
 
@@ -41,7 +32,7 @@ export class AdminCommentsController {
   update(
     @Param("id") id: string,
     @Body() updateCommentDto: UpdateCommentDto,
-    @Query("userId") userId: string
+    @Query("userId") userId: string,
   ) {
     return this.commentsService.update(id, updateCommentDto, userId);
   }

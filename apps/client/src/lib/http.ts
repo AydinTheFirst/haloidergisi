@@ -1,18 +1,18 @@
-import { API_URL } from "~/config";
 import axios from "axios";
 import { toast } from "sonner";
+
+import { API_URL } from "~/config";
 
 const http = axios.create({
   baseURL: API_URL,
   headers: {
-    "Content-Type": "application/json"
-  }
+    "Content-Type": "application/json",
+  },
 });
 
 http.interceptors.request.use(
   (config) => {
-    const token =
-      typeof window !== "undefined" ? localStorage.getItem("token") : null;
+    const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
 
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
@@ -20,7 +20,7 @@ http.interceptors.request.use(
 
     return config;
   },
-  (err) => err
+  (err) => err,
 );
 
 const fetcher = (url: string) => http.get(url).then((res) => res.data);
@@ -34,7 +34,7 @@ const handleError = (error: unknown) => {
 
   if (!error.response) {
     return toast.error("Ağ bağlantısı hatası!", {
-      description: "Lütfen internet bağlantınızı kontrol edin."
+      description: "Lütfen internet bağlantınızı kontrol edin.",
     });
   }
 
@@ -46,7 +46,7 @@ const handleError = (error: unknown) => {
   console.error("API Hatası:", message, errors);
 
   return toast.error(message, {
-    description: errors && errors.join("\n")
+    description: errors && errors.join("\n"),
   });
 };
 
@@ -59,8 +59,8 @@ const uploadFiles = async (files: File[]) => {
 
   const { data } = await http.post<string[]>("/files", formData, {
     headers: {
-      "Content-Type": "multipart/form-data"
-    }
+      "Content-Type": "multipart/form-data",
+    },
   });
 
   return data;

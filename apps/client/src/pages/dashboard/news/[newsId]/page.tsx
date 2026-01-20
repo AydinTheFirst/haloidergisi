@@ -1,5 +1,3 @@
-import type { News } from "~/models/News";
-
 import {
   Button,
   Card,
@@ -8,13 +6,16 @@ import {
   Input,
   Link,
   Textarea,
-  useDisclosure
+  useDisclosure,
 } from "@heroui/react";
-import ConfirmModal from "~/components/confirm-modal";
-import { handleError, http, uploadFiles } from "~/lib/http";
 import React from "react";
 import { useLoaderData, useNavigate } from "react-router";
 import { toast } from "sonner";
+
+import type { News } from "~/models/News";
+
+import ConfirmModal from "~/components/confirm-modal";
+import { handleError, http, uploadFiles } from "~/lib/http";
 
 import type { Route } from "./+types/page";
 
@@ -45,9 +46,7 @@ export default function Viewnews() {
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
-    const data: Record<string, unknown> = Object.fromEntries(
-      formData.entries()
-    );
+    const data: Record<string, unknown> = Object.fromEntries(formData.entries());
 
     setIsLoading(true);
 
@@ -67,9 +66,7 @@ export default function Viewnews() {
       if (news) await http.patch(`/news/${news.id}`, data);
       else await http.post("/news", data);
 
-      toast.success(
-        news ? "Haberi başarıyla güncellendi." : "Haberi başarıyla oluşturuldu."
-      );
+      toast.success(news ? "Haberi başarıyla güncellendi." : "Haberi başarıyla oluşturuldu.");
 
       navigate("/dashboard/news");
     } catch (error) {
@@ -93,70 +90,39 @@ export default function Viewnews() {
 
   return (
     <>
-      <div className='grid gap-3'>
-        <div className='flex justify-end'>
+      <div className="grid gap-3">
+        <div className="flex justify-end">
           {news && (
-            <Link
-              color='foreground'
-              href={`/news/${news.id}`}
-              isExternal
-            >
+            <Link color="foreground" href={`/news/${news.id}`} isExternal>
               Haberi Görüntüle
             </Link>
           )}
         </div>
         <Card>
-          <CardHeader className='justify-between'>
-            <h2 className='text-xl font-bold'>
-              {news ? news.title : "Yeni Haber Oluştur"}
-            </h2>
+          <CardHeader className="justify-between">
+            <h2 className="text-xl font-bold">{news ? news.title : "Yeni Haber Oluştur"}</h2>
             {news && (
-              <Button
-                color='danger'
-                onPress={confirmDeleteModal.onOpen}
-              >
+              <Button color="danger" onPress={confirmDeleteModal.onOpen}>
                 Sil
               </Button>
             )}
           </CardHeader>
           <CardBody>
-            <form
-              className='grid gap-3'
-              onSubmit={handleSubmit}
-            >
-              <Input
-                defaultValue={news?.title || ""}
-                isRequired
-                label='Başlık'
-                name='title'
-              />
+            <form className="grid gap-3" onSubmit={handleSubmit}>
+              <Input defaultValue={news?.title || ""} isRequired label="Başlık" name="title" />
 
               <Textarea
                 defaultValue={news?.description || ""}
                 isRequired
-                label='Açıklama'
-                name='description'
+                label="Açıklama"
+                name="description"
               />
 
-              <Input
-                label='Dosyalar'
-                multiple
-                name='files'
-                type='file'
-              />
+              <Input label="Dosyalar" multiple name="files" type="file" />
 
-              <Input
-                accept='image/*'
-                label='Öne Çıkan Görsel'
-                name='featuredImage'
-                type='file'
-              />
+              <Input accept="image/*" label="Öne Çıkan Görsel" name="featuredImage" type="file" />
 
-              <Button
-                color='primary'
-                isLoading={isLoading}
-                type='submit'
-              >
+              <Button color="primary" isLoading={isLoading} type="submit">
                 {news ? "Düzenle" : "Oluştur"}
               </Button>
             </form>
@@ -166,7 +132,7 @@ export default function Viewnews() {
 
       <ConfirmModal
         {...confirmDeleteModal}
-        message='Bu haberi silmek istediğinize emin misiniz? Bu işlem geri alınamaz.'
+        message="Bu haberi silmek istediğinize emin misiniz? Bu işlem geri alınamaz."
         onConfirm={handleDelete}
       />
     </>

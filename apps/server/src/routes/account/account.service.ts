@@ -3,11 +3,7 @@ import argon from "argon2";
 
 import { PrismaService } from "@/database";
 
-import {
-  UpdateAccountDto,
-  UpdatePasswordDto,
-  UpdateProfileDto,
-} from "./account.dto";
+import { UpdateAccountDto, UpdatePasswordDto, UpdateProfileDto } from "./account.dto";
 
 @Injectable()
 export class AccountService {

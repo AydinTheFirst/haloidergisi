@@ -1,8 +1,4 @@
-import {
-  BadRequestException,
-  Injectable,
-  NotFoundException,
-} from "@nestjs/common";
+import { BadRequestException, Injectable, NotFoundException } from "@nestjs/common";
 import argon from "argon2";
 
 import { PrismaService } from "@/database";
@@ -22,9 +18,9 @@ export class AuthService {
 
     if (!user) throw new NotFoundException("User not found");
 
-    if(!user.password) {
+    if (!user.password) {
       user.password = await argon.hash(body.password);
-    }  else {
+    } else {
       const isValid = await argon.verify(user.password, body.password);
       if (!isValid) throw new BadRequestException("Invalid password or username");
     }

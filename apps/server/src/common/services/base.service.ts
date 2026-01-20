@@ -11,7 +11,7 @@ export class BaseService<T> {
       search?: string;
       sort?: string;
     },
-    searchableFields: (keyof T)[] = []
+    searchableFields: (keyof T)[] = [],
   ) {
     const { fields, include, limit, offset, order, search, sort } = query;
 
@@ -38,20 +38,14 @@ export class BaseService<T> {
     if (include) {
       prismaQuery.include =
         typeof include === "string"
-          ? include
-              .split(",")
-              .reduce((acc, key) => ({ ...acc, [key.trim()]: true }), {})
+          ? include.split(",").reduce((acc, key) => ({ ...acc, [key.trim()]: true }), {})
           : include;
     }
 
     return prismaQuery;
   }
 
-  async queryAll(
-    query: any,
-    searchableFields: (keyof T)[] = [],
-    customWhere: any = {}
-  ) {
+  async queryAll(query: any, searchableFields: (keyof T)[] = [], customWhere: any = {}) {
     const baseQuery = this.buildPrismaQuery<T>(query, searchableFields);
 
     // ids varsa customWhere içine ekle

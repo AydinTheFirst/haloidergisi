@@ -6,15 +6,15 @@ import type { Route } from "./+types/page";
 export const meta: Route.MetaFunction = () => {
   return [
     {
-      title: "HALO Dergisi - Gizlilik Politikası"
-    }
+      title: "HALO Dergisi - Gizlilik Politikası",
+    },
   ];
 };
 
 export default function Privacy() {
   return (
-    <div className='container py-20'>
-      <div className='prose mx-auto'>
+    <div className="container py-20">
+      <div className="prose mx-auto">
         <MarkdownContent>{markdown}</MarkdownContent>
       </div>
     </div>

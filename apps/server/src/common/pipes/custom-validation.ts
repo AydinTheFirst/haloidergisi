@@ -1,8 +1,4 @@
-import {
-  BadRequestException,
-  ValidationError,
-  ValidationPipe,
-} from "@nestjs/common";
+import { BadRequestException, ValidationError, ValidationPipe } from "@nestjs/common";
 
 export class CustomValidationPipe extends ValidationPipe {
   // Hataları oluştururken doğrudan bir BadRequestException fırlatıyoruz
@@ -19,11 +15,7 @@ export class CustomValidationPipe extends ValidationPipe {
   }
 
   // Hata mesajlarını düzleştirip, tek bir dizide topluyoruz.
-  protected flattenValidationErrors(
-    validationErrors: ValidationError[],
-  ): string[] {
-    return validationErrors.map((error) =>
-      Object.values(error.constraints).join(", "),
-    );
+  protected flattenValidationErrors(validationErrors: ValidationError[]): string[] {
+    return validationErrors.map((error) => Object.values(error.constraints).join(", "));
   }
 }

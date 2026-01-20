@@ -1,11 +1,12 @@
+import { Link, Pagination } from "@heroui/react";
+import { useLoaderData, useNavigate, useSearchParams } from "react-router";
+
 import type { Post } from "~/models/Post";
 import type { PaginatedResponse } from "~/types";
 
-import { Link, Pagination } from "@heroui/react";
 import DataTable from "~/components/data-table";
 import FilterDrawer from "~/components/filter-drawer";
 import { http } from "~/lib/http";
-import { useLoaderData, useNavigate, useSearchParams } from "react-router";
 
 import type { Route } from "./+types/page";
 
@@ -18,7 +19,7 @@ export const clientLoader = async ({ request }: Route.LoaderArgs) => {
   searchParams.set("offset", String((+page - 1) * +limit));
 
   const { data: news } = await http.get<PaginatedResponse<Post>>("/news", {
-    params: Object.fromEntries(searchParams.entries())
+    params: Object.fromEntries(searchParams.entries()),
   });
 
   return { news };
@@ -33,29 +34,26 @@ export default function News() {
 
   const columns = [
     { key: "title", label: "Başlık" },
-    { key: "updatedAt", label: "Güncellenme Tarihi" }
+    { key: "updatedAt", label: "Güncellenme Tarihi" },
   ];
 
   const rows = news.items.map((item) => ({
     key: item.id,
     title: item.title,
-    updatedAt: new Date(item.updatedAt).toLocaleString()
+    updatedAt: new Date(item.updatedAt).toLocaleString(),
   }));
 
   return (
-    <div className='grid gap-3'>
-      <div className='grid grid-cols-1 gap-3 md:grid-cols-2'>
+    <div className="grid gap-3">
+      <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
         <div>
-          <h2 className='text-xl font-bold'>Haberler</h2>
-          <small className='text-muted'>
+          <h2 className="text-xl font-bold">Haberler</h2>
+          <small className="text-muted">
             ({news.items.length}/{news.meta.total}) item bulundu.
           </small>
         </div>
-        <div className='flex items-end justify-end gap-2'>
-          <Link
-            color='foreground'
-            href='/dashboard/news/create'
-          >
+        <div className="flex items-end justify-end gap-2">
+          <Link color="foreground" href="/dashboard/news/create">
             Haber Ekle
           </Link>
 
@@ -68,7 +66,7 @@ export default function News() {
         onRowAction={(key) => navigate(`/dashboard/news/${key}`)}
       />
       <Pagination
-        className='mx-auto'
+        className="mx-auto"
         onChange={(page) =>
           setSearchParams((prev) => {
             prev.set("page", String(page));

@@ -6,15 +6,15 @@ import type { Route } from "./+types/page";
 export const meta: Route.MetaFunction = () => {
   return [
     {
-      title: "HALO Dergisi - Kullanım Şartları"
-    }
+      title: "HALO Dergisi - Kullanım Şartları",
+    },
   ];
 };
 
 export default function Terms() {
   return (
-    <div className='container py-20'>
-      <div className='prose mx-auto'>
+    <div className="container py-20">
+      <div className="prose mx-auto">
         <MarkdownContent>{markdown}</MarkdownContent>
       </div>
     </div>

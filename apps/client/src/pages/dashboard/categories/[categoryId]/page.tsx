@@ -1,34 +1,21 @@
-import type { Category } from "~/models/Category";
-
-import {
-  Button,
-  Card,
-  CardBody,
-  CardHeader,
-  Input,
-  Link,
-  useDisclosure
-} from "@heroui/react";
-import ConfirmModal from "~/components/confirm-modal";
-import { handleError, http } from "~/lib/http";
+import { Button, Card, CardBody, CardHeader, Input, Link, useDisclosure } from "@heroui/react";
 import React from "react";
 import { useLoaderData, useNavigate } from "react-router";
 import { toast } from "sonner";
 
-export const clientLoader = async ({
-  params
-}: {
-  params: { categoryId?: string };
-}) => {
+import type { Category } from "~/models/Category";
+
+import ConfirmModal from "~/components/confirm-modal";
+import { handleError, http } from "~/lib/http";
+
+export const clientLoader = async ({ params }: { params: { categoryId?: string } }) => {
   const { categoryId } = params;
 
   if (!categoryId || categoryId === "create") {
     return { category: null };
   }
 
-  const { data: category } = await http.get<Category>(
-    `/categories/${categoryId}`
-  );
+  const { data: category } = await http.get<Category>(`/categories/${categoryId}`);
 
   return { category };
 };
@@ -43,10 +30,7 @@ export default function ViewCategory() {
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
-    const data = Object.fromEntries(formData.entries()) as Record<
-      string,
-      unknown
-    >;
+    const data = Object.fromEntries(formData.entries()) as Record<string, unknown>;
 
     setIsLoading(true);
 
@@ -78,57 +62,43 @@ export default function ViewCategory() {
 
   return (
     <>
-      <div className='grid gap-3'>
-        <div className='flex justify-end'>
+      <div className="grid gap-3">
+        <div className="flex justify-end">
           {category && (
-            <Link
-              color='foreground'
-              href={`/categories/${category.id}`}
-              isExternal
-            >
+            <Link color="foreground" href={`/categories/${category.id}`} isExternal>
               Kategoriyi Görüntüle
             </Link>
           )}
         </div>
 
         <Card>
-          <CardHeader className='justify-between'>
-            <h2 className='text-xl font-bold'>
+          <CardHeader className="justify-between">
+            <h2 className="text-xl font-bold">
               {category ? category.title : "Yeni Kategori Oluştur"}
             </h2>
             {category && (
-              <Button
-                color='danger'
-                onPress={confirmDeleteModal.onOpen}
-              >
+              <Button color="danger" onPress={confirmDeleteModal.onOpen}>
                 Sil
               </Button>
             )}
           </CardHeader>
 
           <CardBody>
-            <form
-              className='grid gap-3'
-              onSubmit={handleSubmit}
-            >
+            <form className="grid gap-3" onSubmit={handleSubmit}>
               <Input
                 defaultValue={category?.title || ""}
                 isRequired
-                label='Kategori Adı'
-                name='title'
+                label="Kategori Adı"
+                name="title"
               />
 
               <Input
                 defaultValue={category?.description || ""}
-                label='Açıklama'
-                name='description'
+                label="Açıklama"
+                name="description"
               />
 
-              <Button
-                color='primary'
-                isLoading={isLoading}
-                type='submit'
-              >
+              <Button color="primary" isLoading={isLoading} type="submit">
                 {category ? "Düzenle" : "Oluştur"}
               </Button>
             </form>
@@ -138,7 +108,7 @@ export default function ViewCategory() {
 
       <ConfirmModal
         {...confirmDeleteModal}
-        message='Bu kategoriyi silmek istediğinize emin misiniz? Bu işlem geri alınamaz.'
+        message="Bu kategoriyi silmek istediğinize emin misiniz? Bu işlem geri alınamaz."
         onConfirm={handleDelete}
       />
     </>

@@ -3,11 +3,7 @@ import { Body, Controller, Get, Patch, UseGuards } from "@nestjs/common";
 import { GetUser } from "@/common/decorators";
 import { AuthGuard } from "@/common/guards";
 
-import {
-  UpdateAccountDto,
-  UpdatePasswordDto,
-  UpdateProfileDto,
-} from "./account.dto";
+import { UpdateAccountDto, UpdatePasswordDto, UpdateProfileDto } from "./account.dto";
 import { AccountService } from "./account.service";
 
 @Controller("account")
@@ -21,26 +17,17 @@ export class AccountController {
   }
 
   @Patch()
-  async update(
-    @GetUser("id") id: string,
-    @Body() updateAccountDto: UpdateAccountDto
-  ) {
+  async update(@GetUser("id") id: string, @Body() updateAccountDto: UpdateAccountDto) {
     return this.accountService.update(id, updateAccountDto);
   }
 
   @Patch("password")
-  async updatePassword(
-    @GetUser("id") id: string,
-    @Body() updatePasswordDto: UpdatePasswordDto
-  ) {
+  async updatePassword(@GetUser("id") id: string, @Body() updatePasswordDto: UpdatePasswordDto) {
     return this.accountService.updatePassword(id, updatePasswordDto);
   }
 
   @Patch("profile")
-  async updateProfile(
-    @GetUser("id") id: string,
-    @Body() updateProfileDto: UpdateProfileDto
-  ) {
+  async updateProfile(@GetUser("id") id: string, @Body() updateProfileDto: UpdateProfileDto) {
     return this.accountService.updateProfile(id, updateProfileDto);
   }
 }

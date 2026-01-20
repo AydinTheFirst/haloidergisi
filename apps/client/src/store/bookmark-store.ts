@@ -15,7 +15,7 @@ export const useBookmarkStore = create<BookmarkStore>()(
       addBookmark: (postId) => {
         if (!get().isBookmarked(postId)) {
           set((state) => ({
-            bookmarks: [...state.bookmarks, postId]
+            bookmarks: [...state.bookmarks, postId],
           }));
         }
       },
@@ -23,7 +23,7 @@ export const useBookmarkStore = create<BookmarkStore>()(
       isBookmarked: (postId) => get().bookmarks.includes(postId),
       removeBookmark: (postId) => {
         set((state) => ({
-          bookmarks: state.bookmarks.filter((id) => id !== postId)
+          bookmarks: state.bookmarks.filter((id) => id !== postId),
         }));
       },
       toggleBookmark: (postId) => {
@@ -32,10 +32,10 @@ export const useBookmarkStore = create<BookmarkStore>()(
         } else {
           get().addBookmark(postId);
         }
-      }
+      },
     }),
     {
-      name: "bookmarks"
-    }
-  )
+      name: "bookmarks",
+    },
+  ),
 );

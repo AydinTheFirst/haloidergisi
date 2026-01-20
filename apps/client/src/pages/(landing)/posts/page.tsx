@@ -1,7 +1,3 @@
-import type { Category } from "~/models/Category";
-import type { Post } from "~/models/Post";
-import type { PaginatedResponse } from "~/types";
-
 import {
   Button,
   Drawer,
@@ -14,13 +10,18 @@ import {
   Pagination,
   Select,
   SelectItem,
-  useDisclosure
+  useDisclosure,
 } from "@heroui/react";
-import PostCard from "~/components/post-card";
-import { http } from "~/lib/http";
 import { LucideBookmark, LucideFilter } from "lucide-react";
 import { useLoaderData, useSearchParams } from "react-router";
 import useSWR from "swr";
+
+import type { Category } from "~/models/Category";
+import type { Post } from "~/models/Post";
+import type { PaginatedResponse } from "~/types";
+
+import PostCard from "~/components/post-card";
+import { http } from "~/lib/http";
 
 import type { Route } from "./+types/page";
 
@@ -29,12 +30,12 @@ export const meta: Route.MetaFunction = ({ data }) => {
     {
       description:
         "Dergiler, HALO Dergisinin paylaşılan en son dergilerini incleyebilir ve indirebilirsiniz.",
-      title: `HALO Dergisi - Dergiler`
+      title: `HALO Dergisi - Dergiler`,
     },
     {
       content: data?.posts.items.map((post) => post.title).join(", "),
-      name: "keywords"
-    }
+      name: "keywords",
+    },
   ];
 };
 
@@ -49,8 +50,8 @@ export const loader = async ({ request }: Route.LoaderArgs) => {
   const { data: posts } = await http.get<PaginatedResponse<Post>>("/posts", {
     params: {
       include: "category,reactions,comments",
-      ...Object.fromEntries(searchParams.entries())
-    }
+      ...Object.fromEntries(searchParams.entries()),
+    },
   });
 
   return { posts };
@@ -62,55 +63,39 @@ export default function Posts() {
   const [_, setSearchParams] = useSearchParams();
 
   return (
-    <div className='container py-20'>
-      <div className='grid gap-5'>
-        <div className='grid grid-cols-1 gap-3 md:grid-cols-2'>
-          <div className='flex flex-col gap-2'>
-            <h1 className='text-3xl font-bold'>Dergiler</h1>
-            <p className='max-w-xl'>
-              Dergiler, edebiyat dünyasındaki en önemli yayın organlarından
-              biridir. Bu sayfada, dergilerle ilgili en son haberleri ve
-              makaleleri bulabilirsiniz.
+    <div className="container py-20">
+      <div className="grid gap-5">
+        <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
+          <div className="flex flex-col gap-2">
+            <h1 className="text-3xl font-bold">Dergiler</h1>
+            <p className="max-w-xl">
+              Dergiler, edebiyat dünyasındaki en önemli yayın organlarından biridir. Bu sayfada,
+              dergilerle ilgili en son haberleri ve makaleleri bulabilirsiniz.
             </p>
-            <p className='text-muted text-sm'>
-              {posts.items.length} dergi bulundu.
-            </p>
-            <Link
-              color='foreground'
-              href='/posts/bookmarks'
-            >
+            <p className="text-muted text-sm">{posts.items.length} dergi bulundu.</p>
+            <Link color="foreground" href="/posts/bookmarks">
               <LucideBookmark size={20} />
               <span>Kaydedilen Dergiler</span>
             </Link>
           </div>
-          <div className='flex items-end justify-end gap-2'>
+          <div className="flex items-end justify-end gap-2">
             <PostsFilter />
           </div>
         </div>
-        <div className='grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3'>
+        <div className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3">
           {posts.items.map((post) => (
-            <PostCard
-              key={post.id}
-              post={post}
-            />
+            <PostCard key={post.id} post={post} />
           ))}
         </div>
         {posts.items.length === 0 && (
-          <div className='flex flex-col items-center justify-center gap-3'>
-            <p className='text-muted'>Hiç dergi bulunamadı.</p>
-            <Button
-              color='primary'
-              onPress={() => setSearchParams({})}
-              variant='light'
-            >
+          <div className="flex flex-col items-center justify-center gap-3">
+            <p className="text-muted">Hiç dergi bulunamadı.</p>
+            <Button color="primary" onPress={() => setSearchParams({})} variant="light">
               Filtreleri Temizle
             </Button>
           </div>
         )}
-        <div
-          className='flex items-center justify-center'
-          hidden={posts.items.length === 0}
-        >
+        <div className="flex items-center justify-center" hidden={posts.items.length === 0}>
           <Pagination
             onChange={(page) =>
               setSearchParams((prev) => {
@@ -153,69 +138,47 @@ function PostsFilter() {
 
   return (
     <>
-      <Button
-        isIconOnly
-        onPress={onOpen}
-        variant='light'
-      >
+      <Button isIconOnly onPress={onOpen} variant="light">
         <LucideFilter />
       </Button>
-      <Drawer
-        isOpen={isOpen}
-        onOpenChange={onOpenChange}
-      >
+      <Drawer isOpen={isOpen} onOpenChange={onOpenChange}>
         <DrawerContent>
-          <DrawerHeader className='flex flex-col gap-1'>
-            <h2 className='font-semibold'>Dergi Filtreleri</h2>
-            <p className='text-muted text-sm'>
-              Dergileri filtrelemek için aşağıdaki seçenekleri
-              kullanabilirsiniz.
+          <DrawerHeader className="flex flex-col gap-1">
+            <h2 className="font-semibold">Dergi Filtreleri</h2>
+            <p className="text-muted text-sm">
+              Dergileri filtrelemek için aşağıdaki seçenekleri kullanabilirsiniz.
             </p>
           </DrawerHeader>
           <DrawerBody>
-            <form
-              className='grid gap-3'
-              onSubmit={handleSubmit}
-            >
+            <form className="grid gap-3" onSubmit={handleSubmit}>
               <Input
                 defaultValue={searchParams.get("search") || ""}
-                description='Dergi başlığı veya içeriği girin...'
+                description="Dergi başlığı veya içeriği girin..."
                 isClearable
-                label='Dergi Arama'
-                name='search'
+                label="Dergi Arama"
+                name="search"
               />
 
               <Select
                 defaultSelectedKeys={[searchParams.get("categoryId") || ""]}
-                description='Kategori seçin...'
+                description="Kategori seçin..."
                 items={categories || []}
-                label='Kategori Seç'
-                name='categoryId'
+                label="Kategori Seç"
+                name="categoryId"
               >
                 {(item) => <SelectItem key={item.id}>{item.title}</SelectItem>}
               </Select>
 
-              <Button
-                color='primary'
-                type='submit'
-              >
+              <Button color="primary" type="submit">
                 Filtrele
               </Button>
             </form>
           </DrawerBody>
           <DrawerFooter>
-            <Button
-              color='danger'
-              onPress={() => setSearchParams({})}
-              variant='light'
-            >
+            <Button color="danger" onPress={() => setSearchParams({})} variant="light">
               Filtreleri Temizle
             </Button>
-            <Button
-              color='danger'
-              onPress={onClose}
-              variant='light'
-            >
+            <Button color="danger" onPress={onClose} variant="light">
               Kapat
             </Button>
           </DrawerFooter>

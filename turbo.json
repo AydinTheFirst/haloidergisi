@@ -15,7 +15,9 @@
     },
     "lint": {},
     "format": {},
-    "type-check": {},
+    "check-types": {
+      "cache": false
+    },
     "dev": {
       "dependsOn": ["^dev", "db:generate"],
       "cache": false,

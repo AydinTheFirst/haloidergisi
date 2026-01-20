@@ -20,7 +20,7 @@ import { PostsService } from "./posts.service";
 export class PostsController {
   constructor(
     private readonly postsService: PostsService,
-    private readonly commentsService: CommentsService
+    private readonly commentsService: CommentsService,
   ) {}
 
   @Post()

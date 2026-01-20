@@ -1,11 +1,12 @@
+import { Link, Pagination } from "@heroui/react";
+import { useLoaderData, useNavigate, useSearchParams } from "react-router";
+
 import type { Post } from "~/models/Post";
 import type { PaginatedResponse } from "~/types";
 
-import { Link, Pagination } from "@heroui/react";
 import DataTable from "~/components/data-table";
 import FilterDrawer from "~/components/filter-drawer";
 import { http } from "~/lib/http";
-import { useLoaderData, useNavigate, useSearchParams } from "react-router";
 
 import type { Route } from "./+types/page";
 
@@ -18,12 +19,9 @@ export const clientLoader = async ({ request }: Route.LoaderArgs) => {
   searchParams.set("offset", String((+page - 1) * +limit));
   searchParams.set("include", "category,reactions,comments");
 
-  const { data: posts } = await http.get<PaginatedResponse<Post>>(
-    "/posts/admin",
-    {
-      params: Object.fromEntries(searchParams.entries())
-    }
-  );
+  const { data: posts } = await http.get<PaginatedResponse<Post>>("/posts/admin", {
+    params: Object.fromEntries(searchParams.entries()),
+  });
 
   return { posts };
 };
@@ -40,7 +38,7 @@ export default function Posts() {
     { key: "category", label: "Kategori" },
     { key: "comments", label: "Yorum Sayısı" },
     { key: "reactions", label: "Reaksiyon Sayısı" },
-    { key: "updatedAt", label: "Güncellenme Tarihi" }
+    { key: "updatedAt", label: "Güncellenme Tarihi" },
   ];
 
   const rows = posts.items.map((item) => ({
@@ -49,25 +47,22 @@ export default function Posts() {
     key: item.id,
     reactions: item.reactions?.length || 0,
     title: item.title,
-    updatedAt: new Date(item.updatedAt).toLocaleString()
+    updatedAt: new Date(item.updatedAt).toLocaleString(),
   }));
 
   console.log("posts", posts.meta);
 
   return (
-    <div className='grid gap-3'>
-      <div className='grid grid-cols-1 gap-3 md:grid-cols-2'>
+    <div className="grid gap-3">
+      <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
         <div>
-          <h2 className='text-xl font-bold'>Dergiler</h2>
-          <small className='text-muted'>
+          <h2 className="text-xl font-bold">Dergiler</h2>
+          <small className="text-muted">
             ({posts.items.length}/{posts.meta.total}) item bulundu.
           </small>
         </div>
-        <div className='flex items-end justify-end gap-2'>
-          <Link
-            color='foreground'
-            href='/dashboard/posts/create'
-          >
+        <div className="flex items-end justify-end gap-2">
+          <Link color="foreground" href="/dashboard/posts/create">
             Dergi Ekle
           </Link>
           <FilterDrawer />
@@ -79,7 +74,7 @@ export default function Posts() {
         onRowAction={(key) => navigate(`/dashboard/posts/${key}`)}
       />
       <Pagination
-        className='mx-auto'
+        className="mx-auto"
         onChange={(page) =>
           setSearchParams((prev) => {
             prev.set("page", String(page));

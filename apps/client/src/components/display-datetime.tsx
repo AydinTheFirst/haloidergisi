@@ -14,7 +14,7 @@ export default function DisplayDateTime({ date }: MessageTimeProps) {
   if (isToday) {
     return messageDate.toLocaleTimeString([], {
       hour: "2-digit",
-      minute: "2-digit"
+      minute: "2-digit",
     });
   }
 
@@ -23,6 +23,6 @@ export default function DisplayDateTime({ date }: MessageTimeProps) {
     hour: "2-digit",
     minute: "2-digit",
     month: "2-digit",
-    year: "numeric"
+    year: "numeric",
   });
 }

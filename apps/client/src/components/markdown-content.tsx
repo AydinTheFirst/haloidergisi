@@ -7,10 +7,7 @@ export interface MarkdownContentProps {
   className?: string;
 }
 
-export const MarkdownContent: React.FC<MarkdownContentProps> = ({
-  children,
-  className
-}) => {
+export const MarkdownContent: React.FC<MarkdownContentProps> = ({ children, className }) => {
   return (
     <div className={cn("prose max-w-none", className)}>
       <ReactMarkdown
@@ -18,11 +15,11 @@ export const MarkdownContent: React.FC<MarkdownContentProps> = ({
           a: ({ ...props }) => (
             <a
               {...props}
-              className='text-blue-500 hover:underline'
-              rel='noopener noreferrer'
-              target='_blank'
+              className="text-blue-500 hover:underline"
+              rel="noopener noreferrer"
+              target="_blank"
             />
-          )
+          ),
         }}
         remarkPlugins={[remarkGfm]}
       >

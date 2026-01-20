@@ -1,8 +1,4 @@
-import {
-  GetObjectCommandOutput,
-  PutObjectCommand,
-  S3,
-} from "@aws-sdk/client-s3";
+import { GetObjectCommandOutput, PutObjectCommand, S3 } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import { Injectable, Logger, OnModuleInit } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
@@ -82,7 +78,7 @@ export class S3Service implements OnModuleInit {
       }),
       {
         expiresIn: 60 * 60 * 24 * 7, // 7d
-      }
+      },
     );
 
     return url;
@@ -116,7 +112,7 @@ export class S3Service implements OnModuleInit {
     const keys = await Promise.all(
       files.map(async (file) => {
         return await this.uploadFile(file);
-      })
+      }),
     );
 
     return keys;

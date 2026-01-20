@@ -1,14 +1,8 @@
-import {
-  Button,
-  Dropdown,
-  DropdownItem,
-  DropdownMenu,
-  DropdownTrigger,
-  Link
-} from "@heroui/react";
+import { Button, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger, Link } from "@heroui/react";
+import { LucideUser } from "lucide-react";
+
 import { useAuth } from "~/hooks/use-auth";
 import { UserRole } from "~/models/enums";
-import { LucideUser } from "lucide-react";
 
 export default function AuthItems() {
   const { user } = useAuth();
@@ -21,17 +15,10 @@ export default function AuthItems() {
   if (!user) {
     return (
       <>
-        <Button
-          as={Link}
-          className='hidden md:flex'
-          href='/login'
-        >
+        <Button as={Link} className="hidden md:flex" href="/login">
           Giriş Yap
         </Button>
-        <Button
-          as={Link}
-          href='/register'
-        >
+        <Button as={Link} href="/register">
           Kayıt Ol
         </Button>
       </>
@@ -41,33 +28,22 @@ export default function AuthItems() {
   return (
     <Dropdown>
       <DropdownTrigger>
-        <Button
-          isIconOnly
-          variant='light'
-        >
+        <Button isIconOnly variant="light">
           <LucideUser />
         </Button>
       </DropdownTrigger>
-      <DropdownMenu aria-label='Static Actions'>
-        <DropdownItem
-          href='/account'
-          key='profile'
-        >
+      <DropdownMenu aria-label="Static Actions">
+        <DropdownItem href="/account" key="profile">
           Profil
         </DropdownItem>
         <DropdownItem
           hidden={!user.roles.includes(UserRole.ADMIN)}
-          href='/dashboard'
-          key='dashboard'
+          href="/dashboard"
+          key="dashboard"
         >
           Yönetim Paneli
         </DropdownItem>
-        <DropdownItem
-          className='text-danger'
-          color='danger'
-          key='logout'
-          onPress={handleLogout}
-        >
+        <DropdownItem className="text-danger" color="danger" key="logout" onPress={handleLogout}>
           Çıkış Yap
         </DropdownItem>
       </DropdownMenu>

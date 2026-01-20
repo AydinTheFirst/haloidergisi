@@ -1,6 +1,6 @@
-import type { Post } from "~/models/Post";
-
 import { Card, CardFooter, CardHeader, cn, Link } from "@heroui/react";
+
+import type { Post } from "~/models/Post";
 
 import CdnImage from "./cdn-image";
 
@@ -9,10 +9,7 @@ interface SimplePostCardProps {
   post: Post;
 }
 
-export default function SimplePostCard({
-  className,
-  post
-}: SimplePostCardProps) {
+export default function SimplePostCard({ className, post }: SimplePostCardProps) {
   return (
     <Card
       as={Link}
@@ -20,18 +17,16 @@ export default function SimplePostCard({
       href={`/posts/${post.id}`}
       isHoverable
       isPressable
-      shadow='none'
+      shadow="none"
     >
-      <CardHeader className='p-0'>
-        {post.cover && <CdnImage src={post.cover} />}
-      </CardHeader>
-      <CardFooter className='flex flex-col gap-1 text-center'>
-        <h2 className='line-clamp-1 text-lg font-semibold'>{post.title}</h2>
-        <small className='text-muted'>
+      <CardHeader className="p-0">{post.cover && <CdnImage src={post.cover} />}</CardHeader>
+      <CardFooter className="flex flex-col gap-1 text-center">
+        <h2 className="line-clamp-1 text-lg font-semibold">{post.title}</h2>
+        <small className="text-muted">
           {new Date(post.createdAt).toLocaleDateString("tr-TR", {
             day: "numeric",
             month: "long",
-            year: "numeric"
+            year: "numeric",
           })}
         </small>
       </CardFooter>

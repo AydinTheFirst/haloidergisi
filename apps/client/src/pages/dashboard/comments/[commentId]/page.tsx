@@ -1,5 +1,3 @@
-import type { Comment } from "~/models/Comment";
-
 import {
   Button,
   Card,
@@ -8,28 +6,25 @@ import {
   Input,
   Link,
   Textarea,
-  useDisclosure
+  useDisclosure,
 } from "@heroui/react";
-import ConfirmModal from "~/components/confirm-modal";
-import { handleError, http } from "~/lib/http";
 import React from "react";
 import { useLoaderData, useNavigate } from "react-router";
 import { toast } from "sonner";
 
-export const clientLoader = async ({
-  params
-}: {
-  params: { commentId?: string };
-}) => {
+import type { Comment } from "~/models/Comment";
+
+import ConfirmModal from "~/components/confirm-modal";
+import { handleError, http } from "~/lib/http";
+
+export const clientLoader = async ({ params }: { params: { commentId?: string } }) => {
   const { commentId } = params;
 
   if (!commentId || commentId === "create") {
     return { comment: null };
   }
 
-  const { data: comment } = await http.get<Comment>(
-    `/admin/comments/${commentId}?include=post`
-  );
+  const { data: comment } = await http.get<Comment>(`/admin/comments/${commentId}?include=post`);
 
   return { comment };
 };
@@ -43,10 +38,7 @@ export default function ViewComment() {
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
-    const data = Object.fromEntries(formData.entries()) as Record<
-      string,
-      unknown
-    >;
+    const data = Object.fromEntries(formData.entries()) as Record<string, unknown>;
 
     setIsLoading(true);
 
@@ -80,67 +72,46 @@ export default function ViewComment() {
 
   return (
     <>
-      <div className='grid gap-3'>
+      <div className="grid gap-3">
         {comment?.post && (
-          <div className='flex items-center justify-between'>
-            <span className='text-muted'>Bağlı Post: {comment.post.title}</span>
-            <Link
-              color='foreground'
-              href={`/posts/${comment.post.id}`}
-              isExternal
-            >
+          <div className="flex items-center justify-between">
+            <span className="text-muted">Bağlı Post: {comment.post.title}</span>
+            <Link color="foreground" href={`/posts/${comment.post.id}`} isExternal>
               Gönderiyi Aç
             </Link>
           </div>
         )}
 
         <Card>
-          <CardHeader className='justify-between'>
-            <h2 className='text-xl font-bold'>
-              {comment ? "Yorumu Güncelle" : "Yeni Yorum"}
-            </h2>
+          <CardHeader className="justify-between">
+            <h2 className="text-xl font-bold">{comment ? "Yorumu Güncelle" : "Yeni Yorum"}</h2>
             {comment && (
-              <Button
-                color='danger'
-                onPress={confirmDeleteModal.onOpen}
-              >
+              <Button color="danger" onPress={confirmDeleteModal.onOpen}>
                 Sil
               </Button>
             )}
           </CardHeader>
 
           <CardBody>
-            <form
-              className='grid gap-3'
-              onSubmit={handleSubmit}
-            >
+            <form className="grid gap-3" onSubmit={handleSubmit}>
               {!comment && (
                 <>
+                  <Input isRequired label="Gönderi ID" name="postId" placeholder="Post UUID" />
                   <Input
-                    isRequired
-                    label='Gönderi ID'
-                    name='postId'
-                    placeholder='Post UUID'
-                  />
-                  <Input
-                    label='Cevaplanacak Yorum ID (opsiyonel)'
-                    name='replyToId'
-                    placeholder='UUID (isteğe bağlı)'
+                    label="Cevaplanacak Yorum ID (opsiyonel)"
+                    name="replyToId"
+                    placeholder="UUID (isteğe bağlı)"
                   />
                 </>
               )}
               <Textarea
                 defaultValue={comment?.content || ""}
                 isRequired
-                label='Yorum'
-                name='content'
+                label="Yorum"
+                name="content"
               />
 
-              <Button
-                color='primary'
-                isLoading={isLoading}
-                type='submit'
-              >
+              <Button color="primary" isLoading={isLoading} type="submit">
                 {comment ? "Güncelle" : "Oluştur"}
               </Button>
             </form>
@@ -150,7 +121,7 @@ export default function ViewComment() {
 
       <ConfirmModal
         {...confirmDeleteModal}
-        message='Bu yorumu silmek istediğinize emin misiniz?'
+        message="Bu yorumu silmek istediğinize emin misiniz?"
         onConfirm={handleDelete}
       />
     </>

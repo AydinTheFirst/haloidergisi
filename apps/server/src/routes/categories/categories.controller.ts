@@ -13,11 +13,7 @@ import {
 import { Roles } from "@/common/decorators";
 import { AuthGuard } from "@/common/guards";
 
-import {
-  CreateCategoryDto,
-  QueryCategoryDto,
-  UpdateCategoryDto,
-} from "./categories.dto";
+import { CreateCategoryDto, QueryCategoryDto, UpdateCategoryDto } from "./categories.dto";
 import { CategoriesService } from "./categories.service";
 
 @Controller("categories")
@@ -56,10 +52,7 @@ export class CategoriesController {
   @Patch(":id")
   @Roles(["ADMIN"])
   @UseGuards(AuthGuard)
-  update(
-    @Param("id") id: string,
-    @Body() updateCategoryDto: UpdateCategoryDto
-  ) {
+  update(@Param("id") id: string, @Body() updateCategoryDto: UpdateCategoryDto) {
     return this.categoriesService.update(id, updateCategoryDto);
   }
 }

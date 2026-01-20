@@ -1,7 +1,7 @@
-import type { ReactionType } from "~/models/enums";
-
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
+
+import type { ReactionType } from "~/models/enums";
 
 interface ReactionState {
   reactions: Record<string, ReactionType>;
@@ -23,13 +23,13 @@ export const useReactionStore = create<ReactionState>()(
         set((state) => ({
           reactions: {
             ...state.reactions,
-            [postId]: type
-          }
-        }))
+            [postId]: type,
+          },
+        })),
     }),
     {
       name: "reactions",
-      partialize: (state) => ({ reactions: state.reactions })
-    }
-  )
+      partialize: (state) => ({ reactions: state.reactions }),
+    },
+  ),
 );

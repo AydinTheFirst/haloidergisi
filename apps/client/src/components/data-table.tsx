@@ -5,7 +5,7 @@ import {
   TableColumn,
   TableHeader,
   type TableProps,
-  TableRow
+  TableRow,
 } from "@heroui/react";
 
 export interface Column {
@@ -25,11 +25,11 @@ export interface Row {
 
 export default function DataTable({ columns, items, ...rest }: DataTableProps) {
   return (
-    <div className='overflow-x-auto p-1'>
+    <div className="overflow-x-auto p-1">
       <Table
-        aria-label='Example table with dynamic content'
+        aria-label="Example table with dynamic content"
         isStriped
-        selectionMode='single'
+        selectionMode="single"
         {...rest}
       >
         <TableHeader>
@@ -37,7 +37,7 @@ export default function DataTable({ columns, items, ...rest }: DataTableProps) {
             <TableColumn key={column.key}>{column.label}</TableColumn>
           ))}
         </TableHeader>
-        <TableBody emptyContent='Veri yok'>
+        <TableBody emptyContent="Veri yok">
           {items.map((row) => (
             <TableRow key={row.key}>
               {columns.map((column) => (

@@ -61,9 +61,7 @@ export class NewsService extends BaseService<News> {
   async update(id: string, updateNewsDto: UpdateNewsDto) {
     const news = await this.findOne(id);
 
-    const slug = updateNewsDto.title
-      ? this.makeSlug(updateNewsDto.title)
-      : news.slug;
+    const slug = updateNewsDto.title ? this.makeSlug(updateNewsDto.title) : news.slug;
 
     const updated = await this.prisma.news.update({
       data: { ...updateNewsDto, slug },

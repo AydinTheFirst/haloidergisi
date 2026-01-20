@@ -5,5 +5,5 @@ import devtoolsJson from "vite-plugin-devtools-json"; // Added plugin for devtoo
 import tsconfigPaths from "vite-tsconfig-paths";
 
 export default defineConfig({
-  plugins: [tailwindcss(), reactRouter(), tsconfigPaths(), devtoolsJson()]
+  plugins: [tailwindcss(), reactRouter(), tsconfigPaths(), devtoolsJson()],
 });

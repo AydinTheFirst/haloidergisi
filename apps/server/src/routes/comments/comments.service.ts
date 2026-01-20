@@ -3,11 +3,7 @@ import { Injectable, NotFoundException } from "@nestjs/common";
 import { BaseService } from "@/common/services/base.service";
 import { Comment, Prisma, PrismaService } from "@/database";
 
-import {
-  CreateCommentDto,
-  QueryCommentDto,
-  UpdateCommentDto,
-} from "./comments.dto";
+import { CreateCommentDto, QueryCommentDto, UpdateCommentDto } from "./comments.dto";
 
 @Injectable()
 export class CommentsService extends BaseService<Comment> {

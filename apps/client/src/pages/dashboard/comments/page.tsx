@@ -1,11 +1,12 @@
+import { Pagination } from "@heroui/react";
+import { useLoaderData, useNavigate, useSearchParams } from "react-router";
+
 import type { Comment } from "~/models/Comment";
 import type { PaginatedResponse } from "~/types";
 
-import { Pagination } from "@heroui/react";
 import DataTable from "~/components/data-table";
 import FilterDrawer from "~/components/filter-drawer";
 import { http } from "~/lib/http";
-import { useLoaderData, useNavigate, useSearchParams } from "react-router";
 
 export const clientLoader = async ({ request }: { request: Request }) => {
   const { searchParams } = new URL(request.url);
@@ -16,12 +17,9 @@ export const clientLoader = async ({ request }: { request: Request }) => {
   searchParams.set("offset", String((+page - 1) * +limit));
   searchParams.set("include", "post,user");
 
-  const { data: comments } = await http.get<PaginatedResponse<Comment>>(
-    "admin/comments",
-    {
-      params: Object.fromEntries(searchParams.entries())
-    }
-  );
+  const { data: comments } = await http.get<PaginatedResponse<Comment>>("admin/comments", {
+    params: Object.fromEntries(searchParams.entries()),
+  });
 
   return { comments };
 };
@@ -35,7 +33,7 @@ export default function CommentsList() {
     { key: "content", label: "İçerik" },
     { key: "post", label: "Bağlı Olduğu Post" },
     { key: "user", label: "Kullanıcı" },
-    { key: "createdAt", label: "Tarih" }
+    { key: "createdAt", label: "Tarih" },
   ];
 
   const rows = comments.items.map((comment) => ({
@@ -43,14 +41,14 @@ export default function CommentsList() {
     createdAt: new Date(comment.createdAt).toLocaleString(),
     key: comment.id,
     post: comment.post?.title || "-",
-    user: comment.user?.username || "-"
+    user: comment.user?.username || "-",
   }));
 
   return (
-    <div className='grid gap-3'>
-      <div className='flex items-center justify-between'>
-        <h2 className='text-xl font-bold'>Yorumlar</h2>
-        <div className='flex justify-end'>
+    <div className="grid gap-3">
+      <div className="flex items-center justify-between">
+        <h2 className="text-xl font-bold">Yorumlar</h2>
+        <div className="flex justify-end">
           <FilterDrawer />
         </div>
       </div>
@@ -62,7 +60,7 @@ export default function CommentsList() {
       />
 
       <Pagination
-        className='mx-auto'
+        className="mx-auto"
         onChange={(page) => {
           setSearchParams((prev) => {
             prev.set("page", String(page));

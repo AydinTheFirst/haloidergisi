@@ -69,13 +69,9 @@ export class ReactionsService extends BaseService<Reaction> {
       where: { postId },
     });
 
-    const likes = reactions.filter(
-      (reaction) => reaction.type === ReactionType.LIKE
-    ).length;
+    const likes = reactions.filter((reaction) => reaction.type === ReactionType.LIKE).length;
 
-    const dislikes = reactions.filter(
-      (reaction) => reaction.type === ReactionType.DISLIKE
-    ).length;
+    const dislikes = reactions.filter((reaction) => reaction.type === ReactionType.DISLIKE).length;
 
     return {
       dislikes,

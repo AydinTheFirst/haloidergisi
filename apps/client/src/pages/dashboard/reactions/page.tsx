@@ -1,10 +1,11 @@
+import { Pagination } from "@heroui/react";
+import { useLoaderData, useNavigate, useSearchParams } from "react-router";
+
 import type { Reaction } from "~/models/Reaction";
 import type { PaginatedResponse } from "~/types";
 
-import { Pagination } from "@heroui/react";
 import DataTable from "~/components/data-table";
 import { http } from "~/lib/http";
-import { useLoaderData, useNavigate, useSearchParams } from "react-router";
 
 export const clientLoader = async ({ request }: { request: Request }) => {
   const { searchParams } = new URL(request.url);
@@ -15,12 +16,9 @@ export const clientLoader = async ({ request }: { request: Request }) => {
   searchParams.set("offset", String((+page - 1) * +limit));
   searchParams.set("include", "user,post");
 
-  const { data: reactions } = await http.get<PaginatedResponse<Reaction>>(
-    "/admin/reactions",
-    {
-      params: Object.fromEntries(searchParams.entries())
-    }
-  );
+  const { data: reactions } = await http.get<PaginatedResponse<Reaction>>("/admin/reactions", {
+    params: Object.fromEntries(searchParams.entries()),
+  });
 
   return { reactions };
 };
@@ -34,7 +32,7 @@ export default function ReactionsList() {
     { key: "type", label: "Tepki" },
     { key: "user", label: "Kullanıcı" },
     { key: "post", label: "Post" },
-    { key: "createdAt", label: "Tarih" }
+    { key: "createdAt", label: "Tarih" },
   ];
 
   const rows = reactions.items.map((reaction) => ({
@@ -42,13 +40,13 @@ export default function ReactionsList() {
     key: reaction.id,
     post: reaction.post?.title || "-",
     type: reaction.type,
-    user: reaction.user?.username || "-"
+    user: reaction.user?.username || "-",
   }));
 
   return (
-    <div className='grid gap-3'>
-      <div className='flex items-center justify-between'>
-        <h2 className='text-xl font-bold'>Reaksiyonlar</h2>
+    <div className="grid gap-3">
+      <div className="flex items-center justify-between">
+        <h2 className="text-xl font-bold">Reaksiyonlar</h2>
       </div>
 
       <DataTable
@@ -58,7 +56,7 @@ export default function ReactionsList() {
       />
 
       <Pagination
-        className='mx-auto'
+        className="mx-auto"
         onChange={(page) => {
           setSearchParams((prev) => {
             prev.set("page", String(page));

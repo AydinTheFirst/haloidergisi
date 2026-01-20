@@ -7,7 +7,7 @@ import {
   ModalContent,
   ModalFooter,
   ModalHeader,
-  type UseDisclosureProps
+  type UseDisclosureProps,
 } from "@heroui/react";
 
 interface ConfirmModalProps extends UseDisclosureProps {
@@ -19,25 +19,18 @@ export default function ConfirmModal(props: ConfirmModalProps) {
   const { isOpen, message, onClose, onConfirm } = props;
 
   return (
-    <Modal
-      isOpen={isOpen}
-      onClose={onClose}
-    >
+    <Modal isOpen={isOpen} onClose={onClose}>
       <ModalContent>
-        <ModalHeader className='flex flex-col gap-1'>Emin misiniz?</ModalHeader>
+        <ModalHeader className="flex flex-col gap-1">Emin misiniz?</ModalHeader>
         <ModalBody>
           <p>{message}</p>
         </ModalBody>
         <ModalFooter>
-          <Button
-            color='danger'
-            onPress={onClose}
-            variant='light'
-          >
+          <Button color="danger" onPress={onClose} variant="light">
             Vazgeç
           </Button>
           <Button
-            color='primary'
+            color="primary"
             onPress={() => {
               onConfirm();
               if (onClose) onClose();

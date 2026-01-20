@@ -12,12 +12,10 @@ export class FilesService {
       file.map(async (f) => {
         const key = await this.s3.uploadFile(f);
         return key;
-      })
+      }),
     );
 
-    return uploadedFiles.map((r) =>
-      r.status === "fulfilled" ? r.value : null
-    );
+    return uploadedFiles.map((r) => (r.status === "fulfilled" ? r.value : null));
   }
 
   async findAll() {

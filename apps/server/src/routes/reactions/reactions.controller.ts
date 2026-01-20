@@ -1,11 +1,4 @@
-import {
-  Body,
-  Controller,
-  Delete,
-  Param,
-  Post,
-  UseGuards,
-} from "@nestjs/common";
+import { Body, Controller, Delete, Param, Post, UseGuards } from "@nestjs/common";
 
 import { GetUser } from "@/common/decorators";
 import { AuthGuard } from "@/common/guards";
@@ -26,10 +19,7 @@ export class ReactionsController {
 
   @Post()
   @UseGuards(AuthGuard)
-  async upsertReaction(
-    @Body() reactionDto: ReactionDto,
-    @GetUser("id") userId: string
-  ) {
+  async upsertReaction(@Body() reactionDto: ReactionDto, @GetUser("id") userId: string) {
     return this.reactionsService.upsertReaction(userId, reactionDto);
   }
 }

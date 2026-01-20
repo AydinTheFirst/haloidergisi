@@ -1,5 +1,6 @@
-import { useMediaQuery } from "~/hooks/use-media-query";
 import { useEffect, useState } from "react";
+
+import { useMediaQuery } from "~/hooks/use-media-query";
 
 export const CollapsibleText = ({ text }: { text: string }) => {
   const isMobile = useMediaQuery("(max-width: 768px)");
@@ -15,16 +16,13 @@ export const CollapsibleText = ({ text }: { text: string }) => {
   }, [isMobile]);
 
   return (
-    <div className='w-full'>
-      <p className='break-words whitespace-pre-line text-neutral-700'>
+    <div className="w-full">
+      <p className="break-words whitespace-pre-line text-neutral-700">
         {isExpanded ? text : `${text.substring(0, previewLimit)}...`}
       </p>
 
       {shouldShowButton && (
-        <button
-          className='mt-2 text-sm font-medium hover:underline'
-          onClick={toggleText}
-        >
+        <button className="mt-2 text-sm font-medium hover:underline" onClick={toggleText}>
           {isExpanded ? "Daha Az Göster" : "Devamını Oku"}
         </button>
       )}

@@ -1,10 +1,11 @@
+import { Link, Pagination } from "@heroui/react";
+import { useLoaderData, useNavigate, useSearchParams } from "react-router";
+
 import type { Category } from "~/models/Category";
 import type { PaginatedResponse } from "~/types";
 
-import { Link, Pagination } from "@heroui/react";
 import DataTable from "~/components/data-table";
 import { http } from "~/lib/http";
-import { useLoaderData, useNavigate, useSearchParams } from "react-router";
 
 export const clientLoader = async ({ request }: { request: Request }) => {
   const { searchParams } = new URL(request.url);
@@ -16,12 +17,9 @@ export const clientLoader = async ({ request }: { request: Request }) => {
   searchParams.set("offset", String((+page - 1) * +limit));
   searchParams.set("include", "posts");
 
-  const { data: categories } = await http.get<PaginatedResponse<Category>>(
-    "/categories",
-    {
-      params: Object.fromEntries(searchParams.entries())
-    }
-  );
+  const { data: categories } = await http.get<PaginatedResponse<Category>>("/categories", {
+    params: Object.fromEntries(searchParams.entries()),
+  });
 
   return { categories };
 };
@@ -35,7 +33,7 @@ export default function CategoriesList() {
     { key: "title", label: "Kategori Adı" },
     { key: "description", label: "Açıklama" },
     { key: "postCount", label: "Gönderi Sayısı" },
-    { key: "updatedAt", label: "Güncellenme Tarihi" }
+    { key: "updatedAt", label: "Güncellenme Tarihi" },
   ];
 
   const rows = categories.items.map((item) => ({
@@ -43,17 +41,14 @@ export default function CategoriesList() {
     key: item.id,
     postCount: item.posts?.length || 0,
     title: item.title,
-    updatedAt: new Date(item.updatedAt).toLocaleString()
+    updatedAt: new Date(item.updatedAt).toLocaleString(),
   }));
 
   return (
-    <div className='grid gap-3'>
-      <div className='flex items-center justify-between'>
-        <h2 className='text-xl font-bold'>Kategoriler</h2>
-        <Link
-          color='foreground'
-          href='/dashboard/categories/create'
-        >
+    <div className="grid gap-3">
+      <div className="flex items-center justify-between">
+        <h2 className="text-xl font-bold">Kategoriler</h2>
+        <Link color="foreground" href="/dashboard/categories/create">
           Kategori Ekle
         </Link>
       </div>
@@ -65,7 +60,7 @@ export default function CategoriesList() {
       />
 
       <Pagination
-        className='mx-auto'
+        className="mx-auto"
         onChange={(page) => {
           setSearchParams((prev) => {
             prev.set("page", String(page));

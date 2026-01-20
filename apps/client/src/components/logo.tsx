@@ -4,7 +4,7 @@ export default function Logo(props: ImageProps) {
   const newProps = {
     ...props,
     alt: "Halo Logo",
-    src: "/halo-light.png"
+    src: "/halo-light.png",
   } as ImageProps;
 
   return <Image {...newProps} />;

@@ -1,14 +1,14 @@
 export enum PostStatus {
   DRAFT = "DRAFT",
-  PUBLISHED = "PUBLISHED"
+  PUBLISHED = "PUBLISHED",
 }
 
 export enum ReactionType {
   DISLIKE = "DISLIKE",
-  LIKE = "LIKE"
+  LIKE = "LIKE",
 }
 
 export enum UserRole {
   ADMIN = "ADMIN",
-  USER = "USER"
+  USER = "USER",
 }

@@ -1,6 +1,3 @@
-import type { ClientUser } from "~/models/ClientUser";
-import type { Squad } from "~/models/Squad";
-
 import {
   Button,
   Card,
@@ -10,19 +7,19 @@ import {
   Link,
   Select,
   SelectItem,
-  useDisclosure
+  useDisclosure,
 } from "@heroui/react";
-import ConfirmModal from "~/components/confirm-modal";
-import { handleError, http } from "~/lib/http";
 import React from "react";
 import { useLoaderData, useNavigate } from "react-router";
 import { toast } from "sonner";
 
-export const clientLoader = async ({
-  params
-}: {
-  params: { userId?: string };
-}) => {
+import type { ClientUser } from "~/models/ClientUser";
+import type { Squad } from "~/models/Squad";
+
+import ConfirmModal from "~/components/confirm-modal";
+import { handleError, http } from "~/lib/http";
+
+export const clientLoader = async ({ params }: { params: { userId?: string } }) => {
   const { userId } = params;
 
   const { data: squads } = await http.get<Squad[]>("/squads");
@@ -46,10 +43,7 @@ export default function ViewUser() {
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
-    const data = Object.fromEntries(formData.entries()) as Record<
-      string,
-      unknown
-    >;
+    const data = Object.fromEntries(formData.entries()) as Record<string, unknown>;
 
     setIsLoading(true);
     try {
@@ -80,75 +74,56 @@ export default function ViewUser() {
 
   return (
     <>
-      <div className='grid gap-3'>
-        <div className='flex justify-end'>
+      <div className="grid gap-3">
+        <div className="flex justify-end">
           {user && (
-            <Link
-              color='foreground'
-              href={`/users/${user.id}`}
-              isExternal
-            >
+            <Link color="foreground" href={`/users/${user.id}`} isExternal>
               Profili Görüntüle
             </Link>
           )}
         </div>
 
         <Card>
-          <CardHeader className='justify-between'>
-            <h2 className='text-xl font-bold'>
+          <CardHeader className="justify-between">
+            <h2 className="text-xl font-bold">
               {user ? user.profile?.displayName : "Yeni Kullanıcı Oluştur"}
             </h2>
             {user && (
-              <Button
-                color='danger'
-                onPress={confirmDeleteModal.onOpen}
-              >
+              <Button color="danger" onPress={confirmDeleteModal.onOpen}>
                 Sil
               </Button>
             )}
           </CardHeader>
 
           <CardBody>
-            <form
-              className='grid gap-3'
-              onSubmit={handleSubmit}
-            >
+            <form className="grid gap-3" onSubmit={handleSubmit}>
               <Input
                 defaultValue={user?.username || ""}
                 isRequired
-                label='Kullanıcı Adı'
-                name='username'
+                label="Kullanıcı Adı"
+                name="username"
               />
 
               <Input
                 defaultValue={user?.email || ""}
                 isRequired
-                label='Email'
-                name='email'
-                type='email'
+                label="Email"
+                name="email"
+                type="email"
               />
 
               <Select
                 defaultSelectedKeys={[user?.squadId || ""]}
                 items={squads}
-                label='Takım'
-                name='squadId'
+                label="Takım"
+                name="squadId"
               >
                 {(item) => <SelectItem key={item.id}>{item.name}</SelectItem>}
               </Select>
 
-              <Input
-                isRequired={!user}
-                label='Şifre'
-                name='password'
-                type='password'
-              />
+              <Input isRequired={!user} label="Şifre" name="password" type="password" />
 
-              <Button
-                color='primary'
-                isLoading={isLoading}
-                type='submit'
-              >
+              <Button color="primary" isLoading={isLoading} type="submit">
                 {user ? "Güncelle" : "Oluştur"}
               </Button>
             </form>
@@ -160,7 +135,7 @@ export default function ViewUser() {
 
       <ConfirmModal
         {...confirmDeleteModal}
-        message='Bu kullanıcıyı silmek istediğinize emin misiniz? Bu işlem geri alınamaz.'
+        message="Bu kullanıcıyı silmek istediğinize emin misiniz? Bu işlem geri alınamaz."
         onConfirm={handleDelete}
       />
     </>
@@ -173,10 +148,7 @@ function ViewProfile(user: ClientUser) {
   const handleUpdateProfile = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
-    const data = Object.fromEntries(formData.entries()) as Record<
-      string,
-      unknown
-    >;
+    const data = Object.fromEntries(formData.entries()) as Record<string, unknown>;
 
     if (isLoading) return;
 
@@ -193,38 +165,21 @@ function ViewProfile(user: ClientUser) {
   return (
     <Card>
       <CardHeader>
-        <h2 className='text-xl font-bold'>Profil Bilgileri</h2>
+        <h2 className="text-xl font-bold">Profil Bilgileri</h2>
       </CardHeader>
       <CardBody>
-        <form
-          className='grid gap-3'
-          onSubmit={handleUpdateProfile}
-        >
+        <form className="grid gap-3" onSubmit={handleUpdateProfile}>
           <Input
             defaultValue={user.profile?.displayName || ""}
-            label='Görünen İsim'
-            name='displayName'
+            label="Görünen İsim"
+            name="displayName"
           />
 
-          <Input
-            defaultValue={user.profile?.title || ""}
-            label='Unvan'
-            name='title'
-            type='text'
-          />
+          <Input defaultValue={user.profile?.title || ""} label="Unvan" name="title" type="text" />
 
-          <Input
-            defaultValue={user.profile?.bio || ""}
-            label='Biyografi'
-            name='bio'
-            type='text'
-          />
+          <Input defaultValue={user.profile?.bio || ""} label="Biyografi" name="bio" type="text" />
 
-          <Button
-            color='primary'
-            isLoading={isLoading}
-            type='submit'
-          >
+          <Button color="primary" isLoading={isLoading} type="submit">
             Profili Güncelle
           </Button>
         </form>

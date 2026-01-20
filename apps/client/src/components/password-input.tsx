@@ -10,22 +10,10 @@ export default function PasswordInput(props: InputProps) {
   };
 
   const endContent = (
-    <Button
-      isIconOnly
-      onPress={handleToggleVisibility}
-      size='sm'
-      type='button'
-      variant='light'
-    >
+    <Button isIconOnly onPress={handleToggleVisibility} size="sm" type="button" variant="light">
       {isVisible ? <LucideEye size={20} /> : <LucideEyeOff size={20} />}
     </Button>
   );
 
-  return (
-    <Input
-      {...props}
-      endContent={endContent}
-      type={isVisible ? "text" : "password"}
-    />
-  );
+  return <Input {...props} endContent={endContent} type={isVisible ? "text" : "password"} />;
 }

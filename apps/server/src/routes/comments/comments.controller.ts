@@ -1,12 +1,4 @@
-import {
-  Body,
-  Controller,
-  Delete,
-  Param,
-  Patch,
-  Post,
-  UseGuards,
-} from "@nestjs/common";
+import { Body, Controller, Delete, Param, Patch, Post, UseGuards } from "@nestjs/common";
 
 import { GetUser } from "@/common/decorators";
 import { AuthGuard } from "@/common/guards";
@@ -20,10 +12,7 @@ export class CommentsController {
 
   @Post()
   @UseGuards(AuthGuard)
-  create(
-    @Body() createCommentDto: CreateCommentDto,
-    @GetUser("id") userId: string
-  ) {
+  create(@Body() createCommentDto: CreateCommentDto, @GetUser("id") userId: string) {
     return this.commentsService.create(createCommentDto, userId);
   }
 
@@ -38,7 +27,7 @@ export class CommentsController {
   update(
     @Param("id") id: string,
     @Body() updateCommentDto: UpdateCommentDto,
-    @GetUser("id") userId: string
+    @GetUser("id") userId: string,
   ) {
     return this.commentsService.update(id, updateCommentDto, userId);
   }

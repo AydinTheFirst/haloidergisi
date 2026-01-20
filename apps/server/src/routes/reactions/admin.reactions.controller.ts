@@ -1,21 +1,8 @@
-import {
-  Body,
-  Controller,
-  Delete,
-  Get,
-  Param,
-  Post,
-  Query,
-  UseGuards,
-} from "@nestjs/common";
+import { Body, Controller, Delete, Get, Param, Post, Query, UseGuards } from "@nestjs/common";
 
 import { AdminGuard, AuthGuard } from "@/common/guards";
 
-import {
-  CreateReactionDto,
-  QueryReactionDto,
-  UpdateReactionDto,
-} from "./reaction.dto";
+import { CreateReactionDto, QueryReactionDto, UpdateReactionDto } from "./reaction.dto";
 import { ReactionsService } from "./reactions.service";
 
 @Controller("admin/reactions")
@@ -44,10 +31,7 @@ export class AdminReactionsController {
   }
 
   @Post(":id")
-  async update(
-    @Param("id") id: string,
-    @Body() updateReactionDto: UpdateReactionDto
-  ) {
+  async update(@Param("id") id: string, @Body() updateReactionDto: UpdateReactionDto) {
     return this.reactionsService.update(id, updateReactionDto);
   }
 }

@@ -1,7 +1,3 @@
-import type { Category } from "~/models/Category";
-import type { Post } from "~/models/Post";
-import type { PaginatedResponse } from "~/types";
-
 import {
   Button,
   Card,
@@ -12,13 +8,18 @@ import {
   Select,
   SelectItem,
   Textarea,
-  useDisclosure
+  useDisclosure,
 } from "@heroui/react";
-import ConfirmModal from "~/components/confirm-modal";
-import { handleError, http, uploadFiles } from "~/lib/http";
 import React from "react";
 import { useLoaderData, useNavigate } from "react-router";
 import { toast } from "sonner";
+
+import type { Category } from "~/models/Category";
+import type { Post } from "~/models/Post";
+import type { PaginatedResponse } from "~/types";
+
+import ConfirmModal from "~/components/confirm-modal";
+import { handleError, http, uploadFiles } from "~/lib/http";
 
 import type { Route } from "./+types/page";
 
@@ -29,8 +30,7 @@ export const clientLoader = async ({ params }: Route.LoaderArgs) => {
     throw new Error("Post ID is required");
   }
 
-  const { data: categories } =
-    await http.get<PaginatedResponse<Category>>("/categories");
+  const { data: categories } = await http.get<PaginatedResponse<Category>>("/categories");
 
   if (postId === "create") {
     return { categories, post: null };
@@ -52,9 +52,7 @@ export default function ViewPost() {
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
-    const data: Record<string, unknown> = Object.fromEntries(
-      formData.entries()
-    );
+    const data: Record<string, unknown> = Object.fromEntries(formData.entries());
 
     setIsLoading(true);
 
@@ -74,9 +72,7 @@ export default function ViewPost() {
       if (post) await http.patch(`/posts/${post.id}`, data);
       else await http.post("/posts", data);
 
-      toast.success(
-        post ? "Dergi başarıyla güncellendi." : "Dergi başarıyla oluşturuldu."
-      );
+      toast.success(post ? "Dergi başarıyla güncellendi." : "Dergi başarıyla oluşturuldu.");
 
       navigate("/dashboard/posts");
     } catch (error) {
@@ -100,50 +96,33 @@ export default function ViewPost() {
 
   return (
     <>
-      <div className='grid gap-3'>
-        <div className='flex justify-end'>
+      <div className="grid gap-3">
+        <div className="flex justify-end">
           {post && (
-            <Link
-              color='foreground'
-              href={`/posts/${post.id}`}
-              isExternal
-            >
+            <Link color="foreground" href={`/posts/${post.id}`} isExternal>
               Dergiyi Görüntüle
             </Link>
           )}
         </div>
         <Card>
-          <CardHeader className='justify-between'>
-            <h2 className='text-xl font-bold'>
-              {post ? post.title : "Yeni Dergi Oluştur"}
-            </h2>
+          <CardHeader className="justify-between">
+            <h2 className="text-xl font-bold">{post ? post.title : "Yeni Dergi Oluştur"}</h2>
             {post && (
-              <Button
-                color='danger'
-                onPress={confirmDeleteModal.onOpen}
-              >
+              <Button color="danger" onPress={confirmDeleteModal.onOpen}>
                 Sil
               </Button>
             )}
           </CardHeader>
           <CardBody>
-            <form
-              className='grid gap-3'
-              onSubmit={handleSubmit}
-            >
-              <Input
-                defaultValue={post?.title || ""}
-                isRequired
-                label='Başlık'
-                name='title'
-              />
+            <form className="grid gap-3" onSubmit={handleSubmit}>
+              <Input defaultValue={post?.title || ""} isRequired label="Başlık" name="title" />
 
               <Select
                 defaultSelectedKeys={[post?.categoryId || ""]}
                 isRequired
                 items={categories.items}
-                label='Kategori'
-                name='categoryId'
+                label="Kategori"
+                name="categoryId"
               >
                 {(item) => <SelectItem key={item.id}>{item.title}</SelectItem>}
               </Select>
@@ -152,10 +131,10 @@ export default function ViewPost() {
                 defaultSelectedKeys={[post?.status || "DRAFT"]}
                 items={[
                   { key: "DRAFT", label: "Taslak" },
-                  { key: "PUBLISHED", label: "Yayınlandı" }
+                  { key: "PUBLISHED", label: "Yayınlandı" },
                 ]}
-                label='Durum'
-                name='status'
+                label="Durum"
+                name="status"
               >
                 {(item) => <SelectItem key={item.key}>{item.label}</SelectItem>}
               </Select>
@@ -163,29 +142,15 @@ export default function ViewPost() {
               <Textarea
                 defaultValue={post?.description || ""}
                 isRequired
-                label='Açıklama'
-                name='description'
+                label="Açıklama"
+                name="description"
               />
 
-              <Input
-                accept='application/pdf'
-                label='Dergi Dosyası'
-                name='file'
-                type='file'
-              />
+              <Input accept="application/pdf" label="Dergi Dosyası" name="file" type="file" />
 
-              <Input
-                accept='image/*'
-                label='Kapak Resmi'
-                name='cover'
-                type='file'
-              />
+              <Input accept="image/*" label="Kapak Resmi" name="cover" type="file" />
 
-              <Button
-                color='primary'
-                isLoading={isLoading}
-                type='submit'
-              >
+              <Button color="primary" isLoading={isLoading} type="submit">
                 {post ? "Düzenle" : "Oluştur"}
               </Button>
             </form>
@@ -195,7 +160,7 @@ export default function ViewPost() {
 
       <ConfirmModal
         {...confirmDeleteModal}
-        message='Bu dergiyi silmek istediğinize emin misiniz? Bu işlem geri alınamaz.'
+        message="Bu dergiyi silmek istediğinize emin misiniz? Bu işlem geri alınamaz."
         onConfirm={handleDelete}
       />
     </>

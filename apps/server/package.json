@@ -1,19 +1,17 @@
 {
   "name": "server",
-  "version": "0.0.1",
-  "description": "",
   "private": true,
   "scripts": {
     "build": "nest build",
-    "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
-    "dev": "nest start --watch",
-    "start:debug": "nest start --debug --watch",
-    "start": "node dist/main",
-    "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
     "db:generate": "prisma generate",
     "db:push": "prisma db push",
-    "type-check": "tsc --noEmit",
-    "postinstall": "prisma generate"
+    "dev": "nest start --watch",
+    "format": "oxfmt",
+    "lint": "oxlint --fix",
+    "postinstall": "prisma generate",
+    "start": "node dist/main",
+    "start:debug": "nest start --debug --watch",
+    "check-types": "tsc --noEmit"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.842.0",
@@ -43,18 +41,15 @@
     "socket.io": "^4.8.1"
   },
   "devDependencies": {
-    "@eslint/js": "^9.30.1",
     "@nestjs/cli": "^11.0.7",
     "@swc/cli": "^0.7.7",
     "@swc/core": "^1.12.11",
     "@types/express": "^5.0.3",
     "@types/multer": "^2.0.0",
     "@types/node": "^24.0.10",
-    "eslint": "^9.30.1",
-    "eslint-plugin-perfectionist": "^4.15.0",
-    "prettier": "^3.6.2",
+    "oxfmt": "^0.26.0",
+    "oxlint": "^1.41.0",
     "prisma": "^6.11.1",
-    "typescript": "^5.8.3",
-    "typescript-eslint": "^8.36.0"
+    "typescript": "^5.8.3"
   }
 }

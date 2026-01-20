@@ -1,25 +1,14 @@
-import type { Squad } from "~/models/Squad";
-
-import {
-  Button,
-  Card,
-  CardBody,
-  CardHeader,
-  Input,
-  Link,
-  useDisclosure
-} from "@heroui/react";
-import ConfirmModal from "~/components/confirm-modal";
-import { handleError, http } from "~/lib/http";
+import { Button, Card, CardBody, CardHeader, Input, Link, useDisclosure } from "@heroui/react";
 import React from "react";
 import { useLoaderData, useNavigate } from "react-router";
 import { toast } from "sonner";
 
-export const clientLoader = async ({
-  params
-}: {
-  params: { squadId?: string };
-}) => {
+import type { Squad } from "~/models/Squad";
+
+import ConfirmModal from "~/components/confirm-modal";
+import { handleError, http } from "~/lib/http";
+
+export const clientLoader = async ({ params }: { params: { squadId?: string } }) => {
   const { squadId } = params;
 
   if (!squadId || squadId === "create") {
@@ -40,10 +29,7 @@ export default function ViewSquad() {
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
-    const data = Object.fromEntries(formData.entries()) as Record<
-      string,
-      unknown
-    >;
+    const data = Object.fromEntries(formData.entries()) as Record<string, unknown>;
 
     data.order = Number(data.order);
 
@@ -76,65 +62,44 @@ export default function ViewSquad() {
 
   return (
     <>
-      <div className='grid gap-3'>
-        <div className='flex justify-end'>
+      <div className="grid gap-3">
+        <div className="flex justify-end">
           {squad && (
-            <Link
-              color='foreground'
-              href={`/squads/${squad.id}`}
-              isExternal
-            >
+            <Link color="foreground" href={`/squads/${squad.id}`} isExternal>
               Ekip Sayfası
             </Link>
           )}
         </div>
 
         <Card>
-          <CardHeader className='justify-between'>
-            <h2 className='text-xl font-bold'>
-              {squad ? squad.name : "Yeni Ekip Oluştur"}
-            </h2>
+          <CardHeader className="justify-between">
+            <h2 className="text-xl font-bold">{squad ? squad.name : "Yeni Ekip Oluştur"}</h2>
             {squad && (
-              <Button
-                color='danger'
-                onPress={confirmDeleteModal.onOpen}
-              >
+              <Button color="danger" onPress={confirmDeleteModal.onOpen}>
                 Sil
               </Button>
             )}
           </CardHeader>
 
           <CardBody>
-            <form
-              className='grid gap-3'
-              onSubmit={handleSubmit}
-            >
-              <Input
-                defaultValue={squad?.name || ""}
-                isRequired
-                label='Ekip Adı'
-                name='name'
-              />
+            <form className="grid gap-3" onSubmit={handleSubmit}>
+              <Input defaultValue={squad?.name || ""} isRequired label="Ekip Adı" name="name" />
               <Input
                 defaultValue={squad?.description || ""}
                 isRequired
-                label='Açıklama'
-                name='description'
+                label="Açıklama"
+                name="description"
               />
 
               <Input
                 defaultValue={squad?.order.toString() || "0"}
                 isRequired
-                label='Sıra'
-                name='order'
-                type='number'
+                label="Sıra"
+                name="order"
+                type="number"
               />
 
-              <Button
-                color='primary'
-                isLoading={isLoading}
-                type='submit'
-              >
+              <Button color="primary" isLoading={isLoading} type="submit">
                 {squad ? "Güncelle" : "Oluştur"}
               </Button>
             </form>
@@ -144,7 +109,7 @@ export default function ViewSquad() {
 
       <ConfirmModal
         {...confirmDeleteModal}
-        message='Bu ekibi silmek istediğinize emin misiniz?'
+        message="Bu ekibi silmek istediğinize emin misiniz?"
         onConfirm={handleDelete}
       />
     </>

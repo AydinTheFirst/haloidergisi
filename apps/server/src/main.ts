@@ -1,7 +1,6 @@
 import { Logger } from "@nestjs/common";
 import { NestFactory } from "@nestjs/core";
 import "dotenv/config";
-
 import { AppModule } from "@/app";
 import { CustomValidationPipe } from "@/common/pipes";
 import { config, swagger } from "@/config";
@@ -15,9 +14,7 @@ async function bootstrap() {
 
   await swagger(app);
 
-  app.useGlobalPipes(
-    new CustomValidationPipe({ transform: true, whitelist: true }),
-  );
+  app.useGlobalPipes(new CustomValidationPipe({ transform: true, whitelist: true }));
 
   await app.listen(config.port);
 

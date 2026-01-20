@@ -1,11 +1,12 @@
+import { Link, Pagination } from "@heroui/react";
+import { useLoaderData, useNavigate, useSearchParams } from "react-router";
+
 import type { ClientUser } from "~/models/ClientUser";
 import type { PaginatedResponse } from "~/types";
 
-import { Link, Pagination } from "@heroui/react";
 import DataTable from "~/components/data-table";
 import FilterDrawer from "~/components/filter-drawer";
 import { http } from "~/lib/http";
-import { useLoaderData, useNavigate, useSearchParams } from "react-router";
 
 export const clientLoader = async ({ request }: { request: Request }) => {
   const { searchParams } = new URL(request.url);
@@ -17,12 +18,9 @@ export const clientLoader = async ({ request }: { request: Request }) => {
   searchParams.set("offset", String((+page - 1) * +limit));
   searchParams.set("include", "profile,squad");
 
-  const { data: users } = await http.get<PaginatedResponse<ClientUser>>(
-    "/users",
-    {
-      params: Object.fromEntries(searchParams.entries())
-    }
-  );
+  const { data: users } = await http.get<PaginatedResponse<ClientUser>>("/users", {
+    params: Object.fromEntries(searchParams.entries()),
+  });
 
   return { users };
 };
@@ -36,7 +34,7 @@ export default function UsersList() {
     { key: "displayName", label: "Ad Soyad" },
     { key: "email", label: "Email" },
     { key: "squad", label: "Takım" },
-    { key: "updatedAt", label: "Güncellenme Tarihi" }
+    { key: "updatedAt", label: "Güncellenme Tarihi" },
   ];
 
   const rows = users.items.map((user) => ({
@@ -44,18 +42,15 @@ export default function UsersList() {
     email: user.email,
     key: user.id,
     squad: user.squad ? user.squad.name : "-",
-    updatedAt: new Date(user.updatedAt).toLocaleString()
+    updatedAt: new Date(user.updatedAt).toLocaleString(),
   }));
 
   return (
-    <div className='grid gap-3'>
-      <div className='flex items-center justify-between'>
-        <h2 className='text-xl font-bold'>Kullanıcılar</h2>
-        <div className='flex items-end gap-2'>
-          <Link
-            color='foreground'
-            href='/dashboard/users/create'
-          >
+    <div className="grid gap-3">
+      <div className="flex items-center justify-between">
+        <h2 className="text-xl font-bold">Kullanıcılar</h2>
+        <div className="flex items-end gap-2">
+          <Link color="foreground" href="/dashboard/users/create">
             Kullanıcı Ekle
           </Link>
           <FilterDrawer />
@@ -69,7 +64,7 @@ export default function UsersList() {
       />
 
       <Pagination
-        className='mx-auto'
+        className="mx-auto"
         onChange={(page) => {
           setSearchParams((prev) => {
             prev.set("page", String(page));

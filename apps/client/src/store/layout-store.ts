@@ -7,5 +7,5 @@ interface LayoutStore {
 
 export const useLayoutStore = create<LayoutStore>((set) => ({
   navbarHeight: 0,
-  setNavbarHeight: (height) => set({ navbarHeight: height })
+  setNavbarHeight: (height) => set({ navbarHeight: height }),
 }));

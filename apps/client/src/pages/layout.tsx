@@ -1,11 +1,12 @@
 import { HeroUIProvider } from "@heroui/react";
-import LoadingBar from "~/components/loading-bar";
-import { AuthProvider } from "~/context/auth-context";
-import { fetcher, handleError } from "~/lib/http";
 import { ThemeProvider } from "next-themes";
 import { type MetaFunction, Outlet, useHref, useNavigate } from "react-router";
 import { Toaster } from "sonner";
 import { SWRConfig } from "swr";
+
+import LoadingBar from "~/components/loading-bar";
+import { AuthProvider } from "~/context/auth-context";
+import { fetcher, handleError } from "~/lib/http";
 
 export const meta: MetaFunction = () => {
   return [
@@ -13,8 +14,8 @@ export const meta: MetaFunction = () => {
     {
       content:
         "Bölümümüze ve öğrencilerine katkı sağlamak amacıyla, diğer fakülteler dahil olmak üzere; ortaya bir fikir- edebiyat dergisi sunmak için bir araya gelmiş bir grup öğrenciyiz.",
-      name: "description"
-    }
+      name: "description",
+    },
   ];
 };
 
@@ -23,20 +24,14 @@ export default function Layout() {
 
   return (
     <>
-      <ThemeProvider
-        attribute='class'
-        forcedTheme='light'
-      >
-        <HeroUIProvider
-          navigate={navigate}
-          useHref={useHref}
-        >
+      <ThemeProvider attribute="class" forcedTheme="light">
+        <HeroUIProvider navigate={navigate} useHref={useHref}>
           <LoadingBar />
 
           <SWRConfig
             value={{
               fetcher,
-              onError: handleError
+              onError: handleError,
             }}
           >
             <AuthProvider>

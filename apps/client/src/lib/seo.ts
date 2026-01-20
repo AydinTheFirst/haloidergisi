@@ -25,7 +25,7 @@ export function createMetaTags({
   robots = "index, follow",
   title = "HALO Dergisi - Dergi Detay",
   updatedTime,
-  url = "https://haloidergisi.com"
+  url = "https://haloidergisi.com",
 }: MetaOptions): MetaDescriptor[] {
   return [
     // Basic
@@ -41,12 +41,8 @@ export function createMetaTags({
     { content: image, property: "og:image" },
     { content: "article", property: "og:type" },
     { content: url, property: "og:url" },
-    ...(publishedTime
-      ? [{ content: publishedTime, property: "article:published_time" }]
-      : []),
-    ...(updatedTime
-      ? [{ content: updatedTime, property: "article:modified_time" }]
-      : []),
+    ...(publishedTime ? [{ content: publishedTime, property: "article:published_time" }] : []),
+    ...(updatedTime ? [{ content: updatedTime, property: "article:modified_time" }] : []),
 
     // Twitter
     { content: title, name: "twitter:title" },
@@ -55,8 +51,6 @@ export function createMetaTags({
     { content: "summary_large_image", name: "twitter:card" },
 
     // Canonical link
-    ...(canonical
-      ? [{ href: canonical, rel: "canonical", tagName: "link" }]
-      : [])
+    ...(canonical ? [{ href: canonical, rel: "canonical", tagName: "link" }] : []),
   ];
 }

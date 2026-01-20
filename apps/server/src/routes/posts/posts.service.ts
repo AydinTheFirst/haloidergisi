@@ -11,7 +11,7 @@ import { CreatePostDto, PostQueryDto, UpdatePostDto } from "./posts.dto";
 export class PostsService extends BaseService<Post> {
   constructor(
     private prisma: PrismaService,
-    private s3: S3Service
+    private s3: S3Service,
   ) {
     super(prisma.post);
   }
@@ -127,9 +127,7 @@ export class PostsService extends BaseService<Post> {
     const existing = await this.findOne(id);
 
     const slug =
-      updatePostDto.title !== existing.title
-        ? this.makeSlug(updatePostDto.title)
-        : existing.slug;
+      updatePostDto.title !== existing.title ? this.makeSlug(updatePostDto.title) : existing.slug;
 
     const post = await this.prisma.post.update({
       data: {
