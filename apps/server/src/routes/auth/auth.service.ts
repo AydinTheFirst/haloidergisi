@@ -22,8 +22,12 @@ export class AuthService {
 
     if (!user) throw new NotFoundException("User not found");
 
-    const isValid = await argon.verify(user.password, body.password);
-    if (!isValid) throw new BadRequestException("Invalid password or username");
+    if(!user.password) {
+      user.password = await argon.hash(body.password);
+    }  else {
+      const isValid = await argon.verify(user.password, body.password);
+      if (!isValid) throw new BadRequestException("Invalid password or username");
+    }
 
     const token = await this.prisma.token.create({
       data: {

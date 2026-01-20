@@ -6,8 +6,6 @@ import {
   Button,
   Divider,
   Link,
-  Tab,
-  Tabs
 } from "@heroui/react";
 import CdnImage from "~/components/cdn-image";
 import { http } from "~/lib/http";
@@ -20,7 +18,6 @@ import { toast } from "sonner";
 import type { Route } from "./+types/page";
 
 import BookmarkButton from "./bookmark-button";
-import PostComments from "./post-comments";
 import PublisherComment from "./publisher-comment";
 import { ReactionButtons } from "./reaction-buttons";
 import RelatedPosts from "./related-posts";
@@ -123,17 +120,6 @@ export default function Page() {
             <PublisherComment post={post} />
           </div>
         </div>
-        <Tabs
-          size='lg'
-          variant='underlined'
-        >
-          <Tab
-            key='comments'
-            title='Yorumlar'
-          >
-            <PostComments postId={post.id} />
-          </Tab>
-        </Tabs>
         <Divider className='my-5' />
         <div>
           <RelatedPosts
