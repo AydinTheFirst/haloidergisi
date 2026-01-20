@@ -1,20 +1,23 @@
 {
-    "prisma.pinToPrisma6": true,
+  "prisma.pinToPrisma6": true,
+  "oxc.fmt.configPath": ".oxfmtrc.json",
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "oxc.oxc-vscode",
+  "editor.codeActionsOnSave": {
+    "source.fixAll.oxc": "always"
+  },
+  "[json]": {
     "editor.defaultFormatter": "oxc.oxc-vscode",
-    "editor.codeActionsOnSave": {},
-
-    "[json]": {
-        "editor.defaultFormatter": "oxc.oxc-vscode",
-        "editor.quickSuggestions": {
-            "strings": true
-        },
-        "editor.suggest.insertMode": "replace"
+    "editor.quickSuggestions": {
+      "strings": true
     },
-    "[jsonc]": {
-        "editor.defaultFormatter": "oxc.oxc-vscode",
-        "editor.quickSuggestions": {
-            "strings": true
-        },
-        "editor.suggest.insertMode": "replace"
-    }
+    "editor.suggest.insertMode": "replace"
+  },
+  "[jsonc]": {
+    "editor.defaultFormatter": "oxc.oxc-vscode",
+    "editor.quickSuggestions": {
+      "strings": true
+    },
+    "editor.suggest.insertMode": "replace"
+  }
 }

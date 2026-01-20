@@ -55,10 +55,10 @@ export default function Hero() {
         width: "100vw",
       }}
     >
-      <img className="el el-left" ref={elLeft} src="/halo/left-hand.png" />
-      <img className="el el-right" ref={elRight} src="/halo/right-hand.png" />
-      <img className="halo" ref={haloCircle} src="/halo/halo-circle.png" />
-      <img className="halo-text" ref={haloText} src="/halo/halo-text.png" />
+      <img className="el el-left" ref={elLeft} src="/halo/left-hand.png" alt="Left Hand" />
+      <img className="el el-right" ref={elRight} src="/halo/right-hand.png" alt="Right Hand" />
+      <img className="halo" ref={haloCircle} src="/halo/halo-circle.png" alt="Halo Circle" />
+      <img className="halo-text" ref={haloText} src="/halo/halo-text.png" alt="Halo Text" />
 
       <div className="absolute inset-0 flex items-end justify-center p-3">
         <ExploreButton />

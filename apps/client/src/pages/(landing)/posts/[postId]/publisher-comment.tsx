@@ -31,7 +31,7 @@ export default function PublisherComment({ post }: PublisherCommentProps) {
         </p>
         <div className="flex gap-1">
           {post.tags.map((tag) => (
-            <Chip>{tag}</Chip>
+            <Chip key={tag}>{tag}</Chip>
           ))}
         </div>
       </div>
