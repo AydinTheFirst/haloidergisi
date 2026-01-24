@@ -1,0 +1,157 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id                   Int                   @id @default(autoincrement())
+  email                String                @unique
+  emailVerifiedAt      DateTime?
+  password             String?
+  createdAt            DateTime              @default(now())
+  updatedAt            DateTime              @updatedAt
+  tokens               Token[]
+  roles                Role[]                @default([USER])
+  profile              Profile?
+  providers            Provider[]
+  notificationSettings NotificationSettings?
+  squad                Squad?                @relation(fields: [squadId], references: [id])
+  squadId              Int?
+  postReactions        PostReaction[]
+}
+
+model Provider {
+  id         Int          @id @default(autoincrement())
+  providerId String
+  provider   ProviderType
+  user       User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId     Int
+
+  @@unique([provider, providerId])
+}
+
+model Profile {
+  id        Int     @id @default(autoincrement())
+  name      String
+  website   String?
+  avatarUrl String?
+  title     String?
+  bio       String?
+
+  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId Int  @unique
+}
+
+model Token {
+  id        Int      @id @default(autoincrement())
+  token     String   @unique
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    Int
+  createdAt DateTime @default(now())
+  expiresAt DateTime
+}
+
+model Post {
+  id      Int        @id @default(autoincrement())
+  slug    String     @unique
+  status  PostStatus @default(DRAFT)
+  title   String
+  content String?
+
+  coverImage String?
+  attachment String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  category      Category?      @relation(fields: [categoryId], references: [id])
+  categoryId    Int?
+  postReactions PostReaction[]
+}
+
+model Category {
+  id        Int      @id @default(autoincrement())
+  name      String   @unique
+  createdAt DateTime @default(now())
+
+  posts Post[]
+}
+
+model PageVisit {
+  id        Int      @id @default(autoincrement())
+  pageUrl   String   @unique
+  count     Int      @default(0)
+  visitedAt DateTime @default(now())
+}
+
+model NotificationSettings {
+  id     Int  @id @default(autoincrement())
+  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId Int  @unique
+
+  // channels
+  emailNotifications Boolean @default(true)
+
+  // types
+  newPost       Boolean @default(true)
+  securityAlert Boolean @default(true)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model File {
+  key       String   @id
+  createdAt DateTime @default(now())
+}
+
+model Squad {
+  id    Int    @id @default(autoincrement())
+  name  String @unique
+  sort  Int    @default(0)
+  users User[]
+
+  createdAt DateTime @default(now())
+}
+
+model PostReaction {
+  id        Int              @id @default(autoincrement())
+  type      PostReactionType
+  post      Post             @relation(fields: [postId], references: [id], onDelete: Cascade)
+  postId    Int
+  user      User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    Int
+  createdAt DateTime         @default(now())
+
+  @@unique([postId, userId, type])
+}
+
+enum PostReactionType {
+  LIKE
+  DISLIKE
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum PostStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
+enum ProviderType {
+  GOOGLE
+}

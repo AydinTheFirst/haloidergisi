@@ -1,0 +1,30 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "plugins": [
+    "eslint",
+    "import",
+    "jsx-a11y",
+    "node",
+    "oxc",
+    "promise",
+    "react",
+    "react-perf",
+    "typescript",
+    "unicorn"
+  ],
+  "settings": {
+    "jsx-a11y": {
+      "polymorphicPropName": null,
+      "components": {},
+      "attributes": {}
+    },
+    "react": {
+      "formComponents": [],
+      "linkComponents": [{ "name": "Link", "attribute": "to" }],
+      "version": null
+    }
+  },
+  "rules": {
+    "typescript/no-misused-spread": "off"
+  }
+}

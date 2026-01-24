@@ -1,0 +1,14 @@
+{
+  "$schema": "./node_modules/oxfmt/configuration_schema.json",
+  "experimentalSortPackageJson": {
+    "sortScripts": true
+  },
+  "experimentalSortImports": {},
+  "experimentalTailwindcss": {},
+  "printWidth": 100,
+  "tabWidth": 2,
+  "useTabs": false,
+  "semi": true,
+  "jsxSingleQuote": true,
+  "singleAttributePerLine": true
+}

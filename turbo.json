@@ -1,0 +1,22 @@
+{
+  "$schema": "https://turborepo.dev/schema.json",
+  "globalPassThroughEnv": ["*"],
+  "tasks": {
+    "start": {
+      "dependsOn": ["^start"]
+    },
+    "build": {
+      "dependsOn": ["^build"]
+    },
+    "dev": {
+      "dependsOn": ["^db:generate", "^build"],
+      "persistent": true,
+      "cache": false
+    },
+    "//#lint": {},
+    "//#format": {},
+    "//#type-check": {},
+    "db:update": { "cache": false },
+    "db:generate": { "cache": false }
+  }
+}
