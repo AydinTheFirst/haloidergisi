@@ -1,0 +1,27 @@
+.table-container {
+  @apply border-border w-full overflow-hidden rounded-lg shadow;
+}
+
+table {
+  @apply bg-surface text-surface-foreground w-full border-collapse;
+}
+
+thead {
+  @apply text-muted-foreground bg-secondary text-left text-sm uppercase;
+}
+
+th {
+  @apply px-6 py-3;
+}
+
+td {
+  @apply px-6 py-4 whitespace-nowrap;
+}
+
+tbody tr:hover {
+  @apply bg-secondary/50;
+}
+
+tbody tr:last-child td {
+  @apply border-b-0;
+}

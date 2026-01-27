@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from "@nestjs/common";
+import { BadRequestException, Injectable, NotFoundException } from "@nestjs/common";
 
 import { PrismaService } from "@/database";
 import { PrismaQueryParams } from "@/decorators";
@@ -18,19 +18,19 @@ export class ProfileService {
     return { items, meta: { total: count, skip: query.skip, take: query.take } };
   }
 
-  async findOne(id: number) {
+  async findOne(id: string) {
     const profile = await this.prisma.profile.findUnique({
       where: { id },
     });
 
     if (!profile) {
-      throw new BadRequestException("Profile not found");
+      throw new NotFoundException("Profile not found");
     }
 
     return profile;
   }
 
-  async findByUserId(userId: number) {
+  async findByUserId(userId: string) {
     const profile = await this.prisma.profile.findUnique({
       where: { userId },
     });
@@ -42,7 +42,7 @@ export class ProfileService {
     return profile;
   }
 
-  async update(id: number, data: UpdateProfileDto) {
+  async update(id: string, data: UpdateProfileDto) {
     await this.findOne(id);
 
     const updatedProfile = await this.prisma.profile.update({

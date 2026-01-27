@@ -23,7 +23,7 @@ export class TokensService {
     });
   }
 
-  async generateToken(userId: number) {
+  async generateToken(userId: string) {
     const token = await this.prismaService.token.create({
       data: {
         userId,

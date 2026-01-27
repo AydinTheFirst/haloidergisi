@@ -22,7 +22,10 @@ export const Route = createFileRoute("/_landing/posts/")({
   loaderDeps: ({ search: { page, limit } }: { search: Search }) => ({ page, limit }),
   loader: async ({ deps }) => {
     const { data: posts } = await apiClient.get<QueryRes<Post>>("/posts", {
-      params: deps,
+      params: {
+        status: "PUBLISHED",
+        ...deps,
+      },
     });
 
     return { posts };
@@ -61,7 +64,6 @@ function RouteComponent() {
         <Pagination
           currentPage={posts.meta.skip / posts.meta.take + 1}
           totalPages={Math.ceil(posts.meta.total / posts.meta.take)}
-          fullPath={Route.fullPath}
         />
       </div>
     </div>

@@ -67,7 +67,7 @@ export function DeleteAccountPanel() {
       <Form
         form={form}
         onSubmit={onSubmit}
-        className='space-y-6'
+        className='mx-auto'
       >
         <Field.Root
           name='password'

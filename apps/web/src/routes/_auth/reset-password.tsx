@@ -32,7 +32,7 @@ export const Route = createFileRoute("/_auth/reset-password")({
 
 function RouteComponent() {
   const router = useRouter();
-  const search = useSearch({ from: "/_auth/reset-password" });
+  const search = useSearch({ from: Route.id });
 
   const [isPswrdVisible, setIsPswdVisible] = React.useState(false);
   const [token, setToken] = React.useState<string | null>(null);

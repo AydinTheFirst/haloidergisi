@@ -1,5 +1,5 @@
 import { Post, PostStatus } from "@repo/db";
-import { IsEnum, IsNumber, IsOptional, IsString } from "class-validator";
+import { IsEnum, IsOptional, IsString, IsUUID } from "class-validator";
 
 export class CreatePostDto implements Partial<Post> {
   @IsString()
@@ -19,6 +19,6 @@ export class CreatePostDto implements Partial<Post> {
   attachment?: string;
 
   @IsOptional()
-  @IsNumber()
-  categoryId?: number | null | undefined;
+  @IsUUID()
+  categoryId?: string | null | undefined;
 }

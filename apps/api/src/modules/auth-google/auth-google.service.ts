@@ -99,7 +99,7 @@ export class AuthGoogleService {
     return { token };
   }
 
-  async linkAccount(userId: number, code: string) {
+  async linkAccount(userId: string, code: string) {
     const payload = await this.verifyGoogleUser(code);
 
     const existingProvider = await this.prismaService.provider.findFirst({

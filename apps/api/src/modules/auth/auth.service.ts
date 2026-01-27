@@ -14,7 +14,7 @@ import { LoginDto, RegisterDto, ResetPasswordDto } from "./auth.dto";
 @Injectable()
 export class AuthService {
   private logger = new Logger(AuthService.name);
-  private passwordResetTokens = new Map<string, number>();
+  private passwordResetTokens = new Map<string, string>();
 
   constructor(
     private readonly prismaService: PrismaService,

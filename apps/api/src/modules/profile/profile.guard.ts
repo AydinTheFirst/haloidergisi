@@ -23,15 +23,15 @@ export class ProfileGuard implements CanActivate {
     return true;
   }
 
-  extractProfileIdFromRequest(request: Request): number | null {
+  extractProfileIdFromRequest(request: Request): string | null {
     const profileIdParam = request.params["id"];
     if (profileIdParam) {
-      return Number(profileIdParam);
+      return typeof profileIdParam === "string" ? profileIdParam : profileIdParam[0];
     }
 
     const profileIdBody = request.body?.id;
     if (profileIdBody) {
-      return Number(profileIdBody);
+      return profileIdBody;
     }
 
     return null;

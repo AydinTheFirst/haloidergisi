@@ -14,25 +14,25 @@ import {
   Text,
 } from "@react-email/components";
 
-interface NewIssueEmailProps {
+interface NewPostEmailProps {
   name: string;
-  issueTitle: string;
-  issueDescription?: string;
+  postTitle: string;
+  postDescription?: string;
   coverImageUrl?: string;
-  issueUrl: string;
+  postUrl: string;
 }
 
-export default function NewIssueEmail({
+export default function NewPostEmail({
   name = "John Doe",
-  issueTitle = "Yeni Sayı",
-  issueDescription = "lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+  postTitle = "Yeni Sayı",
+  postDescription = "lorem ipsum dolor sit amet, consectetur adipiscing elit.",
   coverImageUrl = "https://plus.unsplash.com/premium_photo-1765918653566-859c2e4bb4e6?q=80&w=736&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-  issueUrl = "#",
-}: NewIssueEmailProps) {
+  postUrl = "#",
+}: NewPostEmailProps) {
   return (
     <Html>
       <Head />
-      <Preview>Yeni Sayı Yayınlandı: {issueTitle}</Preview>
+      <Preview>Yeni Sayı Yayınlandı: {postTitle}</Preview>
       <Tailwind
         config={{
           presets: [pixelBasedPreset],
@@ -53,7 +53,7 @@ export default function NewIssueEmail({
               <Section className='px-12 py-4'>
                 <Img
                   src={coverImageUrl}
-                  alt={issueTitle}
+                  alt={postTitle}
                   className='w-full rounded-lg'
                   style={{ maxWidth: "500px", margin: "0 auto", display: "block" }}
                 />
@@ -63,9 +63,9 @@ export default function NewIssueEmail({
             {/* Issue Info */}
             <Section className='px-12 py-8'>
               <div className='rounded-lg bg-blue-50 p-6'>
-                <Text className='m-0 mb-3 text-2xl font-bold text-gray-900'>{issueTitle}</Text>
-                {issueDescription && (
-                  <Text className='m-0 text-base text-gray-700'>{issueDescription}</Text>
+                <Text className='m-0 mb-3 text-2xl font-bold text-gray-900'>{postTitle}</Text>
+                {postDescription && (
+                  <Text className='m-0 text-base text-gray-700'>{postDescription}</Text>
                 )}
               </div>
             </Section>
@@ -73,7 +73,7 @@ export default function NewIssueEmail({
             {/* CTA Button */}
             <Section className='px-12 py-8 text-center'>
               <Button
-                href={issueUrl}
+                href={postUrl}
                 className='rounded-lg bg-blue-600 px-8 py-3 text-center text-base font-bold text-white'
               >
                 Şimdi Oku
@@ -84,12 +84,6 @@ export default function NewIssueEmail({
             <Section className='px-12 py-8'>
               <Text className='m-4 text-xl font-bold text-gray-800'>Bu Sayıda:</Text>
               <div className='m-4 space-y-3'>
-                <div className='flex gap-3'>
-                  <Text className='text-lg'>✍️</Text>
-                  <Text className='text-base text-gray-700'>
-                    Seçkin yazarlarımızdan yeni makaleler
-                  </Text>
-                </div>
                 <div className='flex gap-3'>
                   <Text className='text-lg'>🎨</Text>
                   <Text className='text-base text-gray-700'>Özel illüstrasyonlar ve görseller</Text>
@@ -119,7 +113,7 @@ export default function NewIssueEmail({
               <Text className='m-1 text-sm text-gray-600'>
                 Yeni sayı bildirimlerini almak istemiyorsan,{" "}
                 <Link
-                  href={`${process.env.WEB_URL || "https://haloidergisi.com"}/account/preferences`}
+                  href={"https://haloidergisi.com/account"}
                   className='text-blue-600 underline'
                 >
                   bildirim ayarlarını

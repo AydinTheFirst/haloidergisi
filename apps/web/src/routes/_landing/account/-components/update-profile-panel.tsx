@@ -1,34 +1,34 @@
-import { Button, Field, Form, Separator } from "@adn-ui/react";
+import { Button, Field, Form, Label, Separator } from "@adn-ui/react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { z } from "zod";
 
+import CdnImage from "@/components/cdn-image";
+import { FieldFileInput } from "@/components/file-input";
 import { useAuth } from "@/hooks/use-auth";
 import apiClient from "@/lib/api-client";
-
-const updateProfileSchema = z.object({
-  name: z.string().min(1, { message: "İsim gereklidir." }),
-  bio: z.string().max(500, { message: "Biyografi en fazla 500 karakter olabilir." }).optional(),
-});
-
-type UpdateProfileData = z.infer<typeof updateProfileSchema>;
+import { queryClient } from "@/lib/query-client";
+import { ProfileSchema, profileSchema } from "@/schemas/profile";
 
 export function UpdateProfilePanel() {
   const { data: user } = useAuth();
 
-  const form = useForm<UpdateProfileData>({
-    resolver: zodResolver(updateProfileSchema),
+  const form = useForm<ProfileSchema>({
+    resolver: zodResolver(profileSchema),
     defaultValues: {
       name: user?.profile?.name || "",
       bio: user?.profile?.bio || "",
+      title: user?.profile?.title || "",
+      website: user?.profile?.website || "",
+      avatarUrl: user?.profile?.avatarUrl || "",
     },
   });
 
-  const onSubmit = async (data: UpdateProfileData) => {
+  const onSubmit = async (data: ProfileSchema) => {
     try {
       await apiClient.patch(`/profile/${user!.profile!.id}`, data);
       toast.success("Profiliniz başarıyla güncellendi.");
+      await queryClient.invalidateQueries({ queryKey: ["auth"] });
     } catch (error) {
       console.error(error);
       toast.error(apiClient.resolveApiError(error).message);
@@ -51,22 +51,52 @@ export function UpdateProfilePanel() {
       <Form
         form={form}
         onSubmit={onSubmit}
+        className='mx-auto'
       >
+        <Field.Root name='avatarUrl'>
+          <div className='flex items-end justify-between'>
+            <Label>Profil Resmi</Label>
+            <CdnImage
+              src={form.watch("avatarUrl") || ""}
+              alt='Avatar'
+              className='size-20'
+            />
+          </div>
+          <FieldFileInput
+            name='avatarUrl'
+            accept='image/*'
+          />
+          <Field.HelperText>
+            Profil resminiz, hesabınızı tanımlamak için kullanılır.
+          </Field.HelperText>
+          <Field.ErrorMessage />
+        </Field.Root>
+
         <Field.Root
           name='name'
           isRequired
         >
-          <Field.Label className='text-sm font-medium'>İsim</Field.Label>
-          <Field.Input
-            name='name'
-            className='mt-2'
-          />
+          <Field.Label>İsim</Field.Label>
+          <Field.Input name='name' />
           <Field.HelperText>Görünür isminiz.</Field.HelperText>
           <Field.ErrorMessage />
         </Field.Root>
 
+        <Field.Root name='website'>
+          <Field.Label>Website</Field.Label>
+          <Field.Input
+            name='website'
+            placeholder='Örneğin: https://example.com'
+          />
+          <Field.HelperText>
+            Sosyal medya profillerinize veya kişisel web sitenize bağlantı ekleyebilirsiniz. TAM URL
+            formatında olduğundan emin olun (örneğin, https://example.com).
+          </Field.HelperText>
+          <Field.ErrorMessage />
+        </Field.Root>
+
         <Field.Root name='bio'>
-          <Field.Label className='text-sm font-medium'>Biyografi</Field.Label>
+          <Field.Label>Biyografi</Field.Label>
           <Field.TextArea
             name='bio'
             placeholder='Kendiniz hakkında birkaç kelime yazın...'

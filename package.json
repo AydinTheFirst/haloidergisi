@@ -6,16 +6,19 @@
     "packages/*"
   ],
   "scripts": {
-    "build": "turbo run build",
+    "build": "dotenvx run -- turbo run build",
     "db:update": "turbo run db:update",
     "dev": "turbo run dev",
+    "dotenvx": "dotenvx",
     "format": "oxfmt",
     "lint": "oxlint",
     "prepare": "husky",
-    "start": "turbo run start",
+    "start": "NODE_ENV=production dotenvx run -- turbo run start",
     "type-check": "oxlint --type-check"
   },
-  "dependencies": {},
+  "dependencies": {
+    "@dotenvx/dotenvx": "^1.52.0"
+  },
   "devDependencies": {
     "@types/bun": "latest",
     "husky": "^9.1.7",

@@ -1,13 +1,14 @@
 import { Button, ButtonGroup } from "@adn-ui/react";
-import { Link } from "@tanstack/react-router";
+import { useRouter } from "@tanstack/react-router";
 
 interface PaginationProps {
-  fullPath: string;
   totalPages: number;
   currentPage: number;
 }
 
-export default function Pagination({ totalPages, fullPath, currentPage }: PaginationProps) {
+export default function Pagination({ totalPages, currentPage }: PaginationProps) {
+  const router = useRouter();
+
   return (
     <div className='mt-8 flex items-center justify-center'>
       <ButtonGroup aria-label='Pagination'>
@@ -17,14 +18,10 @@ export default function Pagination({ totalPages, fullPath, currentPage }: Pagina
 
           return (
             <Button
-              render={
-                <Link
-                  to={fullPath}
-                  search={(old) => ({ ...old, page })}
-                />
-              }
               variant={isActive ? "primary" : "outline"}
               key={page}
+              // @ts-ignore
+              onClick={() => router.navigate({ search: (old) => ({ ...old, page }) })}
             >
               {page}
             </Button>

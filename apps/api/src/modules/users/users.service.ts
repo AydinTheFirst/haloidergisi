@@ -5,7 +5,7 @@ import { WelcomeEmail } from "@repo/emails";
 import argon2 from "argon2";
 
 import { PrismaService } from "@/database";
-import { AllowAnonymous, PrismaQueryParams } from "@/decorators";
+import { PrismaQueryParams } from "@/decorators";
 
 import { CreateUserDto } from "./dto/create-user.dto";
 import { UpdateUserDto } from "./dto/update-user.dto";
@@ -17,7 +17,6 @@ export class UsersService {
     private readonly mailerService: MailerService,
   ) {}
 
-  @AllowAnonymous()
   async create({ name, password, email, ...createUserDto }: CreateUserDto) {
     const existingUser = await this.prismaService.user.findUnique({
       where: { email },
@@ -55,7 +54,7 @@ export class UsersService {
     return { items, meta: { total, take: query.take, skip: query.skip } };
   }
 
-  async findOne(id: number) {
+  async findOne(id: string) {
     const user = await this.prismaService.user.findUnique({
       where: { id },
       include: { profile: true },
@@ -68,7 +67,7 @@ export class UsersService {
     return user;
   }
 
-  async update(id: number, updateUserDto: UpdateUserDto) {
+  async update(id: string, { name, crewId, ...updateUserDto }: UpdateUserDto) {
     const user = await this.findOne(id);
 
     if (updateUserDto.password) {
@@ -89,13 +88,19 @@ export class UsersService {
 
     const updatedUser = await this.prismaService.user.update({
       where: { id: user.id },
-      data: updateUserDto,
+      data: {
+        ...updateUserDto,
+        profile: {
+          update: { name },
+        },
+        crewId: crewId ? crewId : null,
+      },
     });
 
     return updatedUser;
   }
 
-  async remove(id: number) {
+  async remove(id: string) {
     const user = await this.findOne(id);
 
     await this.prismaService.user.delete({

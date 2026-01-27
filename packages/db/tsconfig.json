@@ -27,5 +27,6 @@
     "noPropertyAccessFromIndexSignature": false
   },
 
-  "include": ["src", "generated"]
+  "include": ["src", "generated"],
+  "exclude": ["dist", "node_modules"]
 }

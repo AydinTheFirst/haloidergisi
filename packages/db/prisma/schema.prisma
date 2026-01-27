@@ -14,7 +14,7 @@ datasource db {
 }
 
 model User {
-  id                   Int                   @id @default(autoincrement())
+  id                   String                @id @default(uuid())
   email                String                @unique
   emailVerifiedAt      DateTime?
   password             String?
@@ -25,44 +25,46 @@ model User {
   profile              Profile?
   providers            Provider[]
   notificationSettings NotificationSettings?
-  squad                Squad?                @relation(fields: [squadId], references: [id])
-  squadId              Int?
+  crewId               String?
+  crew                 Crew?                 @relation(fields: [crewId], references: [id])
   postReactions        PostReaction[]
 }
 
 model Provider {
-  id         Int          @id @default(autoincrement())
+  id         String       @id @default(uuid())
   providerId String
   provider   ProviderType
   user       User         @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId     Int
+  userId     String
 
   @@unique([provider, providerId])
 }
 
 model Profile {
-  id        Int     @id @default(autoincrement())
+  id        String  @id @default(uuid())
   name      String
   website   String?
   avatarUrl String?
   title     String?
   bio       String?
 
-  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId Int  @unique
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String @unique
+
+  createdAt DateTime @default(now())
 }
 
 model Token {
-  id        Int      @id @default(autoincrement())
+  id        String   @id @default(uuid())
   token     String   @unique
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId    Int
+  userId    String
   createdAt DateTime @default(now())
   expiresAt DateTime
 }
 
 model Post {
-  id      Int        @id @default(autoincrement())
+  id      String     @id @default(uuid())
   slug    String     @unique
   status  PostStatus @default(DRAFT)
   title   String
@@ -75,12 +77,13 @@ model Post {
   updatedAt DateTime @updatedAt
 
   category      Category?      @relation(fields: [categoryId], references: [id])
-  categoryId    Int?
+  categoryId    String?
   postReactions PostReaction[]
 }
 
 model Category {
-  id        Int      @id @default(autoincrement())
+  id String @id @default(uuid())
+
   name      String   @unique
   createdAt DateTime @default(now())
 
@@ -88,16 +91,18 @@ model Category {
 }
 
 model PageVisit {
-  id        Int      @id @default(autoincrement())
-  pageUrl   String   @unique
-  count     Int      @default(0)
-  visitedAt DateTime @default(now())
+  id    String   @id @default(uuid())
+  url   String
+  date  DateTime @default(now()) @db.Date
+  count Int      @default(1)
+
+  @@unique([url, date])
 }
 
 model NotificationSettings {
-  id     Int  @id @default(autoincrement())
-  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId Int  @unique
+  id     String @id @default(uuid())
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String @unique
 
   // channels
   emailNotifications Boolean @default(true)
@@ -115,8 +120,8 @@ model File {
   createdAt DateTime @default(now())
 }
 
-model Squad {
-  id    Int    @id @default(autoincrement())
+model Crew {
+  id    String @id @default(uuid())
   name  String @unique
   sort  Int    @default(0)
   users User[]
@@ -125,15 +130,24 @@ model Squad {
 }
 
 model PostReaction {
-  id        Int              @id @default(autoincrement())
+  id        String           @id @default(uuid())
   type      PostReactionType
   post      Post             @relation(fields: [postId], references: [id], onDelete: Cascade)
-  postId    Int
+  postId    String
   user      User             @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId    Int
+  userId    String
   createdAt DateTime         @default(now())
 
   @@unique([postId, userId, type])
+}
+
+model Message {
+  id        String   @id @default(uuid())
+  name      String
+  email     String
+  subject   String
+  content   String
+  createdAt DateTime @default(now())
 }
 
 enum PostReactionType {

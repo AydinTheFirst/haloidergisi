@@ -64,7 +64,7 @@ export default function WelcomeEmail({ name = "John Doe" }: WelcomeEmailProps) {
             {/* CTA Button */}
             <Section className='px-12 py-8 text-center'>
               <Button
-                href={`${process.env.WEB_URL || "https://haloidergisi.com"}/dashboard`}
+                href={process.env.WEB_URL || "https://haloidergisi.com"}
                 className='rounded-lg bg-blue-600 px-8 py-3 text-center text-base font-bold text-white'
               >
                 Başla

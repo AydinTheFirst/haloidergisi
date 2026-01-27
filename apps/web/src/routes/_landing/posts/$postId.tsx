@@ -1,25 +1,27 @@
-import { Button } from "@adn-ui/react";
+import { Button, Dialog, Field, Form } from "@adn-ui/react";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { Icon } from "@iconify/react";
-import { Category, Post } from "@repo/db";
 import { useQuery } from "@tanstack/react-query";
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 
 import { Breadcrumb, BreadcrumbItem } from "@/components/breadcrumbs";
 import CdnImage from "@/components/cdn-image";
 import Markdown from "@/components/markdown";
 import { PostCard, PostCardSkeleton } from "@/components/post-card";
+import { Turnstile } from "@/components/turnstile";
 import apiClient from "@/lib/api-client";
+import { feedbackSchema, FeedbackSchema } from "@/schemas/message";
+import { Post } from "@/types";
 import { QueryRes } from "@/types";
 import { getCdnUrl } from "@/utils/cdn";
-
-interface _Post extends Post {
-  category?: Category;
-}
 
 export const Route = createFileRoute("/_landing/posts/$postId")({
   component: RouteComponent,
   loader: async ({ params }) => {
-    const { data: post } = await apiClient.get<QueryRes<_Post>>("/posts", {
+    const { data: post } = await apiClient.get<QueryRes<Post>>("/posts", {
       params: {
         slug: params.postId,
         fields: JSON.stringify({ category: true }),
@@ -32,8 +34,6 @@ export const Route = createFileRoute("/_landing/posts/$postId")({
 
 function RouteComponent() {
   const { post } = Route.useLoaderData();
-
-  console.log(post);
 
   return (
     <div className='container py-20'>
@@ -66,19 +66,26 @@ function RouteComponent() {
                 src={post.coverImage!}
                 alt={post.title}
               />
-              <Button
-                render={
-                  <Link
-                    to={getCdnUrl(post.attachment!)}
-                    target='_blank'
-                    rel='noopener noreferrer'
-                  />
-                }
-                className='hidden w-full md:inline-flex'
-              >
-                <Icon icon='mdi:download' />
-                Dergiyi İndir
-              </Button>
+
+              <div className='flex justify-end'>
+                <FeedbackForm />
+              </div>
+
+              <div className='hidden md:block'>
+                <Button
+                  render={
+                    <Link
+                      to={getCdnUrl(post.attachment!)}
+                      target='_blank'
+                      rel='noopener noreferrer'
+                    />
+                  }
+                  className='w-full'
+                >
+                  <Icon icon='mdi:download' />
+                  Dergiyi İndir
+                </Button>
+              </div>
             </div>
           </div>
           <div className='col-span-12 md:col-span-6'>
@@ -117,7 +124,7 @@ function RouteComponent() {
                   İndir
                 </a>
               </li>
-              <li>
+              <li className='mt-4 md:hidden'>
                 <Button
                   render={
                     <Link
@@ -126,7 +133,7 @@ function RouteComponent() {
                       rel='noopener noreferrer'
                     />
                   }
-                  className='w-full md:hidden'
+                  className='w-full'
                 >
                   <Icon icon='mdi:download' />
                   Dergiyi İndir
@@ -175,5 +182,108 @@ function FeaturedPosts() {
         {!posts && [...Array(3)].map((_, index) => <PostCardSkeleton key={index} />)}
       </div>
     </div>
+  );
+}
+
+function FeedbackForm() {
+  const { post } = Route.useLoaderData();
+  const [trunstileToken, setTurnstileToken] = useState<string | null>(null);
+  const [isOpen, setIsOpen] = useState(false);
+
+  const form = useForm<FeedbackSchema>({
+    resolver: zodResolver(feedbackSchema),
+  });
+
+  const onSubmit = async (data: FeedbackSchema) => {
+    if (!trunstileToken) {
+      toast.error("Lütfen CAPTCHA doğrulamasını tamamlayın.");
+      return;
+    }
+
+    try {
+      await apiClient.post("/messages", {
+        "cf-turnstile-response": trunstileToken,
+        subject: `Dergi Geri Bildirimi: ${post.title}`,
+        name: data.name ?? "Anonim",
+        email: data.email ?? "anon@example.com",
+        content: data.content,
+      });
+      toast.success("Geri bildiriminiz için teşekkürler!");
+      form.reset();
+      setIsOpen(false);
+    } catch (error) {
+      const resolved = apiClient.resolveApiError(error);
+      toast.error(resolved.message, {
+        description: resolved.error,
+      });
+    }
+  };
+
+  return (
+    <Dialog.Root
+      open={isOpen}
+      onOpenChange={setIsOpen}
+    >
+      <Button
+        onClick={() => setIsOpen(true)}
+        variant='ghost'
+      >
+        <Icon icon='mdi:message-text-outline' />
+        Geri Bildirim Gönder
+      </Button>
+      <Dialog.Portal>
+        <Dialog.Backdrop />
+        <Dialog.Popup>
+          <Dialog.Content className='overflow-y-auto'>
+            <Dialog.Close />
+            <Dialog.Title>Geri Bildirim Gönder</Dialog.Title>
+            <Dialog.Description>
+              Dergi ile ilgili geri bildirimlerinizi bizimle paylaşın.
+            </Dialog.Description>
+            <br />
+
+            <Form
+              form={form}
+              onSubmit={onSubmit}
+            >
+              <Field.Root name='email'>
+                <Field.Label>E-posta (isteğe bağlı)</Field.Label>
+                <Field.Input type='email' />
+                <Field.HelperText>
+                  Size geri dönüş yapabilmemiz için geçerli bir e-posta adresi bırakabilirsiniz.
+                </Field.HelperText>
+                <Field.ErrorMessage />
+              </Field.Root>
+
+              <Field.Root name='name'>
+                <Field.Label>İsim (isteğe bağlı)</Field.Label>
+                <Field.Input type='text' />
+                <Field.HelperText>İsterseniz isminizi de bırakabilirsiniz.</Field.HelperText>
+                <Field.ErrorMessage />
+              </Field.Root>
+
+              <Field.Root name='content'>
+                <Field.Label>Geri Bildirim</Field.Label>
+                <Field.TextArea rows={6} />
+                <Field.HelperText>
+                  Dergi ile ilgili düşüncelerinizi, önerilerinizi veya eleştirilerinizi
+                  paylaşabilirsiniz.
+                </Field.HelperText>
+                <Field.ErrorMessage />
+              </Field.Root>
+
+              <Turnstile onVerify={setTurnstileToken} />
+
+              <Button
+                className={"w-full"}
+                type='submit'
+              >
+                Gönder
+              </Button>
+            </Form>
+          </Dialog.Content>
+        </Dialog.Popup>
+      </Dialog.Portal>
+    </Dialog.Root>
   );
 }

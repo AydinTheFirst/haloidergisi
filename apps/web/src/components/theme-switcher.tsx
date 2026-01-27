@@ -11,37 +11,27 @@ export default function ThemeSwitcher({ ...props }: ThemeSwitcherProps) {
       {themes?.map((t) => (
         <IconButton
           key={t}
-          title={getLabelForTheme(t)}
+          title={ThemeLabel[t]}
           onClick={() => setTheme(t)}
           variant={theme === t ? "secondary" : "outline"}
           {...props}
           size='sm'
         >
-          <Icon icon={getIconForTheme(t)} />
+          <Icon icon={ThemeIcon[t]} />
         </IconButton>
       ))}
     </ButtonGroup>
   );
 }
 
-function getIconForTheme(theme: string | undefined) {
-  switch (theme) {
-    case "light":
-      return "mdi:white-balance-sunny";
-    case "dark":
-      return "mdi:moon-waning-crescent";
-    default:
-      return "mdi:monitor";
-  }
-}
+const ThemeIcon: Record<string, string> = {
+  light: "mdi:white-balance-sunny",
+  dark: "mdi:moon-waning-crescent",
+  system: "mdi:monitor",
+};
 
-function getLabelForTheme(theme: string | undefined) {
-  switch (theme) {
-    case "light":
-      return "Light mode";
-    case "dark":
-      return "Dark mode";
-    default:
-      return "System mode";
-  }
-}
+const ThemeLabel: Record<string, string> = {
+  light: "Light mode",
+  dark: "Dark mode",
+  system: "System mode",
+};

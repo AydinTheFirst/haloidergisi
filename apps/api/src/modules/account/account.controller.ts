@@ -13,50 +13,50 @@ export class AccountController {
   constructor(private readonly accountService: AccountService) {}
 
   @Get("notification-settings")
-  getNotifications(@Auth("id") userId: number) {
+  getNotifications(@Auth("id") userId: string) {
     return this.accountService.getNotifications(userId);
   }
 
   @Patch("notification-settings")
   updateNotifications(
-    @Auth("id") userId: number,
+    @Auth("id") userId: string,
     @Body() updateNotificationsDto: UpdateNotificationsDto,
   ) {
     return this.accountService.updateNotifications(userId, updateNotificationsDto);
   }
 
   @Get()
-  findOne(@Auth("id") userId: number) {
+  findOne(@Auth("id") userId: string) {
     return this.accountService.findOne(userId);
   }
 
   @Get("providers")
-  getProviders(@Auth("id") userId: number) {
+  getProviders(@Auth("id") userId: string) {
     return this.accountService.getProviders(userId);
   }
 
   @Delete("providers/:providerId")
-  removeProvider(@Auth("id") userId: number, @Body("providerId") providerId: number) {
+  removeProvider(@Auth("id") userId: string, @Body("providerId") providerId: string) {
     return this.accountService.removeProvider(userId, providerId);
   }
 
   @Patch()
-  update(@Auth("id") userId: number, @Body() updateAccountDto: UpdateAccountDto) {
+  update(@Auth("id") userId: string, @Body() updateAccountDto: UpdateAccountDto) {
     return this.accountService.update(userId, updateAccountDto);
   }
 
   @Delete()
-  remove(@Auth("id") userId: number) {
+  remove(@Auth("id") userId: string) {
     return this.accountService.remove(userId);
   }
 
   @Post("request-email-verification")
-  requestEmailVerification(@Auth("id") userId: number) {
+  requestEmailVerification(@Auth("id") userId: string) {
     return this.accountService.requestEmailVerification(userId);
   }
 
   @Post("verify-email")
-  verifyEmail(@Auth("id") userId: number, @Body("token") token: string) {
+  verifyEmail(@Auth("id") userId: string, @Body("token") token: string) {
     return this.accountService.verifyEmail(userId, token);
   }
 }

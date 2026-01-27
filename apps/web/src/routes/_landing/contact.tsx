@@ -5,19 +5,11 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { z } from "zod";
 
 import { Turnstile } from "@/components/turnstile";
 import { socialLinks } from "@/constants";
 import apiClient from "@/lib/api-client";
-
-const contactFormSchema = z.object({
-  name: z.string().min(1, { message: "İsim gereklidir." }),
-  email: z.email({ message: "Geçerli bir e-posta adresi girin." }),
-  message: z.string().min(1, { message: "Mesaj gereklidir." }),
-});
-
-type ContactFormData = z.infer<typeof contactFormSchema>;
+import { messageSchema, MessageSchema } from "@/schemas/message";
 
 export const Route = createFileRoute("/_landing/contact")({
   component: RouteComponent,
@@ -26,23 +18,24 @@ export const Route = createFileRoute("/_landing/contact")({
 function RouteComponent() {
   const [token, setToken] = useState<string | null>(null);
 
-  const form = useForm<ContactFormData>({
-    resolver: zodResolver(contactFormSchema),
+  const form = useForm<MessageSchema>({
+    resolver: zodResolver(messageSchema),
     defaultValues: {
       name: "",
       email: "",
-      message: "",
+      content: "",
+      subject: "",
     },
   });
 
-  const onSubmit = async (data: ContactFormData) => {
+  const onSubmit = async (data: MessageSchema) => {
     if (!token) {
       toast.error("Lütfen CAPTCHA doğrulamasını tamamlayın.");
       return;
     }
 
     try {
-      await apiClient.post("/contact", {
+      await apiClient.post("/messages", {
         ...data,
         "cf-turnstile-response": token,
       });
@@ -78,6 +71,8 @@ function RouteComponent() {
               <Form
                 form={form}
                 onSubmit={onSubmit}
+                className='max-w-none'
+                variant='grid'
               >
                 <Field.Root
                   name='name'
@@ -87,6 +82,7 @@ function RouteComponent() {
                   <Field.Input type='text' />
                   <Field.ErrorMessage />
                 </Field.Root>
+
                 <Field.Root
                   name='email'
                   isRequired
@@ -95,23 +91,40 @@ function RouteComponent() {
                   <Field.Input type='email' />
                   <Field.ErrorMessage />
                 </Field.Root>
+
                 <Field.Root
-                  name='message'
+                  name='subject'
                   isRequired
+                  className='col-span-2'
+                >
+                  <Field.Label>Konu</Field.Label>
+                  <Field.Input type='text' />
+                  <Field.ErrorMessage />
+                </Field.Root>
+
+                <Field.Root
+                  name='content'
+                  isRequired
+                  className='col-span-2'
                 >
                   <Field.Label>Mesaj</Field.Label>
                   <Field.TextArea rows={5} />
                   <Field.ErrorMessage />
                 </Field.Root>
 
-                <Turnstile onVerify={(token) => setToken(token)} />
+                <Turnstile
+                  onVerify={(token) => setToken(token)}
+                  className='col-span-2'
+                />
 
-                <Button
-                  className='w-full'
-                  type='submit'
-                >
-                  Gönder
-                </Button>
+                <div className='col-span-2'>
+                  <Button
+                    className='w-full'
+                    type='submit'
+                  >
+                    Gönder
+                  </Button>
+                </div>
               </Form>
             </Card.Content>
           </Card.Root>

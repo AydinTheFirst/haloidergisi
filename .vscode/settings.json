@@ -1,5 +1,21 @@
 {
-  "typescript.experimental.useTsgo": true,
+  "files.watcherExclude": {
+    "**/node_modules/**": true,
+    "**/dist/**": true,
+    "**/build/**": true,
+    "**/.git/objects/**": true,
+    "**/routeTree.gen.ts": true
+  },
+
+  "search.exclude": {
+    "**/node_modules/**": true,
+    "**/dist/**": true,
+    "**/routeTree.gen.ts": true
+  },
+
+  "files.readonlyInclude": {
+    "**/routeTree.gen.ts": true
+  },
 
   "files.associations": {
     "*.css": "tailwindcss"
@@ -28,15 +44,6 @@
     "editor.suggest.insertMode": "replace"
   },
 
-  "files.watcherExclude": {
-    "**/routeTree.gen.ts": true
-  },
-  "search.exclude": {
-    "**/routeTree.gen.ts": true
-  },
-  "files.readonlyInclude": {
-    "**/routeTree.gen.ts": true
-  },
   "[prisma]": {
     "editor.defaultFormatter": "Prisma.prisma"
   },

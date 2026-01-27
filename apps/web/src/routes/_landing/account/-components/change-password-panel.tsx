@@ -58,6 +58,7 @@ export function ChangePasswordPanel() {
       <Form
         form={form}
         onSubmit={onSubmit}
+        className='mx-auto'
       >
         <Field.Root name='currentPassword'>
           <Field.Label className='text-sm font-medium'>Mevcut Parola</Field.Label>

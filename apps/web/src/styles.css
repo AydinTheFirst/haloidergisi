@@ -3,6 +3,8 @@
 
 @plugin "@tailwindcss/typography";
 
+@import "./table.css" layer(components);
+
 @custom-variant dark (.dark &);
 
 @layer base {
@@ -16,6 +18,12 @@
 }
 
 @layer components {
+  button:not(:disabled),
+  [role="button"]:not(:disabled),
+  link:not(:disabled) {
+    cursor: pointer;
+  }
+
   .breadcrumb {
     @apply flex flex-wrap items-center gap-2 text-sm;
   }
@@ -55,6 +63,14 @@
 
   .input::placeholder {
     @apply text-muted-foreground text-sm;
+  }
+
+  .link {
+    @apply cursor-pointer;
+
+    & svg {
+      @apply size-5;
+    }
   }
 }
 

@@ -1,4 +1,5 @@
 import { BadRequestException, Injectable } from "@nestjs/common";
+import { EventEmitter2 } from "@nestjs/event-emitter";
 import slugify from "slugify";
 
 import { PrismaService } from "@/database";
@@ -9,7 +10,10 @@ import { UpdatePostDto } from "./dto/update-post.dto";
 
 @Injectable()
 export class PostsService {
-  constructor(private readonly prismaService: PrismaService) {}
+  constructor(
+    private readonly prismaService: PrismaService,
+    private readonly eventEmitter: EventEmitter2,
+  ) {}
 
   makeSlug(title: string) {
     return slugify(title, { lower: true, strict: true }) + "-" + Date.now();
@@ -23,6 +27,8 @@ export class PostsService {
       },
     });
 
+    this.eventEmitter.emit("post.created", post);
+
     return post;
   }
 
@@ -35,7 +41,7 @@ export class PostsService {
     return { items, meta: { total, take: query.take, skip: query.skip } };
   }
 
-  async findOne(id: number) {
+  async findOne(id: string) {
     const post = await this.prismaService.post.findUnique({
       where: { id },
     });
@@ -47,7 +53,7 @@ export class PostsService {
     return post;
   }
 
-  async update(id: number, updatePostDto: UpdatePostDto) {
+  async update(id: string, updatePostDto: UpdatePostDto) {
     await this.findOne(id);
 
     const updatedPost = await this.prismaService.post.update({
@@ -58,7 +64,7 @@ export class PostsService {
     return updatedPost;
   }
 
-  async remove(id: number) {
+  async remove(id: string) {
     await this.findOne(id);
 
     await this.prismaService.post.delete({

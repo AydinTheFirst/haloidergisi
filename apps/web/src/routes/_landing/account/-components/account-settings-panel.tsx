@@ -68,6 +68,7 @@ export function AccountSettingsPanel() {
       <Form
         form={form}
         onSubmit={onSubmit}
+        className='mx-auto'
       >
         <Field.Root
           name='email'

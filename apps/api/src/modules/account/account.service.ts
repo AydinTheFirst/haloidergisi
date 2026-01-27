@@ -12,18 +12,18 @@ import { UsersService } from "../users/users.service";
 import { ChangePasswordDto, UpdateAccountDto, UpdateNotificationsDto } from "./account.dto";
 @Injectable()
 export class AccountService {
-  private readonly emailVerifications = new Map<string, number>();
+  private readonly emailVerifications = new Map<string, string>();
   constructor(
     private readonly prisma: PrismaService,
     private readonly usersService: UsersService,
     private readonly mailerService: MailerService,
   ) {}
 
-  findOne(userId: number) {
+  findOne(userId: string) {
     return this.usersService.findOne(userId);
   }
 
-  async getNotifications(userId: number) {
+  async getNotifications(userId: string) {
     const settings = await this.prisma.notificationSettings.findUnique({
       where: { userId },
     });
@@ -31,7 +31,7 @@ export class AccountService {
     return settings;
   }
 
-  async updateNotifications(userId: number, data: UpdateNotificationsDto) {
+  async updateNotifications(userId: string, data: UpdateNotificationsDto) {
     const settings = await this.prisma.notificationSettings.upsert({
       where: { userId },
       update: { ...data },
@@ -41,7 +41,7 @@ export class AccountService {
     return settings;
   }
 
-  async getProviders(userId: number) {
+  async getProviders(userId: string) {
     const providers = await this.prisma.provider.findMany({
       where: { userId },
     });
@@ -49,15 +49,15 @@ export class AccountService {
     return providers;
   }
 
-  update(userId: number, data: UpdateAccountDto) {
+  update(userId: string, data: UpdateAccountDto) {
     return this.usersService.update(userId, data);
   }
 
-  remove(userId: number) {
+  remove(userId: string) {
     return this.usersService.remove(userId);
   }
 
-  async changePassword(userId: number, data: ChangePasswordDto) {
+  async changePassword(userId: string, data: ChangePasswordDto) {
     const user = await this.usersService.findOne(userId);
 
     const isCurrentPasswordValid = await argon.verify(user.password!, data.currentPassword);
@@ -73,7 +73,7 @@ export class AccountService {
     return { success: true };
   }
 
-  async requestEmailVerification(userId: number) {
+  async requestEmailVerification(userId: string) {
     const alreadyRequested = Array.from(this.emailVerifications.values()).includes(userId);
     if (alreadyRequested) {
       throw new BadRequestException(
@@ -97,7 +97,7 @@ export class AccountService {
     return { success: true };
   }
 
-  async verifyEmail(userId: number, token: string) {
+  async verifyEmail(userId: string, token: string) {
     const storedUserId = this.emailVerifications.get(token);
 
     if (storedUserId !== userId) {
@@ -116,7 +116,7 @@ export class AccountService {
     this.emailVerifications.clear();
   }
 
-  async removeProvider(userId: number, providerId: number) {
+  async removeProvider(userId: string, providerId: string) {
     const provider = await this.prisma.provider.findFirst({
       where: { id: providerId, userId },
     });

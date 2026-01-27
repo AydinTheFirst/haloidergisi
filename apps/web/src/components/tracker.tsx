@@ -4,6 +4,8 @@ import { useEffect } from "react";
 
 import apiClient from "@/lib/api-client";
 
+const ignoredPaths = [/^\/assets\//, /^\/api\//, /^\/dashboard(\/.*|$)/];
+
 export default function AnalyticsTracker() {
   const { pathname } = useLocation();
 
@@ -15,6 +17,7 @@ export default function AnalyticsTracker() {
   });
 
   useEffect(() => {
+    if (ignoredPaths.some((regex) => regex.test(pathname))) return;
     mutate(pathname);
   }, [pathname, mutate]);
 

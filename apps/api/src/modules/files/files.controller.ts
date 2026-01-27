@@ -3,11 +3,11 @@ import {
   Controller,
   Delete,
   Post,
-  UploadedFiles,
+  UploadedFile,
   UseGuards,
   UseInterceptors,
 } from "@nestjs/common";
-import { FilesInterceptor } from "@nestjs/platform-express";
+import { FileInterceptor } from "@nestjs/platform-express";
 
 import { Roles } from "@/decorators";
 import { AuthGuard } from "@/guards";
@@ -21,13 +21,13 @@ export class FilesController {
   constructor(private readonly filesService: FilesService) {}
 
   @Post()
-  @UseInterceptors(FilesInterceptor("files"))
-  upload(@UploadedFiles() files: Express.Multer.File[]) {
-    return this.filesService.upload(files);
+  @UseInterceptors(FileInterceptor("file"))
+  upload(@UploadedFile() file: Express.Multer.File) {
+    return this.filesService.upload(file);
   }
 
   @Delete()
-  remove(@Body() keys: string[]) {
-    return this.filesService.remove(keys);
+  remove(@Body("key") key: string) {
+    return this.filesService.remove(key);
   }
 }

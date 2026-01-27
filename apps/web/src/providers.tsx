@@ -1,9 +1,9 @@
 import { composeProviders } from "@adn-ui/react";
 import { GoogleOAuthProvider } from "@react-oauth/google";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { QueryClientProvider } from "@tanstack/react-query";
 import { ThemeProvider } from "next-themes";
 
-const queryClient = new QueryClient();
+import { queryClient } from "@/lib/query-client";
 
 const AppProviders = composeProviders(
   ({ children }) => <ThemeProvider attribute='class'>{children}</ThemeProvider>,

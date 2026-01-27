@@ -22,7 +22,7 @@ export class AuthGoogleController {
   @Post("link")
   @UseGuards(AuthGuard)
   @Roles("USER")
-  async linkAccount(@Auth("id") userId: number, @Body("code") code: string) {
+  async linkAccount(@Auth("id") userId: string, @Body("code") code: string) {
     return this.authGoogleService.linkAccount(userId, code);
   }
 }

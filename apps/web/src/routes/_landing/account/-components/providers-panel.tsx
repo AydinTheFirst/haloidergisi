@@ -21,7 +21,7 @@ export function ProvidersPanel() {
     },
   });
 
-  const handleDisconnect = async (providerId: number) => {
+  const handleDisconnect = async (providerId: string) => {
     try {
       await apiClient.delete(`/account/providers/${providerId}`);
       toast.success("Hesap bağlantısı başarıyla kaldırıldı.");

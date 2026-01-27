@@ -23,6 +23,10 @@ export const Route = createRootRoute({
       {
         title: "HALO Dergisi",
       },
+      {
+        name: "description",
+        content: "HALO Dergisi resmi web sitesi.",
+      },
     ],
     scripts: [
       {

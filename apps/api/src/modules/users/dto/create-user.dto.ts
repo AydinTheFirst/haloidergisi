@@ -18,4 +18,8 @@ export class CreateUserDto implements Partial<User> {
   @IsOptional()
   @IsDateString()
   emailVerifiedAt?: Date | null | undefined;
+
+  @IsOptional()
+  @IsString()
+  crewId?: string | null | undefined;
 }

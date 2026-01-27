@@ -10,21 +10,16 @@ export class FilesService {
     private readonly storageService: StorageService,
   ) {}
 
-  async upload(files: Express.Multer.File[]): Promise<string[]> {
-    const keys = await this.storageService.uploadFiles(files);
-    await this.prismaService.file.createMany({
-      data: keys.map((key) => ({ key })),
-    });
-
-    return keys;
+  async upload(file: Express.Multer.File): Promise<string> {
+    const key = await this.storageService.uploadFile(file);
+    await this.prismaService.file.create({ data: { key } });
+    return key;
   }
 
-  async remove(keys: string[]): Promise<void> {
-    await this.storageService.deleteFiles(keys);
+  async remove(key: string): Promise<void> {
+    await this.storageService.deleteFile(key);
     await this.prismaService.file.deleteMany({
-      where: {
-        key: { in: keys },
-      },
+      where: { key },
     });
   }
 }

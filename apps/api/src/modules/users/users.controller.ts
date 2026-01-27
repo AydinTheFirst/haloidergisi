@@ -19,22 +19,22 @@ export class UsersController {
   }
 
   @Get()
-  findAll(@PrismaQuery() query: PrismaQueryParams) {
+  findAll(@PrismaQuery(["email", "profile.name"]) query: PrismaQueryParams) {
     return this.usersService.findAll(query);
   }
 
   @Get(":id")
   findOne(@Param("id") id: string) {
-    return this.usersService.findOne(+id);
+    return this.usersService.findOne(id);
   }
 
   @Patch(":id")
   update(@Param("id") id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.usersService.update(+id, updateUserDto);
+    return this.usersService.update(id, updateUserDto);
   }
 
   @Delete(":id")
   remove(@Param("id") id: string) {
-    return this.usersService.remove(+id);
+    return this.usersService.remove(id);
   }
 }

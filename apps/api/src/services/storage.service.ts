@@ -16,35 +16,27 @@ export class StorageService extends S3 {
     });
   }
 
-  async uploadFiles(files: Express.Multer.File[]): Promise<string[]> {
-    const uploadPromises = files.map(async (file) => {
-      const key = `${Date.now()}-${file.originalname}`;
+  async uploadFile(file: Express.Multer.File): Promise<string> {
+    const key = `${Date.now()}-${file.originalname}`;
 
-      const command = new PutObjectCommand({
-        Bucket: this.bucket,
-        Key: key,
-        Body: file.buffer,
-        ContentType: file.mimetype,
-      });
-
-      await this.send(command);
-
-      return key;
+    const command = new PutObjectCommand({
+      Bucket: this.bucket,
+      Key: key,
+      Body: file.buffer,
+      ContentType: file.mimetype,
     });
 
-    return Promise.all(uploadPromises);
+    await this.send(command);
+
+    return key;
   }
 
-  async deleteFiles(keys: string[]): Promise<void> {
-    const deletePromises = keys.map(async (key) => {
-      const command = new DeleteObjectCommand({
-        Bucket: this.bucket,
-        Key: key,
-      });
-
-      await this.send(command);
+  async deleteFile(key: string): Promise<void> {
+    const command = new DeleteObjectCommand({
+      Bucket: this.bucket,
+      Key: key,
     });
 
-    await Promise.all(deletePromises);
+    await this.send(command);
   }
 }

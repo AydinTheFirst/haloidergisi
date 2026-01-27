@@ -67,7 +67,7 @@ const tabs = [
 
 function RouteComponent() {
   const navigate = useNavigate({ from: Route.fullPath });
-  const { tab = "update-profile" } = useSearch({ from: "/_landing/account/" });
+  const { tab = "update-profile" } = useSearch({ from: Route.id });
   const { data: user } = useAuth();
 
   if (!user) return null;

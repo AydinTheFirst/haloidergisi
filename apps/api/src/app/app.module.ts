@@ -2,6 +2,7 @@ import { MailerModule } from "@nestjs-modules/mailer";
 import { MiddlewareConsumer, NestModule } from "@nestjs/common";
 import { Module } from "@nestjs/common";
 import { ConfigModule } from "@nestjs/config";
+import { EventEmitterModule } from "@nestjs/event-emitter";
 import { ScheduleModule } from "@nestjs/schedule";
 
 import { PrismaModule } from "@/database";
@@ -13,6 +14,7 @@ import { AppService } from "./app.service";
 
 @Module({
   imports: [
+    EventEmitterModule.forRoot(),
     MailerModule.forRoot({
       transport: {
         host: process.env.SMTP_HOST,
@@ -24,7 +26,7 @@ import { AppService } from "./app.service";
         },
       },
       defaults: {
-        from: `"No Reply" <${process.env.SMTP_USER}>`,
+        from: `"HALO Dergisi" <${process.env.SMTP_USER}>`,
       },
     }),
     ConfigModule.forRoot({
