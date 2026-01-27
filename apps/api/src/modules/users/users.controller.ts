@@ -19,7 +19,7 @@ export class UsersController {
   }
 
   @Get()
-  findAll(@PrismaQuery(["email", "profile.name"]) query: PrismaQueryParams) {
+  findAll(@PrismaQuery(["email", "profile.name", "crew.name"]) query: PrismaQueryParams) {
     return this.usersService.findAll(query);
   }
 

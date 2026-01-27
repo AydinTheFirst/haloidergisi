@@ -33,7 +33,10 @@ export function PostCard({ post }: PostCardProps) {
             <Card.Description className='line-clamp-2 md:line-clamp-4'>
               {post.content}
             </Card.Description>
-            <div className='mt-auto flex items-center justify-end gap-2'>
+            <div
+              hidden
+              className='mt-auto flex items-center justify-end gap-2'
+            >
               <Chip
                 size='sm'
                 variant='outline'

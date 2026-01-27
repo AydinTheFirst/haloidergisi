@@ -234,7 +234,7 @@ function FeedbackForm() {
       <Dialog.Portal>
         <Dialog.Backdrop />
         <Dialog.Popup>
-          <Dialog.Content className='overflow-y-auto'>
+          <Dialog.Content className='max-h-96 overflow-x-hidden overflow-y-auto'>
             <Dialog.Close />
             <Dialog.Title>Geri Bildirim Gönder</Dialog.Title>
             <Dialog.Description>
