@@ -7,13 +7,10 @@ import { toast } from "sonner";
 
 import { GoogleAuthButton } from "@/components/auth";
 import apiClient from "@/lib/api-client";
+import { queryClient } from "@/lib/query-client";
 
 export function ProvidersPanel() {
-  const {
-    data: providers,
-    refetch,
-    isLoading,
-  } = useQuery({
+  const { data: providers, isLoading } = useQuery({
     queryKey: ["account-providers"],
     queryFn: async () => {
       const { data } = await apiClient.get<Provider[]>("/account/providers");
@@ -25,7 +22,7 @@ export function ProvidersPanel() {
     try {
       await apiClient.delete(`/account/providers/${providerId}`);
       toast.success("Hesap bağlantısı başarıyla kaldırıldı.");
-      await refetch();
+      await queryClient.invalidateQueries({ queryKey: ["account-providers"] });
     } catch (error) {
       console.error(error);
       toast.error(apiClient.resolveApiError(error).message);
