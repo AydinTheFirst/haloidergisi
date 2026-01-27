@@ -6,7 +6,15 @@ import { ThemeProvider } from "next-themes";
 import { queryClient } from "@/lib/query-client";
 
 const AppProviders = composeProviders(
-  ({ children }) => <ThemeProvider attribute='class'>{children}</ThemeProvider>,
+  ({ children }) => (
+    <ThemeProvider
+      attribute='class'
+      defaultTheme='light'
+      enableSystem
+    >
+      {children}
+    </ThemeProvider>
+  ),
   ({ children }) => <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>,
   ({ children }) => (
     <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
