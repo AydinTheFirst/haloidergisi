@@ -1,3 +1,5 @@
+export type * from "@repo/db";
+
 import {
   User as BaseUser,
   Profile as BaseProfile,

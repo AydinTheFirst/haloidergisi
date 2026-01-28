@@ -18,7 +18,8 @@ export const PrismaQuery = createParamDecorator(
       string
     >;
 
-    const take = limit ? parseInt(limit, 10) : 10;
+    const limitVal = parseInt(limit || "10", 10);
+    const take = limitVal === -1 ? undefined : limitVal;
     const skip = page && take ? (parseInt(page, 10) - 1) * take : 0;
 
     // createdAt:desc
