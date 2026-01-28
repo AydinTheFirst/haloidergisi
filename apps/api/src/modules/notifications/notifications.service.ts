@@ -4,6 +4,7 @@ import { OnEvent } from "@nestjs/event-emitter";
 import { render } from "@react-email/render";
 import { type Post } from "@repo/db";
 import { NewPostEmail } from "@repo/emails";
+import { WelcomeEmail } from "@repo/emails";
 
 import { PrismaService } from "@/database";
 import { getCdnUrl } from "@/utils/cdn";
@@ -16,6 +17,15 @@ export class NotificationsService {
     private prisma: PrismaService,
     private mailerService: MailerService,
   ) {}
+
+  @OnEvent("user.created")
+  async handleUserCreatedEvent(user: { id: string; email: string; profile?: { name?: string } }) {
+    await this.mailerService.sendMail({
+      to: user.email,
+      subject: "HALO Dergisine Hoşgeldiniz!",
+      html: await render(WelcomeEmail({ name: user.profile?.name || "HALO Okuyucusu" })),
+    });
+  }
 
   @OnEvent("post.created")
   async handlePostCreatedEvent(post: Post) {

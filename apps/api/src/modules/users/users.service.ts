@@ -1,7 +1,5 @@
-import { MailerService } from "@nestjs-modules/mailer";
 import { BadRequestException, Injectable, NotFoundException } from "@nestjs/common";
-import { render } from "@react-email/render";
-import { WelcomeEmail } from "@repo/emails";
+import { EventEmitter2 } from "@nestjs/event-emitter";
 import argon2 from "argon2";
 
 import { PrismaService } from "@/database";
@@ -14,7 +12,7 @@ import { UpdateUserDto } from "./dto/update-user.dto";
 export class UsersService {
   constructor(
     private readonly prismaService: PrismaService,
-    private readonly mailerService: MailerService,
+    private readonly eventEmitter: EventEmitter2,
   ) {}
 
   async create({ name, password, email, ...createUserDto }: CreateUserDto) {
@@ -36,11 +34,7 @@ export class UsersService {
       },
     });
 
-    await this.mailerService.sendMail({
-      to: email,
-      subject: "HALO Dergisine Hoşgeldiniz!",
-      html: await render(WelcomeEmail({ name })),
-    });
+    this.eventEmitter.emit("user.created", user);
 
     return user;
   }
