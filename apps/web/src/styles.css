@@ -20,7 +20,8 @@
 @layer components {
   button:not(:disabled),
   [role="button"]:not(:disabled),
-  link:not(:disabled) {
+  link:not(:disabled),
+  [role="link"]:not(:disabled) {
     cursor: pointer;
   }
 

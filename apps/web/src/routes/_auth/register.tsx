@@ -16,6 +16,7 @@ const registerSchema = z.object({
   name: z.string().min(1, { error: "İsim gereklidir." }),
   email: z.email({ error: "Geçerli bir e-posta adresi girin." }),
   password: z.string().min(6, { error: "Şifre en az 6 karakter olmalıdır." }),
+  acceptTerms: z.literal(true, { error: "Kullanım Şartları'nı kabul etmelisiniz." }),
 });
 
 type RegisterFormData = z.infer<typeof registerSchema>;
@@ -122,6 +123,20 @@ function RouteComponent() {
                 </Field.Label>
                 <Field.Input type='password' />
                 <Field.HelperText>Şifreniz en az 6 karakter olmalıdır.</Field.HelperText>
+                <Field.ErrorMessage />
+              </Field.Root>
+
+              <Field.Root name='acceptTerms'>
+                <Field.Label className='flex items-center gap-2'>
+                  <Field.Checkbox />
+                  <Link
+                    to='/terms'
+                    className='link underline'
+                  >
+                    Kullanım Şartları
+                  </Link>
+                  'nı kabul ediyorum.
+                </Field.Label>
                 <Field.ErrorMessage />
               </Field.Root>
 

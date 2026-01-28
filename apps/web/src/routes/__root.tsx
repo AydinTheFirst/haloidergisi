@@ -9,8 +9,12 @@ import AnalyticsTracker from "@/components/tracker";
 import AppProviders from "@/providers";
 
 import appCss from "../styles.css?url";
+import { ErrorComponent } from "./-error";
+import { NotFound } from "./-not-found";
 
 export const Route = createRootRoute({
+  notFoundComponent: NotFound,
+  errorComponent: ErrorComponent,
   head: () => ({
     meta: [
       {

@@ -1,26 +1,16 @@
 {
   "files.watcherExclude": {
-    "**/node_modules/**": true,
-    "**/dist/**": true,
-    "**/build/**": true,
-    "**/.git/objects/**": true,
     "**/routeTree.gen.ts": true
   },
-
   "search.exclude": {
-    "**/node_modules/**": true,
-    "**/dist/**": true,
     "**/routeTree.gen.ts": true
   },
-
   "files.readonlyInclude": {
     "**/routeTree.gen.ts": true
   },
-
   "files.associations": {
     "*.css": "tailwindcss"
   },
-
   "oxc.typeAware": true,
   "oxc.configPath": ".oxlintrc.json",
   "editor.defaultFormatter": "oxc.oxc-vscode",
@@ -28,7 +18,6 @@
   "editor.codeActionsOnSave": {
     "source.fixAll.oxc": "always"
   },
-
   "[json]": {
     "editor.defaultFormatter": "oxc.oxc-vscode",
     "editor.quickSuggestions": {
@@ -37,13 +26,12 @@
     "editor.suggest.insertMode": "replace"
   },
   "[jsonc]": {
-    "editor.defaultFormatter": "oxc.oxc-vscode",
+    "editor.defaultFormatter": "vscode.json-language-features",
     "editor.quickSuggestions": {
       "strings": true
     },
     "editor.suggest.insertMode": "replace"
   },
-
   "[prisma]": {
     "editor.defaultFormatter": "Prisma.prisma"
   },

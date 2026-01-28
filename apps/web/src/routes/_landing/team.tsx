@@ -54,22 +54,24 @@ function RouteComponent() {
 function UserCard(user: User) {
   return (
     <Dialog.Root>
-      <Dialog.Trigger>
-        <motion.div whileHover={{ scale: 1.05 }}>
-          <button className='bg-surface text-surface-foreground w-full rounded p-4'>
-            <div className='flex items-center gap-2'>
-              <Avatar.Root>
-                <Avatar.Image src={getCdnUrl(user.profile?.avatarUrl as string)} />
-                <Avatar.Fallback>{user.profile?.name?.slice(0, 2).toUpperCase()}</Avatar.Fallback>
-              </Avatar.Root>
-              <div className='text-left'>
-                <div className='text-lg font-medium'>{user.profile?.name}</div>
-                <div className='text-muted-foreground text-sm'>{user.profile?.title}</div>
+      <Dialog.Trigger
+        render={
+          <motion.div whileHover={{ scale: 1.05 }}>
+            <button className='bg-surface text-surface-foreground w-full rounded px-3 py-2'>
+              <div className='flex items-center gap-2'>
+                <Avatar.Root>
+                  <Avatar.Image src={getCdnUrl(user.profile?.avatarUrl as string)} />
+                  <Avatar.Fallback>{user.profile?.name?.slice(0, 2).toUpperCase()}</Avatar.Fallback>
+                </Avatar.Root>
+                <div className='text-left'>
+                  <div className='text-lg font-medium'>{user.profile?.name}</div>
+                  <div className='text-muted-foreground text-sm'>{user.profile?.title}</div>
+                </div>
               </div>
-            </div>
-          </button>
-        </motion.div>
-      </Dialog.Trigger>
+            </button>
+          </motion.div>
+        }
+      />
       <Dialog.Portal>
         <Dialog.Backdrop />
         <Dialog.Popup>

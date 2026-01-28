@@ -5,6 +5,7 @@ import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
+import CdnImage from "@/components/cdn-image";
 import { FieldFileInput } from "@/components/file-input";
 import apiClient from "@/lib/api-client";
 import { postSchema, PostSchema } from "@/schemas/post";
@@ -20,6 +21,12 @@ export const Route = createFileRoute("/dashboard/posts/$postId")({
   },
 });
 
+const PostStatus = {
+  DRAFT: "Taslak",
+  PUBLISHED: "Yayınlandı",
+  ARCHIVED: "Arşivlendi",
+};
+
 function RouteComponent() {
   const { post, categories } = Route.useLoaderData();
   const navigate = useNavigate({ from: Route.id });
@@ -32,6 +39,7 @@ function RouteComponent() {
       attachment: post.attachment ?? "",
       coverImage: post.coverImage ?? "",
       status: post.status,
+      categoryId: post.categoryId ?? "",
     },
   });
 
@@ -75,8 +83,24 @@ function RouteComponent() {
               <Field.ErrorMessage />
             </Field.Root>
 
+            <Field.Root name='status'>
+              <Field.Label>Durum</Field.Label>
+              <Field.Select>
+                {Object.entries(PostStatus).map(([value, label]) => (
+                  <option
+                    key={value}
+                    value={value}
+                  >
+                    {label}
+                  </option>
+                ))}
+              </Field.Select>
+              <Field.HelperText>Post durumu seçiniz.</Field.HelperText>
+              <Field.ErrorMessage />
+            </Field.Root>
+
             <Field.Root name='categoryId'>
-              <Field.Label>Kategori ID</Field.Label>
+              <Field.Label>Kategori</Field.Label>
               <Field.Select>
                 <option value=''>Kategori seçiniz</option>
                 {categories.items.map((category) => (
@@ -88,21 +112,18 @@ function RouteComponent() {
                   </option>
                 ))}
               </Field.Select>
-              <Field.HelperText>Geçerli bir kategori ID'si giriniz.</Field.HelperText>
+              <Field.HelperText>Post için bir kategori seçin.</Field.HelperText>
               <Field.ErrorMessage />
             </Field.Root>
 
             <Field.Root name='coverImage'>
-              <div className='flex justify-between'>
+              <div className='flex items-end justify-between'>
                 <Field.Label>Kapak Resmi</Field.Label>
-
-                <Link
-                  to={getCdnUrl(post.coverImage as string)}
-                  target='_blank'
-                  className='underline'
-                >
-                  Resim Önizleme
-                </Link>
+                <CdnImage
+                  src={getCdnUrl(form.watch("coverImage") as string)}
+                  alt='Cover Image'
+                  className='size-20'
+                />
               </div>
               <FieldFileInput accept='image/*' />
               <Field.HelperText>Post için bir kapak resmi yükleyin.</Field.HelperText>
@@ -112,14 +133,7 @@ function RouteComponent() {
             <Field.Root name='attachment'>
               <div className='flex justify-between'>
                 <Field.Label>Ek Dosya</Field.Label>
-
-                <Link
-                  to={getCdnUrl(post.attachment as string)}
-                  target='_blank'
-                  className='underline'
-                >
-                  PDF Önizleme
-                </Link>
+                <Link to={getCdnUrl(form.watch("attachment") as string)}>Dosyayı Görüntüle</Link>
               </div>
               <FieldFileInput accept='application/pdf' />
               <Field.HelperText>Derginin PDF dosyasını yükleyin .</Field.HelperText>

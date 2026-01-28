@@ -1,14 +1,16 @@
 import { Button, Card, Field, Form } from "@adn-ui/react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Category } from "@repo/db";
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
+import CdnImage from "@/components/cdn-image";
 import { FieldFileInput } from "@/components/file-input";
 import apiClient from "@/lib/api-client";
 import { postSchema, PostSchema } from "@/schemas/post";
 import { List } from "@/types";
+import { getCdnUrl } from "@/utils/cdn";
 
 export const Route = createFileRoute("/dashboard/posts/new")({
   component: RouteComponent,
@@ -108,14 +110,24 @@ function RouteComponent() {
             </Field.Root>
 
             <Field.Root name='coverImage'>
-              <Field.Label>Kapak Resmi</Field.Label>
+              <div className='flex justify-between'>
+                <Field.Label>Kapak Resmi</Field.Label>
+                <CdnImage
+                  src={getCdnUrl(form.watch("coverImage") as string)}
+                  alt='Cover Image'
+                  className='size-20'
+                />
+              </div>
               <FieldFileInput accept='image/*' />
               <Field.HelperText>Post için bir kapak resmi yükleyin.</Field.HelperText>
               <Field.ErrorMessage />
             </Field.Root>
 
             <Field.Root name='attachment'>
-              <Field.Label>Ek Dosya</Field.Label>
+              <div className='flex justify-between'>
+                <Field.Label>Ek Dosya</Field.Label>
+                <Link to={getCdnUrl(form.watch("attachment") as string)}>Dosyayı Görüntüle</Link>
+              </div>
               <FieldFileInput accept='application/pdf' />
               <Field.HelperText>Derginin PDF dosyasını yükleyin .</Field.HelperText>
               <Field.ErrorMessage />
