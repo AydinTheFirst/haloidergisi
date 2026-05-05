@@ -1,4 +1,3 @@
-import { Separator, Field, Button, Form } from "@adn-ui/react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { createFileRoute } from "@tanstack/react-router";
 import React from "react";
@@ -6,11 +5,22 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import z from "zod";
 
+import { Button } from "@/components/ui/button";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Separator } from "@/components/ui/separator";
 import { useAuth } from "@/hooks/use-auth";
 import apiClient from "@/lib/api-client";
 
 const updateAccountSchema = z.object({
-  email: z.email({ message: "Geçerli bir e-posta adresi girin." }),
+  email: z.string().email({ message: "Geçerli bir e-posta adresi girin." }),
 });
 
 type UpdateAccountData = z.infer<typeof updateAccountSchema>;
@@ -44,7 +54,8 @@ function RouteComponent() {
     }
   };
 
-  const handleRequestVerification = async () => {
+  const handleRequestVerification = async (e: React.MouseEvent) => {
+    e.preventDefault();
     setIsVerificationLoading(true);
     try {
       await apiClient.post("/account/request-email-verification");
@@ -70,38 +81,46 @@ function RouteComponent() {
 
       <Separator />
 
-      <Form
-        form={form}
-        onSubmit={onSubmit}
-        className='mx-auto'
-      >
-        <Field.Root
-          name='email'
-          isRequired
+      <Form {...form}>
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          className='space-y-4'
         >
-          <Field.Label className='text-sm font-medium'>E-posta Adresi</Field.Label>
-          <Field.Input
+          <FormField
+            control={form.control}
             name='email'
-            className='pr-10'
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>E-posta Adresi</FormLabel>
+                <FormControl>
+                  <Input
+                    {...field}
+                    className='pr-10'
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
           />
-        </Field.Root>
 
-        {user.emailVerifiedAt ? (
-          <div className='text-sm text-green-600'>E-posta adresiniz doğrulandı.</div>
-        ) : (
-          <Button
-            variant='outline'
-            size='sm'
-            onClick={handleRequestVerification}
-            disabled={isVerificationLoading}
-          >
-            Doğrulama E-postası Gönder
-          </Button>
-        )}
+          {user.emailVerifiedAt ? (
+            <div className='text-sm font-medium text-green-600'>E-posta adresiniz doğrulandı.</div>
+          ) : (
+            <Button
+              variant='outline'
+              size='sm'
+              type='button'
+              onClick={handleRequestVerification}
+              disabled={isVerificationLoading}
+            >
+              Doğrulama E-postası Gönder
+            </Button>
+          )}
 
-        <div className='flex justify-end pt-4'>
-          <Button type='submit'>Değişiklikleri Kaydet</Button>
-        </div>
+          <div className='flex justify-end pt-4'>
+            <Button type='submit'>Değişiklikleri Kaydet</Button>
+          </div>
+        </form>
       </Form>
     </div>
   );

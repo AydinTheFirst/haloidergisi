@@ -1,4 +1,3 @@
-import { Button, Dialog, Field, Form } from "@adn-ui/react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Icon } from "@iconify/react";
 import { useQuery } from "@tanstack/react-query";
@@ -12,6 +11,26 @@ import CdnImage from "@/components/cdn-image";
 import Markdown from "@/components/markdown";
 import { PostCard, PostCardSkeleton } from "@/components/post-card";
 import { Turnstile } from "@/components/turnstile";
+import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import apiClient from "@/lib/api-client";
 import { feedbackSchema, FeedbackSchema } from "@/schemas/message";
 import { Post } from "@/types";
@@ -73,17 +92,17 @@ function RouteComponent() {
 
               <div className='hidden md:block'>
                 <Button
-                  render={
-                    <Link
-                      to={getCdnUrl(post.attachment!)}
-                      target='_blank'
-                      rel='noopener noreferrer'
-                    />
-                  }
+                  asChild
                   className='w-full'
                 >
-                  <Icon icon='mdi:download' />
-                  Dergiyi İndir
+                  <Link
+                    to={getCdnUrl(post.attachment!)}
+                    target='_blank'
+                    rel='noopener noreferrer'
+                  >
+                    <Icon icon='mdi:download' />
+                    Dergiyi İndir
+                  </Link>
                 </Button>
               </div>
             </div>
@@ -126,17 +145,17 @@ function RouteComponent() {
               </li>
               <li className='mt-4 md:hidden'>
                 <Button
-                  render={
-                    <Link
-                      to={getCdnUrl(post.attachment!)}
-                      target='_blank'
-                      rel='noopener noreferrer'
-                    />
-                  }
+                  asChild
                   className='w-full'
                 >
-                  <Icon icon='mdi:download' />
-                  Dergiyi İndir
+                  <Link
+                    to={getCdnUrl(post.attachment!)}
+                    target='_blank'
+                    rel='noopener noreferrer'
+                  >
+                    <Icon icon='mdi:download' />
+                    Dergiyi İndir
+                  </Link>
                 </Button>
               </li>
             </ul>
@@ -220,70 +239,96 @@ function FeedbackForm() {
   };
 
   return (
-    <Dialog.Root
+    <Dialog
       open={isOpen}
       onOpenChange={setIsOpen}
     >
-      <Button
-        onClick={() => setIsOpen(true)}
-        variant='ghost'
-      >
-        <Icon icon='mdi:message-text-outline' />
-        Geri Bildirim Gönder
-      </Button>
-      <Dialog.Portal>
-        <Dialog.Backdrop />
-        <Dialog.Popup>
-          <Dialog.Content className='max-h-96 overflow-x-hidden overflow-y-auto'>
-            <Dialog.Close />
-            <Dialog.Title>Geri Bildirim Gönder</Dialog.Title>
-            <Dialog.Description>
-              Dergi ile ilgili geri bildirimlerinizi bizimle paylaşın.
-            </Dialog.Description>
-            <br />
+      <DialogTrigger asChild>
+        <Button variant='ghost'>
+          <Icon icon='mdi:message-text-outline' />
+          Geri Bildirim Gönder
+        </Button>
+      </DialogTrigger>
+      <DialogContent className='max-h-[90vh] overflow-y-auto'>
+        <DialogHeader>
+          <DialogTitle>Geri Bildirim Gönder</DialogTitle>
+          <DialogDescription>
+            Dergi ile ilgili geri bildirimlerinizi bizimle paylaşın.
+          </DialogDescription>
+        </DialogHeader>
 
-            <Form
-              form={form}
-              onSubmit={onSubmit}
+        <Form {...form}>
+          <form
+            onSubmit={form.handleSubmit(onSubmit)}
+            className='space-y-4'
+          >
+            <FormField
+              control={form.control}
+              name='email'
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>E-posta (isteğe bağlı)</FormLabel>
+                  <FormControl>
+                    <Input
+                      type='email'
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormDescription>
+                    Size geri dönüş yapabilmemiz için geçerli bir e-posta adresi bırakabilirsiniz.
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name='name'
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>İsim (isteğe bağlı)</FormLabel>
+                  <FormControl>
+                    <Input {...field} />
+                  </FormControl>
+                  <FormDescription>İsterseniz isminizi de bırakabilirsiniz.</FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name='content'
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Geri Bildirim</FormLabel>
+                  <FormControl>
+                    <Textarea
+                      rows={6}
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormDescription>
+                    Dergi ile ilgili düşüncelerinizi, önerilerinizi veya eleştirilerinizi
+                    paylaşabilirsiniz.
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <Turnstile onVerify={setTurnstileToken} />
+
+            <Button
+              className={"w-full"}
+              type='submit'
             >
-              <Field.Root name='email'>
-                <Field.Label>E-posta (isteğe bağlı)</Field.Label>
-                <Field.Input type='email' />
-                <Field.HelperText>
-                  Size geri dönüş yapabilmemiz için geçerli bir e-posta adresi bırakabilirsiniz.
-                </Field.HelperText>
-                <Field.ErrorMessage />
-              </Field.Root>
-
-              <Field.Root name='name'>
-                <Field.Label>İsim (isteğe bağlı)</Field.Label>
-                <Field.Input type='text' />
-                <Field.HelperText>İsterseniz isminizi de bırakabilirsiniz.</Field.HelperText>
-                <Field.ErrorMessage />
-              </Field.Root>
-
-              <Field.Root name='content'>
-                <Field.Label>Geri Bildirim</Field.Label>
-                <Field.TextArea rows={6} />
-                <Field.HelperText>
-                  Dergi ile ilgili düşüncelerinizi, önerilerinizi veya eleştirilerinizi
-                  paylaşabilirsiniz.
-                </Field.HelperText>
-                <Field.ErrorMessage />
-              </Field.Root>
-
-              <Turnstile onVerify={setTurnstileToken} />
-
-              <Button
-                className={"w-full"}
-                type='submit'
-              >
-                Gönder
-              </Button>
-            </Form>
-          </Dialog.Content>
-        </Dialog.Popup>
-      </Dialog.Portal>
-    </Dialog.Root>
+              Gönder
+            </Button>
+          </form>
+        </Form>
+      </DialogContent>
+    </Dialog>
   );
 }

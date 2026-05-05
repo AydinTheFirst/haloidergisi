@@ -1,5 +1,4 @@
-import { cn } from "@adn-ui/react";
-
+import { cn } from "@/lib/utils";
 import { getCdnUrl } from "@/utils/cdn";
 
 interface CdnImageProps extends React.ComponentProps<"img"> {

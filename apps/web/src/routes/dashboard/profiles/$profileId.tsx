@@ -1,4 +1,3 @@
-import { Button, Card, Field, Form } from "@adn-ui/react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Profile } from "@repo/db";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
@@ -6,6 +5,10 @@ import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Field } from "@/components/ui/field";
+import { Form } from "@/components/ui/form";
 import apiClient from "@/lib/api-client";
 import { profileSchema, ProfileSchema } from "@/schemas/profile";
 
@@ -61,55 +64,54 @@ function RouteComponent() {
 
   return (
     <section>
-      <Card.Root className='mx-auto'>
-        <Card.Header>
-          <Card.Title>Profili Düzenle</Card.Title>
-        </Card.Header>
-        <Card.Content>
-          <Form
-            form={form}
-            onSubmit={onSubmit}
-          >
-            <Field.Root
-              name='name'
-              isRequired
+      <Card className='mx-auto'>
+        <CardHeader>
+          <CardTitle>Profili Düzenle</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <Form {...form}>
+            <form
+              onSubmit={form.handleSubmit(onSubmit)}
+              className='space-y-4'
             >
-              <Field.Label>Ad</Field.Label>
-              <Field.Input type='text' />
-              <Field.HelperText>Profil adı 1-100 karakter olmalıdır.</Field.HelperText>
-              <Field.ErrorMessage />
-            </Field.Root>
+              <Field.Root name='name'>
+                <Field.Label>Ad</Field.Label>
+                <Field.Input type='text' />
+                <Field.HelperText>Profil adı 1-100 karakter olmalıdır.</Field.HelperText>
+                <Field.ErrorMessage />
+              </Field.Root>
 
-            <Field.Root name='title'>
-              <Field.Label>Unvan</Field.Label>
-              <Field.Input type='text' />
-              <Field.HelperText>Profil unvanı 1-100 karakter olmalıdır.</Field.HelperText>
-              <Field.ErrorMessage />
-            </Field.Root>
+              <Field.Root name='title'>
+                <Field.Label>Unvan</Field.Label>
+                <Field.Input type='text' />
+                <Field.HelperText>Profil unvanı 1-100 karakter olmalıdır.</Field.HelperText>
+                <Field.ErrorMessage />
+              </Field.Root>
 
-            <Field.Root name='website'>
-              <Field.Label>Web Sitesi</Field.Label>
-              <Field.Input type='url' />
-              <Field.HelperText>Geçerli bir web sitesi URL'si giriniz.</Field.HelperText>
-              <Field.ErrorMessage />
-            </Field.Root>
+              <Field.Root name='website'>
+                <Field.Label>Web Sitesi</Field.Label>
+                <Field.Input type='url' />
+                <Field.HelperText>Geçerli bir web sitesi URL'si giriniz.</Field.HelperText>
+                <Field.ErrorMessage />
+              </Field.Root>
 
-            <Field.Root name='bio'>
-              <Field.Label>Biyografi</Field.Label>
-              <Field.TextArea rows={5} />
-              <Field.HelperText>Maksimum 500 karakter.</Field.HelperText>
-              <Field.ErrorMessage />
-            </Field.Root>
+              <Field.Root name='bio'>
+                <Field.Label>Biyografi</Field.Label>
+                <Field.TextArea rows={5} />
+                <Field.HelperText>Maksimum 500 karakter.</Field.HelperText>
+                <Field.ErrorMessage />
+              </Field.Root>
 
-            <Button
-              type='submit'
-              disabled={form.formState.isSubmitting}
-            >
-              Güncelle
-            </Button>
+              <Button
+                type='submit'
+                disabled={form.formState.isSubmitting}
+              >
+                Güncelle
+              </Button>
+            </form>
           </Form>
-        </Card.Content>
-      </Card.Root>
+        </CardContent>
+      </Card>
     </section>
   );
 }

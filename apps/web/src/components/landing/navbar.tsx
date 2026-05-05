@@ -1,7 +1,9 @@
-import { Button, Navbar, NavbarContainer } from "@adn-ui/react";
 import { Link } from "@tanstack/react-router";
+import { Menu } from "lucide-react";
 import React from "react";
 
+import { Button } from "@/components/ui/button";
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { useAuth } from "@/hooks/use-auth";
 
 import AccountDropdown from "../account-dropdown";
@@ -33,95 +35,114 @@ export default function LandingNavbar() {
   const { data: user } = useAuth();
 
   return (
-    <Navbar
-      open={isOpen}
-      onOpenChange={setIsOpen}
-    >
-      <NavbarContainer>
-        <Navbar.Content>
-          <Navbar.Toggle className='md:hidden' />
+    <nav className='bg-background/95 supports-backdrop-filter:bg-background/60 sticky top-0 z-50 w-full border-b backdrop-blur-sm'>
+      <div className='container flex h-16 items-center justify-between px-4 md:px-8'>
+        <div className='flex items-center gap-4'>
+          <Sheet
+            open={isOpen}
+            onOpenChange={setIsOpen}
+          >
+            <SheetTrigger asChild>
+              <Button
+                variant='ghost'
+                size='icon'
+                className='md:hidden'
+              >
+                <Menu className='size-5' />
+                <span className='sr-only'>Toggle menu</span>
+              </Button>
+            </SheetTrigger>
+            <SheetContent side='left'>
+              <SheetHeader>
+                <SheetTitle>
+                  <Logo className='h-10' />
+                </SheetTitle>
+              </SheetHeader>
+              <div className='flex flex-col gap-4 py-8'>
+                {items.map((item) => (
+                  <Link
+                    key={item.url}
+                    to={item.url}
+                    className='hover:text-primary text-lg font-medium'
+                    onClick={() => setIsOpen(false)}
+                  >
+                    {item.label}
+                  </Link>
+                ))}
+                <div className='mt-4 flex flex-col gap-2'>
+                  {!user && (
+                    <>
+                      <Button
+                        variant='outline'
+                        asChild
+                        className='w-full'
+                      >
+                        <Link
+                          to='/login'
+                          onClick={() => setIsOpen(false)}
+                        >
+                          Giriş Yap
+                        </Link>
+                      </Button>
+                      <Button
+                        asChild
+                        className='w-full'
+                      >
+                        <Link
+                          to='/register'
+                          onClick={() => setIsOpen(false)}
+                        >
+                          Kayıt Ol
+                        </Link>
+                      </Button>
+                    </>
+                  )}
+                </div>
+                <div className='mt-auto flex items-center justify-between'>
+                  <span>Tema</span>
+                  <ThemeSwitcher />
+                </div>
+              </div>
+            </SheetContent>
+          </Sheet>
           <Link
             to='/'
             className='flex items-center'
           >
-            <Logo className='h-14' />
+            <Logo className='h-12' />
           </Link>
-        </Navbar.Content>
-        <Navbar.Content className='hidden justify-center md:flex'>
+        </div>
+
+        <div className='hidden md:flex md:items-center md:gap-6'>
           {items.map((item) => (
-            <Navbar.Item key={item.url}>
-              <Link
-                className='link'
-                to={item.url}
-              >
-                {item.label}
-              </Link>
-            </Navbar.Item>
+            <Link
+              key={item.url}
+              to={item.url}
+              className='hover:text-primary text-sm font-medium transition-colors'
+            >
+              {item.label}
+            </Link>
           ))}
-        </Navbar.Content>
-        <Navbar.Content className='justify-end'>
+        </div>
+
+        <div className='flex items-center gap-4'>
           {user && <AccountDropdown />}
           {!user && (
             <>
-              <Navbar.Item className='hidden md:block'>
-                <Button
-                  variant='secondary'
-                  render={<Link to='/login' />}
-                >
-                  Giriş Yap
-                </Button>
-              </Navbar.Item>
-              <Navbar.Item>
-                <Button
-                  render={<Link to='/register' />}
-                  variant='primary'
-                >
-                  Kayıt Ol
-                </Button>
-              </Navbar.Item>
+              <Button
+                variant='ghost'
+                asChild
+                className='hidden md:flex'
+              >
+                <Link to='/login'>Giriş Yap</Link>
+              </Button>
+              <Button asChild>
+                <Link to='/register'>Kayıt Ol</Link>
+              </Button>
             </>
           )}
-        </Navbar.Content>
-        <Navbar.Menu position='bottom'>
-          <Navbar.MenuContent>
-            <div className='py-2'>Navigasyon</div>
-            <ul className='space-y-2'>
-              {items.map((item) => (
-                <li key={item.url}>
-                  <Link
-                    className='link'
-                    to={item.url}
-                  >
-                    {item.label}
-                  </Link>
-                </li>
-              ))}
-              {!user && (
-                <li className='flex items-center gap-2'>
-                  <Button
-                    variant='secondary'
-                    render={<Link to='/login' />}
-                    className='flex-1'
-                  >
-                    Giriş Yap
-                  </Button>
-                  <Button
-                    className='flex-1'
-                    variant='primary'
-                    render={<Link to='/register' />}
-                  >
-                    Kayıt Ol
-                  </Button>
-                </li>
-              )}
-              <li className='flex items-center justify-between'>
-                <span>Tema</span>
-                <ThemeSwitcher />
-              </li>
-            </ul>
-          </Navbar.MenuContent>
-        </Navbar.Menu>
-      </NavbarContainer>
-    </Navbar>
+        </div>
+      </div>
+    </nav>
   );
 }

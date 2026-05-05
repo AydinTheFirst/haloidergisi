@@ -1,6 +1,7 @@
-import { Button } from "@adn-ui/react";
 import { Icon } from "@iconify/react";
 import { Link, useRouter } from "@tanstack/react-router";
+
+import { Button } from "@/components/ui/button";
 
 export function ErrorComponent({ error }: { error: Error }) {
   const router = useRouter();
@@ -40,9 +41,12 @@ export function ErrorComponent({ error }: { error: Error }) {
             Tekrar Dene
           </Button>
 
-          <Link to='/'>
-            <Button className='gap-2'>Ana Sayfaya Dön</Button>
-          </Link>
+          <Button
+            asChild
+            className='gap-2'
+          >
+            <Link to='/'>Ana Sayfaya Dön</Link>
+          </Button>
         </div>
       </div>
     </div>

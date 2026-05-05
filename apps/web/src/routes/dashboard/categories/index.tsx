@@ -1,4 +1,3 @@
-import { Button, Input } from "@adn-ui/react";
 import { Icon } from "@iconify/react";
 import { Category } from "@repo/db";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -16,6 +15,8 @@ import { toast } from "sonner";
 import { z } from "zod";
 
 import { DataGrid } from "@/components/data-grid";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import useDebounce from "@/hooks/use-debounce";
 import apiClient from "@/lib/api-client";
 import { QueryRes } from "@/types";
@@ -158,7 +159,9 @@ function RouteComponent() {
   return (
     <section className='space-y-4'>
       <div className='flex items-center justify-between'>
-        <Button render={<Link to='/dashboard/categories/new' />}>Yeni</Button>
+        <Button asChild>
+          <Link to='/dashboard/categories/new'>Yeni</Link>
+        </Button>
         <div className='relative'>
           <Icon
             icon='mdi:magnify'

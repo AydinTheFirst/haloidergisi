@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 
-import { cn } from "@adn-ui/react";
+import { cn } from "@/lib/utils";
 
 interface ChartCardProps {
   title: string;

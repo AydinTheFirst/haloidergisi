@@ -1,10 +1,12 @@
-import { Button, Card, Container } from "@adn-ui/react";
 import { Icon } from "@iconify/react";
 import { useQuery } from "@tanstack/react-query";
 import { createFileRoute, Link, useSearch } from "@tanstack/react-router";
 import { motion } from "motion/react";
 import z from "zod";
 
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Container } from "@/components/ui/container";
 import apiClient from "@/lib/api-client";
 
 const searchSchema = z.object({
@@ -39,8 +41,8 @@ function RouteComponent() {
         transition={{ duration: 0.4, ease: "easeOut" }}
         className='w-full max-w-md'
       >
-        <Card.Root>
-          <Card.Header className='text-center'>
+        <Card>
+          <CardHeader className='text-center'>
             <motion.div
               animate={{ rotate: isLoading ? 360 : 0 }}
               transition={{ duration: isLoading ? 1 : 0.5, repeat: isLoading ? Infinity : 0 }}
@@ -66,19 +68,19 @@ function RouteComponent() {
               )}
             </motion.div>
 
-            <Card.Title className='text-2xl'>
+            <CardTitle className='text-2xl'>
               {isLoading && "E-posta Doğrulanıyor"}
               {error && "Doğrulama Başarısız"}
               {data && "E-posta Doğrulandı!"}
-            </Card.Title>
-            <Card.Description className='mt-2'>
+            </CardTitle>
+            <CardDescription className='mt-2'>
               {isLoading && "Lütfen bekleyin, e-postanız doğrulanıyor..."}
               {error && "E-posta doğrulama işlemi sırasında bir hata oluştu."}
               {data && "E-postanız başarıyla doğrulandı. Artık giriş yapabilirsiniz."}
-            </Card.Description>
-          </Card.Header>
+            </CardDescription>
+          </CardHeader>
 
-          <Card.Content className='space-y-6'>
+          <CardContent className='space-y-6'>
             {error && (
               <div className='bg-destructive/10 flex items-start gap-3 rounded-lg p-4'>
                 <Icon
@@ -108,32 +110,36 @@ function RouteComponent() {
             )}
 
             <Button
-              render={<Link to='/' />}
+              asChild
               className='w-full'
               size='lg'
             >
-              <Icon
-                icon='mdi:home'
-                className='mr-2 text-lg'
-              />
-              Anasayfaya Dön
+              <Link to='/'>
+                <Icon
+                  icon='mdi:home'
+                  className='mr-2 text-lg'
+                />
+                Anasayfaya Dön
+              </Link>
             </Button>
 
             {error && (
               <Button
                 variant='outline'
-                render={<Link to='/login' />}
+                asChild
                 className='w-full'
               >
-                <Icon
-                  icon='mdi:login'
-                  className='mr-2 text-lg'
-                />
-                Giriş Sayfasına Git
+                <Link to='/login'>
+                  <Icon
+                    icon='mdi:login'
+                    className='mr-2 text-lg'
+                  />
+                  Giriş Sayfasına Git
+                </Link>
               </Button>
             )}
-          </Card.Content>
-        </Card.Root>
+          </CardContent>
+        </Card>
       </motion.div>
     </Container>
   );

@@ -1,5 +1,6 @@
-import { cn } from "@adn-ui/react";
 import ReactMarkdown from "react-markdown";
+
+import { cn } from "@/lib/utils";
 
 interface MarkdownProps extends React.ComponentProps<"article"> {
   children: string;

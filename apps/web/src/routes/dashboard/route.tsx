@@ -1,4 +1,3 @@
-import { Avatar, Card, IconButton, Sidebar } from "@adn-ui/react";
 import { Icon } from "@iconify/react";
 import { createFileRoute, Link, Outlet, redirect } from "@tanstack/react-router";
 import { useLocation } from "@tanstack/react-router";
@@ -6,6 +5,24 @@ import { useEffect } from "react";
 import { useWindowSize } from "usehooks-ts";
 
 import ThemeSwitcher from "@/components/theme-switcher";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import {
+  Sidebar,
+  SidebarContent,
+  SidebarFooter,
+  SidebarGroup,
+  SidebarGroupContent,
+  SidebarGroupLabel,
+  SidebarHeader,
+  SidebarInset,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+  SidebarProvider,
+  SidebarTrigger,
+} from "@/components/ui/sidebar";
 import { useAuth, useLogout } from "@/hooks/use-auth";
 import { useSidebarStore } from "@/store/sidebar-store";
 
@@ -42,66 +59,78 @@ function RouteComponent() {
   }
 
   return (
-    <Sidebar.Root
-      isOpen={isOpen}
+    <SidebarProvider
+      open={isOpen}
       onOpenChange={setIsOpen}
     >
-      <Sidebar.Panel>
-        <Sidebar.Header>
-          <Link to='/'>Anasayfa</Link>
-          <Sidebar.Trigger className='md:hidden' />
-        </Sidebar.Header>
-        <Sidebar.Content>
-          <Sidebar.Menu>
-            <Sidebar.MenuLabel>Sayfalar</Sidebar.MenuLabel>
-            {pages.map((page) => (
-              <Link
-                key={page.to}
-                to={page.to}
-                activeOptions={{ exact: true }}
-              >
-                <Sidebar.MenuItem>
-                  <Icon icon={page.icon} />
-                  {page.name}
-                </Sidebar.MenuItem>
-              </Link>
-            ))}
-          </Sidebar.Menu>
-        </Sidebar.Content>
-        <Sidebar.Footer>
+      <Sidebar>
+        <SidebarHeader>
+          <div className='flex h-12 items-center px-4'>
+            <Link
+              to='/'
+              className='text-lg font-bold'
+            >
+              Anasayfa
+            </Link>
+          </div>
+        </SidebarHeader>
+        <SidebarContent>
+          <SidebarGroup>
+            <SidebarGroupLabel>Sayfalar</SidebarGroupLabel>
+            <SidebarGroupContent>
+              <SidebarMenu>
+                {pages.map((page) => (
+                  <SidebarMenuItem key={page.to}>
+                    <SidebarMenuButton asChild>
+                      <Link
+                        to={page.to}
+                        activeOptions={{ exact: true }}
+                        className='[&.active]:bg-sidebar-accent [&.active]:text-sidebar-accent-foreground'
+                      >
+                        <Icon icon={page.icon} />
+                        <span>{page.name}</span>
+                      </Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                ))}
+              </SidebarMenu>
+            </SidebarGroupContent>
+          </SidebarGroup>
+        </SidebarContent>
+        <SidebarFooter>
           <ThemeSwitcher />
-        </Sidebar.Footer>
-      </Sidebar.Panel>
-      <Sidebar.Outlet className='flex-1'>
-        <Card.Root className='w-full max-w-none flex-row items-center justify-between rounded-none'>
-          <Card.Header className='flex-row'>
-            <Sidebar.Trigger />
-          </Card.Header>
-          <Card.Content className='flex-row items-center justify-end'>
+        </SidebarFooter>
+      </Sidebar>
+      <SidebarInset className='flex flex-1 flex-col'>
+        <Card className='flex w-full max-w-none flex-row items-center justify-between rounded-none border-x-0 border-t-0'>
+          <CardHeader className='flex-row p-4'>
+            <SidebarTrigger />
+          </CardHeader>
+          <CardContent className='flex-row items-center justify-end gap-4 p-4'>
             <div className='flex gap-2'>
-              <Avatar.Root size='sm'>
-                <Avatar.Image src={user?.profile?.avatarUrl || undefined} />
-                <Avatar.Fallback>AD</Avatar.Fallback>
-              </Avatar.Root>
+              <Avatar className='size-8'>
+                <AvatarImage src={user?.profile?.avatarUrl || undefined} />
+                <AvatarFallback>AD</AvatarFallback>
+              </Avatar>
               <div className='hidden md:block'>
                 <div className='text-sm font-medium'>{user?.profile?.name}</div>
                 <div className='text-muted-foreground text-xs'>{user?.email}</div>
               </div>
             </div>
-            <IconButton
-              size='sm'
+            <Button
+              size='icon-sm'
               variant='ghost'
               onClick={logout}
             >
               <Icon icon='mdi:logout' />
-            </IconButton>
-          </Card.Content>
-        </Card.Root>
+            </Button>
+          </CardContent>
+        </Card>
         <div className='container max-w-none py-10'>
           <Outlet />
         </div>
-      </Sidebar.Outlet>
-    </Sidebar.Root>
+      </SidebarInset>
+    </SidebarProvider>
   );
 }
 

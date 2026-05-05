@@ -1,4 +1,3 @@
-import { Separator, Button } from "@adn-ui/react";
 import { Icon } from "@iconify/react";
 import { Provider } from "@repo/db";
 import { useQuery } from "@tanstack/react-query";
@@ -6,6 +5,8 @@ import { createFileRoute } from "@tanstack/react-router";
 import { toast } from "sonner";
 
 import { GoogleAuthButton } from "@/components/auth";
+import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
 import apiClient from "@/lib/api-client";
 import { queryClient } from "@/lib/query-client";
 

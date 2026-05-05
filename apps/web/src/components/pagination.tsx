@@ -1,5 +1,6 @@
-import { Button, ButtonGroup } from "@adn-ui/react";
 import { useRouter } from "@tanstack/react-router";
+
+import { Button } from "@/components/ui/button";
 
 interface PaginationProps {
   totalPages: number;
@@ -11,15 +12,19 @@ export default function Pagination({ totalPages, currentPage }: PaginationProps)
 
   return (
     <div className='mt-8 flex items-center justify-center'>
-      <ButtonGroup aria-label='Pagination'>
+      <div
+        className='flex items-center gap-1'
+        aria-label='Pagination'
+      >
         {[...Array(totalPages)].map((_, index) => {
           const page = index + 1;
           const isActive = page === currentPage;
 
           return (
             <Button
-              variant={isActive ? "primary" : "outline"}
+              variant={isActive ? "default" : "outline"}
               key={page}
+              size='sm'
               // @ts-ignore
               onClick={() => router.navigate({ search: (old) => ({ ...old, page }) })}
             >
@@ -27,7 +32,7 @@ export default function Pagination({ totalPages, currentPage }: PaginationProps)
             </Button>
           );
         })}
-      </ButtonGroup>
+      </div>
     </div>
   );
 }

@@ -1,26 +1,27 @@
-import { ButtonGroup, IconButton } from "@adn-ui/react";
 import { Icon } from "@iconify/react";
 import { useTheme } from "next-themes";
 
-interface ThemeSwitcherProps extends React.ComponentProps<typeof IconButton> {}
+import { Button } from "@/components/ui/button";
+
+interface ThemeSwitcherProps extends React.ComponentProps<typeof Button> {}
 export default function ThemeSwitcher({ ...props }: ThemeSwitcherProps) {
   const { themes, setTheme, theme } = useTheme();
 
   return (
-    <ButtonGroup>
+    <div className='flex items-center gap-1'>
       {themes?.map((t) => (
-        <IconButton
+        <Button
           key={t}
           title={ThemeLabel[t]}
           onClick={() => setTheme(t)}
           variant={theme === t ? "secondary" : "outline"}
           {...props}
-          size='sm'
+          size='icon-sm'
         >
           <Icon icon={ThemeIcon[t]} />
-        </IconButton>
+        </Button>
       ))}
-    </ButtonGroup>
+    </div>
   );
 }
 

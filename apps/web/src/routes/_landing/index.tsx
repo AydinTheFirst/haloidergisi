@@ -1,12 +1,13 @@
 import type { Post } from "@repo/db";
 
-import { Button, Chip } from "@adn-ui/react";
 import { Icon } from "@iconify/react";
 import { useQuery } from "@tanstack/react-query";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { motion } from "motion/react";
 
 import { PostCard, PostCardSkeleton } from "@/components/post-card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { socialLinks } from "@/constants";
 import apiClient from "@/lib/api-client";
 import { QueryRes } from "@/types";
@@ -31,10 +32,10 @@ function HeroSection() {
     <section className='container py-20'>
       <div className='grid grid-cols-1 gap-16 md:grid-cols-2'>
         <div className='space-y-4'>
-          <Chip size='sm'>
+          <Badge size='sm'>
             <Icon icon='mdi:sparkles' />
             <span className='font-bold'>HALO Dergisi</span>
-          </Chip>
+          </Badge>
 
           <h1 className='text-4xl font-bold md:text-5xl'>Aylık Fikir, Sanat ve Edebiyat Dergisi</h1>
           <p className='text-muted-foreground text-lg'>
@@ -42,16 +43,20 @@ function HeroSection() {
             ortaya bir fikir- edebiyat dergisi sunmak için bir araya gelmiş bir grup öğrenciyiz.
           </p>
           <div className='flex flex-wrap items-center gap-4'>
-            <Button render={<Link to='/posts' />}>
-              <Icon icon='mdi:post-outline' />
-              Dergilere Göz At
+            <Button asChild>
+              <Link to='/posts'>
+                <Icon icon='mdi:post-outline' />
+                Dergilere Göz At
+              </Link>
             </Button>
             <Button
-              render={<Link to='/about' />}
+              asChild
               variant='outline'
             >
-              <Icon icon='mdi:information-outline' />
-              Hakkımızda
+              <Link to='/about'>
+                <Icon icon='mdi:information-outline' />
+                Hakkımızda
+              </Link>
             </Button>
           </div>
           <br />

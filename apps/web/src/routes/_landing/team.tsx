@@ -1,7 +1,14 @@
-import { Avatar, Dialog } from "@adn-ui/react";
 import { createFileRoute } from "@tanstack/react-router";
 import { motion } from "motion/react";
 
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import apiClient from "@/lib/api-client";
 import { Crew, List, User } from "@/types";
 import { getCdnUrl } from "@/utils/cdn";
@@ -53,55 +60,55 @@ function RouteComponent() {
 
 function UserCard(user: User) {
   return (
-    <Dialog.Root>
-      <Dialog.Trigger
-        render={
-          <motion.div whileHover={{ scale: 1.05 }}>
-            <button className='bg-surface text-surface-foreground w-full rounded px-3 py-2'>
-              <div className='flex items-center gap-2'>
-                <Avatar.Root>
-                  <Avatar.Image src={getCdnUrl(user.profile?.avatarUrl as string)} />
-                  <Avatar.Fallback>{user.profile?.name?.slice(0, 2).toUpperCase()}</Avatar.Fallback>
-                </Avatar.Root>
-                <div className='text-left'>
-                  <div className='text-lg font-medium'>{user.profile?.name}</div>
-                  <div className='text-muted-foreground text-sm'>{user.profile?.title}</div>
-                </div>
-              </div>
-            </button>
-          </motion.div>
-        }
-      />
-      <Dialog.Portal>
-        <Dialog.Backdrop />
-        <Dialog.Popup>
-          <Dialog.Content className='max-w-md space-y-4'>
-            <div className='flex items-center gap-4'>
-              <Avatar.Root size='lg'>
-                <Avatar.Image src={getCdnUrl(user.profile?.avatarUrl as string)} />
-                <Avatar.Fallback>{user.profile?.name?.slice(0, 2).toUpperCase()}</Avatar.Fallback>
-              </Avatar.Root>
+    <Dialog>
+      <DialogTrigger asChild>
+        <motion.div
+          whileHover={{ scale: 1.05 }}
+          className='cursor-pointer'
+        >
+          <div className='bg-surface text-surface-foreground w-full rounded px-3 py-2'>
+            <div className='flex items-center gap-2'>
+              <Avatar>
+                <AvatarImage src={getCdnUrl(user.profile?.avatarUrl as string)} />
+                <AvatarFallback>{user.profile?.name?.slice(0, 2).toUpperCase()}</AvatarFallback>
+              </Avatar>
               <div className='text-left'>
-                <div className='text-2xl font-medium'>{user.profile?.name}</div>
+                <div className='text-lg font-medium'>{user.profile?.name}</div>
                 <div className='text-muted-foreground text-sm'>{user.profile?.title}</div>
               </div>
             </div>
-            {user.profile?.bio && <p>{user.profile.bio}</p>}
-            <div className='flex justify-end gap-2'>
-              {user.profile?.website && (
-                <a
-                  className='link'
-                  href={user.profile?.website}
-                  target='_blank'
-                  rel='noopener noreferrer'
-                >
-                  Website
-                </a>
-              )}
+          </div>
+        </motion.div>
+      </DialogTrigger>
+      <DialogContent className='max-w-md'>
+        <DialogHeader>
+          <div className='flex items-center gap-4'>
+            <Avatar size='lg'>
+              <AvatarImage src={getCdnUrl(user.profile?.avatarUrl as string)} />
+              <AvatarFallback>{user.profile?.name?.slice(0, 2).toUpperCase()}</AvatarFallback>
+            </Avatar>
+            <div className='text-left'>
+              <DialogTitle className='text-2xl font-medium'>{user.profile?.name}</DialogTitle>
+              <div className='text-muted-foreground text-sm'>{user.profile?.title}</div>
             </div>
-          </Dialog.Content>
-        </Dialog.Popup>
-      </Dialog.Portal>
-    </Dialog.Root>
+          </div>
+        </DialogHeader>
+        <div className='space-y-4'>
+          {user.profile?.bio && <p className='text-sm'>{user.profile.bio}</p>}
+          <div className='flex justify-end gap-2'>
+            {user.profile?.website && (
+              <a
+                className='link text-sm'
+                href={user.profile?.website}
+                target='_blank'
+                rel='noopener noreferrer'
+              >
+                Website
+              </a>
+            )}
+          </div>
+        </div>
+      </DialogContent>
+    </Dialog>
   );
 }

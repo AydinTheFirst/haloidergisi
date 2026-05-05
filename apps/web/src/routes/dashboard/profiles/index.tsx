@@ -1,4 +1,3 @@
-import { Input } from "@adn-ui/react";
 import { Icon } from "@iconify/react";
 import { useQuery } from "@tanstack/react-query";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
@@ -14,6 +13,7 @@ import { useEffect, useState } from "react";
 import { z } from "zod";
 
 import { DataGrid } from "@/components/data-grid";
+import { Input } from "@/components/ui/input";
 import useDebounce from "@/hooks/use-debounce";
 import apiClient from "@/lib/api-client";
 import { Profile, QueryRes } from "@/types";

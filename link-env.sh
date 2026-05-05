@@ -13,7 +13,7 @@ echo "🔗 Symlink işlemi başlatılıyor..."
 
 find apps packages -maxdepth 2 -name "package.json" | while read -r package; do
     dir=$(dirname "$package")
-    
+
     echo "⚙️  İşleniyor: $dir"
 
     # Eğer o klasörde zaten bir .env varsa (dosya veya link) sil

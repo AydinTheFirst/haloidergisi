@@ -1,4 +1,3 @@
-import { Separator, Field, Button, Form, Label } from "@adn-ui/react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { createFileRoute } from "@tanstack/react-router";
 import { useForm } from "react-hook-form";
@@ -6,6 +5,20 @@ import { toast } from "sonner";
 
 import CdnImage from "@/components/cdn-image";
 import { FieldFileInput } from "@/components/file-input";
+import { Button } from "@/components/ui/button";
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Separator } from "@/components/ui/separator";
+import { Textarea } from "@/components/ui/textarea";
 import { useAuth } from "@/hooks/use-auth";
 import apiClient from "@/lib/api-client";
 import { queryClient } from "@/lib/query-client";
@@ -53,68 +66,98 @@ function RouteComponent() {
 
       <Separator />
 
-      <Form
-        form={form}
-        onSubmit={onSubmit}
-        className='mx-auto'
-      >
-        <Field.Root name='avatarUrl'>
-          <div className='flex items-end justify-between'>
-            <Label>Profil Resmi</Label>
-            <CdnImage
-              src={form.watch("avatarUrl") || ""}
-              alt='Avatar'
-              className='size-20'
-            />
-          </div>
-          <FieldFileInput
-            name='avatarUrl'
-            accept='image/*'
-          />
-          <Field.HelperText>
-            Profil resminiz, hesabınızı tanımlamak için kullanılır.
-          </Field.HelperText>
-          <Field.ErrorMessage />
-        </Field.Root>
-
-        <Field.Root
-          name='name'
-          isRequired
+      <Form {...form}>
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          className='mx-auto space-y-4'
         >
-          <Field.Label>İsim</Field.Label>
-          <Field.Input name='name' />
-          <Field.HelperText>Görünür isminiz.</Field.HelperText>
-          <Field.ErrorMessage />
-        </Field.Root>
+          <FormField
+            control={form.control}
+            name='avatarUrl'
+            render={() => (
+              <FormItem>
+                <div className='flex items-end justify-between'>
+                  <FormLabel>Profil Resmi</FormLabel>
+                  <CdnImage
+                    src={form.watch("avatarUrl") || ""}
+                    alt='Avatar'
+                    className='size-20'
+                  />
+                </div>
+                <FormControl>
+                  <FieldFileInput
+                    name='avatarUrl'
+                    accept='image/*'
+                  />
+                </FormControl>
+                <FormDescription>
+                  Profil resminiz, hesabınızı tanımlamak için kullanılır.
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-        <Field.Root name='website'>
-          <Field.Label>Website</Field.Label>
-          <Field.Input
+          <FormField
+            control={form.control}
+            name='name'
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>İsim</FormLabel>
+                <FormControl>
+                  <Input {...field} />
+                </FormControl>
+                <FormDescription>Görünür isminiz.</FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
             name='website'
-            placeholder='Örneğin: https://example.com'
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Website</FormLabel>
+                <FormControl>
+                  <Input
+                    {...field}
+                    placeholder='Örneğin: https://example.com'
+                  />
+                </FormControl>
+                <FormDescription>
+                  Sosyal medya profillerinize veya kişisel web sitenize bağlantı ekleyebilirsiniz.
+                  TAM URL formatında olduğundan emin olun (örneğin, https://example.com).
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
           />
-          <Field.HelperText>
-            Sosyal medya profillerinize veya kişisel web sitenize bağlantı ekleyebilirsiniz. TAM URL
-            formatında olduğundan emin olun (örneğin, https://example.com).
-          </Field.HelperText>
-          <Field.ErrorMessage />
-        </Field.Root>
 
-        <Field.Root name='bio'>
-          <Field.Label>Biyografi</Field.Label>
-          <Field.TextArea
+          <FormField
+            control={form.control}
             name='bio'
-            placeholder='Kendiniz hakkında birkaç kelime yazın...'
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Biyografi</FormLabel>
+                <FormControl>
+                  <Textarea
+                    {...field}
+                    placeholder='Kendiniz hakkında birkaç kelime yazın...'
+                  />
+                </FormControl>
+                <FormDescription>
+                  Kendiniz hakkında kısa bir biyografi ekleyin (maksimum 500 karakter).
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
           />
-          <Field.HelperText>
-            Kendiniz hakkında kısa bir biyografi ekleyin (maksimum 500 karakter).
-          </Field.HelperText>
-          <Field.ErrorMessage />
-        </Field.Root>
 
-        <div className='flex justify-end pt-4'>
-          <Button type='submit'>Değişiklikleri Kaydet</Button>
-        </div>
+          <div className='flex justify-end pt-4'>
+            <Button type='submit'>Değişiklikleri Kaydet</Button>
+          </div>
+        </form>
       </Form>
     </div>
   );

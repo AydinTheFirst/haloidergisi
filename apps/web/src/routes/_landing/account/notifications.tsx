@@ -1,9 +1,10 @@
-import { Separator, Button } from "@adn-ui/react";
 import { NotificationSettings } from "@repo/db";
 import { useQueryClient, useQuery, useMutation } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 import { toast } from "sonner";
 
+import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
 import apiClient from "@/lib/api-client";
 
 export const Route = createFileRoute("/_landing/account/notifications")({
@@ -63,7 +64,7 @@ function NotificationSettingsForm() {
       <div className='flex items-center justify-between'>
         <h3 className='font-medium'>E-posta Bildirimleri</h3>
         <Button
-          variant={settings.emailNotifications ? "primary" : "outline"}
+          variant={settings.emailNotifications ? "default" : "outline"}
           onClick={() => mutation.mutate({ emailNotifications: !settings.emailNotifications })}
           disabled={mutation.isPending}
         >
@@ -76,8 +77,9 @@ function NotificationSettingsForm() {
       <div className='flex items-center justify-between'>
         <h3 className='font-medium'>Yeni Dergi Bildirimleri</h3>
         <Button
-          variant={settings.newPost ? "primary" : "outline"}
+          variant={settings.newPost ? "default" : "outline"}
           onClick={() => mutation.mutate({ newPost: !settings.newPost })}
+          disabled={mutation.isPending}
         >
           {settings.newPost ? "Açık" : "Kapalı"}
         </Button>
@@ -86,8 +88,9 @@ function NotificationSettingsForm() {
       <div className='flex items-center justify-between'>
         <h3 className='font-medium'>Güvenlik Bildirimleri</h3>
         <Button
-          variant={settings.securityAlert ? "primary" : "outline"}
+          variant={settings.securityAlert ? "default" : "outline"}
           onClick={() => mutation.mutate({ securityAlert: !settings.securityAlert })}
+          disabled={mutation.isPending}
         >
           {settings.securityAlert ? "Açık" : "Kapalı"}
         </Button>

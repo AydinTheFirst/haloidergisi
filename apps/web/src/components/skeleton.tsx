@@ -1,4 +1,4 @@
-import { cn } from "@adn-ui/react";
+import { cn } from "@/lib/utils";
 
 interface SkeletonProps extends React.ComponentProps<"div"> {}
 

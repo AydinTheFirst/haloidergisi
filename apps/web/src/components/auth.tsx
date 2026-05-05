@@ -1,12 +1,12 @@
-import { Button, ButtonProps } from "@adn-ui/react";
 import { Icon } from "@iconify/react";
 import { useGoogleLogin } from "@react-oauth/google";
 import { useRouter } from "@tanstack/react-router";
 import { toast } from "sonner";
 
+import { Button } from "@/components/ui/button";
 import apiClient from "@/lib/api-client";
 
-interface GoogleAuthButtonProps extends ButtonProps {
+interface GoogleAuthButtonProps extends React.ComponentProps<typeof Button> {
   action?: "login" | "link";
 }
 

@@ -1,7 +1,7 @@
-import { Separator } from "@adn-ui/react";
 import { Icon } from "@iconify/react";
 import { Link } from "@tanstack/react-router";
 
+import { Separator } from "@/components/ui/separator";
 import { socialLinks } from "@/constants";
 
 import Logo from "../logo";

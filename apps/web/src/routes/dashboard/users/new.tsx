@@ -1,4 +1,3 @@
-import { Button, Card, Field, Form } from "@adn-ui/react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Crew } from "@repo/db";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -6,6 +5,25 @@ import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import apiClient from "@/lib/api-client";
 import { userSchema, UserSchema } from "@/schemas/user";
 import { List } from "@/types";
@@ -24,7 +42,7 @@ function RouteComponent() {
   const navigate = useNavigate({ from: Route.id });
   const { crews } = Route.useLoaderData();
 
-  const form = useForm({
+  const form = useForm<UserSchema>({
     resolver: zodResolver(userSchema),
     defaultValues: {
       name: "",
@@ -57,57 +75,106 @@ function RouteComponent() {
   };
 
   return (
-    <Card.Root className='mx-auto'>
-      <Card.Header>
-        <Card.Title>Yeni Kullanıcı Oluştur</Card.Title>
-      </Card.Header>
-      <Card.Content>
-        <section>
-          <Form
-            form={form}
-            onSubmit={onSubmit}
+    <Card className='mx-auto'>
+      <CardHeader>
+        <CardTitle>Yeni Kullanıcı Oluştur</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <Form {...form}>
+          <form
+            onSubmit={form.handleSubmit(onSubmit)}
+            className='space-y-4'
           >
-            <Field.Root name='name'>
-              <Field.Label>Ad</Field.Label>
-              <Field.Input type='text' />
-              <Field.HelperText>
-                Kullanıcı adı en az 1 en fazla 100 karakter olabilir.
-              </Field.HelperText>
-              <Field.ErrorMessage />
-            </Field.Root>
+            <FormField
+              control={form.control}
+              name='name'
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Ad</FormLabel>
+                  <FormControl>
+                    <Input
+                      type='text'
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormDescription>
+                    Kullanıcı adı en az 1 en fazla 100 karakter olabilir.
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-            <Field.Root name='email'>
-              <Field.Label>E-posta</Field.Label>
-              <Field.Input type='email' />
-              <Field.HelperText>Geçerli bir e-posta adresi giriniz.</Field.HelperText>
-              <Field.ErrorMessage />
-            </Field.Root>
+            <FormField
+              control={form.control}
+              name='email'
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>E-posta</FormLabel>
+                  <FormControl>
+                    <Input
+                      type='email'
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormDescription>Geçerli bir e-posta adresi giriniz.</FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-            <Field.Root name='password'>
-              <Field.Label>Şifre</Field.Label>
-              <Field.Input type='password' />
-              <Field.HelperText>Şifre en az 6 en fazla 100 karakter olmalıdır.</Field.HelperText>
-              <Field.ErrorMessage />
-            </Field.Root>
+            <FormField
+              control={form.control}
+              name='password'
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Şifre</FormLabel>
+                  <FormControl>
+                    <Input
+                      type='password'
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormDescription>Şifre en az 6 en fazla 100 karakter olmalıdır.</FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-            <Field.Root name='crewId'>
-              <Field.Label>Crew ID (Opsiyonel)</Field.Label>
-              <Field.Select>
-                <option value=''>Crew atama</option>
-                {crews.items.map((crew) => (
-                  <option
-                    key={crew.id}
-                    value={crew.id}
+            <FormField
+              control={form.control}
+              name='crewId'
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Crew ID (Opsiyonel)</FormLabel>
+                  <Select
+                    onValueChange={(val) => field.onChange(val === "__none__" ? undefined : val)}
+                    value={field.value ?? "__none__"}
                   >
-                    {crew.name}
-                  </option>
-                ))}
-              </Field.Select>
-              <Field.HelperText>
-                Kullanıcıyı bir crew'e atamak için crew ID'si giriniz.
-              </Field.HelperText>
-              <Field.ErrorMessage />
-            </Field.Root>
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectItem value='__none__'>Seçim yapılmadı</SelectItem>
+                      {crews.items.map((crew) => (
+                        <SelectItem
+                          key={crew.id}
+                          value={crew.id}
+                        >
+                          {crew.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormDescription>
+                    Kullanıcıyı bir crew'e atamak için crew ID'si giriniz.
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
             <Button
               type='submit'
@@ -115,9 +182,9 @@ function RouteComponent() {
             >
               {createMutation.isPending ? "Oluşturuluyor..." : "Oluştur"}
             </Button>
-          </Form>
-        </section>
-      </Card.Content>
-    </Card.Root>
+          </form>
+        </Form>
+      </CardContent>
+    </Card>
   );
 }

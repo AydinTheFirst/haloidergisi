@@ -1,4 +1,3 @@
-import { Button, Card, Container, Field, Form, Separator } from "@adn-ui/react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Icon } from "@iconify/react";
 import { createFileRoute, Link, useRouter } from "@tanstack/react-router";
@@ -10,13 +9,28 @@ import z from "zod";
 
 import { GoogleAuthButton } from "@/components/auth";
 import { Turnstile } from "@/components/turnstile";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Container } from "@/components/ui/container";
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Separator } from "@/components/ui/separator";
 import apiClient from "@/lib/api-client";
 
 const registerSchema = z.object({
-  name: z.string().min(1, { error: "İsim gereklidir." }),
-  email: z.email({ error: "Geçerli bir e-posta adresi girin." }),
-  password: z.string().min(6, { error: "Şifre en az 6 karakter olmalıdır." }),
-  acceptTerms: z.literal(true, { error: "Kullanım Şartları'nı kabul etmelisiniz." }),
+  name: z.string().min(1, { message: "İsim gereklidir." }),
+  email: z.string().email({ message: "Geçerli bir e-posta adresi girin." }),
+  password: z.string().min(6, { message: "Şifre en az 6 karakter olmalıdır." }),
+  acceptTerms: z.literal(true, { message: "Kullanım Şartları'nı kabul etmelisiniz." }),
 });
 
 type RegisterFormData = z.infer<typeof registerSchema>;
@@ -34,6 +48,8 @@ function RouteComponent() {
       name: "",
       email: "",
       password: "",
+      // @ts-ignore
+      acceptTerms: false,
     },
   });
 
@@ -66,8 +82,8 @@ function RouteComponent() {
         transition={{ duration: 0.4, ease: "easeOut" }}
         className='w-full max-w-md'
       >
-        <Card.Root className='mx-auto'>
-          <Card.Header className='text-center'>
+        <Card className='mx-auto'>
+          <CardHeader className='text-center'>
             <div className='mb-4 flex justify-center'>
               <div className='from-primary/20 to-primary/10 flex h-12 w-12 items-center justify-center rounded-full bg-linear-to-br'>
                 <Icon
@@ -76,105 +92,152 @@ function RouteComponent() {
                 />
               </div>
             </div>
-            <Card.Title className='text-2xl'>Yeni Hesap Oluştur</Card.Title>
-            <Card.Description className='mt-2'>
+            <CardTitle className='text-2xl'>Yeni Hesap Oluştur</CardTitle>
+            <CardDescription className='mt-2'>
               Hadi başlayalım - yeni bir hesap oluşturun
-            </Card.Description>
-          </Card.Header>
-          <Card.Content>
-            <Form
-              form={form}
-              onSubmit={onSubmit}
-              className='space-y-4'
-            >
-              <Field.Root name='name'>
-                <Field.Label className='flex items-center gap-2'>
-                  <Icon
-                    icon='mdi:account'
-                    className='text-lg'
-                  />
-                  Ad
-                </Field.Label>
-                <Field.Input type='text' />
-                <Field.HelperText>Lütfen tam adınızı girin.</Field.HelperText>
-                <Field.ErrorMessage />
-              </Field.Root>
-
-              <Field.Root name='email'>
-                <Field.Label className='flex items-center gap-2'>
-                  <Icon
-                    icon='mdi:email'
-                    className='text-lg'
-                  />
-                  E-posta
-                </Field.Label>
-                <Field.Input type='email' />
-                <Field.HelperText>Lütfen geçerli bir e-posta adresi girin.</Field.HelperText>
-                <Field.ErrorMessage />
-              </Field.Root>
-
-              <Field.Root name='password'>
-                <Field.Label className='flex items-center gap-2'>
-                  <Icon
-                    icon='mdi:lock'
-                    className='text-lg'
-                  />
-                  Şifre
-                </Field.Label>
-                <Field.Input type='password' />
-                <Field.HelperText>Şifreniz en az 6 karakter olmalıdır.</Field.HelperText>
-                <Field.ErrorMessage />
-              </Field.Root>
-
-              <Field.Root name='acceptTerms'>
-                <Field.Label className='flex items-center gap-2'>
-                  <Field.Checkbox />
-                  <Link
-                    to='/terms'
-                    className='link underline'
-                  >
-                    Kullanım Şartları
-                  </Link>
-                  'nı kabul ediyorum.
-                </Field.Label>
-                <Field.ErrorMessage />
-              </Field.Root>
-
-              <div className='flex justify-center'>
-                <Turnstile onVerify={(token) => setToken(token)} />
-              </div>
-              <Button
-                type='submit'
-                className='w-full'
-                disabled={form.formState.isSubmitting}
-                size='lg'
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Form {...form}>
+              <form
+                onSubmit={form.handleSubmit(onSubmit)}
+                className='space-y-4'
               >
-                <Icon
-                  icon='mdi:account-plus'
-                  className='mr-2 text-lg'
+                <FormField
+                  control={form.control}
+                  name='name'
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className='flex items-center gap-2'>
+                        <Icon
+                          icon='mdi:account'
+                          className='text-lg'
+                        />
+                        Ad
+                      </FormLabel>
+                      <FormControl>
+                        <Input
+                          type='text'
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormDescription>Lütfen tam adınızı girin.</FormDescription>
+                      <FormMessage />
+                    </FormItem>
+                  )}
                 />
-                Kayıt Ol
-              </Button>
-              <div className='flex items-center justify-center gap-2 text-sm'>
-                <span className='text-muted-foreground'>Zaten bir hesabınız var mı?</span>
-                <Link
-                  className='text-primary font-medium hover:underline'
-                  to='/login'
+
+                <FormField
+                  control={form.control}
+                  name='email'
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className='flex items-center gap-2'>
+                        <Icon
+                          icon='mdi:email'
+                          className='text-lg'
+                        />
+                        E-posta
+                      </FormLabel>
+                      <FormControl>
+                        <Input
+                          type='email'
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormDescription>Lütfen geçerli bir e-posta adresi girin.</FormDescription>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name='password'
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className='flex items-center gap-2'>
+                        <Icon
+                          icon='mdi:lock'
+                          className='text-lg'
+                        />
+                        Şifre
+                      </FormLabel>
+                      <FormControl>
+                        <Input
+                          type='password'
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormDescription>Şifreniz en az 6 karakter olmalıdır.</FormDescription>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name='acceptTerms'
+                  render={({ field }) => (
+                    <FormItem>
+                      <div className='flex items-center gap-2'>
+                        <FormControl>
+                          <Checkbox
+                            checked={field.value}
+                            onCheckedChange={field.onChange}
+                          />
+                        </FormControl>
+                        <FormLabel>
+                          <Link
+                            to='/terms'
+                            className='link underline'
+                          >
+                            Kullanım Şartları
+                          </Link>
+                          'nı kabul ediyorum.
+                        </FormLabel>
+                      </div>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <div className='flex justify-center'>
+                  <Turnstile onVerify={(token) => setToken(token)} />
+                </div>
+                <Button
+                  type='submit'
+                  className='w-full'
+                  disabled={form.formState.isSubmitting}
+                  size='lg'
                 >
-                  Giriş Yapın
-                </Link>
-              </div>
+                  <Icon
+                    icon='mdi:account-plus'
+                    className='mr-2 text-lg'
+                  />
+                  Kayıt Ol
+                </Button>
+                <div className='flex items-center justify-center gap-2 text-sm'>
+                  <span className='text-muted-foreground'>Zaten bir hesabınız var mı?</span>
+                  <Link
+                    className='text-primary font-medium hover:underline'
+                    to='/login'
+                  >
+                    Giriş Yapın
+                  </Link>
+                </div>
+              </form>
             </Form>
-          </Card.Content>
+          </CardContent>
           <div className='flex items-center gap-6'>
             <Separator className='my-4 h-px self-center' />
             <span className='text-muted-foreground text-center text-sm'>VEYA</span>
             <Separator className='my-4 h-px self-center' />
           </div>
-          <Card.Content>
+          <CardContent>
             <GoogleAuthButton className='w-full' />
-          </Card.Content>
-        </Card.Root>
+          </CardContent>
+        </Card>
       </motion.div>
     </Container>
   );

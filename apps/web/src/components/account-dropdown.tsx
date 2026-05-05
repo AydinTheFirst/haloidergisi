@@ -1,7 +1,14 @@
-import { buttonVariants, Menu } from "@adn-ui/react";
 import { Icon } from "@iconify/react";
 import { Link } from "@tanstack/react-router";
 
+import { buttonVariants } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { useAuth, useLogout } from "@/hooks/use-auth";
 
 export default function AccountDropdown() {
@@ -11,37 +18,40 @@ export default function AccountDropdown() {
   if (!user) return null;
 
   return (
-    <Menu.Root>
-      <Menu.Trigger className={buttonVariants({ variant: "outline" })}>
+    <DropdownMenu>
+      <DropdownMenuTrigger className={buttonVariants({ variant: "outline" })}>
         <Icon icon='mdi:account-circle-outline' />
         <span className='hidden md:block'>{user.profile?.name}</span>
-      </Menu.Trigger>
-      <Menu.Portal>
-        <Menu.Positioner>
-          <Menu.Popup className='gap-1'>
-            <div className='space-y-2 px-3 py-2'>
-              <Menu.Item render={<Link to='/account' />}>
-                <Icon icon='mdi:cog-outline' />
-                Hesap Ayarları
-              </Menu.Item>
-              {user.roles.includes("ADMIN") && (
-                <Menu.Item render={<Link to='/dashboard' />}>
-                  <Icon icon='mdi:shield-account-outline' />
-                  Yönetici Paneli
-                </Menu.Item>
-              )}
-              <Menu.Separator />
-              <Menu.Item
-                className='text-danger'
-                onClick={logout}
-              >
-                <Icon icon='mdi:logout' />
-                Çıkış Yap
-              </Menu.Item>
-            </div>
-          </Menu.Popup>
-        </Menu.Positioner>
-      </Menu.Portal>
-    </Menu.Root>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent
+        className='gap-1'
+        align='end'
+      >
+        <div className='space-y-2 px-3 py-2'>
+          <DropdownMenuItem asChild>
+            <Link to='/account'>
+              <Icon icon='mdi:cog-outline' />
+              Hesap Ayarları
+            </Link>
+          </DropdownMenuItem>
+          {user.roles.includes("ADMIN") && (
+            <DropdownMenuItem asChild>
+              <Link to='/dashboard'>
+                <Icon icon='mdi:shield-account-outline' />
+                Yönetici Paneli
+              </Link>
+            </DropdownMenuItem>
+          )}
+          <DropdownMenuSeparator />
+          <DropdownMenuItem
+            className='text-destructive focus:text-destructive'
+            onClick={logout}
+          >
+            <Icon icon='mdi:logout' />
+            Çıkış Yap
+          </DropdownMenuItem>
+        </div>
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 }

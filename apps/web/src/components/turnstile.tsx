@@ -1,5 +1,6 @@
-import { cn } from "@adn-ui/react";
 import React from "react";
+
+import { cn } from "@/lib/utils";
 
 interface TurnstileProps extends React.HTMLAttributes<HTMLDivElement> {
   onVerify: (token: string) => void;

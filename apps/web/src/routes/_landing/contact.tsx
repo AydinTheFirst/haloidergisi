@@ -1,4 +1,3 @@
-import { Button, Card, Field, Form } from "@adn-ui/react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Icon } from "@iconify/react";
 import { createFileRoute } from "@tanstack/react-router";
@@ -7,6 +6,18 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
 import { Turnstile } from "@/components/turnstile";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import { socialLinks } from "@/constants";
 import apiClient from "@/lib/api-client";
 import { messageSchema, MessageSchema } from "@/schemas/message";
@@ -60,84 +71,108 @@ function RouteComponent() {
       <br />
       <div className='grid grid-cols-12 gap-8'>
         <div className='col-span-12 md:col-span-8'>
-          <Card.Root className='max-w-none'>
-            <Card.Header>
-              <Card.Title>İletişim</Card.Title>
-              <Card.Description>
+          <Card className='max-w-none'>
+            <CardHeader>
+              <CardTitle>İletişim</CardTitle>
+              <CardDescription>
                 Bizimle iletişime geçmek için aşağıdaki bilgileri kullanabilirsiniz.
-              </Card.Description>
-            </Card.Header>
-            <Card.Content>
-              <Form
-                form={form}
-                onSubmit={onSubmit}
-                className='max-w-none'
-                variant='grid'
-              >
-                <Field.Root
-                  name='name'
-                  isRequired
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <Form {...form}>
+                <form
+                  onSubmit={form.handleSubmit(onSubmit)}
+                  className='grid grid-cols-2 gap-4'
                 >
-                  <Field.Label>İsim</Field.Label>
-                  <Field.Input type='text' />
-                  <Field.ErrorMessage />
-                </Field.Root>
+                  <FormField
+                    control={form.control}
+                    name='name'
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>İsim</FormLabel>
+                        <FormControl>
+                          <Input {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
 
-                <Field.Root
-                  name='email'
-                  isRequired
-                >
-                  <Field.Label>Email</Field.Label>
-                  <Field.Input type='email' />
-                  <Field.ErrorMessage />
-                </Field.Root>
+                  <FormField
+                    control={form.control}
+                    name='email'
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Email</FormLabel>
+                        <FormControl>
+                          <Input
+                            type='email'
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
 
-                <Field.Root
-                  name='subject'
-                  isRequired
-                  className='col-span-2'
-                >
-                  <Field.Label>Konu</Field.Label>
-                  <Field.Input type='text' />
-                  <Field.ErrorMessage />
-                </Field.Root>
+                  <FormField
+                    control={form.control}
+                    name='subject'
+                    render={({ field }) => (
+                      <FormItem className='col-span-2'>
+                        <FormLabel>Konu</FormLabel>
+                        <FormControl>
+                          <Input {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
 
-                <Field.Root
-                  name='content'
-                  isRequired
-                  className='col-span-2'
-                >
-                  <Field.Label>Mesaj</Field.Label>
-                  <Field.TextArea rows={5} />
-                  <Field.ErrorMessage />
-                </Field.Root>
+                  <FormField
+                    control={form.control}
+                    name='content'
+                    render={({ field }) => (
+                      <FormItem className='col-span-2'>
+                        <FormLabel>Mesaj</FormLabel>
+                        <FormControl>
+                          <Textarea
+                            rows={5}
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
 
-                <Turnstile
-                  onVerify={(token) => setToken(token)}
-                  className='col-span-2'
-                />
+                  <Turnstile
+                    onVerify={(token) => setToken(token)}
+                    className='col-span-2'
+                  />
 
-                <div className='col-span-2'>
-                  <Button
-                    className='w-full'
-                    type='submit'
-                  >
-                    Gönder
-                  </Button>
-                </div>
+                  <div className='col-span-2'>
+                    <Button
+                      className='w-full'
+                      type='submit'
+                    >
+                      Gönder
+                    </Button>
+                  </div>
+                </form>
               </Form>
-            </Card.Content>
-          </Card.Root>
+            </CardContent>
+          </Card>
         </div>
         <div className='col-span-12 md:col-span-4'>
-          <Card.Root className='max-w-none'>
-            <Card.Header>
-              <Card.Title>Sosyal Medya</Card.Title>
-              <Card.Description>
+          <Card className='max-w-none'>
+            <CardHeader>
+              <CardTitle>Sosyal Medya</CardTitle>
+              <CardDescription>
                 Bizi sosyal medyada takip edin ve en son güncellemelerden haberdar olun.
-              </Card.Description>
-            </Card.Header>
-            <Card.Content>
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
               <ul className='space-y-4'>
                 {Object.values(socialLinks).map((link) => (
                   <li key={link.label}>
@@ -153,8 +188,8 @@ function RouteComponent() {
                   </li>
                 ))}
               </ul>
-            </Card.Content>
-          </Card.Root>
+            </CardContent>
+          </Card>
         </div>
       </div>
     </div>

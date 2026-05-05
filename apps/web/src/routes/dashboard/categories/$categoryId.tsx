@@ -1,4 +1,3 @@
-import { Card, Field, Button, Form } from "@adn-ui/react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Category } from "@repo/db";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -6,6 +5,18 @@ import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
 import apiClient from "@/lib/api-client";
 import { categoriesSchema, CategorySchema } from "@/schemas/category";
 
@@ -52,33 +63,46 @@ function RouteComponent() {
 
   return (
     <section>
-      <Card.Root className='mx-auto'>
-        <Card.Header>
-          <Card.Title>Kategoriyi Düzenle</Card.Title>
-        </Card.Header>
-        <Card.Content>
-          <Form
-            form={form}
-            onSubmit={onSubmit}
-          >
-            <Field.Root name='name'>
-              <Field.Label>Kategori Adı</Field.Label>
-              <Field.Input type='text' />
-              <Field.HelperText>
-                Kategori adı en az 1 en fazla 100 karakter olabilir.
-              </Field.HelperText>
-              <Field.ErrorMessage />
-            </Field.Root>
-
-            <Button
-              type='submit'
-              disabled={updateMutation.isPending}
+      <Card className='mx-auto'>
+        <CardHeader>
+          <CardTitle>Kategoriyi Düzenle</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <Form {...form}>
+            <form
+              onSubmit={form.handleSubmit(onSubmit)}
+              className='space-y-4'
             >
-              {updateMutation.isPending ? "Güncelleniyor..." : "Güncelle"}
-            </Button>
+              <FormField
+                control={form.control}
+                name='name'
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Kategori Adı</FormLabel>
+                    <FormControl>
+                      <Input
+                        type='text'
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormDescription>
+                      Kategori adı en az 1 en fazla 100 karakter olabilir.
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <Button
+                type='submit'
+                disabled={updateMutation.isPending}
+              >
+                {updateMutation.isPending ? "Güncelleniyor..." : "Güncelle"}
+              </Button>
+            </form>
           </Form>
-        </Card.Content>
-      </Card.Root>
+        </CardContent>
+      </Card>
     </section>
   );
 }

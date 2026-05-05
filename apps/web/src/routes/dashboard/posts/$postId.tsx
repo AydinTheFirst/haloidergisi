@@ -1,4 +1,3 @@
-import { Card, Field, Button, Form } from "@adn-ui/react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Category, Post } from "@repo/db";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
@@ -7,6 +6,26 @@ import { toast } from "sonner";
 
 import CdnImage from "@/components/cdn-image";
 import { FieldFileInput } from "@/components/file-input";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
 import apiClient from "@/lib/api-client";
 import { postSchema, PostSchema } from "@/schemas/post";
 import { List } from "@/types";
@@ -58,97 +77,177 @@ function RouteComponent() {
 
   return (
     <section>
-      <Card.Root className='mx-auto'>
-        <Card.Header>
-          <Card.Title>Post'u Düzenle</Card.Title>
-        </Card.Header>
-        <Card.Content>
-          <Form
-            form={form}
-            onSubmit={onSubmit}
-          >
-            <Field.Root name='title'>
-              <Field.Label>Başlık</Field.Label>
-              <Field.Input type='text' />
-              <Field.HelperText>
-                Post başlığı en az 1 en fazla 200 karakter olabilir.
-              </Field.HelperText>
-              <Field.ErrorMessage />
-            </Field.Root>
-
-            <Field.Root name='content'>
-              <Field.Label>İçerik</Field.Label>
-              <Field.TextArea rows={10} />
-              <Field.HelperText>Post içeriği en az 1 karakter olmalıdır.</Field.HelperText>
-              <Field.ErrorMessage />
-            </Field.Root>
-
-            <Field.Root name='status'>
-              <Field.Label>Durum</Field.Label>
-              <Field.Select>
-                {Object.entries(PostStatus).map(([value, label]) => (
-                  <option
-                    key={value}
-                    value={value}
-                  >
-                    {label}
-                  </option>
-                ))}
-              </Field.Select>
-              <Field.HelperText>Post durumu seçiniz.</Field.HelperText>
-              <Field.ErrorMessage />
-            </Field.Root>
-
-            <Field.Root name='categoryId'>
-              <Field.Label>Kategori</Field.Label>
-              <Field.Select>
-                <option value=''>Kategori seçiniz</option>
-                {categories.items.map((category) => (
-                  <option
-                    key={category.id}
-                    value={category.id}
-                  >
-                    {category.name}
-                  </option>
-                ))}
-              </Field.Select>
-              <Field.HelperText>Post için bir kategori seçin.</Field.HelperText>
-              <Field.ErrorMessage />
-            </Field.Root>
-
-            <Field.Root name='coverImage'>
-              <div className='flex items-end justify-between'>
-                <Field.Label>Kapak Resmi</Field.Label>
-                <CdnImage
-                  src={getCdnUrl(form.watch("coverImage") as string)}
-                  alt='Cover Image'
-                  className='size-20'
-                />
-              </div>
-              <FieldFileInput accept='image/*' />
-              <Field.HelperText>Post için bir kapak resmi yükleyin.</Field.HelperText>
-              <Field.ErrorMessage />
-            </Field.Root>
-
-            <Field.Root name='attachment'>
-              <div className='flex justify-between'>
-                <Field.Label>Ek Dosya</Field.Label>
-                <Link to={getCdnUrl(form.watch("attachment") as string)}>Dosyayı Görüntüle</Link>
-              </div>
-              <FieldFileInput accept='application/pdf' />
-              <Field.HelperText>Derginin PDF dosyasını yükleyin .</Field.HelperText>
-              <Field.ErrorMessage />
-            </Field.Root>
-
-            <Button
-              type='submit'
-              disabled={form.formState.isSubmitting}
+      <Card className='mx-auto'>
+        <CardHeader>
+          <CardTitle>Post'u Düzenle</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <Form {...form}>
+            <form
+              onSubmit={form.handleSubmit(onSubmit)}
+              className='space-y-4'
             >
-              Güncelle
-            </Button>
+              <FormField
+                control={form.control}
+                name='title'
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Başlık</FormLabel>
+                    <FormControl>
+                      <Input
+                        type='text'
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormDescription>
+                      Post başlığı en az 1 en fazla 200 karakter olabilir.
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name='content'
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>İçerik</FormLabel>
+                    <FormControl>
+                      <Textarea
+                        rows={10}
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormDescription>Post içeriği en az 1 karakter olmalıdır.</FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name='status'
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Durum</FormLabel>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value || "DRAFT"}
+                    >
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {Object.entries(PostStatus).map(([value, label]) => (
+                          <SelectItem
+                            key={value}
+                            value={value}
+                          >
+                            {label}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <FormDescription>Post durumu seçiniz.</FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name='categoryId'
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Kategori</FormLabel>
+                    <Select
+                      onValueChange={(val) => field.onChange(val === "__none__" ? undefined : val)}
+                      value={field.value ?? "__none__"}
+                    >
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        <SelectItem value='__none__'>Kategori seçiniz</SelectItem>
+                        {categories.items.map((category) => (
+                          <SelectItem
+                            key={category.id}
+                            value={category.id}
+                          >
+                            {category.name}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <FormDescription>Post için bir kategori seçin.</FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name='coverImage'
+                render={({ field }) => (
+                  <FormItem>
+                    <div className='flex items-end justify-between'>
+                      <FormLabel>Kapak Resmi</FormLabel>
+                      <CdnImage
+                        src={getCdnUrl(field.value as string)}
+                        alt='Cover Image'
+                        className='size-20'
+                      />
+                    </div>
+                    <FormControl>
+                      <FieldFileInput
+                        name='coverImage'
+                        accept='image/*'
+                      />
+                    </FormControl>
+                    <FormDescription>Post için bir kapak resmi yükleyin.</FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name='attachment'
+                render={({ field }) => (
+                  <FormItem>
+                    <div className='flex justify-between'>
+                      <FormLabel>Ek Dosya</FormLabel>
+                      {field.value && (
+                        <Link to={getCdnUrl(field.value as string)}>Dosyayı Görüntüle</Link>
+                      )}
+                    </div>
+                    <FormControl>
+                      <FieldFileInput
+                        name='attachment'
+                        accept='application/pdf'
+                      />
+                    </FormControl>
+                    <FormDescription>Derginin PDF dosyasını yükleyin.</FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <Button
+                type='submit'
+                disabled={form.formState.isSubmitting}
+              >
+                Güncelle
+              </Button>
+            </form>
           </Form>
-        </Card.Content>
-      </Card.Root>
+        </CardContent>
+      </Card>
     </section>
   );
 }

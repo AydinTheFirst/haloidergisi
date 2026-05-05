@@ -1,4 +1,3 @@
-import { Button, Card, Container, Field, Form } from "@adn-ui/react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Icon } from "@iconify/react";
 import { createFileRoute, Link, useRouter, useSearch } from "@tanstack/react-router";
@@ -9,6 +8,18 @@ import { toast } from "sonner";
 import z from "zod";
 
 import { Turnstile } from "@/components/turnstile";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Container } from "@/components/ui/container";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
 import apiClient from "@/lib/api-client";
 
 const searchSchema = z.object({
@@ -80,8 +91,8 @@ function RouteComponent() {
         transition={{ duration: 0.4, ease: "easeOut" }}
         className='w-full max-w-md'
       >
-        <Card.Root className='mx-auto'>
-          <Card.Header className='text-center'>
+        <Card className='mx-auto'>
+          <CardHeader className='text-center'>
             <div className='mb-4 flex justify-center'>
               <div className='from-primary/20 to-primary/10 flex h-12 w-12 items-center justify-center rounded-full bg-linear-to-br'>
                 <Icon
@@ -90,95 +101,112 @@ function RouteComponent() {
                 />
               </div>
             </div>
-            <Card.Title className='text-2xl'>Şifrenizi Sıfırlayın</Card.Title>
-            <Card.Description className='mt-2'>Yeni bir güvenli şifre belirleyin</Card.Description>
-          </Card.Header>
-          <Card.Content>
-            <Form
-              form={form}
-              onSubmit={onSubmit}
-              className='space-y-4'
-            >
-              <Field.Root
-                name='newPassword'
-                isRequired
+            <CardTitle className='text-2xl'>Şifrenizi Sıfırlayın</CardTitle>
+            <CardDescription className='mt-2'>Yeni bir güvenli şifre belirleyin</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Form {...form}>
+              <form
+                onSubmit={form.handleSubmit(onSubmit)}
+                className='space-y-4'
               >
-                <Field.Label className='flex items-center gap-2'>
-                  <Icon
-                    icon='mdi:lock'
-                    className='text-lg'
-                  />
-                  Yeni Şifre
-                </Field.Label>
-                <div className='relative'>
-                  <Field.Input type={isPswrdVisible ? "text" : "password"} />
-                  <button
-                    type='button'
-                    onClick={() => setIsPswdVisible(!isPswrdVisible)}
-                    className='text-muted-foreground hover:text-foreground absolute inset-y-0 right-0 flex items-center px-3'
-                  >
-                    <Icon icon={isPswrdVisible ? "mdi:eye-off" : "mdi:eye"} />
-                  </button>
-                </div>
-                <Field.ErrorMessage />
-              </Field.Root>
-
-              <Field.Root
-                name='newPasswordConfirm'
-                isRequired
-              >
-                <Field.Label className='flex items-center gap-2'>
-                  <Icon
-                    icon='mdi:lock-check'
-                    className='text-lg'
-                  />
-                  Şifre (Tekrar)
-                </Field.Label>
-                <div className='relative'>
-                  <Field.Input type={isPswrdVisible ? "text" : "password"} />
-                  <button
-                    type='button'
-                    onClick={() => setIsPswdVisible(!isPswrdVisible)}
-                    className='text-muted-foreground hover:text-foreground absolute inset-y-0 right-0 flex items-center px-3'
-                  >
-                    <Icon icon={isPswrdVisible ? "mdi:eye-off" : "mdi:eye"} />
-                  </button>
-                </div>
-                <Field.ErrorMessage />
-              </Field.Root>
-
-              <div className='flex justify-center'>
-                <Turnstile onVerify={(token) => setToken(token)} />
-              </div>
-              <Button
-                type='submit'
-                className='w-full'
-                disabled={form.formState.isSubmitting}
-                size='lg'
-              >
-                <Icon
-                  icon='mdi:check-circle'
-                  className='mr-2 text-lg'
+                <FormField
+                  control={form.control}
+                  name='newPassword'
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className='flex items-center gap-2'>
+                        <Icon
+                          icon='mdi:lock'
+                          className='text-lg'
+                        />
+                        Yeni Şifre
+                      </FormLabel>
+                      <div className='relative'>
+                        <FormControl>
+                          <Input
+                            type={isPswrdVisible ? "text" : "password"}
+                            {...field}
+                          />
+                        </FormControl>
+                        <button
+                          type='button'
+                          onClick={() => setIsPswdVisible(!isPswrdVisible)}
+                          className='text-muted-foreground hover:text-foreground absolute inset-y-0 right-0 flex items-center px-3'
+                        >
+                          <Icon icon={isPswrdVisible ? "mdi:eye-off" : "mdi:eye"} />
+                        </button>
+                      </div>
+                      <FormMessage />
+                    </FormItem>
+                  )}
                 />
-                Şifrenizi Sıfırlayın
-              </Button>
 
-              <div className='flex items-center justify-center gap-2 text-sm'>
-                <Icon
-                  icon='mdi:information'
-                  className='text-muted-foreground'
+                <FormField
+                  control={form.control}
+                  name='newPasswordConfirm'
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className='flex items-center gap-2'>
+                        <Icon
+                          icon='mdi:lock-check'
+                          className='text-lg'
+                        />
+                        Şifre (Tekrar)
+                      </FormLabel>
+                      <div className='relative'>
+                        <FormControl>
+                          <Input
+                            type={isPswrdVisible ? "text" : "password"}
+                            {...field}
+                          />
+                        </FormControl>
+                        <button
+                          type='button'
+                          onClick={() => setIsPswdVisible(!isPswrdVisible)}
+                          className='text-muted-foreground hover:text-foreground absolute inset-y-0 right-0 flex items-center px-3'
+                        >
+                          <Icon icon={isPswrdVisible ? "mdi:eye-off" : "mdi:eye"} />
+                        </button>
+                      </div>
+                      <FormMessage />
+                    </FormItem>
+                  )}
                 />
-                <span className='text-muted-foreground'>Hatırladınız mı?</span>
-                <Link
-                  className='text-primary font-medium hover:underline'
-                  to='/login'
+
+                <div className='flex justify-center'>
+                  <Turnstile onVerify={(token) => setToken(token)} />
+                </div>
+                <Button
+                  type='submit'
+                  className='w-full'
+                  disabled={form.formState.isSubmitting}
+                  size='lg'
                 >
-                  Giriş Yapın
-                </Link>
-              </div>
+                  <Icon
+                    icon='mdi:check-circle'
+                    className='mr-2 text-lg'
+                  />
+                  Şifrenizi Sıfırlayın
+                </Button>
+
+                <div className='flex items-center justify-center gap-2 text-sm'>
+                  <Icon
+                    icon='mdi:information'
+                    className='text-muted-foreground'
+                  />
+                  <span className='text-muted-foreground'>Hatırladınız mı?</span>
+                  <Link
+                    className='text-primary font-medium hover:underline'
+                    to='/login'
+                  >
+                    Giriş Yapın
+                  </Link>
+                </div>
+              </form>
             </Form>
-          </Card.Content>
-        </Card.Root>
+          </CardContent>
+        </Card>
       </motion.div>
     </Container>
   );

@@ -1,10 +1,22 @@
-import { Card, Field, Button, Form } from "@adn-ui/react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Message } from "@repo/db";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import apiClient from "@/lib/api-client";
 import { messageSchema, MessageSchema } from "@/schemas/message";
 
@@ -45,56 +57,104 @@ function RouteComponent() {
 
   return (
     <section>
-      <Card.Root className='mx-auto'>
-        <Card.Header>
-          <Card.Title>Mesajı Düzenle</Card.Title>
-        </Card.Header>
-        <Card.Content>
-          <Form
-            form={form}
-            onSubmit={onSubmit}
-          >
-            <Field.Root name='name'>
-              <Field.Label>Gönderen</Field.Label>
-              <Field.Input type='text' />
-              <Field.HelperText>Mesaj adı en az 1 en fazla 100 karakter olabilir.</Field.HelperText>
-              <Field.ErrorMessage />
-            </Field.Root>
-
-            <Field.Root name='email'>
-              <Field.Label>E-postası</Field.Label>
-              <Field.Input type='email' />
-              <Field.HelperText>Geçerli bir e-posta adresi girin.</Field.HelperText>
-              <Field.ErrorMessage />
-            </Field.Root>
-
-            <Field.Root name='subject'>
-              <Field.Label>Konusu</Field.Label>
-              <Field.Input type='text' />
-              <Field.HelperText>
-                Mesaj konusu en az 1 en fazla 150 karakter olabilir.
-              </Field.HelperText>
-              <Field.ErrorMessage />
-            </Field.Root>
-
-            <Field.Root name='content'>
-              <Field.Label>İçeriği</Field.Label>
-              <Field.TextArea rows={6} />
-              <Field.HelperText>
-                Mesaj içeriği en az 1 en fazla 2000 karakter olabilir.
-              </Field.HelperText>
-              <Field.ErrorMessage />
-            </Field.Root>
-
-            <Button
-              type='submit'
-              disabled={form.formState.isSubmitting}
+      <Card className='mx-auto'>
+        <CardHeader>
+          <CardTitle>Mesajı Düzenle</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <Form {...form}>
+            <form
+              onSubmit={form.handleSubmit(onSubmit)}
+              className='space-y-4'
             >
-              {form.formState.isSubmitting ? "Güncelleniyor..." : "Güncelle"}
-            </Button>
+              <FormField
+                control={form.control}
+                name='name'
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Gönderen</FormLabel>
+                    <FormControl>
+                      <Input
+                        type='text'
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormDescription>
+                      Mesaj adı en az 1 en fazla 100 karakter olabilir.
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name='email'
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>E-postası</FormLabel>
+                    <FormControl>
+                      <Input
+                        type='email'
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormDescription>Geçerli bir e-posta adresi girin.</FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name='subject'
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Konusu</FormLabel>
+                    <FormControl>
+                      <Input
+                        type='text'
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormDescription>
+                      Mesaj konusu en az 1 en fazla 150 karakter olabilir.
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name='content'
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>İçeriği</FormLabel>
+                    <FormControl>
+                      <Textarea
+                        rows={6}
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormDescription>
+                      Mesaj içeriği en az 1 en fazla 2000 karakter olabilir.
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <Button
+                type='submit'
+                disabled={form.formState.isSubmitting}
+              >
+                {form.formState.isSubmitting ? "Güncelleniyor..." : "Güncelle"}
+              </Button>
+            </form>
           </Form>
-        </Card.Content>
-      </Card.Root>
+        </CardContent>
+      </Card>
     </section>
   );
 }

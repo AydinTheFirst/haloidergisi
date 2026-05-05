@@ -1,4 +1,4 @@
-import { cn } from "@adn-ui/react";
+import { cn } from "@/lib/utils";
 
 export interface Breadcrumbs extends React.ComponentProps<"ol"> {}
 

@@ -1,8 +1,8 @@
-import { Button } from "@adn-ui/react";
 import { Icon } from "@iconify/react";
 import { createFileRoute, Link, Outlet, useLocation } from "@tanstack/react-router";
 
 import { Surface } from "@/components/chart-card";
+import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/use-auth";
 
 const tabs = [
@@ -68,12 +68,14 @@ function RouteComponent() {
                 {tabs.map((tab) => (
                   <li key={tab.href}>
                     <Button
-                      render={<Link to={tab.href} />}
-                      variant={isActive(tab.href) ? "primary" : "ghost"}
+                      asChild
+                      variant={isActive(tab.href) ? "default" : "ghost"}
                       className='w-full justify-start font-normal'
                     >
-                      <Icon icon={tab.icon} />
-                      {tab.label}
+                      <Link to={tab.href}>
+                        <Icon icon={tab.icon} />
+                        {tab.label}
+                      </Link>
                     </Button>
                   </li>
                 ))}

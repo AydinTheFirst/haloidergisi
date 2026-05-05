@@ -1,4 +1,3 @@
-import { Input } from "@adn-ui/react";
 import { Icon } from "@iconify/react";
 import { Message } from "@repo/db";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -16,6 +15,7 @@ import { toast } from "sonner";
 import { z } from "zod";
 
 import { DataGrid } from "@/components/data-grid";
+import { Input } from "@/components/ui/input";
 import useDebounce from "@/hooks/use-debounce";
 import apiClient from "@/lib/api-client";
 import { QueryRes } from "@/types";

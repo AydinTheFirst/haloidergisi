@@ -19,6 +19,14 @@ import {
 } from "recharts";
 
 import { ChartCard, Surface } from "@/components/chart-card";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import apiClient from "@/lib/api-client";
 import { List, PageVisit, User, Message } from "@/types";
 import {
@@ -329,26 +337,24 @@ function RouteComponent() {
           title='Tüm Sayfa Ziyaretleri'
           description='Detaylı liste'
         >
-          <div className='overflow-x-auto'>
-            <table>
-              <thead>
-                <tr>
-                  <th>Sayfa</th>
-                  <th>Ziyaret Sayısı</th>
-                </tr>
-              </thead>
-              <tbody>
-                {visits.items
-                  .sort((a, b) => b.count - a.count)
-                  .map((visit) => (
-                    <tr key={visit.url}>
-                      <td>{visit.url}</td>
-                      <td>{visit.count}</td>
-                    </tr>
-                  ))}
-              </tbody>
-            </table>
-          </div>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Sayfa</TableHead>
+                <TableHead>Ziyaret Sayısı</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {visits.items
+                .sort((a, b) => b.count - a.count)
+                .map((visit) => (
+                  <TableRow key={visit.url}>
+                    <TableCell>{visit.url}</TableCell>
+                    <TableCell>{visit.count}</TableCell>
+                  </TableRow>
+                ))}
+            </TableBody>
+          </Table>
         </ChartCard>
       </div>
     </div>

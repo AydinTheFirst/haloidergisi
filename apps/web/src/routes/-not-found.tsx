@@ -1,6 +1,7 @@
-import { Button } from "@adn-ui/react";
 import { Icon } from "@iconify/react";
 import { Link } from "@tanstack/react-router";
+
+import { Button } from "@/components/ui/button";
 
 export function NotFound() {
   return (
@@ -21,14 +22,13 @@ export function NotFound() {
           </p>
         </div>
 
-        <Link to='/'>
-          <Button
-            size='lg'
-            className='gap-2'
-          >
-            Ana Sayfaya Dön
-          </Button>
-        </Link>
+        <Button
+          asChild
+          size='lg'
+          className='gap-2'
+        >
+          <Link to='/'>Ana Sayfaya Dön</Link>
+        </Button>
       </div>
     </div>
   );

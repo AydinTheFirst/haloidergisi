@@ -1,4 +1,3 @@
-import { Button, Card, Container, Field, Form } from "@adn-ui/react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Icon } from "@iconify/react";
 import { createFileRoute, Link, useRouter } from "@tanstack/react-router";
@@ -9,10 +8,22 @@ import { toast } from "sonner";
 import z from "zod";
 
 import { Turnstile } from "@/components/turnstile";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Container } from "@/components/ui/container";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
 import apiClient from "@/lib/api-client";
 
 const forgotPasswordFormSchema = z.object({
-  email: z.email({ message: "Geçerli bir e-posta adresi girin." }),
+  email: z.string().email({ message: "Geçerli bir e-posta adresi girin." }),
 });
 
 type ForgotPasswordFormData = z.infer<typeof forgotPasswordFormSchema>;
@@ -60,8 +71,8 @@ function RouteComponent() {
         transition={{ duration: 0.4, ease: "easeOut" }}
         className='w-full max-w-md'
       >
-        <Card.Root className='mx-auto'>
-          <Card.Header className='text-center'>
+        <Card className='mx-auto'>
+          <CardHeader className='text-center'>
             <div className='mb-4 flex justify-center'>
               <div className='from-primary/20 to-primary/10 flex h-12 w-12 items-center justify-center rounded-full bg-linear-to-br'>
                 <Icon
@@ -70,59 +81,68 @@ function RouteComponent() {
                 />
               </div>
             </div>
-            <Card.Title className='text-2xl'>Şifremi Unuttum</Card.Title>
-            <Card.Description className='mt-2'>
+            <CardTitle className='text-2xl'>Şifremi Unuttum</CardTitle>
+            <CardDescription className='mt-2'>
               Endişelenmeyin! Şifrenizi sıfırlamak için e-posta adresinizi girin
-            </Card.Description>
-          </Card.Header>
-          <Card.Content>
-            <Form
-              form={form}
-              onSubmit={onSubmit}
-              className='space-y-4'
-            >
-              <Field.Root
-                name='email'
-                isRequired
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Form {...form}>
+              <form
+                onSubmit={form.handleSubmit(onSubmit)}
+                className='space-y-4'
               >
-                <Field.Label className='flex items-center gap-2'>
-                  <Icon
-                    icon='mdi:email'
-                    className='text-lg'
-                  />
-                  E-posta Adresiniz
-                </Field.Label>
-                <Field.Input type='email' />
-                <Field.ErrorMessage />
-              </Field.Root>
-
-              <div className='flex justify-center'>
-                <Turnstile onVerify={(token) => setToken(token)} />
-              </div>
-              <Button
-                type='submit'
-                className='w-full'
-                disabled={form.formState.isSubmitting}
-                size='lg'
-              >
-                <Icon
-                  icon='mdi:email-send'
-                  className='mr-2 text-lg'
+                <FormField
+                  control={form.control}
+                  name='email'
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className='flex items-center gap-2'>
+                        <Icon
+                          icon='mdi:email'
+                          className='text-lg'
+                        />
+                        E-posta Adresiniz
+                      </FormLabel>
+                      <FormControl>
+                        <Input
+                          type='email'
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
                 />
-                Sıfırlama Talimatlarını Gönder
-              </Button>
-              <div className='flex items-center justify-center gap-2 text-sm'>
-                <span className='text-muted-foreground'>Hatırladınız mı?</span>
-                <Link
-                  className='text-primary font-medium hover:underline'
-                  to='/login'
+
+                <div className='flex justify-center'>
+                  <Turnstile onVerify={(token) => setToken(token)} />
+                </div>
+                <Button
+                  type='submit'
+                  className='w-full'
+                  disabled={form.formState.isSubmitting}
+                  size='lg'
                 >
-                  Giriş Yapın
-                </Link>
-              </div>
+                  <Icon
+                    icon='mdi:email-send'
+                    className='mr-2 text-lg'
+                  />
+                  Sıfırlama Talimatlarını Gönder
+                </Button>
+                <div className='flex items-center justify-center gap-2 text-sm'>
+                  <span className='text-muted-foreground'>Hatırladınız mı?</span>
+                  <Link
+                    className='text-primary font-medium hover:underline'
+                    to='/login'
+                  >
+                    Giriş Yapın
+                  </Link>
+                </div>
+              </form>
             </Form>
-          </Card.Content>
-        </Card.Root>
+          </CardContent>
+        </Card>
       </motion.div>
     </Container>
   );

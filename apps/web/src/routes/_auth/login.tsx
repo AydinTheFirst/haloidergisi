@@ -1,4 +1,3 @@
-import { Button, Card, Container, Field, Form, Separator } from "@adn-ui/react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Icon } from "@iconify/react";
 import { createFileRoute, Link, useRouter } from "@tanstack/react-router";
@@ -10,6 +9,11 @@ import z from "zod";
 
 import { GoogleAuthButton } from "@/components/auth";
 import { Turnstile } from "@/components/turnstile";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Separator } from "@/components/ui/separator";
 import apiClient from "@/lib/api-client";
 
 const loginSchema = z.object({
@@ -53,15 +57,15 @@ function RouteComponent() {
   };
 
   return (
-    <Container className='grid min-h-screen place-items-center px-4'>
+    <div className='container grid min-h-screen place-items-center px-4'>
       <motion.div
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.4, ease: "easeOut" }}
         className='w-full max-w-md'
       >
-        <Card.Root className='mx-auto'>
-          <Card.Header className='text-center'>
+        <Card className='mx-auto'>
+          <CardHeader className='text-center'>
             <div className='mb-4 flex justify-center'>
               <div className='from-primary/20 to-primary/10 flex h-12 w-12 items-center justify-center rounded-full bg-linear-to-br'>
                 <Icon
@@ -70,55 +74,66 @@ function RouteComponent() {
                 />
               </div>
             </div>
-            <Card.Title className='text-2xl'>Giriş Yapın</Card.Title>
-            <Card.Description className='mt-2'>
-              Hesabınıza erişmek için giriş yapın
-            </Card.Description>
-          </Card.Header>
-          <Card.Content>
-            <Form
-              form={form}
-              onSubmit={onSubmit}
+            <CardTitle className='text-2xl'>Giriş Yapın</CardTitle>
+            <CardDescription className='mt-2'>Hesabınıza erişmek için giriş yapın</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <form
+              onSubmit={form.handleSubmit(onSubmit)}
               className='space-y-4'
             >
-              <Field.Root
-                name='email'
-                isRequired
-              >
-                <Field.Label className='flex items-center gap-2'>
+              <div className='space-y-2'>
+                <Label
+                  htmlFor='email'
+                  className='flex items-center gap-2'
+                >
                   <Icon
                     icon='mdi:email'
                     className='text-lg'
                   />
                   E-posta
-                </Field.Label>
-                <Field.Input type='email' />
-                <Field.ErrorMessage />
-              </Field.Root>
+                </Label>
+                <Input
+                  id='email'
+                  type='email'
+                  {...form.register("email")}
+                />
+                {form.formState.errors.email && (
+                  <p className='text-destructive text-xs'>{form.formState.errors.email.message}</p>
+                )}
+              </div>
 
-              <Field.Root
-                name='password'
-                isRequired
-              >
+              <div className='space-y-2'>
                 <div className='flex items-center justify-between'>
-                  <Field.Label className='flex items-center gap-2'>
+                  <Label
+                    htmlFor='password'
+                    className='flex items-center gap-2'
+                  >
                     <Icon
                       icon='mdi:lock'
                       className='text-lg'
                     />
                     Şifre
-                  </Field.Label>
+                  </Label>
 
                   <Link
                     to='/forgot-password'
-                    className='text-danger text-xs hover:underline'
+                    className='text-destructive text-xs hover:underline'
                   >
                     Şifremi Unuttum?
                   </Link>
                 </div>
-                <Field.Input type='password' />
-                <Field.ErrorMessage />
-              </Field.Root>
+                <Input
+                  id='password'
+                  type='password'
+                  {...form.register("password")}
+                />
+                {form.formState.errors.password && (
+                  <p className='text-destructive text-xs'>
+                    {form.formState.errors.password.message}
+                  </p>
+                )}
+              </div>
 
               <div className='flex justify-center'>
                 <Turnstile onVerify={(token) => setToken(token)} />
@@ -144,18 +159,18 @@ function RouteComponent() {
                   Kayıt Olun
                 </Link>
               </div>
-            </Form>
-          </Card.Content>
-          <div className='flex items-center gap-6'>
-            <Separator className='my-4 h-px self-center' />
+            </form>
+          </CardContent>
+          <div className='flex items-center gap-6 px-6'>
+            <Separator className='flex-1' />
             <span className='text-muted-foreground text-center text-sm'>VEYA</span>
-            <Separator className='my-4 h-px self-center' />
+            <Separator className='flex-1' />
           </div>
-          <Card.Content>
+          <CardContent className='mt-4'>
             <GoogleAuthButton className='w-full' />
-          </Card.Content>
-        </Card.Root>
+          </CardContent>
+        </Card>
       </motion.div>
-    </Container>
+    </div>
   );
 }

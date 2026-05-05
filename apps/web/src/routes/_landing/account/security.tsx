@@ -1,4 +1,3 @@
-import { Separator, Field, Button, Form } from "@adn-ui/react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Icon } from "@iconify/react";
 import { createFileRoute } from "@tanstack/react-router";
@@ -7,6 +6,18 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import z from "zod";
 
+import { Button } from "@/components/ui/button";
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Separator } from "@/components/ui/separator";
 import apiClient from "@/lib/api-client";
 
 const changePasswordFormSchema = z.object({
@@ -60,71 +71,99 @@ function RouteComponent() {
 
       <Separator />
 
-      <Form
-        form={form}
-        onSubmit={onSubmit}
-        className='mx-auto'
-      >
-        <Field.Root name='currentPassword'>
-          <Field.Label className='text-sm font-medium'>Mevcut Parola</Field.Label>
-          <div className='relative mt-2'>
-            <Field.Input
-              type={isPasswordVisible ? "text" : "password"}
-              className='pr-10'
-            />
-            <button
-              onClick={() => setIsPasswordVisible((prev) => !prev)}
-              type='button'
-              className='absolute top-1/2 right-3 -translate-y-1/2 cursor-pointer'
-            >
-              <Icon icon={isPasswordVisible ? "mdi:eye-off" : "mdi:eye"} />
-            </button>
-          </div>
-          <Field.HelperText>Mevcut parolanızı girin.</Field.HelperText>
-          <Field.ErrorMessage />
-        </Field.Root>
+      <Form {...form}>
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          className='mx-auto space-y-4'
+        >
+          <FormField
+            control={form.control}
+            name='currentPassword'
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Mevcut Parola</FormLabel>
+                <FormControl>
+                  <div className='relative'>
+                    <Input
+                      type={isPasswordVisible ? "text" : "password"}
+                      className='pr-10'
+                      {...field}
+                    />
+                    <button
+                      onClick={() => setIsPasswordVisible((prev) => !prev)}
+                      type='button'
+                      className='absolute top-1/2 right-3 -translate-y-1/2 cursor-pointer'
+                    >
+                      <Icon icon={isPasswordVisible ? "mdi:eye-off" : "mdi:eye"} />
+                    </button>
+                  </div>
+                </FormControl>
+                <FormDescription>Mevcut parolanızı girin.</FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-        <Field.Root name='newPassword'>
-          <Field.Label className='text-sm font-medium'>Yeni Parola</Field.Label>
-          <div className='relative mt-2'>
-            <Field.Input
-              type={isPasswordVisible ? "text" : "password"}
-              className='pr-10'
-            />
-            <button
-              onClick={() => setIsPasswordVisible((prev) => !prev)}
-              type='button'
-              className='absolute top-1/2 right-3 -translate-y-1/2 cursor-pointer'
-            >
-              <Icon icon={isPasswordVisible ? "mdi:eye-off" : "mdi:eye"} />
-            </button>
-          </div>
-          <Field.HelperText>En az 6 karakter olmalıdır.</Field.HelperText>
-          <Field.ErrorMessage />
-        </Field.Root>
+          <FormField
+            control={form.control}
+            name='newPassword'
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Yeni Parola</FormLabel>
+                <FormControl>
+                  <div className='relative'>
+                    <Input
+                      type={isPasswordVisible ? "text" : "password"}
+                      className='pr-10'
+                      {...field}
+                    />
+                    <button
+                      onClick={() => setIsPasswordVisible((prev) => !prev)}
+                      type='button'
+                      className='absolute top-1/2 right-3 -translate-y-1/2 cursor-pointer'
+                    >
+                      <Icon icon={isPasswordVisible ? "mdi:eye-off" : "mdi:eye"} />
+                    </button>
+                  </div>
+                </FormControl>
+                <FormDescription>En az 6 karakter olmalıdır.</FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-        <Field.Root name='confirmNewPassword'>
-          <Field.Label className='text-sm font-medium'>Yeni Parola (Tekrar)</Field.Label>
-          <div className='relative mt-2'>
-            <Field.Input
-              type={isPasswordVisible ? "text" : "password"}
-              className='pr-10'
-            />
-            <button
-              onClick={() => setIsPasswordVisible((prev) => !prev)}
-              type='button'
-              className='absolute top-1/2 right-3 -translate-y-1/2 cursor-pointer'
-            >
-              <Icon icon={isPasswordVisible ? "mdi:eye-off" : "mdi:eye"} />
-            </button>
-          </div>
-          <Field.HelperText>Yeni parolanızı tekrar girin.</Field.HelperText>
-          <Field.ErrorMessage />
-        </Field.Root>
+          <FormField
+            control={form.control}
+            name='confirmNewPassword'
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Yeni Parola (Tekrar)</FormLabel>
+                <FormControl>
+                  <div className='relative'>
+                    <Input
+                      type={isPasswordVisible ? "text" : "password"}
+                      className='pr-10'
+                      {...field}
+                    />
+                    <button
+                      onClick={() => setIsPasswordVisible((prev) => !prev)}
+                      type='button'
+                      className='absolute top-1/2 right-3 -translate-y-1/2 cursor-pointer'
+                    >
+                      <Icon icon={isPasswordVisible ? "mdi:eye-off" : "mdi:eye"} />
+                    </button>
+                  </div>
+                </FormControl>
+                <FormDescription>Yeni parolanızı tekrar girin.</FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-        <div className='flex justify-end pt-4'>
-          <Button type='submit'>Parolayı Güncelle</Button>
-        </div>
+          <div className='flex justify-end pt-4'>
+            <Button type='submit'>Parolayı Güncelle</Button>
+          </div>
+        </form>
       </Form>
     </div>
   );
