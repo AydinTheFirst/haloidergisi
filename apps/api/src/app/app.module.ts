@@ -2,11 +2,13 @@ import { MailerModule } from "@nestjs-modules/mailer";
 import { MiddlewareConsumer, NestModule } from "@nestjs/common";
 import { Module } from "@nestjs/common";
 import { ConfigModule } from "@nestjs/config";
+import { APP_GUARD } from "@nestjs/core";
 import { EventEmitterModule } from "@nestjs/event-emitter";
 import { JwtModule } from "@nestjs/jwt";
 import { ScheduleModule } from "@nestjs/schedule";
 
 import { DrizzleModule } from "@/database";
+import { AuthGuard } from "@/guards/auth.guard";
 import { LoggerMiddleware } from "@/middlewares/logger.middleware";
 import modules from "@/modules";
 import { MailService } from "@/services/mail.service";
@@ -43,7 +45,14 @@ import { AppService } from "./app.service";
     ...modules,
   ],
   controllers: [AppController],
-  providers: [AppService, MailService],
+  providers: [
+    AppService,
+    MailService,
+    {
+      provide: APP_GUARD,
+      useClass: AuthGuard,
+    },
+  ],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {

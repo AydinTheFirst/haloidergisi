@@ -34,6 +34,18 @@ export default function AccountDropdown() {
               Hesap Ayarları
             </Link>
           </DropdownMenuItem>
+          <DropdownMenuItem asChild>
+            <Link to='/articles'>
+              <Icon icon='mdi:file-document-edit-outline' />
+              Yazı Gönder
+            </Link>
+          </DropdownMenuItem>
+          <DropdownMenuItem asChild>
+            <Link to='/articles/my'>
+              <Icon icon='mdi:file-document-outline' />
+              Yazılarım
+            </Link>
+          </DropdownMenuItem>
           {user.roles.includes("ADMIN") && (
             <DropdownMenuItem asChild>
               <Link to='/dashboard'>

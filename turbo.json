@@ -11,13 +11,15 @@
       "dependsOn": ["^build"]
     },
     "dev": {
-      "dependsOn": ["^db:generate", "^build"],
+      "dependsOn": ["^build"],
       "persistent": true,
       "cache": false
     },
     "//#lint": {},
     "//#format": {},
-    "//#type-check": {},
+    "type-check": {
+      "dependsOn": ["^build"]
+    },
     "db:update": { "cache": false },
     "db:generate": { "cache": false }
   }

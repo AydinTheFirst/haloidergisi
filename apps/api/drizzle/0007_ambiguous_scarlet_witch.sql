@@ -1,0 +1,1 @@
+ALTER TABLE "Article" ADD CONSTRAINT "Article_callId_authorId_unique" UNIQUE("callId","authorId");

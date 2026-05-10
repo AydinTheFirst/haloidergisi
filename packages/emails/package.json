@@ -4,13 +4,14 @@
   "type": "module",
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.js",
+      "types": "./dist/index.d.mts",
+      "import": "./dist/index.mjs",
       "require": "./dist/index.cjs"
     }
   },
   "scripts": {
     "build": "tsdown",
+    "type-check": "tsc --noEmit",
     "export": "email export",
     "start:dev": "email dev --port 3030 --dir src/emails"
   },

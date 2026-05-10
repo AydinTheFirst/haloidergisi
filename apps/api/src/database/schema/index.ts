@@ -38,6 +38,22 @@ export const ProviderType = {
 export type ProviderType = (typeof ProviderType)[keyof typeof ProviderType];
 export const providerTypeEnum = pgEnum("ProviderType", ["GOOGLE"]);
 
+export const ArticleStatus = {
+  PENDING: "PENDING",
+  REVIEWING: "REVIEWING",
+  APPROVED: "APPROVED",
+  REJECTED: "REJECTED",
+  REVISION_REQ: "REVISION_REQ",
+} as const;
+export type ArticleStatus = (typeof ArticleStatus)[keyof typeof ArticleStatus];
+export const articleStatusEnum = pgEnum("ArticleStatus", [
+  "PENDING",
+  "REVIEWING",
+  "APPROVED",
+  "REJECTED",
+  "REVISION_REQ",
+]);
+
 export const users = pgTable("User", {
   id: text("id")
     .primaryKey()
@@ -184,6 +200,38 @@ export const messages = pgTable("Message", {
   createdAt: timestamp("createdAt").defaultNow().notNull(),
 });
 
+export const submissionCalls = pgTable("SubmissionCall", {
+  id: text("id")
+    .primaryKey()
+    .$defaultFn(() => crypto.randomUUID()),
+  title: text("title").notNull(),
+  description: text("description"),
+  startDate: timestamp("startDate").notNull(),
+  endDate: timestamp("endDate").notNull(),
+  isActive: boolean("isActive").notNull().default(true),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().notNull(),
+});
+
+export const articles = pgTable(
+  "Article",
+  {
+    id: text("id")
+      .primaryKey()
+      .$defaultFn(() => crypto.randomUUID()),
+    callId: text("callId").notNull(),
+    authorId: text("authorId").notNull(),
+    title: text("title").notNull(),
+    content: text("content").notNull(),
+    fileUrl: text("fileUrl"),
+    status: articleStatusEnum("status").notNull().default("PENDING"),
+    adminNote: text("adminNote"),
+    createdAt: timestamp("createdAt").defaultNow().notNull(),
+    updatedAt: timestamp("updatedAt").defaultNow().notNull(),
+  },
+  (t) => [unique("Article_callId_authorId_unique").on(t.callId, t.authorId)],
+);
+
 // Relations
 export const usersRelations = relations(users, ({ one, many }) => ({
   tokens: many(tokens),
@@ -201,6 +249,7 @@ export const usersRelations = relations(users, ({ one, many }) => ({
     references: [crews.id],
   }),
   postReactions: many(postReactions),
+  articles: many(articles),
 }));
 
 export const providersRelations = relations(providers, ({ one }) => ({
@@ -266,6 +315,21 @@ export const themesRelations = relations(themes, ({ one }) => ({
   }),
 }));
 
+export const submissionCallsRelations = relations(submissionCalls, ({ many }) => ({
+  articles: many(articles),
+}));
+
+export const articlesRelations = relations(articles, ({ one }) => ({
+  call: one(submissionCalls, {
+    fields: [articles.callId],
+    references: [submissionCalls.id],
+  }),
+  author: one(users, {
+    fields: [articles.authorId],
+    references: [users.id],
+  }),
+}));
+
 export type User = typeof users.$inferSelect;
 export type NewUser = typeof users.$inferInsert;
 
@@ -304,3 +368,9 @@ export type NewMessage = typeof messages.$inferInsert;
 
 export type Theme = typeof themes.$inferSelect;
 export type NewTheme = typeof themes.$inferInsert;
+
+export type SubmissionCall = typeof submissionCalls.$inferSelect;
+export type NewSubmissionCall = typeof submissionCalls.$inferInsert;
+
+export type Article = typeof articles.$inferSelect;
+export type NewArticle = typeof articles.$inferInsert;

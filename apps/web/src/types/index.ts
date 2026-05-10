@@ -7,7 +7,12 @@ import {
   Post as BasePost,
   Category as BaseCategory,
   Theme as BaseTheme,
+  SubmissionCall as BaseSubmissionCall,
+  Article as BaseArticle,
+  ArticleStatus,
 } from "@repo/db";
+
+export { ArticleStatus };
 
 export interface List<T> {
   items: T[];
@@ -46,4 +51,13 @@ export interface Post extends BasePost {
 
 export interface Theme extends BaseTheme {
   posts?: Post[];
+}
+
+export interface SubmissionCall extends BaseSubmissionCall {
+  articles?: Article[];
+}
+
+export interface Article extends BaseArticle {
+  author?: User;
+  call?: SubmissionCall;
 }

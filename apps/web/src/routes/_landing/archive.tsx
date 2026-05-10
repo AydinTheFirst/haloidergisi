@@ -79,7 +79,7 @@ function MagazineNode({ magazine }: { magazine: ArchiveMagazine }) {
         className='hover:bg-muted/30 flex w-full items-center gap-4 p-4 text-left transition-colors'
         onClick={() => setIsOpen(!isOpen)}
       >
-        <div className='bg-muted relative size-20 flex-shrink-0 overflow-hidden rounded-lg'>
+        <div className='bg-muted relative size-20 shrink-0 overflow-hidden rounded-lg'>
           {magazine.coverImage ? (
             <CdnImage
               src={magazine.coverImage}

@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { pageVisits } from "@repo/db";
-import { and, desc, eq, sql } from "drizzle-orm";
+import { desc, sql } from "drizzle-orm";
 
 import { DrizzleService } from "@/database";
 import { DrizzleQueryParams } from "@/decorators";

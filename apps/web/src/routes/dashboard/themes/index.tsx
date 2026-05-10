@@ -2,7 +2,7 @@ import { Icon } from "@iconify/react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 import { Check, ChevronsUpDown } from "lucide-react";
-import { useState } from "react";
+import { useId, useState } from "react";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
@@ -127,24 +127,42 @@ function ThemesDashboard() {
                 className='flex items-end gap-4'
               >
                 <div className='flex-1 space-y-2'>
-                  <label className='text-sm font-medium'>Başlık (Eser)</label>
+                  <label
+                    htmlFor={`work-${index}`}
+                    className='text-sm font-medium'
+                  >
+                    Başlık (Eser)
+                  </label>
                   <Input
+                    id={`work-${index}`}
                     value={theme.work}
                     onChange={(e) => handleInputChange(index, "work", e.target.value)}
                     placeholder='Örn: Sefiller'
                   />
                 </div>
                 <div className='flex-1 space-y-2'>
-                  <label className='text-sm font-medium'>Konu (Tür)</label>
+                  <label
+                    htmlFor={`category-${index}`}
+                    className='text-sm font-medium'
+                  >
+                    Konu (Tür)
+                  </label>
                   <Input
+                    id={`category-${index}`}
                     value={theme.category}
                     onChange={(e) => handleInputChange(index, "category", e.target.value)}
                     placeholder='Örn: Kitap'
                   />
                 </div>
                 <div className='flex-1 space-y-2'>
-                  <label className='text-sm font-medium'>İlgili Dergi Sayısı</label>
+                  <label
+                    htmlFor={`post-${index}`}
+                    className='text-sm font-medium'
+                  >
+                    İlgili Dergi Sayısı
+                  </label>
                   <PostCombobox
+                    id={`post-${index}`}
                     posts={posts?.items || []}
                     value={theme.postId}
                     onChange={(val) => handleInputChange(index, "postId", val)}
@@ -246,17 +264,20 @@ function ThemesDashboard() {
 }
 
 function PostCombobox({
+  id,
   posts,
   value,
   onChange,
   isLoading,
 }: {
+  id?: string;
   posts: Post[];
   value: string;
   onChange: (value: string) => void;
   isLoading: boolean;
 }) {
   const [open, setOpen] = useState(false);
+  const listboxId = useId();
 
   return (
     <Popover
@@ -265,9 +286,11 @@ function PostCombobox({
     >
       <PopoverTrigger asChild>
         <Button
+          id={id}
           variant='outline'
           role='combobox'
           aria-expanded={open}
+          aria-controls={listboxId}
           className='w-full justify-between'
           disabled={isLoading}
         >
@@ -281,7 +304,10 @@ function PostCombobox({
           <ChevronsUpDown className='ml-2 h-4 w-4 shrink-0 opacity-50' />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className='z-[1000] w-[400px] p-0'>
+      <PopoverContent
+        id={listboxId}
+        className='z-[1000] w-[400px] p-0'
+      >
         <Command>
           <CommandInput placeholder='Post ara...' />
           <CommandList>

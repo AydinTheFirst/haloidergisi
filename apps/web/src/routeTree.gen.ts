@@ -28,16 +28,20 @@ import { Route as AuthForgotPasswordRouteImport } from './routes/_auth/forgot-pa
 import { Route as LandingAccountRouteRouteImport } from './routes/_landing/account/route'
 import { Route as DashboardUsersIndexRouteImport } from './routes/dashboard/users/index'
 import { Route as DashboardThemesIndexRouteImport } from './routes/dashboard/themes/index'
+import { Route as DashboardSubmissionsIndexRouteImport } from './routes/dashboard/submissions/index'
 import { Route as DashboardProfilesIndexRouteImport } from './routes/dashboard/profiles/index'
 import { Route as DashboardPostsIndexRouteImport } from './routes/dashboard/posts/index'
 import { Route as DashboardMessagesIndexRouteImport } from './routes/dashboard/messages/index'
 import { Route as DashboardCrewsIndexRouteImport } from './routes/dashboard/crews/index'
 import { Route as DashboardCategoriesIndexRouteImport } from './routes/dashboard/categories/index'
+import { Route as DashboardCallsIndexRouteImport } from './routes/dashboard/calls/index'
 import { Route as DashboardAnalyticsIndexRouteImport } from './routes/dashboard/analytics/index'
 import { Route as LandingPostsIndexRouteImport } from './routes/_landing/posts/index'
+import { Route as LandingArticlesIndexRouteImport } from './routes/_landing/articles/index'
 import { Route as LandingAccountIndexRouteImport } from './routes/_landing/account/index'
 import { Route as DashboardUsersNewRouteImport } from './routes/dashboard/users/new'
 import { Route as DashboardUsersUserIdRouteImport } from './routes/dashboard/users/$userId'
+import { Route as DashboardSubmissionsArticleIdRouteImport } from './routes/dashboard/submissions/$articleId'
 import { Route as DashboardProfilesProfileIdRouteImport } from './routes/dashboard/profiles/$profileId'
 import { Route as DashboardPostsNewRouteImport } from './routes/dashboard/posts/new'
 import { Route as DashboardPostsPostIdRouteImport } from './routes/dashboard/posts/$postId'
@@ -46,12 +50,17 @@ import { Route as DashboardCrewsNewRouteImport } from './routes/dashboard/crews/
 import { Route as DashboardCrewsCrewIdRouteImport } from './routes/dashboard/crews/$crewId'
 import { Route as DashboardCategoriesNewRouteImport } from './routes/dashboard/categories/new'
 import { Route as DashboardCategoriesCategoryIdRouteImport } from './routes/dashboard/categories/$categoryId'
+import { Route as DashboardCallsNewRouteImport } from './routes/dashboard/calls/new'
+import { Route as DashboardCallsCallIdRouteImport } from './routes/dashboard/calls/$callId'
 import { Route as LandingPostsPostIdRouteImport } from './routes/_landing/posts/$postId'
+import { Route as LandingArticlesMyRouteImport } from './routes/_landing/articles/my'
+import { Route as LandingArticlesArticleIdRouteImport } from './routes/_landing/articles/$articleId'
 import { Route as LandingAccountSecurityRouteImport } from './routes/_landing/account/security'
 import { Route as LandingAccountProfileRouteImport } from './routes/_landing/account/profile'
 import { Route as LandingAccountNotificationsRouteImport } from './routes/_landing/account/notifications'
 import { Route as LandingAccountDeleteRouteImport } from './routes/_landing/account/delete'
 import { Route as LandingAccountApplicationsRouteImport } from './routes/_landing/account/applications'
+import { Route as LandingArticlesSubmitCallIdRouteImport } from './routes/_landing/articles/submit.$callId'
 
 const DashboardRouteRoute = DashboardRouteRouteImport.update({
   id: '/dashboard',
@@ -146,6 +155,12 @@ const DashboardThemesIndexRoute = DashboardThemesIndexRouteImport.update({
   path: '/themes/',
   getParentRoute: () => DashboardRouteRoute,
 } as any)
+const DashboardSubmissionsIndexRoute =
+  DashboardSubmissionsIndexRouteImport.update({
+    id: '/submissions/',
+    path: '/submissions/',
+    getParentRoute: () => DashboardRouteRoute,
+  } as any)
 const DashboardProfilesIndexRoute = DashboardProfilesIndexRouteImport.update({
   id: '/profiles/',
   path: '/profiles/',
@@ -172,6 +187,11 @@ const DashboardCategoriesIndexRoute =
     path: '/categories/',
     getParentRoute: () => DashboardRouteRoute,
   } as any)
+const DashboardCallsIndexRoute = DashboardCallsIndexRouteImport.update({
+  id: '/calls/',
+  path: '/calls/',
+  getParentRoute: () => DashboardRouteRoute,
+} as any)
 const DashboardAnalyticsIndexRoute = DashboardAnalyticsIndexRouteImport.update({
   id: '/analytics/',
   path: '/analytics/',
@@ -180,6 +200,11 @@ const DashboardAnalyticsIndexRoute = DashboardAnalyticsIndexRouteImport.update({
 const LandingPostsIndexRoute = LandingPostsIndexRouteImport.update({
   id: '/posts/',
   path: '/posts/',
+  getParentRoute: () => LandingRouteRoute,
+} as any)
+const LandingArticlesIndexRoute = LandingArticlesIndexRouteImport.update({
+  id: '/articles/',
+  path: '/articles/',
   getParentRoute: () => LandingRouteRoute,
 } as any)
 const LandingAccountIndexRoute = LandingAccountIndexRouteImport.update({
@@ -197,6 +222,12 @@ const DashboardUsersUserIdRoute = DashboardUsersUserIdRouteImport.update({
   path: '/users/$userId',
   getParentRoute: () => DashboardRouteRoute,
 } as any)
+const DashboardSubmissionsArticleIdRoute =
+  DashboardSubmissionsArticleIdRouteImport.update({
+    id: '/submissions/$articleId',
+    path: '/submissions/$articleId',
+    getParentRoute: () => DashboardRouteRoute,
+  } as any)
 const DashboardProfilesProfileIdRoute =
   DashboardProfilesProfileIdRouteImport.update({
     id: '/profiles/$profileId',
@@ -240,11 +271,32 @@ const DashboardCategoriesCategoryIdRoute =
     path: '/categories/$categoryId',
     getParentRoute: () => DashboardRouteRoute,
   } as any)
+const DashboardCallsNewRoute = DashboardCallsNewRouteImport.update({
+  id: '/calls/new',
+  path: '/calls/new',
+  getParentRoute: () => DashboardRouteRoute,
+} as any)
+const DashboardCallsCallIdRoute = DashboardCallsCallIdRouteImport.update({
+  id: '/calls/$callId',
+  path: '/calls/$callId',
+  getParentRoute: () => DashboardRouteRoute,
+} as any)
 const LandingPostsPostIdRoute = LandingPostsPostIdRouteImport.update({
   id: '/posts/$postId',
   path: '/posts/$postId',
   getParentRoute: () => LandingRouteRoute,
 } as any)
+const LandingArticlesMyRoute = LandingArticlesMyRouteImport.update({
+  id: '/articles/my',
+  path: '/articles/my',
+  getParentRoute: () => LandingRouteRoute,
+} as any)
+const LandingArticlesArticleIdRoute =
+  LandingArticlesArticleIdRouteImport.update({
+    id: '/articles/$articleId',
+    path: '/articles/$articleId',
+    getParentRoute: () => LandingRouteRoute,
+  } as any)
 const LandingAccountSecurityRoute = LandingAccountSecurityRouteImport.update({
   id: '/security',
   path: '/security',
@@ -272,6 +324,12 @@ const LandingAccountApplicationsRoute =
     path: '/applications',
     getParentRoute: () => LandingAccountRouteRoute,
   } as any)
+const LandingArticlesSubmitCallIdRoute =
+  LandingArticlesSubmitCallIdRouteImport.update({
+    id: '/articles/submit/$callId',
+    path: '/articles/submit/$callId',
+    getParentRoute: () => LandingRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof LandingIndexRoute
@@ -294,7 +352,11 @@ export interface FileRoutesByFullPath {
   '/account/notifications': typeof LandingAccountNotificationsRoute
   '/account/profile': typeof LandingAccountProfileRoute
   '/account/security': typeof LandingAccountSecurityRoute
+  '/articles/$articleId': typeof LandingArticlesArticleIdRoute
+  '/articles/my': typeof LandingArticlesMyRoute
   '/posts/$postId': typeof LandingPostsPostIdRoute
+  '/dashboard/calls/$callId': typeof DashboardCallsCallIdRoute
+  '/dashboard/calls/new': typeof DashboardCallsNewRoute
   '/dashboard/categories/$categoryId': typeof DashboardCategoriesCategoryIdRoute
   '/dashboard/categories/new': typeof DashboardCategoriesNewRoute
   '/dashboard/crews/$crewId': typeof DashboardCrewsCrewIdRoute
@@ -303,18 +365,23 @@ export interface FileRoutesByFullPath {
   '/dashboard/posts/$postId': typeof DashboardPostsPostIdRoute
   '/dashboard/posts/new': typeof DashboardPostsNewRoute
   '/dashboard/profiles/$profileId': typeof DashboardProfilesProfileIdRoute
+  '/dashboard/submissions/$articleId': typeof DashboardSubmissionsArticleIdRoute
   '/dashboard/users/$userId': typeof DashboardUsersUserIdRoute
   '/dashboard/users/new': typeof DashboardUsersNewRoute
   '/account/': typeof LandingAccountIndexRoute
+  '/articles/': typeof LandingArticlesIndexRoute
   '/posts/': typeof LandingPostsIndexRoute
   '/dashboard/analytics/': typeof DashboardAnalyticsIndexRoute
+  '/dashboard/calls/': typeof DashboardCallsIndexRoute
   '/dashboard/categories/': typeof DashboardCategoriesIndexRoute
   '/dashboard/crews/': typeof DashboardCrewsIndexRoute
   '/dashboard/messages/': typeof DashboardMessagesIndexRoute
   '/dashboard/posts/': typeof DashboardPostsIndexRoute
   '/dashboard/profiles/': typeof DashboardProfilesIndexRoute
+  '/dashboard/submissions/': typeof DashboardSubmissionsIndexRoute
   '/dashboard/themes/': typeof DashboardThemesIndexRoute
   '/dashboard/users/': typeof DashboardUsersIndexRoute
+  '/articles/submit/$callId': typeof LandingArticlesSubmitCallIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof LandingIndexRoute
@@ -335,7 +402,11 @@ export interface FileRoutesByTo {
   '/account/notifications': typeof LandingAccountNotificationsRoute
   '/account/profile': typeof LandingAccountProfileRoute
   '/account/security': typeof LandingAccountSecurityRoute
+  '/articles/$articleId': typeof LandingArticlesArticleIdRoute
+  '/articles/my': typeof LandingArticlesMyRoute
   '/posts/$postId': typeof LandingPostsPostIdRoute
+  '/dashboard/calls/$callId': typeof DashboardCallsCallIdRoute
+  '/dashboard/calls/new': typeof DashboardCallsNewRoute
   '/dashboard/categories/$categoryId': typeof DashboardCategoriesCategoryIdRoute
   '/dashboard/categories/new': typeof DashboardCategoriesNewRoute
   '/dashboard/crews/$crewId': typeof DashboardCrewsCrewIdRoute
@@ -344,18 +415,23 @@ export interface FileRoutesByTo {
   '/dashboard/posts/$postId': typeof DashboardPostsPostIdRoute
   '/dashboard/posts/new': typeof DashboardPostsNewRoute
   '/dashboard/profiles/$profileId': typeof DashboardProfilesProfileIdRoute
+  '/dashboard/submissions/$articleId': typeof DashboardSubmissionsArticleIdRoute
   '/dashboard/users/$userId': typeof DashboardUsersUserIdRoute
   '/dashboard/users/new': typeof DashboardUsersNewRoute
   '/account': typeof LandingAccountIndexRoute
+  '/articles': typeof LandingArticlesIndexRoute
   '/posts': typeof LandingPostsIndexRoute
   '/dashboard/analytics': typeof DashboardAnalyticsIndexRoute
+  '/dashboard/calls': typeof DashboardCallsIndexRoute
   '/dashboard/categories': typeof DashboardCategoriesIndexRoute
   '/dashboard/crews': typeof DashboardCrewsIndexRoute
   '/dashboard/messages': typeof DashboardMessagesIndexRoute
   '/dashboard/posts': typeof DashboardPostsIndexRoute
   '/dashboard/profiles': typeof DashboardProfilesIndexRoute
+  '/dashboard/submissions': typeof DashboardSubmissionsIndexRoute
   '/dashboard/themes': typeof DashboardThemesIndexRoute
   '/dashboard/users': typeof DashboardUsersIndexRoute
+  '/articles/submit/$callId': typeof LandingArticlesSubmitCallIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -381,7 +457,11 @@ export interface FileRoutesById {
   '/_landing/account/notifications': typeof LandingAccountNotificationsRoute
   '/_landing/account/profile': typeof LandingAccountProfileRoute
   '/_landing/account/security': typeof LandingAccountSecurityRoute
+  '/_landing/articles/$articleId': typeof LandingArticlesArticleIdRoute
+  '/_landing/articles/my': typeof LandingArticlesMyRoute
   '/_landing/posts/$postId': typeof LandingPostsPostIdRoute
+  '/dashboard/calls/$callId': typeof DashboardCallsCallIdRoute
+  '/dashboard/calls/new': typeof DashboardCallsNewRoute
   '/dashboard/categories/$categoryId': typeof DashboardCategoriesCategoryIdRoute
   '/dashboard/categories/new': typeof DashboardCategoriesNewRoute
   '/dashboard/crews/$crewId': typeof DashboardCrewsCrewIdRoute
@@ -390,18 +470,23 @@ export interface FileRoutesById {
   '/dashboard/posts/$postId': typeof DashboardPostsPostIdRoute
   '/dashboard/posts/new': typeof DashboardPostsNewRoute
   '/dashboard/profiles/$profileId': typeof DashboardProfilesProfileIdRoute
+  '/dashboard/submissions/$articleId': typeof DashboardSubmissionsArticleIdRoute
   '/dashboard/users/$userId': typeof DashboardUsersUserIdRoute
   '/dashboard/users/new': typeof DashboardUsersNewRoute
   '/_landing/account/': typeof LandingAccountIndexRoute
+  '/_landing/articles/': typeof LandingArticlesIndexRoute
   '/_landing/posts/': typeof LandingPostsIndexRoute
   '/dashboard/analytics/': typeof DashboardAnalyticsIndexRoute
+  '/dashboard/calls/': typeof DashboardCallsIndexRoute
   '/dashboard/categories/': typeof DashboardCategoriesIndexRoute
   '/dashboard/crews/': typeof DashboardCrewsIndexRoute
   '/dashboard/messages/': typeof DashboardMessagesIndexRoute
   '/dashboard/posts/': typeof DashboardPostsIndexRoute
   '/dashboard/profiles/': typeof DashboardProfilesIndexRoute
+  '/dashboard/submissions/': typeof DashboardSubmissionsIndexRoute
   '/dashboard/themes/': typeof DashboardThemesIndexRoute
   '/dashboard/users/': typeof DashboardUsersIndexRoute
+  '/_landing/articles/submit/$callId': typeof LandingArticlesSubmitCallIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -426,7 +511,11 @@ export interface FileRouteTypes {
     | '/account/notifications'
     | '/account/profile'
     | '/account/security'
+    | '/articles/$articleId'
+    | '/articles/my'
     | '/posts/$postId'
+    | '/dashboard/calls/$callId'
+    | '/dashboard/calls/new'
     | '/dashboard/categories/$categoryId'
     | '/dashboard/categories/new'
     | '/dashboard/crews/$crewId'
@@ -435,18 +524,23 @@ export interface FileRouteTypes {
     | '/dashboard/posts/$postId'
     | '/dashboard/posts/new'
     | '/dashboard/profiles/$profileId'
+    | '/dashboard/submissions/$articleId'
     | '/dashboard/users/$userId'
     | '/dashboard/users/new'
     | '/account/'
+    | '/articles/'
     | '/posts/'
     | '/dashboard/analytics/'
+    | '/dashboard/calls/'
     | '/dashboard/categories/'
     | '/dashboard/crews/'
     | '/dashboard/messages/'
     | '/dashboard/posts/'
     | '/dashboard/profiles/'
+    | '/dashboard/submissions/'
     | '/dashboard/themes/'
     | '/dashboard/users/'
+    | '/articles/submit/$callId'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -467,7 +561,11 @@ export interface FileRouteTypes {
     | '/account/notifications'
     | '/account/profile'
     | '/account/security'
+    | '/articles/$articleId'
+    | '/articles/my'
     | '/posts/$postId'
+    | '/dashboard/calls/$callId'
+    | '/dashboard/calls/new'
     | '/dashboard/categories/$categoryId'
     | '/dashboard/categories/new'
     | '/dashboard/crews/$crewId'
@@ -476,18 +574,23 @@ export interface FileRouteTypes {
     | '/dashboard/posts/$postId'
     | '/dashboard/posts/new'
     | '/dashboard/profiles/$profileId'
+    | '/dashboard/submissions/$articleId'
     | '/dashboard/users/$userId'
     | '/dashboard/users/new'
     | '/account'
+    | '/articles'
     | '/posts'
     | '/dashboard/analytics'
+    | '/dashboard/calls'
     | '/dashboard/categories'
     | '/dashboard/crews'
     | '/dashboard/messages'
     | '/dashboard/posts'
     | '/dashboard/profiles'
+    | '/dashboard/submissions'
     | '/dashboard/themes'
     | '/dashboard/users'
+    | '/articles/submit/$callId'
   id:
     | '__root__'
     | '/_auth'
@@ -512,7 +615,11 @@ export interface FileRouteTypes {
     | '/_landing/account/notifications'
     | '/_landing/account/profile'
     | '/_landing/account/security'
+    | '/_landing/articles/$articleId'
+    | '/_landing/articles/my'
     | '/_landing/posts/$postId'
+    | '/dashboard/calls/$callId'
+    | '/dashboard/calls/new'
     | '/dashboard/categories/$categoryId'
     | '/dashboard/categories/new'
     | '/dashboard/crews/$crewId'
@@ -521,18 +628,23 @@ export interface FileRouteTypes {
     | '/dashboard/posts/$postId'
     | '/dashboard/posts/new'
     | '/dashboard/profiles/$profileId'
+    | '/dashboard/submissions/$articleId'
     | '/dashboard/users/$userId'
     | '/dashboard/users/new'
     | '/_landing/account/'
+    | '/_landing/articles/'
     | '/_landing/posts/'
     | '/dashboard/analytics/'
+    | '/dashboard/calls/'
     | '/dashboard/categories/'
     | '/dashboard/crews/'
     | '/dashboard/messages/'
     | '/dashboard/posts/'
     | '/dashboard/profiles/'
+    | '/dashboard/submissions/'
     | '/dashboard/themes/'
     | '/dashboard/users/'
+    | '/_landing/articles/submit/$callId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -676,6 +788,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardThemesIndexRouteImport
       parentRoute: typeof DashboardRouteRoute
     }
+    '/dashboard/submissions/': {
+      id: '/dashboard/submissions/'
+      path: '/submissions'
+      fullPath: '/dashboard/submissions/'
+      preLoaderRoute: typeof DashboardSubmissionsIndexRouteImport
+      parentRoute: typeof DashboardRouteRoute
+    }
     '/dashboard/profiles/': {
       id: '/dashboard/profiles/'
       path: '/profiles'
@@ -711,6 +830,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardCategoriesIndexRouteImport
       parentRoute: typeof DashboardRouteRoute
     }
+    '/dashboard/calls/': {
+      id: '/dashboard/calls/'
+      path: '/calls'
+      fullPath: '/dashboard/calls/'
+      preLoaderRoute: typeof DashboardCallsIndexRouteImport
+      parentRoute: typeof DashboardRouteRoute
+    }
     '/dashboard/analytics/': {
       id: '/dashboard/analytics/'
       path: '/analytics'
@@ -723,6 +849,13 @@ declare module '@tanstack/react-router' {
       path: '/posts'
       fullPath: '/posts/'
       preLoaderRoute: typeof LandingPostsIndexRouteImport
+      parentRoute: typeof LandingRouteRoute
+    }
+    '/_landing/articles/': {
+      id: '/_landing/articles/'
+      path: '/articles'
+      fullPath: '/articles/'
+      preLoaderRoute: typeof LandingArticlesIndexRouteImport
       parentRoute: typeof LandingRouteRoute
     }
     '/_landing/account/': {
@@ -744,6 +877,13 @@ declare module '@tanstack/react-router' {
       path: '/users/$userId'
       fullPath: '/dashboard/users/$userId'
       preLoaderRoute: typeof DashboardUsersUserIdRouteImport
+      parentRoute: typeof DashboardRouteRoute
+    }
+    '/dashboard/submissions/$articleId': {
+      id: '/dashboard/submissions/$articleId'
+      path: '/submissions/$articleId'
+      fullPath: '/dashboard/submissions/$articleId'
+      preLoaderRoute: typeof DashboardSubmissionsArticleIdRouteImport
       parentRoute: typeof DashboardRouteRoute
     }
     '/dashboard/profiles/$profileId': {
@@ -802,11 +942,39 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardCategoriesCategoryIdRouteImport
       parentRoute: typeof DashboardRouteRoute
     }
+    '/dashboard/calls/new': {
+      id: '/dashboard/calls/new'
+      path: '/calls/new'
+      fullPath: '/dashboard/calls/new'
+      preLoaderRoute: typeof DashboardCallsNewRouteImport
+      parentRoute: typeof DashboardRouteRoute
+    }
+    '/dashboard/calls/$callId': {
+      id: '/dashboard/calls/$callId'
+      path: '/calls/$callId'
+      fullPath: '/dashboard/calls/$callId'
+      preLoaderRoute: typeof DashboardCallsCallIdRouteImport
+      parentRoute: typeof DashboardRouteRoute
+    }
     '/_landing/posts/$postId': {
       id: '/_landing/posts/$postId'
       path: '/posts/$postId'
       fullPath: '/posts/$postId'
       preLoaderRoute: typeof LandingPostsPostIdRouteImport
+      parentRoute: typeof LandingRouteRoute
+    }
+    '/_landing/articles/my': {
+      id: '/_landing/articles/my'
+      path: '/articles/my'
+      fullPath: '/articles/my'
+      preLoaderRoute: typeof LandingArticlesMyRouteImport
+      parentRoute: typeof LandingRouteRoute
+    }
+    '/_landing/articles/$articleId': {
+      id: '/_landing/articles/$articleId'
+      path: '/articles/$articleId'
+      fullPath: '/articles/$articleId'
+      preLoaderRoute: typeof LandingArticlesArticleIdRouteImport
       parentRoute: typeof LandingRouteRoute
     }
     '/_landing/account/security': {
@@ -843,6 +1011,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/account/applications'
       preLoaderRoute: typeof LandingAccountApplicationsRouteImport
       parentRoute: typeof LandingAccountRouteRoute
+    }
+    '/_landing/articles/submit/$callId': {
+      id: '/_landing/articles/submit/$callId'
+      path: '/articles/submit/$callId'
+      fullPath: '/articles/submit/$callId'
+      preLoaderRoute: typeof LandingArticlesSubmitCallIdRouteImport
+      parentRoute: typeof LandingRouteRoute
     }
   }
 }
@@ -897,8 +1072,12 @@ interface LandingRouteRouteChildren {
   LandingTeamRoute: typeof LandingTeamRoute
   LandingTermsRoute: typeof LandingTermsRoute
   LandingIndexRoute: typeof LandingIndexRoute
+  LandingArticlesArticleIdRoute: typeof LandingArticlesArticleIdRoute
+  LandingArticlesMyRoute: typeof LandingArticlesMyRoute
   LandingPostsPostIdRoute: typeof LandingPostsPostIdRoute
+  LandingArticlesIndexRoute: typeof LandingArticlesIndexRoute
   LandingPostsIndexRoute: typeof LandingPostsIndexRoute
+  LandingArticlesSubmitCallIdRoute: typeof LandingArticlesSubmitCallIdRoute
 }
 
 const LandingRouteRouteChildren: LandingRouteRouteChildren = {
@@ -910,8 +1089,12 @@ const LandingRouteRouteChildren: LandingRouteRouteChildren = {
   LandingTeamRoute: LandingTeamRoute,
   LandingTermsRoute: LandingTermsRoute,
   LandingIndexRoute: LandingIndexRoute,
+  LandingArticlesArticleIdRoute: LandingArticlesArticleIdRoute,
+  LandingArticlesMyRoute: LandingArticlesMyRoute,
   LandingPostsPostIdRoute: LandingPostsPostIdRoute,
+  LandingArticlesIndexRoute: LandingArticlesIndexRoute,
   LandingPostsIndexRoute: LandingPostsIndexRoute,
+  LandingArticlesSubmitCallIdRoute: LandingArticlesSubmitCallIdRoute,
 }
 
 const LandingRouteRouteWithChildren = LandingRouteRoute._addFileChildren(
@@ -920,6 +1103,8 @@ const LandingRouteRouteWithChildren = LandingRouteRoute._addFileChildren(
 
 interface DashboardRouteRouteChildren {
   DashboardIndexRoute: typeof DashboardIndexRoute
+  DashboardCallsCallIdRoute: typeof DashboardCallsCallIdRoute
+  DashboardCallsNewRoute: typeof DashboardCallsNewRoute
   DashboardCategoriesCategoryIdRoute: typeof DashboardCategoriesCategoryIdRoute
   DashboardCategoriesNewRoute: typeof DashboardCategoriesNewRoute
   DashboardCrewsCrewIdRoute: typeof DashboardCrewsCrewIdRoute
@@ -928,20 +1113,25 @@ interface DashboardRouteRouteChildren {
   DashboardPostsPostIdRoute: typeof DashboardPostsPostIdRoute
   DashboardPostsNewRoute: typeof DashboardPostsNewRoute
   DashboardProfilesProfileIdRoute: typeof DashboardProfilesProfileIdRoute
+  DashboardSubmissionsArticleIdRoute: typeof DashboardSubmissionsArticleIdRoute
   DashboardUsersUserIdRoute: typeof DashboardUsersUserIdRoute
   DashboardUsersNewRoute: typeof DashboardUsersNewRoute
   DashboardAnalyticsIndexRoute: typeof DashboardAnalyticsIndexRoute
+  DashboardCallsIndexRoute: typeof DashboardCallsIndexRoute
   DashboardCategoriesIndexRoute: typeof DashboardCategoriesIndexRoute
   DashboardCrewsIndexRoute: typeof DashboardCrewsIndexRoute
   DashboardMessagesIndexRoute: typeof DashboardMessagesIndexRoute
   DashboardPostsIndexRoute: typeof DashboardPostsIndexRoute
   DashboardProfilesIndexRoute: typeof DashboardProfilesIndexRoute
+  DashboardSubmissionsIndexRoute: typeof DashboardSubmissionsIndexRoute
   DashboardThemesIndexRoute: typeof DashboardThemesIndexRoute
   DashboardUsersIndexRoute: typeof DashboardUsersIndexRoute
 }
 
 const DashboardRouteRouteChildren: DashboardRouteRouteChildren = {
   DashboardIndexRoute: DashboardIndexRoute,
+  DashboardCallsCallIdRoute: DashboardCallsCallIdRoute,
+  DashboardCallsNewRoute: DashboardCallsNewRoute,
   DashboardCategoriesCategoryIdRoute: DashboardCategoriesCategoryIdRoute,
   DashboardCategoriesNewRoute: DashboardCategoriesNewRoute,
   DashboardCrewsCrewIdRoute: DashboardCrewsCrewIdRoute,
@@ -950,14 +1140,17 @@ const DashboardRouteRouteChildren: DashboardRouteRouteChildren = {
   DashboardPostsPostIdRoute: DashboardPostsPostIdRoute,
   DashboardPostsNewRoute: DashboardPostsNewRoute,
   DashboardProfilesProfileIdRoute: DashboardProfilesProfileIdRoute,
+  DashboardSubmissionsArticleIdRoute: DashboardSubmissionsArticleIdRoute,
   DashboardUsersUserIdRoute: DashboardUsersUserIdRoute,
   DashboardUsersNewRoute: DashboardUsersNewRoute,
   DashboardAnalyticsIndexRoute: DashboardAnalyticsIndexRoute,
+  DashboardCallsIndexRoute: DashboardCallsIndexRoute,
   DashboardCategoriesIndexRoute: DashboardCategoriesIndexRoute,
   DashboardCrewsIndexRoute: DashboardCrewsIndexRoute,
   DashboardMessagesIndexRoute: DashboardMessagesIndexRoute,
   DashboardPostsIndexRoute: DashboardPostsIndexRoute,
   DashboardProfilesIndexRoute: DashboardProfilesIndexRoute,
+  DashboardSubmissionsIndexRoute: DashboardSubmissionsIndexRoute,
   DashboardThemesIndexRoute: DashboardThemesIndexRoute,
   DashboardUsersIndexRoute: DashboardUsersIndexRoute,
 }
