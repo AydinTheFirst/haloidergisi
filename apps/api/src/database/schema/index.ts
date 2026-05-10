@@ -250,6 +250,7 @@ export const usersRelations = relations(users, ({ one, many }) => ({
   }),
   postReactions: many(postReactions),
   articles: many(articles),
+  news: many(news),
 }));
 
 export const providersRelations = relations(providers, ({ one }) => ({
@@ -374,3 +375,28 @@ export type NewSubmissionCall = typeof submissionCalls.$inferInsert;
 
 export type Article = typeof articles.$inferSelect;
 export type NewArticle = typeof articles.$inferInsert;
+
+export const news = pgTable("News", {
+  id: text("id")
+    .primaryKey()
+    .$defaultFn(() => crypto.randomUUID()),
+  title: text("title").notNull(),
+  slug: text("slug").notNull().unique(),
+  content: text("content").notNull(),
+  keywords: text("keywords"), // Comma separated
+  authorId: text("authorId").notNull(),
+  isPublished: boolean("isPublished").notNull().default(false),
+  publishedAt: timestamp("publishedAt"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().notNull(),
+});
+
+export const newsRelations = relations(news, ({ one }) => ({
+  author: one(users, {
+    fields: [news.authorId],
+    references: [users.id],
+  }),
+}));
+
+export type News = typeof news.$inferSelect;
+export type NewNews = typeof news.$inferInsert;

@@ -8,1026 +8,1111 @@
 // You should NOT make any changes in this file as it will be overwritten.
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
-import { Route as rootRouteImport } from './routes/__root'
-import { Route as DashboardRouteRouteImport } from './routes/dashboard/route'
-import { Route as LandingRouteRouteImport } from './routes/_landing/route'
-import { Route as AuthRouteRouteImport } from './routes/_auth/route'
-import { Route as DashboardIndexRouteImport } from './routes/dashboard/index'
-import { Route as LandingIndexRouteImport } from './routes/_landing/index'
-import { Route as LandingTermsRouteImport } from './routes/_landing/terms'
-import { Route as LandingTeamRouteImport } from './routes/_landing/team'
-import { Route as LandingPrivacyRouteImport } from './routes/_landing/privacy'
-import { Route as LandingContactRouteImport } from './routes/_landing/contact'
-import { Route as LandingArchiveRouteImport } from './routes/_landing/archive'
-import { Route as LandingAboutRouteImport } from './routes/_landing/about'
-import { Route as AuthVerifyEmailRouteImport } from './routes/_auth/verify-email'
-import { Route as AuthResetPasswordRouteImport } from './routes/_auth/reset-password'
-import { Route as AuthRegisterRouteImport } from './routes/_auth/register'
-import { Route as AuthLoginRouteImport } from './routes/_auth/login'
-import { Route as AuthForgotPasswordRouteImport } from './routes/_auth/forgot-password'
-import { Route as LandingAccountRouteRouteImport } from './routes/_landing/account/route'
-import { Route as DashboardUsersIndexRouteImport } from './routes/dashboard/users/index'
-import { Route as DashboardThemesIndexRouteImport } from './routes/dashboard/themes/index'
-import { Route as DashboardSubmissionsIndexRouteImport } from './routes/dashboard/submissions/index'
-import { Route as DashboardProfilesIndexRouteImport } from './routes/dashboard/profiles/index'
-import { Route as DashboardPostsIndexRouteImport } from './routes/dashboard/posts/index'
-import { Route as DashboardMessagesIndexRouteImport } from './routes/dashboard/messages/index'
-import { Route as DashboardCrewsIndexRouteImport } from './routes/dashboard/crews/index'
-import { Route as DashboardCategoriesIndexRouteImport } from './routes/dashboard/categories/index'
-import { Route as DashboardCallsIndexRouteImport } from './routes/dashboard/calls/index'
-import { Route as DashboardAnalyticsIndexRouteImport } from './routes/dashboard/analytics/index'
-import { Route as LandingPostsIndexRouteImport } from './routes/_landing/posts/index'
-import { Route as LandingArticlesIndexRouteImport } from './routes/_landing/articles/index'
-import { Route as LandingAccountIndexRouteImport } from './routes/_landing/account/index'
-import { Route as DashboardUsersNewRouteImport } from './routes/dashboard/users/new'
-import { Route as DashboardUsersUserIdRouteImport } from './routes/dashboard/users/$userId'
-import { Route as DashboardSubmissionsArticleIdRouteImport } from './routes/dashboard/submissions/$articleId'
-import { Route as DashboardProfilesProfileIdRouteImport } from './routes/dashboard/profiles/$profileId'
-import { Route as DashboardPostsNewRouteImport } from './routes/dashboard/posts/new'
-import { Route as DashboardPostsPostIdRouteImport } from './routes/dashboard/posts/$postId'
-import { Route as DashboardMessagesMessageIdRouteImport } from './routes/dashboard/messages/$messageId'
-import { Route as DashboardCrewsNewRouteImport } from './routes/dashboard/crews/new'
-import { Route as DashboardCrewsCrewIdRouteImport } from './routes/dashboard/crews/$crewId'
-import { Route as DashboardCategoriesNewRouteImport } from './routes/dashboard/categories/new'
-import { Route as DashboardCategoriesCategoryIdRouteImport } from './routes/dashboard/categories/$categoryId'
-import { Route as DashboardCallsNewRouteImport } from './routes/dashboard/calls/new'
-import { Route as DashboardCallsCallIdRouteImport } from './routes/dashboard/calls/$callId'
-import { Route as LandingPostsPostIdRouteImport } from './routes/_landing/posts/$postId'
-import { Route as LandingArticlesMyRouteImport } from './routes/_landing/articles/my'
-import { Route as LandingArticlesArticleIdRouteImport } from './routes/_landing/articles/$articleId'
-import { Route as LandingAccountSecurityRouteImport } from './routes/_landing/account/security'
-import { Route as LandingAccountProfileRouteImport } from './routes/_landing/account/profile'
-import { Route as LandingAccountNotificationsRouteImport } from './routes/_landing/account/notifications'
-import { Route as LandingAccountDeleteRouteImport } from './routes/_landing/account/delete'
-import { Route as LandingAccountApplicationsRouteImport } from './routes/_landing/account/applications'
-import { Route as LandingArticlesSubmitCallIdRouteImport } from './routes/_landing/articles/submit.$callId'
+import { Route as rootRouteImport } from "./routes/__root";
+import { Route as AuthForgotPasswordRouteImport } from "./routes/_auth/forgot-password";
+import { Route as AuthLoginRouteImport } from "./routes/_auth/login";
+import { Route as AuthRegisterRouteImport } from "./routes/_auth/register";
+import { Route as AuthResetPasswordRouteImport } from "./routes/_auth/reset-password";
+import { Route as AuthRouteRouteImport } from "./routes/_auth/route";
+import { Route as AuthVerifyEmailRouteImport } from "./routes/_auth/verify-email";
+import { Route as LandingAboutRouteImport } from "./routes/_landing/about";
+import { Route as LandingAccountApplicationsRouteImport } from "./routes/_landing/account/applications";
+import { Route as LandingAccountDeleteRouteImport } from "./routes/_landing/account/delete";
+import { Route as LandingAccountIndexRouteImport } from "./routes/_landing/account/index";
+import { Route as LandingAccountNotificationsRouteImport } from "./routes/_landing/account/notifications";
+import { Route as LandingAccountProfileRouteImport } from "./routes/_landing/account/profile";
+import { Route as LandingAccountRouteRouteImport } from "./routes/_landing/account/route";
+import { Route as LandingAccountSecurityRouteImport } from "./routes/_landing/account/security";
+import { Route as LandingArchiveRouteImport } from "./routes/_landing/archive";
+import { Route as LandingArticlesArticleIdRouteImport } from "./routes/_landing/articles/$articleId";
+import { Route as LandingArticlesIndexRouteImport } from "./routes/_landing/articles/index";
+import { Route as LandingArticlesMyRouteImport } from "./routes/_landing/articles/my";
+import { Route as LandingArticlesSubmitCallIdRouteImport } from "./routes/_landing/articles/submit.$callId";
+import { Route as LandingBlogSlugRouteImport } from "./routes/_landing/blog/$slug";
+import { Route as LandingBlogIndexRouteImport } from "./routes/_landing/blog/index";
+import { Route as LandingContactRouteImport } from "./routes/_landing/contact";
+import { Route as LandingIndexRouteImport } from "./routes/_landing/index";
+import { Route as LandingPostsPostIdRouteImport } from "./routes/_landing/posts/$postId";
+import { Route as LandingPostsIndexRouteImport } from "./routes/_landing/posts/index";
+import { Route as LandingPrivacyRouteImport } from "./routes/_landing/privacy";
+import { Route as LandingRouteRouteImport } from "./routes/_landing/route";
+import { Route as LandingTeamRouteImport } from "./routes/_landing/team";
+import { Route as LandingTermsRouteImport } from "./routes/_landing/terms";
+import { Route as DashboardAnalyticsIndexRouteImport } from "./routes/dashboard/analytics/index";
+import { Route as DashboardCallsCallIdRouteImport } from "./routes/dashboard/calls/$callId";
+import { Route as DashboardCallsIndexRouteImport } from "./routes/dashboard/calls/index";
+import { Route as DashboardCallsNewRouteImport } from "./routes/dashboard/calls/new";
+import { Route as DashboardCategoriesCategoryIdRouteImport } from "./routes/dashboard/categories/$categoryId";
+import { Route as DashboardCategoriesIndexRouteImport } from "./routes/dashboard/categories/index";
+import { Route as DashboardCategoriesNewRouteImport } from "./routes/dashboard/categories/new";
+import { Route as DashboardCrewsCrewIdRouteImport } from "./routes/dashboard/crews/$crewId";
+import { Route as DashboardCrewsIndexRouteImport } from "./routes/dashboard/crews/index";
+import { Route as DashboardCrewsNewRouteImport } from "./routes/dashboard/crews/new";
+import { Route as DashboardIndexRouteImport } from "./routes/dashboard/index";
+import { Route as DashboardMessagesMessageIdRouteImport } from "./routes/dashboard/messages/$messageId";
+import { Route as DashboardMessagesIndexRouteImport } from "./routes/dashboard/messages/index";
+import { Route as DashboardNewsNewsIdRouteImport } from "./routes/dashboard/news/$newsId";
+import { Route as DashboardNewsIndexRouteImport } from "./routes/dashboard/news/index";
+import { Route as DashboardNewsNewRouteImport } from "./routes/dashboard/news/new";
+import { Route as DashboardPostsPostIdRouteImport } from "./routes/dashboard/posts/$postId";
+import { Route as DashboardPostsIndexRouteImport } from "./routes/dashboard/posts/index";
+import { Route as DashboardPostsNewRouteImport } from "./routes/dashboard/posts/new";
+import { Route as DashboardProfilesProfileIdRouteImport } from "./routes/dashboard/profiles/$profileId";
+import { Route as DashboardProfilesIndexRouteImport } from "./routes/dashboard/profiles/index";
+import { Route as DashboardRouteRouteImport } from "./routes/dashboard/route";
+import { Route as DashboardSubmissionsArticleIdRouteImport } from "./routes/dashboard/submissions/$articleId";
+import { Route as DashboardSubmissionsIndexRouteImport } from "./routes/dashboard/submissions/index";
+import { Route as DashboardThemesIndexRouteImport } from "./routes/dashboard/themes/index";
+import { Route as DashboardUsersUserIdRouteImport } from "./routes/dashboard/users/$userId";
+import { Route as DashboardUsersIndexRouteImport } from "./routes/dashboard/users/index";
+import { Route as DashboardUsersNewRouteImport } from "./routes/dashboard/users/new";
 
 const DashboardRouteRoute = DashboardRouteRouteImport.update({
-  id: '/dashboard',
-  path: '/dashboard',
+  id: "/dashboard",
+  path: "/dashboard",
   getParentRoute: () => rootRouteImport,
-} as any)
+} as any);
 const LandingRouteRoute = LandingRouteRouteImport.update({
-  id: '/_landing',
+  id: "/_landing",
   getParentRoute: () => rootRouteImport,
-} as any)
+} as any);
 const AuthRouteRoute = AuthRouteRouteImport.update({
-  id: '/_auth',
+  id: "/_auth",
   getParentRoute: () => rootRouteImport,
-} as any)
+} as any);
 const DashboardIndexRoute = DashboardIndexRouteImport.update({
-  id: '/',
-  path: '/',
+  id: "/",
+  path: "/",
   getParentRoute: () => DashboardRouteRoute,
-} as any)
+} as any);
 const LandingIndexRoute = LandingIndexRouteImport.update({
-  id: '/',
-  path: '/',
+  id: "/",
+  path: "/",
   getParentRoute: () => LandingRouteRoute,
-} as any)
+} as any);
 const LandingTermsRoute = LandingTermsRouteImport.update({
-  id: '/terms',
-  path: '/terms',
+  id: "/terms",
+  path: "/terms",
   getParentRoute: () => LandingRouteRoute,
-} as any)
+} as any);
 const LandingTeamRoute = LandingTeamRouteImport.update({
-  id: '/team',
-  path: '/team',
+  id: "/team",
+  path: "/team",
   getParentRoute: () => LandingRouteRoute,
-} as any)
+} as any);
 const LandingPrivacyRoute = LandingPrivacyRouteImport.update({
-  id: '/privacy',
-  path: '/privacy',
+  id: "/privacy",
+  path: "/privacy",
   getParentRoute: () => LandingRouteRoute,
-} as any)
+} as any);
 const LandingContactRoute = LandingContactRouteImport.update({
-  id: '/contact',
-  path: '/contact',
+  id: "/contact",
+  path: "/contact",
   getParentRoute: () => LandingRouteRoute,
-} as any)
+} as any);
 const LandingArchiveRoute = LandingArchiveRouteImport.update({
-  id: '/archive',
-  path: '/archive',
+  id: "/archive",
+  path: "/archive",
   getParentRoute: () => LandingRouteRoute,
-} as any)
+} as any);
 const LandingAboutRoute = LandingAboutRouteImport.update({
-  id: '/about',
-  path: '/about',
+  id: "/about",
+  path: "/about",
   getParentRoute: () => LandingRouteRoute,
-} as any)
+} as any);
 const AuthVerifyEmailRoute = AuthVerifyEmailRouteImport.update({
-  id: '/verify-email',
-  path: '/verify-email',
+  id: "/verify-email",
+  path: "/verify-email",
   getParentRoute: () => AuthRouteRoute,
-} as any)
+} as any);
 const AuthResetPasswordRoute = AuthResetPasswordRouteImport.update({
-  id: '/reset-password',
-  path: '/reset-password',
+  id: "/reset-password",
+  path: "/reset-password",
   getParentRoute: () => AuthRouteRoute,
-} as any)
+} as any);
 const AuthRegisterRoute = AuthRegisterRouteImport.update({
-  id: '/register',
-  path: '/register',
+  id: "/register",
+  path: "/register",
   getParentRoute: () => AuthRouteRoute,
-} as any)
+} as any);
 const AuthLoginRoute = AuthLoginRouteImport.update({
-  id: '/login',
-  path: '/login',
+  id: "/login",
+  path: "/login",
   getParentRoute: () => AuthRouteRoute,
-} as any)
+} as any);
 const AuthForgotPasswordRoute = AuthForgotPasswordRouteImport.update({
-  id: '/forgot-password',
-  path: '/forgot-password',
+  id: "/forgot-password",
+  path: "/forgot-password",
   getParentRoute: () => AuthRouteRoute,
-} as any)
+} as any);
 const LandingAccountRouteRoute = LandingAccountRouteRouteImport.update({
-  id: '/account',
-  path: '/account',
+  id: "/account",
+  path: "/account",
   getParentRoute: () => LandingRouteRoute,
-} as any)
+} as any);
 const DashboardUsersIndexRoute = DashboardUsersIndexRouteImport.update({
-  id: '/users/',
-  path: '/users/',
+  id: "/users/",
+  path: "/users/",
   getParentRoute: () => DashboardRouteRoute,
-} as any)
+} as any);
 const DashboardThemesIndexRoute = DashboardThemesIndexRouteImport.update({
-  id: '/themes/',
-  path: '/themes/',
+  id: "/themes/",
+  path: "/themes/",
   getParentRoute: () => DashboardRouteRoute,
-} as any)
-const DashboardSubmissionsIndexRoute =
-  DashboardSubmissionsIndexRouteImport.update({
-    id: '/submissions/',
-    path: '/submissions/',
-    getParentRoute: () => DashboardRouteRoute,
-  } as any)
+} as any);
+const DashboardSubmissionsIndexRoute = DashboardSubmissionsIndexRouteImport.update({
+  id: "/submissions/",
+  path: "/submissions/",
+  getParentRoute: () => DashboardRouteRoute,
+} as any);
 const DashboardProfilesIndexRoute = DashboardProfilesIndexRouteImport.update({
-  id: '/profiles/',
-  path: '/profiles/',
+  id: "/profiles/",
+  path: "/profiles/",
   getParentRoute: () => DashboardRouteRoute,
-} as any)
+} as any);
 const DashboardPostsIndexRoute = DashboardPostsIndexRouteImport.update({
-  id: '/posts/',
-  path: '/posts/',
+  id: "/posts/",
+  path: "/posts/",
   getParentRoute: () => DashboardRouteRoute,
-} as any)
+} as any);
+const DashboardNewsIndexRoute = DashboardNewsIndexRouteImport.update({
+  id: "/news/",
+  path: "/news/",
+  getParentRoute: () => DashboardRouteRoute,
+} as any);
 const DashboardMessagesIndexRoute = DashboardMessagesIndexRouteImport.update({
-  id: '/messages/',
-  path: '/messages/',
+  id: "/messages/",
+  path: "/messages/",
   getParentRoute: () => DashboardRouteRoute,
-} as any)
+} as any);
 const DashboardCrewsIndexRoute = DashboardCrewsIndexRouteImport.update({
-  id: '/crews/',
-  path: '/crews/',
+  id: "/crews/",
+  path: "/crews/",
   getParentRoute: () => DashboardRouteRoute,
-} as any)
-const DashboardCategoriesIndexRoute =
-  DashboardCategoriesIndexRouteImport.update({
-    id: '/categories/',
-    path: '/categories/',
-    getParentRoute: () => DashboardRouteRoute,
-  } as any)
+} as any);
+const DashboardCategoriesIndexRoute = DashboardCategoriesIndexRouteImport.update({
+  id: "/categories/",
+  path: "/categories/",
+  getParentRoute: () => DashboardRouteRoute,
+} as any);
 const DashboardCallsIndexRoute = DashboardCallsIndexRouteImport.update({
-  id: '/calls/',
-  path: '/calls/',
+  id: "/calls/",
+  path: "/calls/",
   getParentRoute: () => DashboardRouteRoute,
-} as any)
+} as any);
 const DashboardAnalyticsIndexRoute = DashboardAnalyticsIndexRouteImport.update({
-  id: '/analytics/',
-  path: '/analytics/',
+  id: "/analytics/",
+  path: "/analytics/",
   getParentRoute: () => DashboardRouteRoute,
-} as any)
+} as any);
 const LandingPostsIndexRoute = LandingPostsIndexRouteImport.update({
-  id: '/posts/',
-  path: '/posts/',
+  id: "/posts/",
+  path: "/posts/",
   getParentRoute: () => LandingRouteRoute,
-} as any)
+} as any);
+const LandingBlogIndexRoute = LandingBlogIndexRouteImport.update({
+  id: "/blog/",
+  path: "/blog/",
+  getParentRoute: () => LandingRouteRoute,
+} as any);
 const LandingArticlesIndexRoute = LandingArticlesIndexRouteImport.update({
-  id: '/articles/',
-  path: '/articles/',
+  id: "/articles/",
+  path: "/articles/",
   getParentRoute: () => LandingRouteRoute,
-} as any)
+} as any);
 const LandingAccountIndexRoute = LandingAccountIndexRouteImport.update({
-  id: '/',
-  path: '/',
+  id: "/",
+  path: "/",
   getParentRoute: () => LandingAccountRouteRoute,
-} as any)
+} as any);
 const DashboardUsersNewRoute = DashboardUsersNewRouteImport.update({
-  id: '/users/new',
-  path: '/users/new',
+  id: "/users/new",
+  path: "/users/new",
   getParentRoute: () => DashboardRouteRoute,
-} as any)
+} as any);
 const DashboardUsersUserIdRoute = DashboardUsersUserIdRouteImport.update({
-  id: '/users/$userId',
-  path: '/users/$userId',
+  id: "/users/$userId",
+  path: "/users/$userId",
   getParentRoute: () => DashboardRouteRoute,
-} as any)
-const DashboardSubmissionsArticleIdRoute =
-  DashboardSubmissionsArticleIdRouteImport.update({
-    id: '/submissions/$articleId',
-    path: '/submissions/$articleId',
-    getParentRoute: () => DashboardRouteRoute,
-  } as any)
-const DashboardProfilesProfileIdRoute =
-  DashboardProfilesProfileIdRouteImport.update({
-    id: '/profiles/$profileId',
-    path: '/profiles/$profileId',
-    getParentRoute: () => DashboardRouteRoute,
-  } as any)
+} as any);
+const DashboardSubmissionsArticleIdRoute = DashboardSubmissionsArticleIdRouteImport.update({
+  id: "/submissions/$articleId",
+  path: "/submissions/$articleId",
+  getParentRoute: () => DashboardRouteRoute,
+} as any);
+const DashboardProfilesProfileIdRoute = DashboardProfilesProfileIdRouteImport.update({
+  id: "/profiles/$profileId",
+  path: "/profiles/$profileId",
+  getParentRoute: () => DashboardRouteRoute,
+} as any);
 const DashboardPostsNewRoute = DashboardPostsNewRouteImport.update({
-  id: '/posts/new',
-  path: '/posts/new',
+  id: "/posts/new",
+  path: "/posts/new",
   getParentRoute: () => DashboardRouteRoute,
-} as any)
+} as any);
 const DashboardPostsPostIdRoute = DashboardPostsPostIdRouteImport.update({
-  id: '/posts/$postId',
-  path: '/posts/$postId',
+  id: "/posts/$postId",
+  path: "/posts/$postId",
   getParentRoute: () => DashboardRouteRoute,
-} as any)
-const DashboardMessagesMessageIdRoute =
-  DashboardMessagesMessageIdRouteImport.update({
-    id: '/messages/$messageId',
-    path: '/messages/$messageId',
-    getParentRoute: () => DashboardRouteRoute,
-  } as any)
+} as any);
+const DashboardNewsNewRoute = DashboardNewsNewRouteImport.update({
+  id: "/news/new",
+  path: "/news/new",
+  getParentRoute: () => DashboardRouteRoute,
+} as any);
+const DashboardNewsNewsIdRoute = DashboardNewsNewsIdRouteImport.update({
+  id: "/news/$newsId",
+  path: "/news/$newsId",
+  getParentRoute: () => DashboardRouteRoute,
+} as any);
+const DashboardMessagesMessageIdRoute = DashboardMessagesMessageIdRouteImport.update({
+  id: "/messages/$messageId",
+  path: "/messages/$messageId",
+  getParentRoute: () => DashboardRouteRoute,
+} as any);
 const DashboardCrewsNewRoute = DashboardCrewsNewRouteImport.update({
-  id: '/crews/new',
-  path: '/crews/new',
+  id: "/crews/new",
+  path: "/crews/new",
   getParentRoute: () => DashboardRouteRoute,
-} as any)
+} as any);
 const DashboardCrewsCrewIdRoute = DashboardCrewsCrewIdRouteImport.update({
-  id: '/crews/$crewId',
-  path: '/crews/$crewId',
+  id: "/crews/$crewId",
+  path: "/crews/$crewId",
   getParentRoute: () => DashboardRouteRoute,
-} as any)
+} as any);
 const DashboardCategoriesNewRoute = DashboardCategoriesNewRouteImport.update({
-  id: '/categories/new',
-  path: '/categories/new',
+  id: "/categories/new",
+  path: "/categories/new",
   getParentRoute: () => DashboardRouteRoute,
-} as any)
-const DashboardCategoriesCategoryIdRoute =
-  DashboardCategoriesCategoryIdRouteImport.update({
-    id: '/categories/$categoryId',
-    path: '/categories/$categoryId',
-    getParentRoute: () => DashboardRouteRoute,
-  } as any)
+} as any);
+const DashboardCategoriesCategoryIdRoute = DashboardCategoriesCategoryIdRouteImport.update({
+  id: "/categories/$categoryId",
+  path: "/categories/$categoryId",
+  getParentRoute: () => DashboardRouteRoute,
+} as any);
 const DashboardCallsNewRoute = DashboardCallsNewRouteImport.update({
-  id: '/calls/new',
-  path: '/calls/new',
+  id: "/calls/new",
+  path: "/calls/new",
   getParentRoute: () => DashboardRouteRoute,
-} as any)
+} as any);
 const DashboardCallsCallIdRoute = DashboardCallsCallIdRouteImport.update({
-  id: '/calls/$callId',
-  path: '/calls/$callId',
+  id: "/calls/$callId",
+  path: "/calls/$callId",
   getParentRoute: () => DashboardRouteRoute,
-} as any)
+} as any);
 const LandingPostsPostIdRoute = LandingPostsPostIdRouteImport.update({
-  id: '/posts/$postId',
-  path: '/posts/$postId',
+  id: "/posts/$postId",
+  path: "/posts/$postId",
   getParentRoute: () => LandingRouteRoute,
-} as any)
+} as any);
+const LandingBlogSlugRoute = LandingBlogSlugRouteImport.update({
+  id: "/blog/$slug",
+  path: "/blog/$slug",
+  getParentRoute: () => LandingRouteRoute,
+} as any);
 const LandingArticlesMyRoute = LandingArticlesMyRouteImport.update({
-  id: '/articles/my',
-  path: '/articles/my',
+  id: "/articles/my",
+  path: "/articles/my",
   getParentRoute: () => LandingRouteRoute,
-} as any)
-const LandingArticlesArticleIdRoute =
-  LandingArticlesArticleIdRouteImport.update({
-    id: '/articles/$articleId',
-    path: '/articles/$articleId',
-    getParentRoute: () => LandingRouteRoute,
-  } as any)
+} as any);
+const LandingArticlesArticleIdRoute = LandingArticlesArticleIdRouteImport.update({
+  id: "/articles/$articleId",
+  path: "/articles/$articleId",
+  getParentRoute: () => LandingRouteRoute,
+} as any);
 const LandingAccountSecurityRoute = LandingAccountSecurityRouteImport.update({
-  id: '/security',
-  path: '/security',
+  id: "/security",
+  path: "/security",
   getParentRoute: () => LandingAccountRouteRoute,
-} as any)
+} as any);
 const LandingAccountProfileRoute = LandingAccountProfileRouteImport.update({
-  id: '/profile',
-  path: '/profile',
+  id: "/profile",
+  path: "/profile",
   getParentRoute: () => LandingAccountRouteRoute,
-} as any)
-const LandingAccountNotificationsRoute =
-  LandingAccountNotificationsRouteImport.update({
-    id: '/notifications',
-    path: '/notifications',
-    getParentRoute: () => LandingAccountRouteRoute,
-  } as any)
+} as any);
+const LandingAccountNotificationsRoute = LandingAccountNotificationsRouteImport.update({
+  id: "/notifications",
+  path: "/notifications",
+  getParentRoute: () => LandingAccountRouteRoute,
+} as any);
 const LandingAccountDeleteRoute = LandingAccountDeleteRouteImport.update({
-  id: '/delete',
-  path: '/delete',
+  id: "/delete",
+  path: "/delete",
   getParentRoute: () => LandingAccountRouteRoute,
-} as any)
-const LandingAccountApplicationsRoute =
-  LandingAccountApplicationsRouteImport.update({
-    id: '/applications',
-    path: '/applications',
-    getParentRoute: () => LandingAccountRouteRoute,
-  } as any)
-const LandingArticlesSubmitCallIdRoute =
-  LandingArticlesSubmitCallIdRouteImport.update({
-    id: '/articles/submit/$callId',
-    path: '/articles/submit/$callId',
-    getParentRoute: () => LandingRouteRoute,
-  } as any)
+} as any);
+const LandingAccountApplicationsRoute = LandingAccountApplicationsRouteImport.update({
+  id: "/applications",
+  path: "/applications",
+  getParentRoute: () => LandingAccountRouteRoute,
+} as any);
+const LandingArticlesSubmitCallIdRoute = LandingArticlesSubmitCallIdRouteImport.update({
+  id: "/articles/submit/$callId",
+  path: "/articles/submit/$callId",
+  getParentRoute: () => LandingRouteRoute,
+} as any);
 
 export interface FileRoutesByFullPath {
-  '/': typeof LandingIndexRoute
-  '/dashboard': typeof DashboardRouteRouteWithChildren
-  '/account': typeof LandingAccountRouteRouteWithChildren
-  '/forgot-password': typeof AuthForgotPasswordRoute
-  '/login': typeof AuthLoginRoute
-  '/register': typeof AuthRegisterRoute
-  '/reset-password': typeof AuthResetPasswordRoute
-  '/verify-email': typeof AuthVerifyEmailRoute
-  '/about': typeof LandingAboutRoute
-  '/archive': typeof LandingArchiveRoute
-  '/contact': typeof LandingContactRoute
-  '/privacy': typeof LandingPrivacyRoute
-  '/team': typeof LandingTeamRoute
-  '/terms': typeof LandingTermsRoute
-  '/dashboard/': typeof DashboardIndexRoute
-  '/account/applications': typeof LandingAccountApplicationsRoute
-  '/account/delete': typeof LandingAccountDeleteRoute
-  '/account/notifications': typeof LandingAccountNotificationsRoute
-  '/account/profile': typeof LandingAccountProfileRoute
-  '/account/security': typeof LandingAccountSecurityRoute
-  '/articles/$articleId': typeof LandingArticlesArticleIdRoute
-  '/articles/my': typeof LandingArticlesMyRoute
-  '/posts/$postId': typeof LandingPostsPostIdRoute
-  '/dashboard/calls/$callId': typeof DashboardCallsCallIdRoute
-  '/dashboard/calls/new': typeof DashboardCallsNewRoute
-  '/dashboard/categories/$categoryId': typeof DashboardCategoriesCategoryIdRoute
-  '/dashboard/categories/new': typeof DashboardCategoriesNewRoute
-  '/dashboard/crews/$crewId': typeof DashboardCrewsCrewIdRoute
-  '/dashboard/crews/new': typeof DashboardCrewsNewRoute
-  '/dashboard/messages/$messageId': typeof DashboardMessagesMessageIdRoute
-  '/dashboard/posts/$postId': typeof DashboardPostsPostIdRoute
-  '/dashboard/posts/new': typeof DashboardPostsNewRoute
-  '/dashboard/profiles/$profileId': typeof DashboardProfilesProfileIdRoute
-  '/dashboard/submissions/$articleId': typeof DashboardSubmissionsArticleIdRoute
-  '/dashboard/users/$userId': typeof DashboardUsersUserIdRoute
-  '/dashboard/users/new': typeof DashboardUsersNewRoute
-  '/account/': typeof LandingAccountIndexRoute
-  '/articles/': typeof LandingArticlesIndexRoute
-  '/posts/': typeof LandingPostsIndexRoute
-  '/dashboard/analytics/': typeof DashboardAnalyticsIndexRoute
-  '/dashboard/calls/': typeof DashboardCallsIndexRoute
-  '/dashboard/categories/': typeof DashboardCategoriesIndexRoute
-  '/dashboard/crews/': typeof DashboardCrewsIndexRoute
-  '/dashboard/messages/': typeof DashboardMessagesIndexRoute
-  '/dashboard/posts/': typeof DashboardPostsIndexRoute
-  '/dashboard/profiles/': typeof DashboardProfilesIndexRoute
-  '/dashboard/submissions/': typeof DashboardSubmissionsIndexRoute
-  '/dashboard/themes/': typeof DashboardThemesIndexRoute
-  '/dashboard/users/': typeof DashboardUsersIndexRoute
-  '/articles/submit/$callId': typeof LandingArticlesSubmitCallIdRoute
+  "/": typeof LandingIndexRoute;
+  "/dashboard": typeof DashboardRouteRouteWithChildren;
+  "/account": typeof LandingAccountRouteRouteWithChildren;
+  "/forgot-password": typeof AuthForgotPasswordRoute;
+  "/login": typeof AuthLoginRoute;
+  "/register": typeof AuthRegisterRoute;
+  "/reset-password": typeof AuthResetPasswordRoute;
+  "/verify-email": typeof AuthVerifyEmailRoute;
+  "/about": typeof LandingAboutRoute;
+  "/archive": typeof LandingArchiveRoute;
+  "/contact": typeof LandingContactRoute;
+  "/privacy": typeof LandingPrivacyRoute;
+  "/team": typeof LandingTeamRoute;
+  "/terms": typeof LandingTermsRoute;
+  "/dashboard/": typeof DashboardIndexRoute;
+  "/account/applications": typeof LandingAccountApplicationsRoute;
+  "/account/delete": typeof LandingAccountDeleteRoute;
+  "/account/notifications": typeof LandingAccountNotificationsRoute;
+  "/account/profile": typeof LandingAccountProfileRoute;
+  "/account/security": typeof LandingAccountSecurityRoute;
+  "/articles/$articleId": typeof LandingArticlesArticleIdRoute;
+  "/articles/my": typeof LandingArticlesMyRoute;
+  "/blog/$slug": typeof LandingBlogSlugRoute;
+  "/posts/$postId": typeof LandingPostsPostIdRoute;
+  "/dashboard/calls/$callId": typeof DashboardCallsCallIdRoute;
+  "/dashboard/calls/new": typeof DashboardCallsNewRoute;
+  "/dashboard/categories/$categoryId": typeof DashboardCategoriesCategoryIdRoute;
+  "/dashboard/categories/new": typeof DashboardCategoriesNewRoute;
+  "/dashboard/crews/$crewId": typeof DashboardCrewsCrewIdRoute;
+  "/dashboard/crews/new": typeof DashboardCrewsNewRoute;
+  "/dashboard/messages/$messageId": typeof DashboardMessagesMessageIdRoute;
+  "/dashboard/news/$newsId": typeof DashboardNewsNewsIdRoute;
+  "/dashboard/news/new": typeof DashboardNewsNewRoute;
+  "/dashboard/posts/$postId": typeof DashboardPostsPostIdRoute;
+  "/dashboard/posts/new": typeof DashboardPostsNewRoute;
+  "/dashboard/profiles/$profileId": typeof DashboardProfilesProfileIdRoute;
+  "/dashboard/submissions/$articleId": typeof DashboardSubmissionsArticleIdRoute;
+  "/dashboard/users/$userId": typeof DashboardUsersUserIdRoute;
+  "/dashboard/users/new": typeof DashboardUsersNewRoute;
+  "/account/": typeof LandingAccountIndexRoute;
+  "/articles/": typeof LandingArticlesIndexRoute;
+  "/blog/": typeof LandingBlogIndexRoute;
+  "/posts/": typeof LandingPostsIndexRoute;
+  "/dashboard/analytics/": typeof DashboardAnalyticsIndexRoute;
+  "/dashboard/calls/": typeof DashboardCallsIndexRoute;
+  "/dashboard/categories/": typeof DashboardCategoriesIndexRoute;
+  "/dashboard/crews/": typeof DashboardCrewsIndexRoute;
+  "/dashboard/messages/": typeof DashboardMessagesIndexRoute;
+  "/dashboard/news/": typeof DashboardNewsIndexRoute;
+  "/dashboard/posts/": typeof DashboardPostsIndexRoute;
+  "/dashboard/profiles/": typeof DashboardProfilesIndexRoute;
+  "/dashboard/submissions/": typeof DashboardSubmissionsIndexRoute;
+  "/dashboard/themes/": typeof DashboardThemesIndexRoute;
+  "/dashboard/users/": typeof DashboardUsersIndexRoute;
+  "/articles/submit/$callId": typeof LandingArticlesSubmitCallIdRoute;
 }
 export interface FileRoutesByTo {
-  '/': typeof LandingIndexRoute
-  '/forgot-password': typeof AuthForgotPasswordRoute
-  '/login': typeof AuthLoginRoute
-  '/register': typeof AuthRegisterRoute
-  '/reset-password': typeof AuthResetPasswordRoute
-  '/verify-email': typeof AuthVerifyEmailRoute
-  '/about': typeof LandingAboutRoute
-  '/archive': typeof LandingArchiveRoute
-  '/contact': typeof LandingContactRoute
-  '/privacy': typeof LandingPrivacyRoute
-  '/team': typeof LandingTeamRoute
-  '/terms': typeof LandingTermsRoute
-  '/dashboard': typeof DashboardIndexRoute
-  '/account/applications': typeof LandingAccountApplicationsRoute
-  '/account/delete': typeof LandingAccountDeleteRoute
-  '/account/notifications': typeof LandingAccountNotificationsRoute
-  '/account/profile': typeof LandingAccountProfileRoute
-  '/account/security': typeof LandingAccountSecurityRoute
-  '/articles/$articleId': typeof LandingArticlesArticleIdRoute
-  '/articles/my': typeof LandingArticlesMyRoute
-  '/posts/$postId': typeof LandingPostsPostIdRoute
-  '/dashboard/calls/$callId': typeof DashboardCallsCallIdRoute
-  '/dashboard/calls/new': typeof DashboardCallsNewRoute
-  '/dashboard/categories/$categoryId': typeof DashboardCategoriesCategoryIdRoute
-  '/dashboard/categories/new': typeof DashboardCategoriesNewRoute
-  '/dashboard/crews/$crewId': typeof DashboardCrewsCrewIdRoute
-  '/dashboard/crews/new': typeof DashboardCrewsNewRoute
-  '/dashboard/messages/$messageId': typeof DashboardMessagesMessageIdRoute
-  '/dashboard/posts/$postId': typeof DashboardPostsPostIdRoute
-  '/dashboard/posts/new': typeof DashboardPostsNewRoute
-  '/dashboard/profiles/$profileId': typeof DashboardProfilesProfileIdRoute
-  '/dashboard/submissions/$articleId': typeof DashboardSubmissionsArticleIdRoute
-  '/dashboard/users/$userId': typeof DashboardUsersUserIdRoute
-  '/dashboard/users/new': typeof DashboardUsersNewRoute
-  '/account': typeof LandingAccountIndexRoute
-  '/articles': typeof LandingArticlesIndexRoute
-  '/posts': typeof LandingPostsIndexRoute
-  '/dashboard/analytics': typeof DashboardAnalyticsIndexRoute
-  '/dashboard/calls': typeof DashboardCallsIndexRoute
-  '/dashboard/categories': typeof DashboardCategoriesIndexRoute
-  '/dashboard/crews': typeof DashboardCrewsIndexRoute
-  '/dashboard/messages': typeof DashboardMessagesIndexRoute
-  '/dashboard/posts': typeof DashboardPostsIndexRoute
-  '/dashboard/profiles': typeof DashboardProfilesIndexRoute
-  '/dashboard/submissions': typeof DashboardSubmissionsIndexRoute
-  '/dashboard/themes': typeof DashboardThemesIndexRoute
-  '/dashboard/users': typeof DashboardUsersIndexRoute
-  '/articles/submit/$callId': typeof LandingArticlesSubmitCallIdRoute
+  "/": typeof LandingIndexRoute;
+  "/forgot-password": typeof AuthForgotPasswordRoute;
+  "/login": typeof AuthLoginRoute;
+  "/register": typeof AuthRegisterRoute;
+  "/reset-password": typeof AuthResetPasswordRoute;
+  "/verify-email": typeof AuthVerifyEmailRoute;
+  "/about": typeof LandingAboutRoute;
+  "/archive": typeof LandingArchiveRoute;
+  "/contact": typeof LandingContactRoute;
+  "/privacy": typeof LandingPrivacyRoute;
+  "/team": typeof LandingTeamRoute;
+  "/terms": typeof LandingTermsRoute;
+  "/dashboard": typeof DashboardIndexRoute;
+  "/account/applications": typeof LandingAccountApplicationsRoute;
+  "/account/delete": typeof LandingAccountDeleteRoute;
+  "/account/notifications": typeof LandingAccountNotificationsRoute;
+  "/account/profile": typeof LandingAccountProfileRoute;
+  "/account/security": typeof LandingAccountSecurityRoute;
+  "/articles/$articleId": typeof LandingArticlesArticleIdRoute;
+  "/articles/my": typeof LandingArticlesMyRoute;
+  "/blog/$slug": typeof LandingBlogSlugRoute;
+  "/posts/$postId": typeof LandingPostsPostIdRoute;
+  "/dashboard/calls/$callId": typeof DashboardCallsCallIdRoute;
+  "/dashboard/calls/new": typeof DashboardCallsNewRoute;
+  "/dashboard/categories/$categoryId": typeof DashboardCategoriesCategoryIdRoute;
+  "/dashboard/categories/new": typeof DashboardCategoriesNewRoute;
+  "/dashboard/crews/$crewId": typeof DashboardCrewsCrewIdRoute;
+  "/dashboard/crews/new": typeof DashboardCrewsNewRoute;
+  "/dashboard/messages/$messageId": typeof DashboardMessagesMessageIdRoute;
+  "/dashboard/news/$newsId": typeof DashboardNewsNewsIdRoute;
+  "/dashboard/news/new": typeof DashboardNewsNewRoute;
+  "/dashboard/posts/$postId": typeof DashboardPostsPostIdRoute;
+  "/dashboard/posts/new": typeof DashboardPostsNewRoute;
+  "/dashboard/profiles/$profileId": typeof DashboardProfilesProfileIdRoute;
+  "/dashboard/submissions/$articleId": typeof DashboardSubmissionsArticleIdRoute;
+  "/dashboard/users/$userId": typeof DashboardUsersUserIdRoute;
+  "/dashboard/users/new": typeof DashboardUsersNewRoute;
+  "/account": typeof LandingAccountIndexRoute;
+  "/articles": typeof LandingArticlesIndexRoute;
+  "/blog": typeof LandingBlogIndexRoute;
+  "/posts": typeof LandingPostsIndexRoute;
+  "/dashboard/analytics": typeof DashboardAnalyticsIndexRoute;
+  "/dashboard/calls": typeof DashboardCallsIndexRoute;
+  "/dashboard/categories": typeof DashboardCategoriesIndexRoute;
+  "/dashboard/crews": typeof DashboardCrewsIndexRoute;
+  "/dashboard/messages": typeof DashboardMessagesIndexRoute;
+  "/dashboard/news": typeof DashboardNewsIndexRoute;
+  "/dashboard/posts": typeof DashboardPostsIndexRoute;
+  "/dashboard/profiles": typeof DashboardProfilesIndexRoute;
+  "/dashboard/submissions": typeof DashboardSubmissionsIndexRoute;
+  "/dashboard/themes": typeof DashboardThemesIndexRoute;
+  "/dashboard/users": typeof DashboardUsersIndexRoute;
+  "/articles/submit/$callId": typeof LandingArticlesSubmitCallIdRoute;
 }
 export interface FileRoutesById {
-  __root__: typeof rootRouteImport
-  '/_auth': typeof AuthRouteRouteWithChildren
-  '/_landing': typeof LandingRouteRouteWithChildren
-  '/dashboard': typeof DashboardRouteRouteWithChildren
-  '/_landing/account': typeof LandingAccountRouteRouteWithChildren
-  '/_auth/forgot-password': typeof AuthForgotPasswordRoute
-  '/_auth/login': typeof AuthLoginRoute
-  '/_auth/register': typeof AuthRegisterRoute
-  '/_auth/reset-password': typeof AuthResetPasswordRoute
-  '/_auth/verify-email': typeof AuthVerifyEmailRoute
-  '/_landing/about': typeof LandingAboutRoute
-  '/_landing/archive': typeof LandingArchiveRoute
-  '/_landing/contact': typeof LandingContactRoute
-  '/_landing/privacy': typeof LandingPrivacyRoute
-  '/_landing/team': typeof LandingTeamRoute
-  '/_landing/terms': typeof LandingTermsRoute
-  '/_landing/': typeof LandingIndexRoute
-  '/dashboard/': typeof DashboardIndexRoute
-  '/_landing/account/applications': typeof LandingAccountApplicationsRoute
-  '/_landing/account/delete': typeof LandingAccountDeleteRoute
-  '/_landing/account/notifications': typeof LandingAccountNotificationsRoute
-  '/_landing/account/profile': typeof LandingAccountProfileRoute
-  '/_landing/account/security': typeof LandingAccountSecurityRoute
-  '/_landing/articles/$articleId': typeof LandingArticlesArticleIdRoute
-  '/_landing/articles/my': typeof LandingArticlesMyRoute
-  '/_landing/posts/$postId': typeof LandingPostsPostIdRoute
-  '/dashboard/calls/$callId': typeof DashboardCallsCallIdRoute
-  '/dashboard/calls/new': typeof DashboardCallsNewRoute
-  '/dashboard/categories/$categoryId': typeof DashboardCategoriesCategoryIdRoute
-  '/dashboard/categories/new': typeof DashboardCategoriesNewRoute
-  '/dashboard/crews/$crewId': typeof DashboardCrewsCrewIdRoute
-  '/dashboard/crews/new': typeof DashboardCrewsNewRoute
-  '/dashboard/messages/$messageId': typeof DashboardMessagesMessageIdRoute
-  '/dashboard/posts/$postId': typeof DashboardPostsPostIdRoute
-  '/dashboard/posts/new': typeof DashboardPostsNewRoute
-  '/dashboard/profiles/$profileId': typeof DashboardProfilesProfileIdRoute
-  '/dashboard/submissions/$articleId': typeof DashboardSubmissionsArticleIdRoute
-  '/dashboard/users/$userId': typeof DashboardUsersUserIdRoute
-  '/dashboard/users/new': typeof DashboardUsersNewRoute
-  '/_landing/account/': typeof LandingAccountIndexRoute
-  '/_landing/articles/': typeof LandingArticlesIndexRoute
-  '/_landing/posts/': typeof LandingPostsIndexRoute
-  '/dashboard/analytics/': typeof DashboardAnalyticsIndexRoute
-  '/dashboard/calls/': typeof DashboardCallsIndexRoute
-  '/dashboard/categories/': typeof DashboardCategoriesIndexRoute
-  '/dashboard/crews/': typeof DashboardCrewsIndexRoute
-  '/dashboard/messages/': typeof DashboardMessagesIndexRoute
-  '/dashboard/posts/': typeof DashboardPostsIndexRoute
-  '/dashboard/profiles/': typeof DashboardProfilesIndexRoute
-  '/dashboard/submissions/': typeof DashboardSubmissionsIndexRoute
-  '/dashboard/themes/': typeof DashboardThemesIndexRoute
-  '/dashboard/users/': typeof DashboardUsersIndexRoute
-  '/_landing/articles/submit/$callId': typeof LandingArticlesSubmitCallIdRoute
+  __root__: typeof rootRouteImport;
+  "/_auth": typeof AuthRouteRouteWithChildren;
+  "/_landing": typeof LandingRouteRouteWithChildren;
+  "/dashboard": typeof DashboardRouteRouteWithChildren;
+  "/_landing/account": typeof LandingAccountRouteRouteWithChildren;
+  "/_auth/forgot-password": typeof AuthForgotPasswordRoute;
+  "/_auth/login": typeof AuthLoginRoute;
+  "/_auth/register": typeof AuthRegisterRoute;
+  "/_auth/reset-password": typeof AuthResetPasswordRoute;
+  "/_auth/verify-email": typeof AuthVerifyEmailRoute;
+  "/_landing/about": typeof LandingAboutRoute;
+  "/_landing/archive": typeof LandingArchiveRoute;
+  "/_landing/contact": typeof LandingContactRoute;
+  "/_landing/privacy": typeof LandingPrivacyRoute;
+  "/_landing/team": typeof LandingTeamRoute;
+  "/_landing/terms": typeof LandingTermsRoute;
+  "/_landing/": typeof LandingIndexRoute;
+  "/dashboard/": typeof DashboardIndexRoute;
+  "/_landing/account/applications": typeof LandingAccountApplicationsRoute;
+  "/_landing/account/delete": typeof LandingAccountDeleteRoute;
+  "/_landing/account/notifications": typeof LandingAccountNotificationsRoute;
+  "/_landing/account/profile": typeof LandingAccountProfileRoute;
+  "/_landing/account/security": typeof LandingAccountSecurityRoute;
+  "/_landing/articles/$articleId": typeof LandingArticlesArticleIdRoute;
+  "/_landing/articles/my": typeof LandingArticlesMyRoute;
+  "/_landing/blog/$slug": typeof LandingBlogSlugRoute;
+  "/_landing/posts/$postId": typeof LandingPostsPostIdRoute;
+  "/dashboard/calls/$callId": typeof DashboardCallsCallIdRoute;
+  "/dashboard/calls/new": typeof DashboardCallsNewRoute;
+  "/dashboard/categories/$categoryId": typeof DashboardCategoriesCategoryIdRoute;
+  "/dashboard/categories/new": typeof DashboardCategoriesNewRoute;
+  "/dashboard/crews/$crewId": typeof DashboardCrewsCrewIdRoute;
+  "/dashboard/crews/new": typeof DashboardCrewsNewRoute;
+  "/dashboard/messages/$messageId": typeof DashboardMessagesMessageIdRoute;
+  "/dashboard/news/$newsId": typeof DashboardNewsNewsIdRoute;
+  "/dashboard/news/new": typeof DashboardNewsNewRoute;
+  "/dashboard/posts/$postId": typeof DashboardPostsPostIdRoute;
+  "/dashboard/posts/new": typeof DashboardPostsNewRoute;
+  "/dashboard/profiles/$profileId": typeof DashboardProfilesProfileIdRoute;
+  "/dashboard/submissions/$articleId": typeof DashboardSubmissionsArticleIdRoute;
+  "/dashboard/users/$userId": typeof DashboardUsersUserIdRoute;
+  "/dashboard/users/new": typeof DashboardUsersNewRoute;
+  "/_landing/account/": typeof LandingAccountIndexRoute;
+  "/_landing/articles/": typeof LandingArticlesIndexRoute;
+  "/_landing/blog/": typeof LandingBlogIndexRoute;
+  "/_landing/posts/": typeof LandingPostsIndexRoute;
+  "/dashboard/analytics/": typeof DashboardAnalyticsIndexRoute;
+  "/dashboard/calls/": typeof DashboardCallsIndexRoute;
+  "/dashboard/categories/": typeof DashboardCategoriesIndexRoute;
+  "/dashboard/crews/": typeof DashboardCrewsIndexRoute;
+  "/dashboard/messages/": typeof DashboardMessagesIndexRoute;
+  "/dashboard/news/": typeof DashboardNewsIndexRoute;
+  "/dashboard/posts/": typeof DashboardPostsIndexRoute;
+  "/dashboard/profiles/": typeof DashboardProfilesIndexRoute;
+  "/dashboard/submissions/": typeof DashboardSubmissionsIndexRoute;
+  "/dashboard/themes/": typeof DashboardThemesIndexRoute;
+  "/dashboard/users/": typeof DashboardUsersIndexRoute;
+  "/_landing/articles/submit/$callId": typeof LandingArticlesSubmitCallIdRoute;
 }
 export interface FileRouteTypes {
-  fileRoutesByFullPath: FileRoutesByFullPath
+  fileRoutesByFullPath: FileRoutesByFullPath;
   fullPaths:
-    | '/'
-    | '/dashboard'
-    | '/account'
-    | '/forgot-password'
-    | '/login'
-    | '/register'
-    | '/reset-password'
-    | '/verify-email'
-    | '/about'
-    | '/archive'
-    | '/contact'
-    | '/privacy'
-    | '/team'
-    | '/terms'
-    | '/dashboard/'
-    | '/account/applications'
-    | '/account/delete'
-    | '/account/notifications'
-    | '/account/profile'
-    | '/account/security'
-    | '/articles/$articleId'
-    | '/articles/my'
-    | '/posts/$postId'
-    | '/dashboard/calls/$callId'
-    | '/dashboard/calls/new'
-    | '/dashboard/categories/$categoryId'
-    | '/dashboard/categories/new'
-    | '/dashboard/crews/$crewId'
-    | '/dashboard/crews/new'
-    | '/dashboard/messages/$messageId'
-    | '/dashboard/posts/$postId'
-    | '/dashboard/posts/new'
-    | '/dashboard/profiles/$profileId'
-    | '/dashboard/submissions/$articleId'
-    | '/dashboard/users/$userId'
-    | '/dashboard/users/new'
-    | '/account/'
-    | '/articles/'
-    | '/posts/'
-    | '/dashboard/analytics/'
-    | '/dashboard/calls/'
-    | '/dashboard/categories/'
-    | '/dashboard/crews/'
-    | '/dashboard/messages/'
-    | '/dashboard/posts/'
-    | '/dashboard/profiles/'
-    | '/dashboard/submissions/'
-    | '/dashboard/themes/'
-    | '/dashboard/users/'
-    | '/articles/submit/$callId'
-  fileRoutesByTo: FileRoutesByTo
+    | "/"
+    | "/dashboard"
+    | "/account"
+    | "/forgot-password"
+    | "/login"
+    | "/register"
+    | "/reset-password"
+    | "/verify-email"
+    | "/about"
+    | "/archive"
+    | "/contact"
+    | "/privacy"
+    | "/team"
+    | "/terms"
+    | "/dashboard/"
+    | "/account/applications"
+    | "/account/delete"
+    | "/account/notifications"
+    | "/account/profile"
+    | "/account/security"
+    | "/articles/$articleId"
+    | "/articles/my"
+    | "/blog/$slug"
+    | "/posts/$postId"
+    | "/dashboard/calls/$callId"
+    | "/dashboard/calls/new"
+    | "/dashboard/categories/$categoryId"
+    | "/dashboard/categories/new"
+    | "/dashboard/crews/$crewId"
+    | "/dashboard/crews/new"
+    | "/dashboard/messages/$messageId"
+    | "/dashboard/news/$newsId"
+    | "/dashboard/news/new"
+    | "/dashboard/posts/$postId"
+    | "/dashboard/posts/new"
+    | "/dashboard/profiles/$profileId"
+    | "/dashboard/submissions/$articleId"
+    | "/dashboard/users/$userId"
+    | "/dashboard/users/new"
+    | "/account/"
+    | "/articles/"
+    | "/blog/"
+    | "/posts/"
+    | "/dashboard/analytics/"
+    | "/dashboard/calls/"
+    | "/dashboard/categories/"
+    | "/dashboard/crews/"
+    | "/dashboard/messages/"
+    | "/dashboard/news/"
+    | "/dashboard/posts/"
+    | "/dashboard/profiles/"
+    | "/dashboard/submissions/"
+    | "/dashboard/themes/"
+    | "/dashboard/users/"
+    | "/articles/submit/$callId";
+  fileRoutesByTo: FileRoutesByTo;
   to:
-    | '/'
-    | '/forgot-password'
-    | '/login'
-    | '/register'
-    | '/reset-password'
-    | '/verify-email'
-    | '/about'
-    | '/archive'
-    | '/contact'
-    | '/privacy'
-    | '/team'
-    | '/terms'
-    | '/dashboard'
-    | '/account/applications'
-    | '/account/delete'
-    | '/account/notifications'
-    | '/account/profile'
-    | '/account/security'
-    | '/articles/$articleId'
-    | '/articles/my'
-    | '/posts/$postId'
-    | '/dashboard/calls/$callId'
-    | '/dashboard/calls/new'
-    | '/dashboard/categories/$categoryId'
-    | '/dashboard/categories/new'
-    | '/dashboard/crews/$crewId'
-    | '/dashboard/crews/new'
-    | '/dashboard/messages/$messageId'
-    | '/dashboard/posts/$postId'
-    | '/dashboard/posts/new'
-    | '/dashboard/profiles/$profileId'
-    | '/dashboard/submissions/$articleId'
-    | '/dashboard/users/$userId'
-    | '/dashboard/users/new'
-    | '/account'
-    | '/articles'
-    | '/posts'
-    | '/dashboard/analytics'
-    | '/dashboard/calls'
-    | '/dashboard/categories'
-    | '/dashboard/crews'
-    | '/dashboard/messages'
-    | '/dashboard/posts'
-    | '/dashboard/profiles'
-    | '/dashboard/submissions'
-    | '/dashboard/themes'
-    | '/dashboard/users'
-    | '/articles/submit/$callId'
+    | "/"
+    | "/forgot-password"
+    | "/login"
+    | "/register"
+    | "/reset-password"
+    | "/verify-email"
+    | "/about"
+    | "/archive"
+    | "/contact"
+    | "/privacy"
+    | "/team"
+    | "/terms"
+    | "/dashboard"
+    | "/account/applications"
+    | "/account/delete"
+    | "/account/notifications"
+    | "/account/profile"
+    | "/account/security"
+    | "/articles/$articleId"
+    | "/articles/my"
+    | "/blog/$slug"
+    | "/posts/$postId"
+    | "/dashboard/calls/$callId"
+    | "/dashboard/calls/new"
+    | "/dashboard/categories/$categoryId"
+    | "/dashboard/categories/new"
+    | "/dashboard/crews/$crewId"
+    | "/dashboard/crews/new"
+    | "/dashboard/messages/$messageId"
+    | "/dashboard/news/$newsId"
+    | "/dashboard/news/new"
+    | "/dashboard/posts/$postId"
+    | "/dashboard/posts/new"
+    | "/dashboard/profiles/$profileId"
+    | "/dashboard/submissions/$articleId"
+    | "/dashboard/users/$userId"
+    | "/dashboard/users/new"
+    | "/account"
+    | "/articles"
+    | "/blog"
+    | "/posts"
+    | "/dashboard/analytics"
+    | "/dashboard/calls"
+    | "/dashboard/categories"
+    | "/dashboard/crews"
+    | "/dashboard/messages"
+    | "/dashboard/news"
+    | "/dashboard/posts"
+    | "/dashboard/profiles"
+    | "/dashboard/submissions"
+    | "/dashboard/themes"
+    | "/dashboard/users"
+    | "/articles/submit/$callId";
   id:
-    | '__root__'
-    | '/_auth'
-    | '/_landing'
-    | '/dashboard'
-    | '/_landing/account'
-    | '/_auth/forgot-password'
-    | '/_auth/login'
-    | '/_auth/register'
-    | '/_auth/reset-password'
-    | '/_auth/verify-email'
-    | '/_landing/about'
-    | '/_landing/archive'
-    | '/_landing/contact'
-    | '/_landing/privacy'
-    | '/_landing/team'
-    | '/_landing/terms'
-    | '/_landing/'
-    | '/dashboard/'
-    | '/_landing/account/applications'
-    | '/_landing/account/delete'
-    | '/_landing/account/notifications'
-    | '/_landing/account/profile'
-    | '/_landing/account/security'
-    | '/_landing/articles/$articleId'
-    | '/_landing/articles/my'
-    | '/_landing/posts/$postId'
-    | '/dashboard/calls/$callId'
-    | '/dashboard/calls/new'
-    | '/dashboard/categories/$categoryId'
-    | '/dashboard/categories/new'
-    | '/dashboard/crews/$crewId'
-    | '/dashboard/crews/new'
-    | '/dashboard/messages/$messageId'
-    | '/dashboard/posts/$postId'
-    | '/dashboard/posts/new'
-    | '/dashboard/profiles/$profileId'
-    | '/dashboard/submissions/$articleId'
-    | '/dashboard/users/$userId'
-    | '/dashboard/users/new'
-    | '/_landing/account/'
-    | '/_landing/articles/'
-    | '/_landing/posts/'
-    | '/dashboard/analytics/'
-    | '/dashboard/calls/'
-    | '/dashboard/categories/'
-    | '/dashboard/crews/'
-    | '/dashboard/messages/'
-    | '/dashboard/posts/'
-    | '/dashboard/profiles/'
-    | '/dashboard/submissions/'
-    | '/dashboard/themes/'
-    | '/dashboard/users/'
-    | '/_landing/articles/submit/$callId'
-  fileRoutesById: FileRoutesById
+    | "__root__"
+    | "/_auth"
+    | "/_landing"
+    | "/dashboard"
+    | "/_landing/account"
+    | "/_auth/forgot-password"
+    | "/_auth/login"
+    | "/_auth/register"
+    | "/_auth/reset-password"
+    | "/_auth/verify-email"
+    | "/_landing/about"
+    | "/_landing/archive"
+    | "/_landing/contact"
+    | "/_landing/privacy"
+    | "/_landing/team"
+    | "/_landing/terms"
+    | "/_landing/"
+    | "/dashboard/"
+    | "/_landing/account/applications"
+    | "/_landing/account/delete"
+    | "/_landing/account/notifications"
+    | "/_landing/account/profile"
+    | "/_landing/account/security"
+    | "/_landing/articles/$articleId"
+    | "/_landing/articles/my"
+    | "/_landing/blog/$slug"
+    | "/_landing/posts/$postId"
+    | "/dashboard/calls/$callId"
+    | "/dashboard/calls/new"
+    | "/dashboard/categories/$categoryId"
+    | "/dashboard/categories/new"
+    | "/dashboard/crews/$crewId"
+    | "/dashboard/crews/new"
+    | "/dashboard/messages/$messageId"
+    | "/dashboard/news/$newsId"
+    | "/dashboard/news/new"
+    | "/dashboard/posts/$postId"
+    | "/dashboard/posts/new"
+    | "/dashboard/profiles/$profileId"
+    | "/dashboard/submissions/$articleId"
+    | "/dashboard/users/$userId"
+    | "/dashboard/users/new"
+    | "/_landing/account/"
+    | "/_landing/articles/"
+    | "/_landing/blog/"
+    | "/_landing/posts/"
+    | "/dashboard/analytics/"
+    | "/dashboard/calls/"
+    | "/dashboard/categories/"
+    | "/dashboard/crews/"
+    | "/dashboard/messages/"
+    | "/dashboard/news/"
+    | "/dashboard/posts/"
+    | "/dashboard/profiles/"
+    | "/dashboard/submissions/"
+    | "/dashboard/themes/"
+    | "/dashboard/users/"
+    | "/_landing/articles/submit/$callId";
+  fileRoutesById: FileRoutesById;
 }
 export interface RootRouteChildren {
-  AuthRouteRoute: typeof AuthRouteRouteWithChildren
-  LandingRouteRoute: typeof LandingRouteRouteWithChildren
-  DashboardRouteRoute: typeof DashboardRouteRouteWithChildren
+  AuthRouteRoute: typeof AuthRouteRouteWithChildren;
+  LandingRouteRoute: typeof LandingRouteRouteWithChildren;
+  DashboardRouteRoute: typeof DashboardRouteRouteWithChildren;
 }
 
-declare module '@tanstack/react-router' {
+declare module "@tanstack/react-router" {
   interface FileRoutesByPath {
-    '/dashboard': {
-      id: '/dashboard'
-      path: '/dashboard'
-      fullPath: '/dashboard'
-      preLoaderRoute: typeof DashboardRouteRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/_landing': {
-      id: '/_landing'
-      path: ''
-      fullPath: '/'
-      preLoaderRoute: typeof LandingRouteRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/_auth': {
-      id: '/_auth'
-      path: ''
-      fullPath: '/'
-      preLoaderRoute: typeof AuthRouteRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/dashboard/': {
-      id: '/dashboard/'
-      path: '/'
-      fullPath: '/dashboard/'
-      preLoaderRoute: typeof DashboardIndexRouteImport
-      parentRoute: typeof DashboardRouteRoute
-    }
-    '/_landing/': {
-      id: '/_landing/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof LandingIndexRouteImport
-      parentRoute: typeof LandingRouteRoute
-    }
-    '/_landing/terms': {
-      id: '/_landing/terms'
-      path: '/terms'
-      fullPath: '/terms'
-      preLoaderRoute: typeof LandingTermsRouteImport
-      parentRoute: typeof LandingRouteRoute
-    }
-    '/_landing/team': {
-      id: '/_landing/team'
-      path: '/team'
-      fullPath: '/team'
-      preLoaderRoute: typeof LandingTeamRouteImport
-      parentRoute: typeof LandingRouteRoute
-    }
-    '/_landing/privacy': {
-      id: '/_landing/privacy'
-      path: '/privacy'
-      fullPath: '/privacy'
-      preLoaderRoute: typeof LandingPrivacyRouteImport
-      parentRoute: typeof LandingRouteRoute
-    }
-    '/_landing/contact': {
-      id: '/_landing/contact'
-      path: '/contact'
-      fullPath: '/contact'
-      preLoaderRoute: typeof LandingContactRouteImport
-      parentRoute: typeof LandingRouteRoute
-    }
-    '/_landing/archive': {
-      id: '/_landing/archive'
-      path: '/archive'
-      fullPath: '/archive'
-      preLoaderRoute: typeof LandingArchiveRouteImport
-      parentRoute: typeof LandingRouteRoute
-    }
-    '/_landing/about': {
-      id: '/_landing/about'
-      path: '/about'
-      fullPath: '/about'
-      preLoaderRoute: typeof LandingAboutRouteImport
-      parentRoute: typeof LandingRouteRoute
-    }
-    '/_auth/verify-email': {
-      id: '/_auth/verify-email'
-      path: '/verify-email'
-      fullPath: '/verify-email'
-      preLoaderRoute: typeof AuthVerifyEmailRouteImport
-      parentRoute: typeof AuthRouteRoute
-    }
-    '/_auth/reset-password': {
-      id: '/_auth/reset-password'
-      path: '/reset-password'
-      fullPath: '/reset-password'
-      preLoaderRoute: typeof AuthResetPasswordRouteImport
-      parentRoute: typeof AuthRouteRoute
-    }
-    '/_auth/register': {
-      id: '/_auth/register'
-      path: '/register'
-      fullPath: '/register'
-      preLoaderRoute: typeof AuthRegisterRouteImport
-      parentRoute: typeof AuthRouteRoute
-    }
-    '/_auth/login': {
-      id: '/_auth/login'
-      path: '/login'
-      fullPath: '/login'
-      preLoaderRoute: typeof AuthLoginRouteImport
-      parentRoute: typeof AuthRouteRoute
-    }
-    '/_auth/forgot-password': {
-      id: '/_auth/forgot-password'
-      path: '/forgot-password'
-      fullPath: '/forgot-password'
-      preLoaderRoute: typeof AuthForgotPasswordRouteImport
-      parentRoute: typeof AuthRouteRoute
-    }
-    '/_landing/account': {
-      id: '/_landing/account'
-      path: '/account'
-      fullPath: '/account'
-      preLoaderRoute: typeof LandingAccountRouteRouteImport
-      parentRoute: typeof LandingRouteRoute
-    }
-    '/dashboard/users/': {
-      id: '/dashboard/users/'
-      path: '/users'
-      fullPath: '/dashboard/users/'
-      preLoaderRoute: typeof DashboardUsersIndexRouteImport
-      parentRoute: typeof DashboardRouteRoute
-    }
-    '/dashboard/themes/': {
-      id: '/dashboard/themes/'
-      path: '/themes'
-      fullPath: '/dashboard/themes/'
-      preLoaderRoute: typeof DashboardThemesIndexRouteImport
-      parentRoute: typeof DashboardRouteRoute
-    }
-    '/dashboard/submissions/': {
-      id: '/dashboard/submissions/'
-      path: '/submissions'
-      fullPath: '/dashboard/submissions/'
-      preLoaderRoute: typeof DashboardSubmissionsIndexRouteImport
-      parentRoute: typeof DashboardRouteRoute
-    }
-    '/dashboard/profiles/': {
-      id: '/dashboard/profiles/'
-      path: '/profiles'
-      fullPath: '/dashboard/profiles/'
-      preLoaderRoute: typeof DashboardProfilesIndexRouteImport
-      parentRoute: typeof DashboardRouteRoute
-    }
-    '/dashboard/posts/': {
-      id: '/dashboard/posts/'
-      path: '/posts'
-      fullPath: '/dashboard/posts/'
-      preLoaderRoute: typeof DashboardPostsIndexRouteImport
-      parentRoute: typeof DashboardRouteRoute
-    }
-    '/dashboard/messages/': {
-      id: '/dashboard/messages/'
-      path: '/messages'
-      fullPath: '/dashboard/messages/'
-      preLoaderRoute: typeof DashboardMessagesIndexRouteImport
-      parentRoute: typeof DashboardRouteRoute
-    }
-    '/dashboard/crews/': {
-      id: '/dashboard/crews/'
-      path: '/crews'
-      fullPath: '/dashboard/crews/'
-      preLoaderRoute: typeof DashboardCrewsIndexRouteImport
-      parentRoute: typeof DashboardRouteRoute
-    }
-    '/dashboard/categories/': {
-      id: '/dashboard/categories/'
-      path: '/categories'
-      fullPath: '/dashboard/categories/'
-      preLoaderRoute: typeof DashboardCategoriesIndexRouteImport
-      parentRoute: typeof DashboardRouteRoute
-    }
-    '/dashboard/calls/': {
-      id: '/dashboard/calls/'
-      path: '/calls'
-      fullPath: '/dashboard/calls/'
-      preLoaderRoute: typeof DashboardCallsIndexRouteImport
-      parentRoute: typeof DashboardRouteRoute
-    }
-    '/dashboard/analytics/': {
-      id: '/dashboard/analytics/'
-      path: '/analytics'
-      fullPath: '/dashboard/analytics/'
-      preLoaderRoute: typeof DashboardAnalyticsIndexRouteImport
-      parentRoute: typeof DashboardRouteRoute
-    }
-    '/_landing/posts/': {
-      id: '/_landing/posts/'
-      path: '/posts'
-      fullPath: '/posts/'
-      preLoaderRoute: typeof LandingPostsIndexRouteImport
-      parentRoute: typeof LandingRouteRoute
-    }
-    '/_landing/articles/': {
-      id: '/_landing/articles/'
-      path: '/articles'
-      fullPath: '/articles/'
-      preLoaderRoute: typeof LandingArticlesIndexRouteImport
-      parentRoute: typeof LandingRouteRoute
-    }
-    '/_landing/account/': {
-      id: '/_landing/account/'
-      path: '/'
-      fullPath: '/account/'
-      preLoaderRoute: typeof LandingAccountIndexRouteImport
-      parentRoute: typeof LandingAccountRouteRoute
-    }
-    '/dashboard/users/new': {
-      id: '/dashboard/users/new'
-      path: '/users/new'
-      fullPath: '/dashboard/users/new'
-      preLoaderRoute: typeof DashboardUsersNewRouteImport
-      parentRoute: typeof DashboardRouteRoute
-    }
-    '/dashboard/users/$userId': {
-      id: '/dashboard/users/$userId'
-      path: '/users/$userId'
-      fullPath: '/dashboard/users/$userId'
-      preLoaderRoute: typeof DashboardUsersUserIdRouteImport
-      parentRoute: typeof DashboardRouteRoute
-    }
-    '/dashboard/submissions/$articleId': {
-      id: '/dashboard/submissions/$articleId'
-      path: '/submissions/$articleId'
-      fullPath: '/dashboard/submissions/$articleId'
-      preLoaderRoute: typeof DashboardSubmissionsArticleIdRouteImport
-      parentRoute: typeof DashboardRouteRoute
-    }
-    '/dashboard/profiles/$profileId': {
-      id: '/dashboard/profiles/$profileId'
-      path: '/profiles/$profileId'
-      fullPath: '/dashboard/profiles/$profileId'
-      preLoaderRoute: typeof DashboardProfilesProfileIdRouteImport
-      parentRoute: typeof DashboardRouteRoute
-    }
-    '/dashboard/posts/new': {
-      id: '/dashboard/posts/new'
-      path: '/posts/new'
-      fullPath: '/dashboard/posts/new'
-      preLoaderRoute: typeof DashboardPostsNewRouteImport
-      parentRoute: typeof DashboardRouteRoute
-    }
-    '/dashboard/posts/$postId': {
-      id: '/dashboard/posts/$postId'
-      path: '/posts/$postId'
-      fullPath: '/dashboard/posts/$postId'
-      preLoaderRoute: typeof DashboardPostsPostIdRouteImport
-      parentRoute: typeof DashboardRouteRoute
-    }
-    '/dashboard/messages/$messageId': {
-      id: '/dashboard/messages/$messageId'
-      path: '/messages/$messageId'
-      fullPath: '/dashboard/messages/$messageId'
-      preLoaderRoute: typeof DashboardMessagesMessageIdRouteImport
-      parentRoute: typeof DashboardRouteRoute
-    }
-    '/dashboard/crews/new': {
-      id: '/dashboard/crews/new'
-      path: '/crews/new'
-      fullPath: '/dashboard/crews/new'
-      preLoaderRoute: typeof DashboardCrewsNewRouteImport
-      parentRoute: typeof DashboardRouteRoute
-    }
-    '/dashboard/crews/$crewId': {
-      id: '/dashboard/crews/$crewId'
-      path: '/crews/$crewId'
-      fullPath: '/dashboard/crews/$crewId'
-      preLoaderRoute: typeof DashboardCrewsCrewIdRouteImport
-      parentRoute: typeof DashboardRouteRoute
-    }
-    '/dashboard/categories/new': {
-      id: '/dashboard/categories/new'
-      path: '/categories/new'
-      fullPath: '/dashboard/categories/new'
-      preLoaderRoute: typeof DashboardCategoriesNewRouteImport
-      parentRoute: typeof DashboardRouteRoute
-    }
-    '/dashboard/categories/$categoryId': {
-      id: '/dashboard/categories/$categoryId'
-      path: '/categories/$categoryId'
-      fullPath: '/dashboard/categories/$categoryId'
-      preLoaderRoute: typeof DashboardCategoriesCategoryIdRouteImport
-      parentRoute: typeof DashboardRouteRoute
-    }
-    '/dashboard/calls/new': {
-      id: '/dashboard/calls/new'
-      path: '/calls/new'
-      fullPath: '/dashboard/calls/new'
-      preLoaderRoute: typeof DashboardCallsNewRouteImport
-      parentRoute: typeof DashboardRouteRoute
-    }
-    '/dashboard/calls/$callId': {
-      id: '/dashboard/calls/$callId'
-      path: '/calls/$callId'
-      fullPath: '/dashboard/calls/$callId'
-      preLoaderRoute: typeof DashboardCallsCallIdRouteImport
-      parentRoute: typeof DashboardRouteRoute
-    }
-    '/_landing/posts/$postId': {
-      id: '/_landing/posts/$postId'
-      path: '/posts/$postId'
-      fullPath: '/posts/$postId'
-      preLoaderRoute: typeof LandingPostsPostIdRouteImport
-      parentRoute: typeof LandingRouteRoute
-    }
-    '/_landing/articles/my': {
-      id: '/_landing/articles/my'
-      path: '/articles/my'
-      fullPath: '/articles/my'
-      preLoaderRoute: typeof LandingArticlesMyRouteImport
-      parentRoute: typeof LandingRouteRoute
-    }
-    '/_landing/articles/$articleId': {
-      id: '/_landing/articles/$articleId'
-      path: '/articles/$articleId'
-      fullPath: '/articles/$articleId'
-      preLoaderRoute: typeof LandingArticlesArticleIdRouteImport
-      parentRoute: typeof LandingRouteRoute
-    }
-    '/_landing/account/security': {
-      id: '/_landing/account/security'
-      path: '/security'
-      fullPath: '/account/security'
-      preLoaderRoute: typeof LandingAccountSecurityRouteImport
-      parentRoute: typeof LandingAccountRouteRoute
-    }
-    '/_landing/account/profile': {
-      id: '/_landing/account/profile'
-      path: '/profile'
-      fullPath: '/account/profile'
-      preLoaderRoute: typeof LandingAccountProfileRouteImport
-      parentRoute: typeof LandingAccountRouteRoute
-    }
-    '/_landing/account/notifications': {
-      id: '/_landing/account/notifications'
-      path: '/notifications'
-      fullPath: '/account/notifications'
-      preLoaderRoute: typeof LandingAccountNotificationsRouteImport
-      parentRoute: typeof LandingAccountRouteRoute
-    }
-    '/_landing/account/delete': {
-      id: '/_landing/account/delete'
-      path: '/delete'
-      fullPath: '/account/delete'
-      preLoaderRoute: typeof LandingAccountDeleteRouteImport
-      parentRoute: typeof LandingAccountRouteRoute
-    }
-    '/_landing/account/applications': {
-      id: '/_landing/account/applications'
-      path: '/applications'
-      fullPath: '/account/applications'
-      preLoaderRoute: typeof LandingAccountApplicationsRouteImport
-      parentRoute: typeof LandingAccountRouteRoute
-    }
-    '/_landing/articles/submit/$callId': {
-      id: '/_landing/articles/submit/$callId'
-      path: '/articles/submit/$callId'
-      fullPath: '/articles/submit/$callId'
-      preLoaderRoute: typeof LandingArticlesSubmitCallIdRouteImport
-      parentRoute: typeof LandingRouteRoute
-    }
+    "/dashboard": {
+      id: "/dashboard";
+      path: "/dashboard";
+      fullPath: "/dashboard";
+      preLoaderRoute: typeof DashboardRouteRouteImport;
+      parentRoute: typeof rootRouteImport;
+    };
+    "/_landing": {
+      id: "/_landing";
+      path: "";
+      fullPath: "/";
+      preLoaderRoute: typeof LandingRouteRouteImport;
+      parentRoute: typeof rootRouteImport;
+    };
+    "/_auth": {
+      id: "/_auth";
+      path: "";
+      fullPath: "/";
+      preLoaderRoute: typeof AuthRouteRouteImport;
+      parentRoute: typeof rootRouteImport;
+    };
+    "/dashboard/": {
+      id: "/dashboard/";
+      path: "/";
+      fullPath: "/dashboard/";
+      preLoaderRoute: typeof DashboardIndexRouteImport;
+      parentRoute: typeof DashboardRouteRoute;
+    };
+    "/_landing/": {
+      id: "/_landing/";
+      path: "/";
+      fullPath: "/";
+      preLoaderRoute: typeof LandingIndexRouteImport;
+      parentRoute: typeof LandingRouteRoute;
+    };
+    "/_landing/terms": {
+      id: "/_landing/terms";
+      path: "/terms";
+      fullPath: "/terms";
+      preLoaderRoute: typeof LandingTermsRouteImport;
+      parentRoute: typeof LandingRouteRoute;
+    };
+    "/_landing/team": {
+      id: "/_landing/team";
+      path: "/team";
+      fullPath: "/team";
+      preLoaderRoute: typeof LandingTeamRouteImport;
+      parentRoute: typeof LandingRouteRoute;
+    };
+    "/_landing/privacy": {
+      id: "/_landing/privacy";
+      path: "/privacy";
+      fullPath: "/privacy";
+      preLoaderRoute: typeof LandingPrivacyRouteImport;
+      parentRoute: typeof LandingRouteRoute;
+    };
+    "/_landing/contact": {
+      id: "/_landing/contact";
+      path: "/contact";
+      fullPath: "/contact";
+      preLoaderRoute: typeof LandingContactRouteImport;
+      parentRoute: typeof LandingRouteRoute;
+    };
+    "/_landing/archive": {
+      id: "/_landing/archive";
+      path: "/archive";
+      fullPath: "/archive";
+      preLoaderRoute: typeof LandingArchiveRouteImport;
+      parentRoute: typeof LandingRouteRoute;
+    };
+    "/_landing/about": {
+      id: "/_landing/about";
+      path: "/about";
+      fullPath: "/about";
+      preLoaderRoute: typeof LandingAboutRouteImport;
+      parentRoute: typeof LandingRouteRoute;
+    };
+    "/_auth/verify-email": {
+      id: "/_auth/verify-email";
+      path: "/verify-email";
+      fullPath: "/verify-email";
+      preLoaderRoute: typeof AuthVerifyEmailRouteImport;
+      parentRoute: typeof AuthRouteRoute;
+    };
+    "/_auth/reset-password": {
+      id: "/_auth/reset-password";
+      path: "/reset-password";
+      fullPath: "/reset-password";
+      preLoaderRoute: typeof AuthResetPasswordRouteImport;
+      parentRoute: typeof AuthRouteRoute;
+    };
+    "/_auth/register": {
+      id: "/_auth/register";
+      path: "/register";
+      fullPath: "/register";
+      preLoaderRoute: typeof AuthRegisterRouteImport;
+      parentRoute: typeof AuthRouteRoute;
+    };
+    "/_auth/login": {
+      id: "/_auth/login";
+      path: "/login";
+      fullPath: "/login";
+      preLoaderRoute: typeof AuthLoginRouteImport;
+      parentRoute: typeof AuthRouteRoute;
+    };
+    "/_auth/forgot-password": {
+      id: "/_auth/forgot-password";
+      path: "/forgot-password";
+      fullPath: "/forgot-password";
+      preLoaderRoute: typeof AuthForgotPasswordRouteImport;
+      parentRoute: typeof AuthRouteRoute;
+    };
+    "/_landing/account": {
+      id: "/_landing/account";
+      path: "/account";
+      fullPath: "/account";
+      preLoaderRoute: typeof LandingAccountRouteRouteImport;
+      parentRoute: typeof LandingRouteRoute;
+    };
+    "/dashboard/users/": {
+      id: "/dashboard/users/";
+      path: "/users";
+      fullPath: "/dashboard/users/";
+      preLoaderRoute: typeof DashboardUsersIndexRouteImport;
+      parentRoute: typeof DashboardRouteRoute;
+    };
+    "/dashboard/themes/": {
+      id: "/dashboard/themes/";
+      path: "/themes";
+      fullPath: "/dashboard/themes/";
+      preLoaderRoute: typeof DashboardThemesIndexRouteImport;
+      parentRoute: typeof DashboardRouteRoute;
+    };
+    "/dashboard/submissions/": {
+      id: "/dashboard/submissions/";
+      path: "/submissions";
+      fullPath: "/dashboard/submissions/";
+      preLoaderRoute: typeof DashboardSubmissionsIndexRouteImport;
+      parentRoute: typeof DashboardRouteRoute;
+    };
+    "/dashboard/profiles/": {
+      id: "/dashboard/profiles/";
+      path: "/profiles";
+      fullPath: "/dashboard/profiles/";
+      preLoaderRoute: typeof DashboardProfilesIndexRouteImport;
+      parentRoute: typeof DashboardRouteRoute;
+    };
+    "/dashboard/posts/": {
+      id: "/dashboard/posts/";
+      path: "/posts";
+      fullPath: "/dashboard/posts/";
+      preLoaderRoute: typeof DashboardPostsIndexRouteImport;
+      parentRoute: typeof DashboardRouteRoute;
+    };
+    "/dashboard/news/": {
+      id: "/dashboard/news/";
+      path: "/news";
+      fullPath: "/dashboard/news/";
+      preLoaderRoute: typeof DashboardNewsIndexRouteImport;
+      parentRoute: typeof DashboardRouteRoute;
+    };
+    "/dashboard/messages/": {
+      id: "/dashboard/messages/";
+      path: "/messages";
+      fullPath: "/dashboard/messages/";
+      preLoaderRoute: typeof DashboardMessagesIndexRouteImport;
+      parentRoute: typeof DashboardRouteRoute;
+    };
+    "/dashboard/crews/": {
+      id: "/dashboard/crews/";
+      path: "/crews";
+      fullPath: "/dashboard/crews/";
+      preLoaderRoute: typeof DashboardCrewsIndexRouteImport;
+      parentRoute: typeof DashboardRouteRoute;
+    };
+    "/dashboard/categories/": {
+      id: "/dashboard/categories/";
+      path: "/categories";
+      fullPath: "/dashboard/categories/";
+      preLoaderRoute: typeof DashboardCategoriesIndexRouteImport;
+      parentRoute: typeof DashboardRouteRoute;
+    };
+    "/dashboard/calls/": {
+      id: "/dashboard/calls/";
+      path: "/calls";
+      fullPath: "/dashboard/calls/";
+      preLoaderRoute: typeof DashboardCallsIndexRouteImport;
+      parentRoute: typeof DashboardRouteRoute;
+    };
+    "/dashboard/analytics/": {
+      id: "/dashboard/analytics/";
+      path: "/analytics";
+      fullPath: "/dashboard/analytics/";
+      preLoaderRoute: typeof DashboardAnalyticsIndexRouteImport;
+      parentRoute: typeof DashboardRouteRoute;
+    };
+    "/_landing/posts/": {
+      id: "/_landing/posts/";
+      path: "/posts";
+      fullPath: "/posts/";
+      preLoaderRoute: typeof LandingPostsIndexRouteImport;
+      parentRoute: typeof LandingRouteRoute;
+    };
+    "/_landing/blog/": {
+      id: "/_landing/blog/";
+      path: "/blog";
+      fullPath: "/blog/";
+      preLoaderRoute: typeof LandingBlogIndexRouteImport;
+      parentRoute: typeof LandingRouteRoute;
+    };
+    "/_landing/articles/": {
+      id: "/_landing/articles/";
+      path: "/articles";
+      fullPath: "/articles/";
+      preLoaderRoute: typeof LandingArticlesIndexRouteImport;
+      parentRoute: typeof LandingRouteRoute;
+    };
+    "/_landing/account/": {
+      id: "/_landing/account/";
+      path: "/";
+      fullPath: "/account/";
+      preLoaderRoute: typeof LandingAccountIndexRouteImport;
+      parentRoute: typeof LandingAccountRouteRoute;
+    };
+    "/dashboard/users/new": {
+      id: "/dashboard/users/new";
+      path: "/users/new";
+      fullPath: "/dashboard/users/new";
+      preLoaderRoute: typeof DashboardUsersNewRouteImport;
+      parentRoute: typeof DashboardRouteRoute;
+    };
+    "/dashboard/users/$userId": {
+      id: "/dashboard/users/$userId";
+      path: "/users/$userId";
+      fullPath: "/dashboard/users/$userId";
+      preLoaderRoute: typeof DashboardUsersUserIdRouteImport;
+      parentRoute: typeof DashboardRouteRoute;
+    };
+    "/dashboard/submissions/$articleId": {
+      id: "/dashboard/submissions/$articleId";
+      path: "/submissions/$articleId";
+      fullPath: "/dashboard/submissions/$articleId";
+      preLoaderRoute: typeof DashboardSubmissionsArticleIdRouteImport;
+      parentRoute: typeof DashboardRouteRoute;
+    };
+    "/dashboard/profiles/$profileId": {
+      id: "/dashboard/profiles/$profileId";
+      path: "/profiles/$profileId";
+      fullPath: "/dashboard/profiles/$profileId";
+      preLoaderRoute: typeof DashboardProfilesProfileIdRouteImport;
+      parentRoute: typeof DashboardRouteRoute;
+    };
+    "/dashboard/posts/new": {
+      id: "/dashboard/posts/new";
+      path: "/posts/new";
+      fullPath: "/dashboard/posts/new";
+      preLoaderRoute: typeof DashboardPostsNewRouteImport;
+      parentRoute: typeof DashboardRouteRoute;
+    };
+    "/dashboard/posts/$postId": {
+      id: "/dashboard/posts/$postId";
+      path: "/posts/$postId";
+      fullPath: "/dashboard/posts/$postId";
+      preLoaderRoute: typeof DashboardPostsPostIdRouteImport;
+      parentRoute: typeof DashboardRouteRoute;
+    };
+    "/dashboard/news/new": {
+      id: "/dashboard/news/new";
+      path: "/news/new";
+      fullPath: "/dashboard/news/new";
+      preLoaderRoute: typeof DashboardNewsNewRouteImport;
+      parentRoute: typeof DashboardRouteRoute;
+    };
+    "/dashboard/news/$newsId": {
+      id: "/dashboard/news/$newsId";
+      path: "/news/$newsId";
+      fullPath: "/dashboard/news/$newsId";
+      preLoaderRoute: typeof DashboardNewsNewsIdRouteImport;
+      parentRoute: typeof DashboardRouteRoute;
+    };
+    "/dashboard/messages/$messageId": {
+      id: "/dashboard/messages/$messageId";
+      path: "/messages/$messageId";
+      fullPath: "/dashboard/messages/$messageId";
+      preLoaderRoute: typeof DashboardMessagesMessageIdRouteImport;
+      parentRoute: typeof DashboardRouteRoute;
+    };
+    "/dashboard/crews/new": {
+      id: "/dashboard/crews/new";
+      path: "/crews/new";
+      fullPath: "/dashboard/crews/new";
+      preLoaderRoute: typeof DashboardCrewsNewRouteImport;
+      parentRoute: typeof DashboardRouteRoute;
+    };
+    "/dashboard/crews/$crewId": {
+      id: "/dashboard/crews/$crewId";
+      path: "/crews/$crewId";
+      fullPath: "/dashboard/crews/$crewId";
+      preLoaderRoute: typeof DashboardCrewsCrewIdRouteImport;
+      parentRoute: typeof DashboardRouteRoute;
+    };
+    "/dashboard/categories/new": {
+      id: "/dashboard/categories/new";
+      path: "/categories/new";
+      fullPath: "/dashboard/categories/new";
+      preLoaderRoute: typeof DashboardCategoriesNewRouteImport;
+      parentRoute: typeof DashboardRouteRoute;
+    };
+    "/dashboard/categories/$categoryId": {
+      id: "/dashboard/categories/$categoryId";
+      path: "/categories/$categoryId";
+      fullPath: "/dashboard/categories/$categoryId";
+      preLoaderRoute: typeof DashboardCategoriesCategoryIdRouteImport;
+      parentRoute: typeof DashboardRouteRoute;
+    };
+    "/dashboard/calls/new": {
+      id: "/dashboard/calls/new";
+      path: "/calls/new";
+      fullPath: "/dashboard/calls/new";
+      preLoaderRoute: typeof DashboardCallsNewRouteImport;
+      parentRoute: typeof DashboardRouteRoute;
+    };
+    "/dashboard/calls/$callId": {
+      id: "/dashboard/calls/$callId";
+      path: "/calls/$callId";
+      fullPath: "/dashboard/calls/$callId";
+      preLoaderRoute: typeof DashboardCallsCallIdRouteImport;
+      parentRoute: typeof DashboardRouteRoute;
+    };
+    "/_landing/posts/$postId": {
+      id: "/_landing/posts/$postId";
+      path: "/posts/$postId";
+      fullPath: "/posts/$postId";
+      preLoaderRoute: typeof LandingPostsPostIdRouteImport;
+      parentRoute: typeof LandingRouteRoute;
+    };
+    "/_landing/blog/$slug": {
+      id: "/_landing/blog/$slug";
+      path: "/blog/$slug";
+      fullPath: "/blog/$slug";
+      preLoaderRoute: typeof LandingBlogSlugRouteImport;
+      parentRoute: typeof LandingRouteRoute;
+    };
+    "/_landing/articles/my": {
+      id: "/_landing/articles/my";
+      path: "/articles/my";
+      fullPath: "/articles/my";
+      preLoaderRoute: typeof LandingArticlesMyRouteImport;
+      parentRoute: typeof LandingRouteRoute;
+    };
+    "/_landing/articles/$articleId": {
+      id: "/_landing/articles/$articleId";
+      path: "/articles/$articleId";
+      fullPath: "/articles/$articleId";
+      preLoaderRoute: typeof LandingArticlesArticleIdRouteImport;
+      parentRoute: typeof LandingRouteRoute;
+    };
+    "/_landing/account/security": {
+      id: "/_landing/account/security";
+      path: "/security";
+      fullPath: "/account/security";
+      preLoaderRoute: typeof LandingAccountSecurityRouteImport;
+      parentRoute: typeof LandingAccountRouteRoute;
+    };
+    "/_landing/account/profile": {
+      id: "/_landing/account/profile";
+      path: "/profile";
+      fullPath: "/account/profile";
+      preLoaderRoute: typeof LandingAccountProfileRouteImport;
+      parentRoute: typeof LandingAccountRouteRoute;
+    };
+    "/_landing/account/notifications": {
+      id: "/_landing/account/notifications";
+      path: "/notifications";
+      fullPath: "/account/notifications";
+      preLoaderRoute: typeof LandingAccountNotificationsRouteImport;
+      parentRoute: typeof LandingAccountRouteRoute;
+    };
+    "/_landing/account/delete": {
+      id: "/_landing/account/delete";
+      path: "/delete";
+      fullPath: "/account/delete";
+      preLoaderRoute: typeof LandingAccountDeleteRouteImport;
+      parentRoute: typeof LandingAccountRouteRoute;
+    };
+    "/_landing/account/applications": {
+      id: "/_landing/account/applications";
+      path: "/applications";
+      fullPath: "/account/applications";
+      preLoaderRoute: typeof LandingAccountApplicationsRouteImport;
+      parentRoute: typeof LandingAccountRouteRoute;
+    };
+    "/_landing/articles/submit/$callId": {
+      id: "/_landing/articles/submit/$callId";
+      path: "/articles/submit/$callId";
+      fullPath: "/articles/submit/$callId";
+      preLoaderRoute: typeof LandingArticlesSubmitCallIdRouteImport;
+      parentRoute: typeof LandingRouteRoute;
+    };
   }
 }
 
 interface AuthRouteRouteChildren {
-  AuthForgotPasswordRoute: typeof AuthForgotPasswordRoute
-  AuthLoginRoute: typeof AuthLoginRoute
-  AuthRegisterRoute: typeof AuthRegisterRoute
-  AuthResetPasswordRoute: typeof AuthResetPasswordRoute
-  AuthVerifyEmailRoute: typeof AuthVerifyEmailRoute
+  AuthForgotPasswordRoute: typeof AuthForgotPasswordRoute;
+  AuthLoginRoute: typeof AuthLoginRoute;
+  AuthRegisterRoute: typeof AuthRegisterRoute;
+  AuthResetPasswordRoute: typeof AuthResetPasswordRoute;
+  AuthVerifyEmailRoute: typeof AuthVerifyEmailRoute;
 }
 
 const AuthRouteRouteChildren: AuthRouteRouteChildren = {
@@ -1036,19 +1121,17 @@ const AuthRouteRouteChildren: AuthRouteRouteChildren = {
   AuthRegisterRoute: AuthRegisterRoute,
   AuthResetPasswordRoute: AuthResetPasswordRoute,
   AuthVerifyEmailRoute: AuthVerifyEmailRoute,
-}
+};
 
-const AuthRouteRouteWithChildren = AuthRouteRoute._addFileChildren(
-  AuthRouteRouteChildren,
-)
+const AuthRouteRouteWithChildren = AuthRouteRoute._addFileChildren(AuthRouteRouteChildren);
 
 interface LandingAccountRouteRouteChildren {
-  LandingAccountApplicationsRoute: typeof LandingAccountApplicationsRoute
-  LandingAccountDeleteRoute: typeof LandingAccountDeleteRoute
-  LandingAccountNotificationsRoute: typeof LandingAccountNotificationsRoute
-  LandingAccountProfileRoute: typeof LandingAccountProfileRoute
-  LandingAccountSecurityRoute: typeof LandingAccountSecurityRoute
-  LandingAccountIndexRoute: typeof LandingAccountIndexRoute
+  LandingAccountApplicationsRoute: typeof LandingAccountApplicationsRoute;
+  LandingAccountDeleteRoute: typeof LandingAccountDeleteRoute;
+  LandingAccountNotificationsRoute: typeof LandingAccountNotificationsRoute;
+  LandingAccountProfileRoute: typeof LandingAccountProfileRoute;
+  LandingAccountSecurityRoute: typeof LandingAccountSecurityRoute;
+  LandingAccountIndexRoute: typeof LandingAccountIndexRoute;
 }
 
 const LandingAccountRouteRouteChildren: LandingAccountRouteRouteChildren = {
@@ -1058,26 +1141,29 @@ const LandingAccountRouteRouteChildren: LandingAccountRouteRouteChildren = {
   LandingAccountProfileRoute: LandingAccountProfileRoute,
   LandingAccountSecurityRoute: LandingAccountSecurityRoute,
   LandingAccountIndexRoute: LandingAccountIndexRoute,
-}
+};
 
-const LandingAccountRouteRouteWithChildren =
-  LandingAccountRouteRoute._addFileChildren(LandingAccountRouteRouteChildren)
+const LandingAccountRouteRouteWithChildren = LandingAccountRouteRoute._addFileChildren(
+  LandingAccountRouteRouteChildren,
+);
 
 interface LandingRouteRouteChildren {
-  LandingAccountRouteRoute: typeof LandingAccountRouteRouteWithChildren
-  LandingAboutRoute: typeof LandingAboutRoute
-  LandingArchiveRoute: typeof LandingArchiveRoute
-  LandingContactRoute: typeof LandingContactRoute
-  LandingPrivacyRoute: typeof LandingPrivacyRoute
-  LandingTeamRoute: typeof LandingTeamRoute
-  LandingTermsRoute: typeof LandingTermsRoute
-  LandingIndexRoute: typeof LandingIndexRoute
-  LandingArticlesArticleIdRoute: typeof LandingArticlesArticleIdRoute
-  LandingArticlesMyRoute: typeof LandingArticlesMyRoute
-  LandingPostsPostIdRoute: typeof LandingPostsPostIdRoute
-  LandingArticlesIndexRoute: typeof LandingArticlesIndexRoute
-  LandingPostsIndexRoute: typeof LandingPostsIndexRoute
-  LandingArticlesSubmitCallIdRoute: typeof LandingArticlesSubmitCallIdRoute
+  LandingAccountRouteRoute: typeof LandingAccountRouteRouteWithChildren;
+  LandingAboutRoute: typeof LandingAboutRoute;
+  LandingArchiveRoute: typeof LandingArchiveRoute;
+  LandingContactRoute: typeof LandingContactRoute;
+  LandingPrivacyRoute: typeof LandingPrivacyRoute;
+  LandingTeamRoute: typeof LandingTeamRoute;
+  LandingTermsRoute: typeof LandingTermsRoute;
+  LandingIndexRoute: typeof LandingIndexRoute;
+  LandingArticlesArticleIdRoute: typeof LandingArticlesArticleIdRoute;
+  LandingArticlesMyRoute: typeof LandingArticlesMyRoute;
+  LandingBlogSlugRoute: typeof LandingBlogSlugRoute;
+  LandingPostsPostIdRoute: typeof LandingPostsPostIdRoute;
+  LandingArticlesIndexRoute: typeof LandingArticlesIndexRoute;
+  LandingBlogIndexRoute: typeof LandingBlogIndexRoute;
+  LandingPostsIndexRoute: typeof LandingPostsIndexRoute;
+  LandingArticlesSubmitCallIdRoute: typeof LandingArticlesSubmitCallIdRoute;
 }
 
 const LandingRouteRouteChildren: LandingRouteRouteChildren = {
@@ -1091,41 +1177,44 @@ const LandingRouteRouteChildren: LandingRouteRouteChildren = {
   LandingIndexRoute: LandingIndexRoute,
   LandingArticlesArticleIdRoute: LandingArticlesArticleIdRoute,
   LandingArticlesMyRoute: LandingArticlesMyRoute,
+  LandingBlogSlugRoute: LandingBlogSlugRoute,
   LandingPostsPostIdRoute: LandingPostsPostIdRoute,
   LandingArticlesIndexRoute: LandingArticlesIndexRoute,
+  LandingBlogIndexRoute: LandingBlogIndexRoute,
   LandingPostsIndexRoute: LandingPostsIndexRoute,
   LandingArticlesSubmitCallIdRoute: LandingArticlesSubmitCallIdRoute,
-}
+};
 
-const LandingRouteRouteWithChildren = LandingRouteRoute._addFileChildren(
-  LandingRouteRouteChildren,
-)
+const LandingRouteRouteWithChildren = LandingRouteRoute._addFileChildren(LandingRouteRouteChildren);
 
 interface DashboardRouteRouteChildren {
-  DashboardIndexRoute: typeof DashboardIndexRoute
-  DashboardCallsCallIdRoute: typeof DashboardCallsCallIdRoute
-  DashboardCallsNewRoute: typeof DashboardCallsNewRoute
-  DashboardCategoriesCategoryIdRoute: typeof DashboardCategoriesCategoryIdRoute
-  DashboardCategoriesNewRoute: typeof DashboardCategoriesNewRoute
-  DashboardCrewsCrewIdRoute: typeof DashboardCrewsCrewIdRoute
-  DashboardCrewsNewRoute: typeof DashboardCrewsNewRoute
-  DashboardMessagesMessageIdRoute: typeof DashboardMessagesMessageIdRoute
-  DashboardPostsPostIdRoute: typeof DashboardPostsPostIdRoute
-  DashboardPostsNewRoute: typeof DashboardPostsNewRoute
-  DashboardProfilesProfileIdRoute: typeof DashboardProfilesProfileIdRoute
-  DashboardSubmissionsArticleIdRoute: typeof DashboardSubmissionsArticleIdRoute
-  DashboardUsersUserIdRoute: typeof DashboardUsersUserIdRoute
-  DashboardUsersNewRoute: typeof DashboardUsersNewRoute
-  DashboardAnalyticsIndexRoute: typeof DashboardAnalyticsIndexRoute
-  DashboardCallsIndexRoute: typeof DashboardCallsIndexRoute
-  DashboardCategoriesIndexRoute: typeof DashboardCategoriesIndexRoute
-  DashboardCrewsIndexRoute: typeof DashboardCrewsIndexRoute
-  DashboardMessagesIndexRoute: typeof DashboardMessagesIndexRoute
-  DashboardPostsIndexRoute: typeof DashboardPostsIndexRoute
-  DashboardProfilesIndexRoute: typeof DashboardProfilesIndexRoute
-  DashboardSubmissionsIndexRoute: typeof DashboardSubmissionsIndexRoute
-  DashboardThemesIndexRoute: typeof DashboardThemesIndexRoute
-  DashboardUsersIndexRoute: typeof DashboardUsersIndexRoute
+  DashboardIndexRoute: typeof DashboardIndexRoute;
+  DashboardCallsCallIdRoute: typeof DashboardCallsCallIdRoute;
+  DashboardCallsNewRoute: typeof DashboardCallsNewRoute;
+  DashboardCategoriesCategoryIdRoute: typeof DashboardCategoriesCategoryIdRoute;
+  DashboardCategoriesNewRoute: typeof DashboardCategoriesNewRoute;
+  DashboardCrewsCrewIdRoute: typeof DashboardCrewsCrewIdRoute;
+  DashboardCrewsNewRoute: typeof DashboardCrewsNewRoute;
+  DashboardMessagesMessageIdRoute: typeof DashboardMessagesMessageIdRoute;
+  DashboardNewsNewsIdRoute: typeof DashboardNewsNewsIdRoute;
+  DashboardNewsNewRoute: typeof DashboardNewsNewRoute;
+  DashboardPostsPostIdRoute: typeof DashboardPostsPostIdRoute;
+  DashboardPostsNewRoute: typeof DashboardPostsNewRoute;
+  DashboardProfilesProfileIdRoute: typeof DashboardProfilesProfileIdRoute;
+  DashboardSubmissionsArticleIdRoute: typeof DashboardSubmissionsArticleIdRoute;
+  DashboardUsersUserIdRoute: typeof DashboardUsersUserIdRoute;
+  DashboardUsersNewRoute: typeof DashboardUsersNewRoute;
+  DashboardAnalyticsIndexRoute: typeof DashboardAnalyticsIndexRoute;
+  DashboardCallsIndexRoute: typeof DashboardCallsIndexRoute;
+  DashboardCategoriesIndexRoute: typeof DashboardCategoriesIndexRoute;
+  DashboardCrewsIndexRoute: typeof DashboardCrewsIndexRoute;
+  DashboardMessagesIndexRoute: typeof DashboardMessagesIndexRoute;
+  DashboardNewsIndexRoute: typeof DashboardNewsIndexRoute;
+  DashboardPostsIndexRoute: typeof DashboardPostsIndexRoute;
+  DashboardProfilesIndexRoute: typeof DashboardProfilesIndexRoute;
+  DashboardSubmissionsIndexRoute: typeof DashboardSubmissionsIndexRoute;
+  DashboardThemesIndexRoute: typeof DashboardThemesIndexRoute;
+  DashboardUsersIndexRoute: typeof DashboardUsersIndexRoute;
 }
 
 const DashboardRouteRouteChildren: DashboardRouteRouteChildren = {
@@ -1137,6 +1226,8 @@ const DashboardRouteRouteChildren: DashboardRouteRouteChildren = {
   DashboardCrewsCrewIdRoute: DashboardCrewsCrewIdRoute,
   DashboardCrewsNewRoute: DashboardCrewsNewRoute,
   DashboardMessagesMessageIdRoute: DashboardMessagesMessageIdRoute,
+  DashboardNewsNewsIdRoute: DashboardNewsNewsIdRoute,
+  DashboardNewsNewRoute: DashboardNewsNewRoute,
   DashboardPostsPostIdRoute: DashboardPostsPostIdRoute,
   DashboardPostsNewRoute: DashboardPostsNewRoute,
   DashboardProfilesProfileIdRoute: DashboardProfilesProfileIdRoute,
@@ -1148,31 +1239,33 @@ const DashboardRouteRouteChildren: DashboardRouteRouteChildren = {
   DashboardCategoriesIndexRoute: DashboardCategoriesIndexRoute,
   DashboardCrewsIndexRoute: DashboardCrewsIndexRoute,
   DashboardMessagesIndexRoute: DashboardMessagesIndexRoute,
+  DashboardNewsIndexRoute: DashboardNewsIndexRoute,
   DashboardPostsIndexRoute: DashboardPostsIndexRoute,
   DashboardProfilesIndexRoute: DashboardProfilesIndexRoute,
   DashboardSubmissionsIndexRoute: DashboardSubmissionsIndexRoute,
   DashboardThemesIndexRoute: DashboardThemesIndexRoute,
   DashboardUsersIndexRoute: DashboardUsersIndexRoute,
-}
+};
 
 const DashboardRouteRouteWithChildren = DashboardRouteRoute._addFileChildren(
   DashboardRouteRouteChildren,
-)
+);
 
 const rootRouteChildren: RootRouteChildren = {
   AuthRouteRoute: AuthRouteRouteWithChildren,
   LandingRouteRoute: LandingRouteRouteWithChildren,
   DashboardRouteRoute: DashboardRouteRouteWithChildren,
-}
+};
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
-  ._addFileTypes<FileRouteTypes>()
+  ._addFileTypes<FileRouteTypes>();
 
-import type { getRouter } from './router.tsx'
-import type { createStart } from '@tanstack/react-start'
-declare module '@tanstack/react-start' {
+import type { createStart } from "@tanstack/react-start";
+
+import type { getRouter } from "./router.tsx";
+declare module "@tanstack/react-start" {
   interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
+    ssr: true;
+    router: Awaited<ReturnType<typeof getRouter>>;
   }
 }

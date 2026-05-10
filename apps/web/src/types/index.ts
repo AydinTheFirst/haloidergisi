@@ -10,6 +10,7 @@ import {
   SubmissionCall as BaseSubmissionCall,
   Article as BaseArticle,
   ArticleStatus,
+  News as BaseNews,
 } from "@repo/db";
 
 export { ArticleStatus };
@@ -60,4 +61,8 @@ export interface SubmissionCall extends BaseSubmissionCall {
 export interface Article extends BaseArticle {
   author?: User;
   call?: SubmissionCall;
+}
+
+export interface News extends BaseNews {
+  author?: User;
 }

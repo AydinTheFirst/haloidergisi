@@ -35,6 +35,7 @@ const pages = [
   { name: "Tematik Arşiv", to: "/dashboard/themes", icon: "mdi:archive-outline" },
   { name: "Ekipler", to: "/dashboard/crews", icon: "mdi:account-group-outline" },
   { name: "Mesajlar", to: "/dashboard/messages", icon: "mdi:email" },
+  { name: "Haberler", to: "/dashboard/news", icon: "mdi:newspaper-variant-outline" },
   { name: "İlanlar", to: "/dashboard/calls", icon: "mdi:bullhorn-outline" },
   {
     name: "Yazı Başvuruları",

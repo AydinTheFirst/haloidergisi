@@ -7,6 +7,7 @@ import { CategoriesModule } from "./categories/categories.module";
 import { CrewsModule } from "./crews/crews.module";
 import { FilesModule } from "./files/files.module";
 import { MessagesModule } from "./messages/messages.module";
+import { NewsModule } from "./news/news.module";
 import { PostsModule } from "./posts/posts.module";
 import { ProfileModule } from "./profile/profile.module";
 import { SubmissionCallsModule } from "./submission-calls/submission-calls.module";
@@ -28,6 +29,7 @@ const modules = {
   UsersModule,
   SubmissionCallsModule,
   ArticlesModule,
+  NewsModule,
 };
 
 export default Object.values(modules);

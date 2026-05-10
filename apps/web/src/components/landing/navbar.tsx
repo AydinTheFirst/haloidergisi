@@ -31,6 +31,10 @@ const items = [
     url: "/archive",
     label: "Arşiv",
   },
+  {
+    url: "/blog",
+    label: "Blog",
+  },
 ];
 
 export default function LandingNavbar() {

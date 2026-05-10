@@ -11,6 +11,7 @@
         "clsx": "^2.1.1",
         "cmdk": "^1.1.1",
         "lucide-react": "^1.14.0",
+        "slugify": "^1.6.9",
         "tailwind-merge": "^3.5.0",
       },
       "devDependencies": {
