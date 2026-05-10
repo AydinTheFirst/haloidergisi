@@ -1,13 +1,14 @@
 import { BadRequestException, Injectable } from "@nestjs/common";
 import { EventEmitter2 } from "@nestjs/event-emitter";
 import { posts, themes } from "@repo/db";
-import { eq, sql } from "drizzle-orm";
+import { eq, or, sql } from "drizzle-orm";
 import slugify from "slugify";
 
 import { EMAIL_EVENTS } from "@/constants";
 import { DrizzleService } from "@/database";
 import { DrizzleQueryParams } from "@/decorators";
 import { NewPostEmailDto } from "@/services/mail.service";
+import { applyQuery } from "@/utils";
 
 import { CreatePostDto } from "./dto/create-post.dto";
 import { UpdatePostDto } from "./dto/update-post.dto";
@@ -62,24 +63,33 @@ export class PostsService {
   }
 
   async findAll(query: DrizzleQueryParams) {
+    const { where, orderBy, limit, offset, with: include } = applyQuery(posts, query);
+
     const items = await this.drizzle.db.query.posts.findMany({
-      limit: query.take,
-      offset: query.skip,
+      limit,
+      offset,
+      where,
+      orderBy,
       with: {
         themes: true,
+        ...include,
       },
     });
 
-    const [{ total }] = await this.drizzle.db.select({ total: sql<number>`count(*)` }).from(posts);
+    const [{ total }] = await this.drizzle.db
+      .select({ total: sql<number>`count(*)` })
+      .from(posts)
+      .where(where);
 
     return { items, meta: { total: Number(total), take: query.take, skip: query.skip } };
   }
 
   async findOne(id: string) {
     const post = await this.drizzle.db.query.posts.findFirst({
-      where: eq(posts.id, id),
+      where: or(eq(posts.id, id), eq(posts.slug, id)),
       with: {
         themes: true,
+        category: true,
       },
     });
 
@@ -92,17 +102,17 @@ export class PostsService {
 
   async update(id: string, updatePostDto: UpdatePostDto) {
     const { themes: themesData, ...rest } = updatePostDto;
-    await this.findOne(id);
+    const post = await this.findOne(id);
 
     const updatedPost = await this.drizzle.db.transaction(async (tx) => {
-      const [res] = await tx.update(posts).set(rest).where(eq(posts.id, id)).returning();
+      const [res] = await tx.update(posts).set(rest).where(eq(posts.id, post.id)).returning();
 
       if (themesData !== undefined) {
-        await tx.delete(themes).where(eq(themes.postId, id));
+        await tx.delete(themes).where(eq(themes.postId, post.id));
         if (themesData.length > 0) {
           await tx.insert(themes).values(
             themesData.map((t) => ({
-              postId: id,
+              postId: post.id,
               work: t.work,
               category: t.category,
             })),
@@ -117,9 +127,9 @@ export class PostsService {
   }
 
   async remove(id: string) {
-    await this.findOne(id);
+    const post = await this.findOne(id);
 
-    await this.drizzle.db.delete(posts).where(eq(posts.id, id));
+    await this.drizzle.db.delete(posts).where(eq(posts.id, post.id));
 
     return { success: true };
   }

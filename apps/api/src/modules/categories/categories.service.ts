@@ -4,6 +4,7 @@ import { eq, sql } from "drizzle-orm";
 
 import { DrizzleService } from "@/database";
 import { DrizzleQueryParams } from "@/decorators";
+import { applyQuery } from "@/utils";
 
 import { CreateCategoryDto } from "./dto/create-category.dto";
 import { UpdateCategoryDto } from "./dto/update-category.dto";
@@ -21,14 +22,19 @@ export class CategoriesService {
   }
 
   async findAll(query: DrizzleQueryParams) {
+    const { where, orderBy, limit, offset } = applyQuery(categories, query);
+
     const items = await this.drizzle.db.query.categories.findMany({
-      limit: query.take,
-      offset: query.skip,
+      where,
+      orderBy,
+      limit,
+      offset,
     });
 
     const [{ total }] = await this.drizzle.db
       .select({ total: sql<number>`count(*)` })
-      .from(categories);
+      .from(categories)
+      .where(where);
 
     return { items, meta: { total: Number(total), skip: query.skip, take: query.take } };
   }

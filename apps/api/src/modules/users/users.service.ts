@@ -8,6 +8,7 @@ import { EMAIL_EVENTS } from "@/constants";
 import { DrizzleService } from "@/database";
 import { DrizzleQueryParams } from "@/decorators";
 import { WelcomeEmailDto } from "@/services/mail.service";
+import { applyQuery } from "@/utils";
 
 import { CreateUserDto } from "./dto/create-user.dto";
 import { UpdateUserDto } from "./dto/update-user.dto";
@@ -62,12 +63,22 @@ export class UsersService {
   }
 
   async findAll(query: DrizzleQueryParams) {
+    const { where, orderBy, limit, offset, with: include } = applyQuery(users, query);
+
     const items = await this.drizzle.db.query.users.findMany({
-      limit: query.take,
-      offset: query.skip,
+      where,
+      orderBy,
+      limit,
+      offset,
+      with: {
+        ...include,
+      },
     });
 
-    const [{ total }] = await this.drizzle.db.select({ total: sql<number>`count(*)` }).from(users);
+    const [{ total }] = await this.drizzle.db
+      .select({ total: sql<number>`count(*)` })
+      .from(users)
+      .where(where);
 
     return { items, meta: { total: Number(total), take: query.take, skip: query.skip } };
   }

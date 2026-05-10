@@ -4,6 +4,7 @@ import { eq, sql } from "drizzle-orm";
 
 import { DrizzleService } from "@/database";
 import { DrizzleQueryParams } from "@/decorators";
+import { applyQuery } from "@/utils";
 
 import { UpdateProfileDto } from "./profile.dto";
 
@@ -12,14 +13,19 @@ export class ProfileService {
   constructor(private readonly drizzle: DrizzleService) {}
 
   async findAll(query: DrizzleQueryParams) {
+    const { where, orderBy, limit, offset } = applyQuery(profiles, query);
+
     const items = await this.drizzle.db.query.profiles.findMany({
-      limit: query.take,
-      offset: query.skip,
+      where,
+      orderBy,
+      limit,
+      offset,
     });
 
     const [{ total }] = await this.drizzle.db
       .select({ total: sql<number>`count(*)` })
-      .from(profiles);
+      .from(profiles)
+      .where(where);
 
     return { items, meta: { total: Number(total), skip: query.skip, take: query.take } };
   }

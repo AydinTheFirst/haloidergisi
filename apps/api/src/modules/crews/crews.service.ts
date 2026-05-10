@@ -4,6 +4,7 @@ import { eq, sql } from "drizzle-orm";
 
 import { DrizzleService } from "@/database";
 import { DrizzleQueryParams } from "@/decorators";
+import { applyQuery } from "@/utils";
 
 import { CreateCrewDto } from "./dto/create-crew.dto";
 import { UpdateCrewDto } from "./dto/update-crew.dto";
@@ -18,18 +19,26 @@ export class CrewsService {
   }
 
   async findAll(query: DrizzleQueryParams) {
+    const { where, orderBy, limit, offset, with: include } = applyQuery(crews, query);
+
     const items = await this.drizzle.db.query.crews.findMany({
-      limit: query.take,
-      offset: query.skip,
+      where,
+      orderBy,
+      limit,
+      offset,
       with: {
         users: {
           columns: { id: true },
           with: { profile: true },
         },
+        ...include,
       },
     });
 
-    const [{ total }] = await this.drizzle.db.select({ total: sql<number>`count(*)` }).from(crews);
+    const [{ total }] = await this.drizzle.db
+      .select({ total: sql<number>`count(*)` })
+      .from(crews)
+      .where(where);
 
     return { items, meta: { total: Number(total), skip: query.skip, take: query.take } };
   }
