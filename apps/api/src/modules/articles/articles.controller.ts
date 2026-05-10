@@ -1,5 +1,3 @@
-import type { User } from "@repo/db";
-
 import {
   Body,
   Controller,
