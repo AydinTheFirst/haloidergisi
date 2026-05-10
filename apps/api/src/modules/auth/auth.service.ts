@@ -1,10 +1,12 @@
 import { BadRequestException, Injectable, Logger } from "@nestjs/common";
 import { EventEmitter2 } from "@nestjs/event-emitter";
 import { JwtService } from "@nestjs/jwt";
+import { users } from "@repo/db";
 import argon2 from "argon2";
+import { eq } from "drizzle-orm";
 
 import { EMAIL_EVENTS } from "@/constants";
-import { PrismaService } from "@/database";
+import { DrizzleService } from "@/database";
 import { ResetPasswordEmailDto } from "@/services/mail.service";
 
 import { TokensService } from "../tokens/tokens.service";
@@ -16,7 +18,7 @@ export class AuthService {
   private logger = new Logger(AuthService.name);
 
   constructor(
-    private readonly prismaService: PrismaService,
+    private readonly drizzle: DrizzleService,
     private readonly tokensService: TokensService,
     private readonly usersService: UsersService,
     private readonly jwtService: JwtService,
@@ -30,8 +32,8 @@ export class AuthService {
   async login(loginDto: LoginDto) {
     const { email, password } = loginDto;
 
-    const user = await this.prismaService.user.findUnique({
-      where: { email },
+    const user = await this.drizzle.db.query.users.findFirst({
+      where: eq(users.email, email),
     });
 
     if (!user) {
@@ -40,12 +42,9 @@ export class AuthService {
 
     if (!user.password) {
       // First login
-      user.password = await argon2.hash(password);
+      const hashed = await argon2.hash(password);
 
-      await this.prismaService.user.update({
-        where: { id: user.id },
-        data: { password: user.password },
-      });
+      await this.drizzle.db.update(users).set({ password: hashed }).where(eq(users.id, user.id));
     } else {
       const isPasswordValid = await argon2.verify(user.password, password);
       if (!isPasswordValid) {
@@ -63,9 +62,9 @@ export class AuthService {
   }
 
   async initiatePasswordReset(email: string) {
-    const user = await this.prismaService.user.findUnique({
-      where: { email },
-      include: { profile: true },
+    const user = await this.drizzle.db.query.users.findFirst({
+      where: eq(users.email, email),
+      with: { profile: true },
     });
 
     if (!user) {
@@ -83,7 +82,7 @@ export class AuthService {
       EMAIL_EVENTS.RESET_PASSWORD,
       new ResetPasswordEmailDto({
         to: email,
-        name: user.profile?.name || "Kullanıcı",
+        name: (user as any).profile?.name || "Kullanıcı",
         token,
       }),
     );

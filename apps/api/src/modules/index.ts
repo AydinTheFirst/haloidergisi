@@ -8,6 +8,7 @@ import { FilesModule } from "./files/files.module";
 import { MessagesModule } from "./messages/messages.module";
 import { PostsModule } from "./posts/posts.module";
 import { ProfileModule } from "./profile/profile.module";
+import { ThemesModule } from "./themes/themes.module";
 import { UsersModule } from "./users/users.module";
 
 const modules = {
@@ -21,6 +22,7 @@ const modules = {
   FilesModule,
   PostsModule,
   ProfileModule,
+  ThemesModule,
   UsersModule,
 };
 

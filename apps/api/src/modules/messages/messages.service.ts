@@ -1,31 +1,39 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
+import { messages } from "@repo/db";
+import { eq, sql } from "drizzle-orm";
 
-import { PrismaService } from "@/database";
-import { PrismaQueryParams } from "@/decorators";
+import { DrizzleService } from "@/database";
+import { DrizzleQueryParams } from "@/decorators";
 
 import { CreateMessageDto } from "./dto/create-message.dto";
 import { UpdateMessageDto } from "./dto/update-message.dto";
 
 @Injectable()
 export class MessagesService {
-  constructor(private prisma: PrismaService) {}
+  constructor(private drizzle: DrizzleService) {}
 
   async create(createMessageDto: CreateMessageDto) {
-    const message = await this.prisma.message.create({ data: createMessageDto });
+    const [message] = await this.drizzle.db.insert(messages).values(createMessageDto).returning();
     return message;
   }
 
-  async findAll({ include: _include, ...query }: PrismaQueryParams) {
-    const [items, total] = await this.prisma.$transaction([
-      this.prisma.message.findMany(query),
-      this.prisma.message.count({ where: query.where }),
-    ]);
+  async findAll(query: DrizzleQueryParams) {
+    const items = await this.drizzle.db.query.messages.findMany({
+      limit: query.take,
+      offset: query.skip,
+    });
 
-    return { items, meta: { total, skip: query.skip, take: query.take } };
+    const [{ total }] = await this.drizzle.db
+      .select({ total: sql<number>`count(*)` })
+      .from(messages);
+
+    return { items, meta: { total: Number(total), skip: query.skip, take: query.take } };
   }
 
   async findOne(id: string) {
-    const message = await this.prisma.message.findUnique({ where: { id } });
+    const message = await this.drizzle.db.query.messages.findFirst({
+      where: eq(messages.id, id),
+    });
 
     if (!message) {
       throw new NotFoundException(`Message with ID ${id} not found`);
@@ -37,17 +45,18 @@ export class MessagesService {
   async update(id: string, updateMessageDto: UpdateMessageDto) {
     await this.findOne(id);
 
-    const message = await this.prisma.message.update({
-      where: { id },
-      data: updateMessageDto,
-    });
+    const [message] = await this.drizzle.db
+      .update(messages)
+      .set(updateMessageDto)
+      .where(eq(messages.id, id))
+      .returning();
     return message;
   }
 
   async remove(id: string) {
     await this.findOne(id);
 
-    await this.prisma.message.delete({ where: { id } });
+    await this.drizzle.db.delete(messages).where(eq(messages.id, id));
 
     return { success: true };
   }

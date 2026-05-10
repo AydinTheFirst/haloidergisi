@@ -1,31 +1,42 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
+import { categories } from "@repo/db";
+import { eq, sql } from "drizzle-orm";
 
-import { PrismaService } from "@/database";
-import { PrismaQueryParams } from "@/decorators";
+import { DrizzleService } from "@/database";
+import { DrizzleQueryParams } from "@/decorators";
 
 import { CreateCategoryDto } from "./dto/create-category.dto";
 import { UpdateCategoryDto } from "./dto/update-category.dto";
 
 @Injectable()
 export class CategoriesService {
-  constructor(private prisma: PrismaService) {}
+  constructor(private drizzle: DrizzleService) {}
 
   async create(createCategoryDto: CreateCategoryDto) {
-    const category = await this.prisma.category.create({ data: createCategoryDto });
+    const [category] = await this.drizzle.db
+      .insert(categories)
+      .values(createCategoryDto)
+      .returning();
     return category;
   }
 
-  async findAll(query: PrismaQueryParams) {
-    const [items, total] = await this.prisma.$transaction([
-      this.prisma.category.findMany(query),
-      this.prisma.category.count({ where: query.where }),
-    ]);
+  async findAll(query: DrizzleQueryParams) {
+    const items = await this.drizzle.db.query.categories.findMany({
+      limit: query.take,
+      offset: query.skip,
+    });
 
-    return { items, meta: { total, skip: query.skip, take: query.take } };
+    const [{ total }] = await this.drizzle.db
+      .select({ total: sql<number>`count(*)` })
+      .from(categories);
+
+    return { items, meta: { total: Number(total), skip: query.skip, take: query.take } };
   }
 
   async findOne(id: string) {
-    const category = await this.prisma.category.findUnique({ where: { id } });
+    const category = await this.drizzle.db.query.categories.findFirst({
+      where: eq(categories.id, id),
+    });
 
     if (!category) {
       throw new NotFoundException(`Category with ID ${id} not found`);
@@ -37,10 +48,11 @@ export class CategoriesService {
   async update(id: string, updateCategoryDto: UpdateCategoryDto) {
     await this.findOne(id);
 
-    const category = await this.prisma.category.update({
-      where: { id },
-      data: updateCategoryDto,
-    });
+    const [category] = await this.drizzle.db
+      .update(categories)
+      .set(updateCategoryDto)
+      .where(eq(categories.id, id))
+      .returning();
 
     return category;
   }
@@ -48,7 +60,7 @@ export class CategoriesService {
   async remove(id: string) {
     await this.findOne(id);
 
-    await this.prisma.category.delete({ where: { id } });
+    await this.drizzle.db.delete(categories).where(eq(categories.id, id));
 
     return { success: true };
   }

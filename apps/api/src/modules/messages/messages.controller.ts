@@ -1,6 +1,6 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from "@nestjs/common";
 
-import { AllowAnonymous, PrismaQuery, Roles } from "@/decorators";
+import { AllowAnonymous, DrizzleQuery, Roles } from "@/decorators";
 import { AuthGuard, TurnstileGuard } from "@/guards";
 
 import { CreateMessageDto } from "./dto/create-message.dto";
@@ -21,7 +21,7 @@ export class MessagesController {
   }
 
   @Get()
-  findAll(@PrismaQuery(["name", "email", "subject", "content"]) query) {
+  findAll(@DrizzleQuery(["name", "email", "subject", "content"]) query) {
     return this.messagesService.findAll(query);
   }
 

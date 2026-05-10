@@ -5,9 +5,10 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## Project Overview
 
 **haloidergisi** is a monorepo containing a full-stack web application built with:
+
 - **Runtime**: Bun
 - **Monorepo Tool**: Turborepo
-- **Backend**: NestJS with Prisma ORM and PostgreSQL
+- **Backend**: NestJS with Drizzle ORM and PostgreSQL
 - **Frontend**: React with TanStack Start
 - **Linting**: oxlint
 - **Formatting**: oxfmt
@@ -23,13 +24,14 @@ apps/
 └── web/          # React frontend (TanStack Start)
 
 packages/
-├── db/           # Shared Prisma schema and client
+├── db/           # Shared Drizzle schema and client
 └── emails/       # Shared React Email templates
 ```
 
 ### Backend (`apps/api/`)
 
 **NestJS application** with the following structure:
+
 - `src/modules/` - Feature modules (auth, posts, categories, crews, analytics, files, messages, account, profile)
 - `src/app/` - Application configuration
 - `src/database/` - Database connection setup
@@ -41,8 +43,9 @@ packages/
 - `src/utils/` - Helper functions
 
 **Key Features**:
+
 - JWT-based authentication (Email/Password and Google OAuth)
-- Prisma ORM with PostgreSQL
+- Drizzle ORM with PostgreSQL
 - AWS S3 for file management
 - Event-driven architecture with `@nestjs/event-emitter` for email notifications
 - Nodemailer for transactional emails
@@ -51,6 +54,7 @@ packages/
 ### Frontend (`apps/web/`)
 
 **React application** built with TanStack Start and the following structure:
+
 - `src/routes/` - File-based routing (TanStack Router auto-generates `routeTree.gen.ts`)
 - `src/components/` - Reusable React components (uses Shadcn UI)
 - `src/hooks/` - Custom React hooks
@@ -62,6 +66,7 @@ packages/
 - `src/contents/` - Static content
 
 **Key Features**:
+
 - TanStack Router for file-based routing
 - TanStack Query for server state management
 - Tailwind CSS v4 + Shadcn UI for styling
@@ -72,7 +77,7 @@ packages/
 
 ### Shared Packages
 
-- **`packages/db/`** - Prisma schema and generated client used by both backend and frontend
+- **`packages/db/`** - Drizzle schema and generated client used by both backend and frontend
 - **`packages/emails/`** - React Email templates for transactional emails used by the backend
 
 ## Development Commands
@@ -81,7 +86,7 @@ packages/
 
 ```bash
 bun install                    # Install dependencies
-bun run db:update             # Sync Prisma schema with database (runs migrations)
+bun run db:update             # Sync Drizzle schema with database (runs migrations)
 ```
 
 ### Development
@@ -127,16 +132,16 @@ bun run start                 # Build and start apps in production mode
 ### Database
 
 ```bash
-bun run db:generate           # Generate Prisma client (runs automatically during dev)
+bun run db:generate           # Generate Drizzle client (runs automatically during dev)
 bun run db:update             # Apply migrations and sync schema
 ```
 
 ## Database & Migrations
 
-- **Schema Location**: `packages/db/prisma/schema.prisma`
-- **Database**: PostgreSQL managed via Prisma
-- **Client**: Generated Prisma client exported from `@repo/db`
-- **Migrations**: Prisma migrations run via `db:update` task
+- **Schema Location**: `packages/db/drizzle/schema.drizzle`
+- **Database**: PostgreSQL managed via Drizzle
+- **Client**: Generated Drizzle client exported from `@repo/db`
+- **Migrations**: Drizzle migrations run via `db:update` task
 - **Environment Setup**: Uses `dotenvx` to load database credentials from `.env`
 
 **Important**: The database client is generated from the shared schema, so both frontend and backend use the same types.
@@ -146,6 +151,7 @@ bun run db:update             # Apply migrations and sync schema
 ### NestJS Modules
 
 Each backend module follows a standard pattern:
+
 - `module.ts` - Module definition with imports/exports
 - `controller.ts` - HTTP endpoints and request handling
 - `service.ts` - Business logic
@@ -205,7 +211,7 @@ Each backend module follows a standard pattern:
 ### Adding a New Feature
 
 1. **Backend**: Create a new module in `apps/api/src/modules/` with controller, service, DTO, and entity files
-2. **Database**: Update schema in `packages/db/prisma/schema.prisma`, then run `bun run db:update`
+2. **Database**: Update schema in `packages/db/drizzle/schema.drizzle`, then run `bun run db:update`
 3. **Frontend**: Create routes and components in `apps/web/src/routes/` and `apps/web/src/components/`
 4. **Validation**: Use Zod schemas in `apps/web/src/schemas/` for form/request validation
 
@@ -225,9 +231,9 @@ bun run debug --filter=api    # Starts with Node debugger enabled
 
 ## Key Dependencies
 
-- **Backend**: NestJS, Prisma, JWT, Argon2 (password hashing), AWS SDK, Nodemailer, Google Auth Library
+- **Backend**: NestJS, Drizzle, JWT, Argon2 (password hashing), AWS SDK, Nodemailer, Google Auth Library
 - **Frontend**: React, TanStack Router/Query, Tailwind, Shadcn UI, Zod, React Hook Form, Zustand, Recharts, Framer Motion
-- **Shared**: Prisma client, React Email
+- **Shared**: Drizzle client, React Email
 
 ## Notes for Contributors
 

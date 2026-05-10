@@ -18,6 +18,7 @@ import { Route as LandingTermsRouteImport } from './routes/_landing/terms'
 import { Route as LandingTeamRouteImport } from './routes/_landing/team'
 import { Route as LandingPrivacyRouteImport } from './routes/_landing/privacy'
 import { Route as LandingContactRouteImport } from './routes/_landing/contact'
+import { Route as LandingArchiveRouteImport } from './routes/_landing/archive'
 import { Route as LandingAboutRouteImport } from './routes/_landing/about'
 import { Route as AuthVerifyEmailRouteImport } from './routes/_auth/verify-email'
 import { Route as AuthResetPasswordRouteImport } from './routes/_auth/reset-password'
@@ -26,6 +27,7 @@ import { Route as AuthLoginRouteImport } from './routes/_auth/login'
 import { Route as AuthForgotPasswordRouteImport } from './routes/_auth/forgot-password'
 import { Route as LandingAccountRouteRouteImport } from './routes/_landing/account/route'
 import { Route as DashboardUsersIndexRouteImport } from './routes/dashboard/users/index'
+import { Route as DashboardThemesIndexRouteImport } from './routes/dashboard/themes/index'
 import { Route as DashboardProfilesIndexRouteImport } from './routes/dashboard/profiles/index'
 import { Route as DashboardPostsIndexRouteImport } from './routes/dashboard/posts/index'
 import { Route as DashboardMessagesIndexRouteImport } from './routes/dashboard/messages/index'
@@ -94,6 +96,11 @@ const LandingContactRoute = LandingContactRouteImport.update({
   path: '/contact',
   getParentRoute: () => LandingRouteRoute,
 } as any)
+const LandingArchiveRoute = LandingArchiveRouteImport.update({
+  id: '/archive',
+  path: '/archive',
+  getParentRoute: () => LandingRouteRoute,
+} as any)
 const LandingAboutRoute = LandingAboutRouteImport.update({
   id: '/about',
   path: '/about',
@@ -132,6 +139,11 @@ const LandingAccountRouteRoute = LandingAccountRouteRouteImport.update({
 const DashboardUsersIndexRoute = DashboardUsersIndexRouteImport.update({
   id: '/users/',
   path: '/users/',
+  getParentRoute: () => DashboardRouteRoute,
+} as any)
+const DashboardThemesIndexRoute = DashboardThemesIndexRouteImport.update({
+  id: '/themes/',
+  path: '/themes/',
   getParentRoute: () => DashboardRouteRoute,
 } as any)
 const DashboardProfilesIndexRoute = DashboardProfilesIndexRouteImport.update({
@@ -271,6 +283,7 @@ export interface FileRoutesByFullPath {
   '/reset-password': typeof AuthResetPasswordRoute
   '/verify-email': typeof AuthVerifyEmailRoute
   '/about': typeof LandingAboutRoute
+  '/archive': typeof LandingArchiveRoute
   '/contact': typeof LandingContactRoute
   '/privacy': typeof LandingPrivacyRoute
   '/team': typeof LandingTeamRoute
@@ -300,6 +313,7 @@ export interface FileRoutesByFullPath {
   '/dashboard/messages/': typeof DashboardMessagesIndexRoute
   '/dashboard/posts/': typeof DashboardPostsIndexRoute
   '/dashboard/profiles/': typeof DashboardProfilesIndexRoute
+  '/dashboard/themes/': typeof DashboardThemesIndexRoute
   '/dashboard/users/': typeof DashboardUsersIndexRoute
 }
 export interface FileRoutesByTo {
@@ -310,6 +324,7 @@ export interface FileRoutesByTo {
   '/reset-password': typeof AuthResetPasswordRoute
   '/verify-email': typeof AuthVerifyEmailRoute
   '/about': typeof LandingAboutRoute
+  '/archive': typeof LandingArchiveRoute
   '/contact': typeof LandingContactRoute
   '/privacy': typeof LandingPrivacyRoute
   '/team': typeof LandingTeamRoute
@@ -339,6 +354,7 @@ export interface FileRoutesByTo {
   '/dashboard/messages': typeof DashboardMessagesIndexRoute
   '/dashboard/posts': typeof DashboardPostsIndexRoute
   '/dashboard/profiles': typeof DashboardProfilesIndexRoute
+  '/dashboard/themes': typeof DashboardThemesIndexRoute
   '/dashboard/users': typeof DashboardUsersIndexRoute
 }
 export interface FileRoutesById {
@@ -353,6 +369,7 @@ export interface FileRoutesById {
   '/_auth/reset-password': typeof AuthResetPasswordRoute
   '/_auth/verify-email': typeof AuthVerifyEmailRoute
   '/_landing/about': typeof LandingAboutRoute
+  '/_landing/archive': typeof LandingArchiveRoute
   '/_landing/contact': typeof LandingContactRoute
   '/_landing/privacy': typeof LandingPrivacyRoute
   '/_landing/team': typeof LandingTeamRoute
@@ -383,6 +400,7 @@ export interface FileRoutesById {
   '/dashboard/messages/': typeof DashboardMessagesIndexRoute
   '/dashboard/posts/': typeof DashboardPostsIndexRoute
   '/dashboard/profiles/': typeof DashboardProfilesIndexRoute
+  '/dashboard/themes/': typeof DashboardThemesIndexRoute
   '/dashboard/users/': typeof DashboardUsersIndexRoute
 }
 export interface FileRouteTypes {
@@ -397,6 +415,7 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/verify-email'
     | '/about'
+    | '/archive'
     | '/contact'
     | '/privacy'
     | '/team'
@@ -426,6 +445,7 @@ export interface FileRouteTypes {
     | '/dashboard/messages/'
     | '/dashboard/posts/'
     | '/dashboard/profiles/'
+    | '/dashboard/themes/'
     | '/dashboard/users/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -436,6 +456,7 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/verify-email'
     | '/about'
+    | '/archive'
     | '/contact'
     | '/privacy'
     | '/team'
@@ -465,6 +486,7 @@ export interface FileRouteTypes {
     | '/dashboard/messages'
     | '/dashboard/posts'
     | '/dashboard/profiles'
+    | '/dashboard/themes'
     | '/dashboard/users'
   id:
     | '__root__'
@@ -478,6 +500,7 @@ export interface FileRouteTypes {
     | '/_auth/reset-password'
     | '/_auth/verify-email'
     | '/_landing/about'
+    | '/_landing/archive'
     | '/_landing/contact'
     | '/_landing/privacy'
     | '/_landing/team'
@@ -508,6 +531,7 @@ export interface FileRouteTypes {
     | '/dashboard/messages/'
     | '/dashboard/posts/'
     | '/dashboard/profiles/'
+    | '/dashboard/themes/'
     | '/dashboard/users/'
   fileRoutesById: FileRoutesById
 }
@@ -582,6 +606,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LandingContactRouteImport
       parentRoute: typeof LandingRouteRoute
     }
+    '/_landing/archive': {
+      id: '/_landing/archive'
+      path: '/archive'
+      fullPath: '/archive'
+      preLoaderRoute: typeof LandingArchiveRouteImport
+      parentRoute: typeof LandingRouteRoute
+    }
     '/_landing/about': {
       id: '/_landing/about'
       path: '/about'
@@ -636,6 +667,13 @@ declare module '@tanstack/react-router' {
       path: '/users'
       fullPath: '/dashboard/users/'
       preLoaderRoute: typeof DashboardUsersIndexRouteImport
+      parentRoute: typeof DashboardRouteRoute
+    }
+    '/dashboard/themes/': {
+      id: '/dashboard/themes/'
+      path: '/themes'
+      fullPath: '/dashboard/themes/'
+      preLoaderRoute: typeof DashboardThemesIndexRouteImport
       parentRoute: typeof DashboardRouteRoute
     }
     '/dashboard/profiles/': {
@@ -853,6 +891,7 @@ const LandingAccountRouteRouteWithChildren =
 interface LandingRouteRouteChildren {
   LandingAccountRouteRoute: typeof LandingAccountRouteRouteWithChildren
   LandingAboutRoute: typeof LandingAboutRoute
+  LandingArchiveRoute: typeof LandingArchiveRoute
   LandingContactRoute: typeof LandingContactRoute
   LandingPrivacyRoute: typeof LandingPrivacyRoute
   LandingTeamRoute: typeof LandingTeamRoute
@@ -865,6 +904,7 @@ interface LandingRouteRouteChildren {
 const LandingRouteRouteChildren: LandingRouteRouteChildren = {
   LandingAccountRouteRoute: LandingAccountRouteRouteWithChildren,
   LandingAboutRoute: LandingAboutRoute,
+  LandingArchiveRoute: LandingArchiveRoute,
   LandingContactRoute: LandingContactRoute,
   LandingPrivacyRoute: LandingPrivacyRoute,
   LandingTeamRoute: LandingTeamRoute,
@@ -896,6 +936,7 @@ interface DashboardRouteRouteChildren {
   DashboardMessagesIndexRoute: typeof DashboardMessagesIndexRoute
   DashboardPostsIndexRoute: typeof DashboardPostsIndexRoute
   DashboardProfilesIndexRoute: typeof DashboardProfilesIndexRoute
+  DashboardThemesIndexRoute: typeof DashboardThemesIndexRoute
   DashboardUsersIndexRoute: typeof DashboardUsersIndexRoute
 }
 
@@ -917,6 +958,7 @@ const DashboardRouteRouteChildren: DashboardRouteRouteChildren = {
   DashboardMessagesIndexRoute: DashboardMessagesIndexRoute,
   DashboardPostsIndexRoute: DashboardPostsIndexRoute,
   DashboardProfilesIndexRoute: DashboardProfilesIndexRoute,
+  DashboardThemesIndexRoute: DashboardThemesIndexRoute,
   DashboardUsersIndexRoute: DashboardUsersIndexRoute,
 }
 

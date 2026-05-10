@@ -1,0 +1,1 @@
+ALTER TABLE "Theme" DROP CONSTRAINT "Theme_title_unique";

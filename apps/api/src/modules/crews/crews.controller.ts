@@ -1,6 +1,6 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from "@nestjs/common";
 
-import { AllowAnonymous, PrismaQuery, type PrismaQueryParams, Roles } from "@/decorators";
+import { AllowAnonymous, DrizzleQuery, type DrizzleQueryParams, Roles } from "@/decorators";
 import { AuthGuard } from "@/guards";
 
 import { CrewsService } from "./crews.service";
@@ -20,7 +20,7 @@ export class CrewsController {
 
   @Get()
   @AllowAnonymous()
-  findAll(@PrismaQuery() query: PrismaQueryParams) {
+  findAll(@DrizzleQuery() query: DrizzleQueryParams) {
     return this.crewsService.findAll(query);
   }
 

@@ -32,6 +32,7 @@ const pages = [
   { name: "Profiller", to: "/dashboard/profiles", icon: "mdi:account-circle-outline" },
   { name: "Gönderiler", to: "/dashboard/posts", icon: "mdi:post-outline" },
   { name: "Kategoriler", to: "/dashboard/categories", icon: "mdi:shape-outline" },
+  { name: "Tematik Arşiv", to: "/dashboard/themes", icon: "mdi:archive-outline" },
   { name: "Ekipler", to: "/dashboard/crews", icon: "mdi:account-group-outline" },
   { name: "Mesajlar", to: "/dashboard/messages", icon: "mdi:email" },
   { name: "Analitik", to: "/dashboard/analytics", icon: "mdi:chart-bar" },

@@ -1,7 +1,8 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Category, Post } from "@repo/db";
+import { Icon } from "@iconify/react";
+import { Category } from "@repo/db";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useForm } from "react-hook-form";
+import { useFieldArray, useForm } from "react-hook-form";
 import { toast } from "sonner";
 
 import CdnImage from "@/components/cdn-image";
@@ -28,14 +29,16 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import apiClient from "@/lib/api-client";
 import { postSchema, PostSchema } from "@/schemas/post";
-import { List } from "@/types";
+import { List, Post } from "@/types";
 import { getCdnUrl } from "@/utils/cdn";
 
 export const Route = createFileRoute("/dashboard/posts/$postId")({
   component: RouteComponent,
   loader: async ({ params }) => {
-    const { data: post } = await apiClient.get<Post>(`/posts/${params.postId}`);
-    const { data: categories } = await apiClient.get<List<Category>>(`/categories`);
+    const [{ data: post }, { data: categories }] = await Promise.all([
+      apiClient.get<Post>(`/posts/${params.postId}`),
+      apiClient.get<List<Category>>(`/categories`),
+    ]);
     return { post, categories };
   },
 });
@@ -59,7 +62,17 @@ function RouteComponent() {
       coverImage: post.coverImage ?? "",
       status: post.status,
       categoryId: post.categoryId ?? "",
+      themes:
+        post.themes?.map((t) => ({
+          work: t.work,
+          category: t.category,
+        })) || [],
     },
+  });
+
+  const { fields, append, remove } = useFieldArray({
+    control: form.control,
+    name: "themes",
   });
 
   const onSubmit = async (data: PostSchema) => {
@@ -185,6 +198,80 @@ function RouteComponent() {
                       </SelectContent>
                     </Select>
                     <FormDescription>Post için bir kategori seçin.</FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name='themes'
+                render={() => (
+                  <FormItem>
+                    <FormLabel>Tematik Arşiv (Eserler)</FormLabel>
+                    <div className='space-y-4 rounded-md border p-4'>
+                      {fields.map((field, index) => (
+                        <div
+                          key={field.id}
+                          className='relative grid grid-cols-1 gap-4 rounded-lg border p-4 md:grid-cols-2'
+                        >
+                          <FormField
+                            control={form.control}
+                            name={`themes.${index}.category`}
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel>Konu (Tür)</FormLabel>
+                                <FormControl>
+                                  <Input
+                                    placeholder='Örn: Kitap'
+                                    {...field}
+                                  />
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                          <FormField
+                            control={form.control}
+                            name={`themes.${index}.work`}
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel>Başlık (Eser)</FormLabel>
+                                <FormControl>
+                                  <Input
+                                    placeholder='Örn: Issız Adam'
+                                    {...field}
+                                  />
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                          <Button
+                            type='button'
+                            variant='ghost'
+                            size='icon'
+                            className='text-destructive absolute -top-2 -right-2'
+                            onClick={() => remove(index)}
+                          >
+                            <Icon icon='mdi:close-circle' />
+                          </Button>
+                        </div>
+                      ))}
+                      <Button
+                        type='button'
+                        variant='outline'
+                        size='sm'
+                        onClick={() => append({ work: "", category: "" })}
+                      >
+                        <Icon
+                          icon='mdi:plus'
+                          className='mr-2'
+                        />
+                        Eser Ekle
+                      </Button>
+                    </div>
+                    <FormDescription>Bu yazıda işlenen eserleri ekleyin.</FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}

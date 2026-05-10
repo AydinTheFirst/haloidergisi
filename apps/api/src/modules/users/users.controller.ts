@@ -1,6 +1,6 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from "@nestjs/common";
 
-import { PrismaQuery, type PrismaQueryParams, Roles } from "@/decorators";
+import { DrizzleQuery, type DrizzleQueryParams, Roles } from "@/decorators";
 import { AuthGuard } from "@/guards";
 
 import { CreateUserDto } from "./dto/create-user.dto";
@@ -19,7 +19,7 @@ export class UsersController {
   }
 
   @Get()
-  findAll(@PrismaQuery(["email", "profile.name", "crew.name"]) query: PrismaQueryParams) {
+  findAll(@DrizzleQuery(["email", "profile.name", "crew.name"]) query: DrizzleQueryParams) {
     return this.usersService.findAll(query);
   }
 

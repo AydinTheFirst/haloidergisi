@@ -1,9 +1,10 @@
 import { BadRequestException, Injectable, InternalServerErrorException } from "@nestjs/common";
-import { ProviderType, User } from "@repo/db";
+import { ProviderType, User, providers, users } from "@repo/db";
 import crypto from "crypto";
+import { eq, and } from "drizzle-orm";
 import { OAuth2Client } from "google-auth-library";
 
-import { PrismaService } from "@/database";
+import { DrizzleService } from "@/database";
 
 import { TokensService } from "../tokens/tokens.service";
 import { UsersService } from "../users/users.service";
@@ -13,7 +14,7 @@ export class AuthGoogleService {
   private client: OAuth2Client;
 
   constructor(
-    private readonly prismaService: PrismaService,
+    private readonly drizzle: DrizzleService,
     private readonly usersService: UsersService,
     private readonly tokensService: TokensService,
   ) {
@@ -59,9 +60,12 @@ export class AuthGoogleService {
   async callback(code: string) {
     const payload = await this.verifyGoogleUser(code);
 
-    const provider = await this.prismaService.provider.findFirst({
-      where: { providerId: payload.sub, provider: ProviderType.GOOGLE },
-      include: { user: true },
+    const provider = await this.drizzle.db.query.providers.findFirst({
+      where: and(
+        eq(providers.providerId, payload.sub),
+        eq(providers.provider, ProviderType.GOOGLE),
+      ),
+      with: { user: true },
     });
 
     let user: User;
@@ -69,8 +73,8 @@ export class AuthGoogleService {
     if (provider) {
       user = provider.user;
     } else {
-      const existingUser = await this.prismaService.user.findUnique({
-        where: { email: payload.email },
+      const existingUser = await this.drizzle.db.query.users.findFirst({
+        where: eq(users.email, payload.email!),
       });
 
       if (existingUser) {
@@ -85,12 +89,10 @@ export class AuthGoogleService {
         password: crypto.randomBytes(16).toString("hex"),
       });
 
-      await this.prismaService.provider.create({
-        data: {
-          provider: ProviderType.GOOGLE,
-          providerId: payload.sub,
-          userId: user.id,
-        },
+      await this.drizzle.db.insert(providers).values({
+        provider: ProviderType.GOOGLE,
+        providerId: payload.sub,
+        userId: user.id,
       });
     }
 
@@ -102,20 +104,21 @@ export class AuthGoogleService {
   async linkAccount(userId: string, code: string) {
     const payload = await this.verifyGoogleUser(code);
 
-    const existingProvider = await this.prismaService.provider.findFirst({
-      where: { providerId: payload.sub, provider: ProviderType.GOOGLE },
+    const existingProvider = await this.drizzle.db.query.providers.findFirst({
+      where: and(
+        eq(providers.providerId, payload.sub),
+        eq(providers.provider, ProviderType.GOOGLE),
+      ),
     });
 
     if (existingProvider) {
       throw new BadRequestException("This Google account is already linked with another user.");
     }
 
-    await this.prismaService.provider.create({
-      data: {
-        provider: ProviderType.GOOGLE,
-        providerId: payload.sub,
-        userId,
-      },
+    await this.drizzle.db.insert(providers).values({
+      provider: ProviderType.GOOGLE,
+      providerId: payload.sub,
+      userId,
     });
 
     return payload;

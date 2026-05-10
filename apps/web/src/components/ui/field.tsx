@@ -1,8 +1,7 @@
 import * as React from "react";
-import { FieldPath, FieldValues, useFormContext, Controller } from "react-hook-form";
+import { FieldPath, FieldValues, useFormContext } from "react-hook-form";
 
 import {
-  Form,
   FormControl,
   FormDescription,
   FormField,
@@ -11,15 +10,8 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { Select } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { cn } from "@/lib/utils";
 
 type FieldRootProps<
   TFieldValues extends FieldValues = FieldValues,

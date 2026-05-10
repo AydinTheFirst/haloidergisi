@@ -1,10 +1,12 @@
 import { BadRequestException, Injectable } from "@nestjs/common";
 import { EventEmitter2 } from "@nestjs/event-emitter";
+import { posts, themes } from "@repo/db";
+import { eq, sql } from "drizzle-orm";
 import slugify from "slugify";
 
 import { EMAIL_EVENTS } from "@/constants";
-import { PrismaService } from "@/database";
-import { PrismaQueryParams } from "@/decorators";
+import { DrizzleService } from "@/database";
+import { DrizzleQueryParams } from "@/decorators";
 import { NewPostEmailDto } from "@/services/mail.service";
 
 import { CreatePostDto } from "./dto/create-post.dto";
@@ -13,7 +15,7 @@ import { UpdatePostDto } from "./dto/update-post.dto";
 @Injectable()
 export class PostsService {
   constructor(
-    private readonly prismaService: PrismaService,
+    private readonly drizzle: DrizzleService,
     private readonly eventEmitter: EventEmitter2,
   ) {}
 
@@ -22,11 +24,28 @@ export class PostsService {
   }
 
   async create(createPostDto: CreatePostDto) {
-    const post = await this.prismaService.post.create({
-      data: {
-        ...createPostDto,
-        slug: this.makeSlug(createPostDto.title),
-      },
+    const { themes: themesData, ...rest } = createPostDto;
+
+    const post = await this.drizzle.db.transaction(async (tx) => {
+      const [newPost] = await tx
+        .insert(posts)
+        .values({
+          ...rest,
+          slug: this.makeSlug(createPostDto.title),
+        })
+        .returning();
+
+      if (themesData && themesData.length > 0) {
+        await tx.insert(themes).values(
+          themesData.map((t) => ({
+            postId: newPost.id,
+            work: t.work,
+            category: t.category,
+          })),
+        );
+      }
+
+      return newPost;
     });
 
     this.eventEmitter.emit(
@@ -42,18 +61,26 @@ export class PostsService {
     return post;
   }
 
-  async findAll(query: PrismaQueryParams) {
-    const [items, total] = await this.prismaService.$transaction([
-      this.prismaService.post.findMany(query),
-      this.prismaService.post.count({ where: query.where }),
-    ]);
+  async findAll(query: DrizzleQueryParams) {
+    const items = await this.drizzle.db.query.posts.findMany({
+      limit: query.take,
+      offset: query.skip,
+      with: {
+        themes: true,
+      },
+    });
 
-    return { items, meta: { total, take: query.take, skip: query.skip } };
+    const [{ total }] = await this.drizzle.db.select({ total: sql<number>`count(*)` }).from(posts);
+
+    return { items, meta: { total: Number(total), take: query.take, skip: query.skip } };
   }
 
   async findOne(id: string) {
-    const post = await this.prismaService.post.findUnique({
-      where: { id },
+    const post = await this.drizzle.db.query.posts.findFirst({
+      where: eq(posts.id, id),
+      with: {
+        themes: true,
+      },
     });
 
     if (!post) {
@@ -64,11 +91,26 @@ export class PostsService {
   }
 
   async update(id: string, updatePostDto: UpdatePostDto) {
+    const { themes: themesData, ...rest } = updatePostDto;
     await this.findOne(id);
 
-    const updatedPost = await this.prismaService.post.update({
-      where: { id },
-      data: updatePostDto,
+    const updatedPost = await this.drizzle.db.transaction(async (tx) => {
+      const [res] = await tx.update(posts).set(rest).where(eq(posts.id, id)).returning();
+
+      if (themesData !== undefined) {
+        await tx.delete(themes).where(eq(themes.postId, id));
+        if (themesData.length > 0) {
+          await tx.insert(themes).values(
+            themesData.map((t) => ({
+              postId: id,
+              work: t.work,
+              category: t.category,
+            })),
+          );
+        }
+      }
+
+      return res;
     });
 
     return updatedPost;
@@ -77,9 +119,7 @@ export class PostsService {
   async remove(id: string) {
     await this.findOne(id);
 
-    await this.prismaService.post.delete({
-      where: { id },
-    });
+    await this.drizzle.db.delete(posts).where(eq(posts.id, id));
 
     return { success: true };
   }

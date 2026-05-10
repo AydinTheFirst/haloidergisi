@@ -1,2 +1,2 @@
-export * from "./prisma.service";
-export * from "./prisma.module";
+export * from "./drizzle.service";
+export * from "./drizzle.module";

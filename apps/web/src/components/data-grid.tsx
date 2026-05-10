@@ -85,7 +85,7 @@ export function DataGrid<T>({ table }: DataGridProps<T>) {
             totalPages={table.getPageCount()}
           />
         </div>
-        <div className='flex justify-end'>
+        <div className='flex justify-end gap-2'>
           <Select
             value={table.getState().pagination.pageSize.toString()}
             onValueChange={(value) =>
@@ -93,7 +93,7 @@ export function DataGrid<T>({ table }: DataGridProps<T>) {
               navigate({ search: (old) => ({ ...old, limit: Number(value), page: 1 }) })
             }
           >
-            <SelectTrigger className='h-10 w-[120px]'>
+            <SelectTrigger className='h-10 w-30'>
               <SelectValue placeholder={table.getState().pagination.pageSize} />
             </SelectTrigger>
             <SelectContent>

@@ -6,7 +6,7 @@ import { EventEmitterModule } from "@nestjs/event-emitter";
 import { JwtModule } from "@nestjs/jwt";
 import { ScheduleModule } from "@nestjs/schedule";
 
-import { PrismaModule } from "@/database";
+import { DrizzleModule } from "@/database";
 import { LoggerMiddleware } from "@/middlewares/logger.middleware";
 import modules from "@/modules";
 import { MailService } from "@/services/mail.service";
@@ -39,7 +39,7 @@ import { AppService } from "./app.service";
       isGlobal: true,
     }),
     ScheduleModule.forRoot(),
-    PrismaModule,
+    DrizzleModule,
     ...modules,
   ],
   controllers: [AppController],

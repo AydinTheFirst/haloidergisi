@@ -1,16 +1,18 @@
 import { CanActivate, ExecutionContext } from "@nestjs/common";
 import { ForbiddenException, Inject, Injectable, UnauthorizedException } from "@nestjs/common";
 import { Reflector } from "@nestjs/core";
+import { tokens } from "@repo/db";
+import { eq } from "drizzle-orm";
 
 import { METADATA_KEY } from "@/constants";
-import { PrismaService } from "@/database";
+import { DrizzleService } from "@/database";
 
 @Injectable()
 export class AuthGuard implements CanActivate {
   constructor(
     @Inject(Reflector)
     private readonly reflector: Reflector,
-    private readonly prismaService: PrismaService,
+    private readonly drizzle: DrizzleService,
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
@@ -26,9 +28,9 @@ export class AuthGuard implements CanActivate {
     if (!token && isAllowAnonymous) return true;
 
     if (token) {
-      const tokenDoc = await this.prismaService.token.findUnique({
-        where: { token },
-        include: { user: { include: { profile: true } } },
+      const tokenDoc = await this.drizzle.db.query.tokens.findFirst({
+        where: eq(tokens.token, token),
+        with: { user: { with: { profile: true } } },
       });
 
       request.user = tokenDoc?.user;

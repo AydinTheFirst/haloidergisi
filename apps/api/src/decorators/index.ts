@@ -1,2 +1,2 @@
 export * from "./auth.decorators";
-export * from "./prisma-query.decorator";
+export * from "./drizzle-query.decorator";

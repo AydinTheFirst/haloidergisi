@@ -1,7 +1,7 @@
 import { createParamDecorator, ExecutionContext } from "@nestjs/common";
 import { Request } from "express";
 
-export interface PrismaQueryParams {
+export interface DrizzleQueryParams {
   where?: Record<string, any>;
   skip?: number;
   take?: number;
@@ -9,7 +9,7 @@ export interface PrismaQueryParams {
   include?: Record<string, boolean>;
 }
 
-export const PrismaQuery = createParamDecorator(
+export const DrizzleQuery = createParamDecorator(
   (searchableFields: string[], ctx: ExecutionContext) => {
     const request = ctx.switchToHttp().getRequest() as Request;
 

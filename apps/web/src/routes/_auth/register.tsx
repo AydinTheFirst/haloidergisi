@@ -100,11 +100,11 @@ function RouteComponent() {
           <CardContent>
             <Form {...form}>
               <form
-                onSubmit={form.handleSubmit(onSubmit)}
+                onSubmit={form.handleSubmit(onSubmit as any)}
                 className='space-y-4'
               >
                 <FormField
-                  control={form.control}
+                  control={form.control as any}
                   name='name'
                   render={({ field }) => (
                     <FormItem>
@@ -128,7 +128,7 @@ function RouteComponent() {
                 />
 
                 <FormField
-                  control={form.control}
+                  control={form.control as any}
                   name='email'
                   render={({ field }) => (
                     <FormItem>
@@ -152,7 +152,7 @@ function RouteComponent() {
                 />
 
                 <FormField
-                  control={form.control}
+                  control={form.control as any}
                   name='password'
                   render={({ field }) => (
                     <FormItem>
@@ -176,7 +176,7 @@ function RouteComponent() {
                 />
 
                 <FormField
-                  control={form.control}
+                  control={form.control as any}
                   name='acceptTerms'
                   render={({ field }) => (
                     <FormItem>

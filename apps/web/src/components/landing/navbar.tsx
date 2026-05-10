@@ -27,6 +27,10 @@ const items = [
     url: "/team",
     label: "Ekibimiz",
   },
+  {
+    url: "/archive",
+    label: "Arşiv",
+  },
 ];
 
 export default function LandingNavbar() {

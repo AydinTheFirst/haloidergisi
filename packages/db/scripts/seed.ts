@@ -1,11 +1,13 @@
-import { prisma } from "../src";
+import { eq, sql } from "drizzle-orm";
+
+import { db, users } from "../src";
 
 async function main() {
   // make admin
-  await prisma.user.updateMany({
-    where: { email: "aydinhalil980@gmail.com" },
-    data: { roles: { push: "ADMIN" } },
-  });
+  await db
+    .update(users)
+    .set({ roles: sql`array_append(roles, 'ADMIN')` })
+    .where(eq(users.email, "aydinhalil980@gmail.com"));
 }
 
 try {
@@ -13,6 +15,4 @@ try {
   console.log("Seed script completed successfully.");
 } catch (error) {
   console.error(error);
-} finally {
-  await prisma.$disconnect();
 }

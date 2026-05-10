@@ -1,26 +1,32 @@
 import { BadRequestException, Injectable, NotFoundException } from "@nestjs/common";
+import { profiles } from "@repo/db";
+import { eq, sql } from "drizzle-orm";
 
-import { PrismaService } from "@/database";
-import { PrismaQueryParams } from "@/decorators";
+import { DrizzleService } from "@/database";
+import { DrizzleQueryParams } from "@/decorators";
 
 import { UpdateProfileDto } from "./profile.dto";
 
 @Injectable()
 export class ProfileService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(private readonly drizzle: DrizzleService) {}
 
-  async findAll(query: PrismaQueryParams) {
-    const [items, count] = await this.prisma.$transaction([
-      this.prisma.profile.findMany(query),
-      this.prisma.profile.count({ where: query.where }),
-    ]);
+  async findAll(query: DrizzleQueryParams) {
+    const items = await this.drizzle.db.query.profiles.findMany({
+      limit: query.take,
+      offset: query.skip,
+    });
 
-    return { items, meta: { total: count, skip: query.skip, take: query.take } };
+    const [{ total }] = await this.drizzle.db
+      .select({ total: sql<number>`count(*)` })
+      .from(profiles);
+
+    return { items, meta: { total: Number(total), skip: query.skip, take: query.take } };
   }
 
   async findOne(id: string) {
-    const profile = await this.prisma.profile.findUnique({
-      where: { id },
+    const profile = await this.drizzle.db.query.profiles.findFirst({
+      where: eq(profiles.id, id),
     });
 
     if (!profile) {
@@ -31,8 +37,8 @@ export class ProfileService {
   }
 
   async findByUserId(userId: string) {
-    const profile = await this.prisma.profile.findUnique({
-      where: { userId },
+    const profile = await this.drizzle.db.query.profiles.findFirst({
+      where: eq(profiles.userId, userId),
     });
 
     if (!profile) {
@@ -45,10 +51,11 @@ export class ProfileService {
   async update(id: string, data: UpdateProfileDto) {
     await this.findOne(id);
 
-    const updatedProfile = await this.prisma.profile.update({
-      where: { id },
-      data,
-    });
+    const [updatedProfile] = await this.drizzle.db
+      .update(profiles)
+      .set(data)
+      .where(eq(profiles.id, id))
+      .returning();
 
     return updatedProfile;
   }

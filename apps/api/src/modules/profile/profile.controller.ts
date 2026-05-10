@@ -1,6 +1,6 @@
 import { Body, Controller, Get, Param, Patch, UseGuards } from "@nestjs/common";
 
-import { PrismaQuery, type PrismaQueryParams } from "@/decorators";
+import { DrizzleQuery, type DrizzleQueryParams } from "@/decorators";
 import { AuthGuard } from "@/guards";
 
 import { UpdateProfileDto } from "./profile.dto";
@@ -19,7 +19,7 @@ export class ProfileController {
   }
 
   @Get()
-  findAll(@PrismaQuery(["name", "title", "user.email"]) query: PrismaQueryParams) {
+  findAll(@DrizzleQuery(["name", "title", "user.email"]) query: DrizzleQueryParams) {
     return this.profileService.findAll(query);
   }
 

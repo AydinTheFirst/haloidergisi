@@ -1,34 +1,43 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
+import { crews } from "@repo/db";
+import { eq, sql } from "drizzle-orm";
 
-import { PrismaService } from "@/database";
-import { PrismaQueryParams } from "@/decorators";
+import { DrizzleService } from "@/database";
+import { DrizzleQueryParams } from "@/decorators";
 
 import { CreateCrewDto } from "./dto/create-crew.dto";
 import { UpdateCrewDto } from "./dto/update-crew.dto";
 
 @Injectable()
 export class CrewsService {
-  constructor(private prisma: PrismaService) {}
+  constructor(private drizzle: DrizzleService) {}
 
   async create(createCrewDto: CreateCrewDto) {
-    const crew = await this.prisma.crew.create({ data: createCrewDto });
+    const [crew] = await this.drizzle.db.insert(crews).values(createCrewDto).returning();
     return crew;
   }
 
-  async findAll(query: PrismaQueryParams) {
-    const [items, total] = await this.prisma.$transaction([
-      this.prisma.crew.findMany({
-        ...query,
-        include: { users: { select: { id: true, profile: true } } },
-      }),
-      this.prisma.crew.count({ where: query.where }),
-    ]);
+  async findAll(query: DrizzleQueryParams) {
+    const items = await this.drizzle.db.query.crews.findMany({
+      limit: query.take,
+      offset: query.skip,
+      with: {
+        users: {
+          columns: { id: true },
+          with: { profile: true },
+        },
+      },
+    });
 
-    return { items, meta: { total, skip: query.skip, take: query.take } };
+    const [{ total }] = await this.drizzle.db.select({ total: sql<number>`count(*)` }).from(crews);
+
+    return { items, meta: { total: Number(total), skip: query.skip, take: query.take } };
   }
 
   async findOne(id: string) {
-    const crew = await this.prisma.crew.findUnique({ where: { id } });
+    const crew = await this.drizzle.db.query.crews.findFirst({
+      where: eq(crews.id, id),
+    });
 
     if (!crew) {
       throw new NotFoundException(`Crew with ID ${id} not found`);
@@ -40,10 +49,11 @@ export class CrewsService {
   async update(id: string, updateCrewDto: UpdateCrewDto) {
     await this.findOne(id);
 
-    const crew = await this.prisma.crew.update({
-      where: { id },
-      data: updateCrewDto,
-    });
+    const [crew] = await this.drizzle.db
+      .update(crews)
+      .set(updateCrewDto)
+      .where(eq(crews.id, id))
+      .returning();
 
     return crew;
   }
@@ -51,7 +61,7 @@ export class CrewsService {
   async remove(id: string) {
     await this.findOne(id);
 
-    await this.prisma.crew.delete({ where: { id } });
+    await this.drizzle.db.delete(crews).where(eq(crews.id, id));
 
     return { success: true };
   }

@@ -1,10 +1,12 @@
 import { BadRequestException, Injectable } from "@nestjs/common";
 import { EventEmitter2 } from "@nestjs/event-emitter";
 import { JwtService } from "@nestjs/jwt";
+import { notificationSettings, providers } from "@repo/db";
 import argon from "argon2";
+import { eq, and } from "drizzle-orm";
 
 import { EMAIL_EVENTS } from "@/constants";
-import { PrismaService } from "@/database";
+import { DrizzleService } from "@/database";
 import { VerifyEmailDto } from "@/services/mail.service";
 
 import { UsersService } from "../users/users.service";
@@ -13,7 +15,7 @@ import { ChangePasswordDto, UpdateAccountDto, UpdateNotificationsDto } from "./a
 export class AccountService {
   private readonly emailVerifications = new Map<string, string>();
   constructor(
-    private readonly prisma: PrismaService,
+    private readonly drizzle: DrizzleService,
     private readonly usersService: UsersService,
     private readonly jwtService: JwtService,
     private readonly eventEmitter: EventEmitter2,
@@ -24,29 +26,32 @@ export class AccountService {
   }
 
   async getNotifications(userId: string) {
-    const settings = await this.prisma.notificationSettings.findUnique({
-      where: { userId },
+    const settings = await this.drizzle.db.query.notificationSettings.findFirst({
+      where: eq(notificationSettings.userId, userId),
     });
 
     return settings;
   }
 
   async updateNotifications(userId: string, data: UpdateNotificationsDto) {
-    const settings = await this.prisma.notificationSettings.upsert({
-      where: { userId },
-      update: { ...data },
-      create: { userId, ...data },
-    });
+    const settings = await this.drizzle.db
+      .insert(notificationSettings)
+      .values({ userId, ...data })
+      .onConflictDoUpdate({
+        target: notificationSettings.userId,
+        set: { ...data, updatedAt: new Date() },
+      })
+      .returning();
 
-    return settings;
+    return settings[0];
   }
 
   async getProviders(userId: string) {
-    const providers = await this.prisma.provider.findMany({
-      where: { userId },
+    const results = await this.drizzle.db.query.providers.findMany({
+      where: eq(providers.userId, userId),
     });
 
-    return providers;
+    return results;
   }
 
   update(userId: string, data: UpdateAccountDto) {
@@ -126,17 +131,15 @@ export class AccountService {
   }
 
   async removeProvider(userId: string, providerId: string) {
-    const provider = await this.prisma.provider.findFirst({
-      where: { id: providerId, userId },
+    const provider = await this.drizzle.db.query.providers.findFirst({
+      where: and(eq(providers.id, providerId), eq(providers.userId, userId)),
     });
 
     if (!provider) {
       throw new BadRequestException("No linked provider found.");
     }
 
-    await this.prisma.provider.delete({
-      where: { id: provider.id },
-    });
+    await this.drizzle.db.delete(providers).where(eq(providers.id, provider.id));
 
     return { success: true };
   }

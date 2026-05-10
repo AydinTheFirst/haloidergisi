@@ -32,9 +32,6 @@
     },
     "editor.suggest.insertMode": "replace"
   },
-  "[prisma]": {
-    "editor.defaultFormatter": "Prisma.prisma"
-  },
   "[handlebars]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   }

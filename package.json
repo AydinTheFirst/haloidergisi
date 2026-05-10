@@ -17,7 +17,13 @@
     "type-check": "oxlint --type-check"
   },
   "dependencies": {
-    "@dotenvx/dotenvx": "^1.52.0"
+    "@dotenvx/dotenvx": "^1.52.0",
+    "@radix-ui/react-dialog": "^1.1.15",
+    "@radix-ui/react-popover": "^1.1.15",
+    "clsx": "^2.1.1",
+    "cmdk": "^1.1.1",
+    "lucide-react": "^1.14.0",
+    "tailwind-merge": "^3.5.0"
   },
   "devDependencies": {
     "@types/bun": "latest",

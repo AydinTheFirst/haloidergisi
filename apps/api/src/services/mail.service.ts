@@ -2,10 +2,12 @@ import { ISendMailOptions, MailerService } from "@nestjs-modules/mailer";
 import { Injectable, Logger } from "@nestjs/common";
 import { OnEvent } from "@nestjs/event-emitter";
 import { render } from "@react-email/render";
+import { notificationSettings, profiles, users } from "@repo/db";
 import { NewPostEmail, ResetPasswordEmail, VerifyEmail, WelcomeEmail } from "@repo/emails";
+import { eq } from "drizzle-orm";
 
 import { EMAIL_EVENTS } from "@/constants";
-import { PrismaService } from "@/database";
+import { DrizzleService } from "@/database";
 import { sleep } from "@/utils";
 
 export class BaseEmailDto {
@@ -57,7 +59,7 @@ export class MailService {
   private readonly logger = new Logger(MailService.name);
   constructor(
     private readonly mailerService: MailerService,
-    private readonly prisma: PrismaService,
+    private readonly drizzle: DrizzleService,
   ) {}
 
   async send(options: ISendMailOptions) {
@@ -110,18 +112,24 @@ export class MailService {
 
   @OnEvent(EMAIL_EVENTS.NEW_POST)
   async sendNewPostEmail({ ...rest }: NewPostEmailDto) {
-    const users = await this.prisma.user.findMany({
-      where: { notificationSettings: { newPost: true } },
-      include: { profile: true },
-    });
+    const targetUsers = await this.drizzle.db
+      .select({
+        email: users.email,
+        name: profiles.name,
+      })
+      .from(users)
+      .innerJoin(notificationSettings, eq(notificationSettings.userId, users.id))
+      .leftJoin(profiles, eq(profiles.userId, users.id))
+      .where(eq(notificationSettings.newPost, true));
 
-    for (const user of users) {
+    for (const user of targetUsers) {
       await this.send({
+        to: user.email,
         subject: "Yeni Bir Gönderi Yayınlandı!",
         html: await render(
           NewPostEmail({
             ...rest,
-            name: user.profile?.name || "HALO Okuyucusu",
+            name: user.name || "HALO Okuyucusu",
           }),
         ),
       });

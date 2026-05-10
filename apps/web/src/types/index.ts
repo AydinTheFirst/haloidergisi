@@ -6,6 +6,7 @@ import {
   Crew as BaseCrew,
   Post as BasePost,
   Category as BaseCategory,
+  Theme as BaseTheme,
 } from "@repo/db";
 
 export interface List<T> {
@@ -34,4 +35,15 @@ export interface Crew extends BaseCrew {
 
 export interface Post extends BasePost {
   category?: BaseCategory;
+  themes?: {
+    id: string;
+    work: string;
+    category: string;
+  }[];
+  themeWork?: string;
+  themeCategory?: string;
+}
+
+export interface Theme extends BaseTheme {
+  posts?: Post[];
 }

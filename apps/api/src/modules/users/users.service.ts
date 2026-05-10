@@ -1,10 +1,12 @@
 import { BadRequestException, Injectable, NotFoundException } from "@nestjs/common";
 import { EventEmitter2 } from "@nestjs/event-emitter";
+import { notificationSettings, profiles, users } from "@repo/db";
 import argon2 from "argon2";
+import { eq, sql } from "drizzle-orm";
 
 import { EMAIL_EVENTS } from "@/constants";
-import { PrismaService } from "@/database";
-import { PrismaQueryParams } from "@/decorators";
+import { DrizzleService } from "@/database";
+import { DrizzleQueryParams } from "@/decorators";
 import { WelcomeEmailDto } from "@/services/mail.service";
 
 import { CreateUserDto } from "./dto/create-user.dto";
@@ -13,27 +15,39 @@ import { UpdateUserDto } from "./dto/update-user.dto";
 @Injectable()
 export class UsersService {
   constructor(
-    private readonly prismaService: PrismaService,
+    private readonly drizzle: DrizzleService,
     private readonly eventEmitter: EventEmitter2,
   ) {}
 
   async create({ name, password, email, ...createUserDto }: CreateUserDto) {
-    const existingUser = await this.prismaService.user.findUnique({
-      where: { email },
+    const existingUser = await this.drizzle.db.query.users.findFirst({
+      where: eq(users.email, email),
     });
 
     if (existingUser) {
       throw new BadRequestException(`User with email ${email} already exists`);
     }
 
-    const user = await this.prismaService.user.create({
-      data: {
-        email,
-        password: await argon2.hash(password),
-        ...createUserDto,
-        profile: { create: { name } },
-        notificationSettings: { create: {} },
-      },
+    const user = await this.drizzle.db.transaction(async (tx) => {
+      const [newUser] = await tx
+        .insert(users)
+        .values({
+          email,
+          password: await argon2.hash(password),
+          ...createUserDto,
+        })
+        .returning();
+
+      await tx.insert(profiles).values({
+        userId: newUser.id,
+        name,
+      });
+
+      await tx.insert(notificationSettings).values({
+        userId: newUser.id,
+      });
+
+      return newUser;
     });
 
     this.eventEmitter.emit(
@@ -47,19 +61,21 @@ export class UsersService {
     return user;
   }
 
-  async findAll(query: PrismaQueryParams) {
-    const [items, total] = await this.prismaService.$transaction([
-      this.prismaService.user.findMany(query),
-      this.prismaService.user.count({ where: query.where }),
-    ]);
+  async findAll(query: DrizzleQueryParams) {
+    const items = await this.drizzle.db.query.users.findMany({
+      limit: query.take,
+      offset: query.skip,
+    });
 
-    return { items, meta: { total, take: query.take, skip: query.skip } };
+    const [{ total }] = await this.drizzle.db.select({ total: sql<number>`count(*)` }).from(users);
+
+    return { items, meta: { total: Number(total), take: query.take, skip: query.skip } };
   }
 
   async findOne(id: string) {
-    const user = await this.prismaService.user.findUnique({
-      where: { id },
-      include: { profile: true },
+    const user = await this.drizzle.db.query.users.findFirst({
+      where: eq(users.id, id),
+      with: { profile: true },
     });
 
     if (!user) {
@@ -77,8 +93,8 @@ export class UsersService {
     }
 
     if (updateUserDto.email && updateUserDto.email !== user.email) {
-      const existingUser = await this.prismaService.user.findUnique({
-        where: { email: updateUserDto.email },
+      const existingUser = await this.drizzle.db.query.users.findFirst({
+        where: eq(users.email, updateUserDto.email),
       });
 
       if (existingUser) {
@@ -88,15 +104,21 @@ export class UsersService {
       updateUserDto.emailVerifiedAt = null;
     }
 
-    const updatedUser = await this.prismaService.user.update({
-      where: { id: user.id },
-      data: {
-        ...updateUserDto,
-        profile: {
-          update: { name },
-        },
-        crewId: crewId ? crewId : null,
-      },
+    const updatedUser = await this.drizzle.db.transaction(async (tx) => {
+      const [updatedUser] = await tx
+        .update(users)
+        .set({
+          ...updateUserDto,
+          crewId: crewId || null,
+        })
+        .where(eq(users.id, user.id))
+        .returning();
+
+      if (name) {
+        await tx.update(profiles).set({ name }).where(eq(profiles.userId, user.id));
+      }
+
+      return updatedUser;
     });
 
     return updatedUser;
@@ -105,9 +127,7 @@ export class UsersService {
   async remove(id: string) {
     const user = await this.findOne(id);
 
-    await this.prismaService.user.delete({
-      where: { id: user.id },
-    });
+    await this.drizzle.db.delete(users).where(eq(users.id, user.id));
 
     return { success: true };
   }

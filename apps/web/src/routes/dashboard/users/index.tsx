@@ -125,7 +125,7 @@ function RouteComponent() {
       cell: ({ row }) => {
         const item = row.original;
         return (
-          <div className='space-x-4'>
+          <div className='flex gap-2'>
             <button
               className='link text-danger'
               onClick={() => {
