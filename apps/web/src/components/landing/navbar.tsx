@@ -5,6 +5,7 @@ import React from "react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { useAuth } from "@/hooks/use-auth";
+import { useNavbarStore } from "@/store/navbar-store";
 
 import AccountDropdown from "../account-dropdown";
 import Logo from "../logo";
@@ -38,7 +39,7 @@ const items = [
 ];
 
 export default function LandingNavbar() {
-  const [isOpen, setIsOpen] = React.useState(false);
+  const { isOpen, setIsOpen } = useNavbarStore();
 
   const { data: user } = useAuth();
 
@@ -60,30 +61,34 @@ export default function LandingNavbar() {
                 <span className='sr-only'>Toggle menu</span>
               </Button>
             </SheetTrigger>
-            <SheetContent side='left'>
-              <SheetHeader>
+            <SheetContent
+              side='left'
+              className='flex w-[300px] flex-col px-6 sm:w-[400px]'
+            >
+              <SheetHeader className='border-b pb-6 text-left'>
                 <SheetTitle>
                   <Logo className='h-10' />
                 </SheetTitle>
               </SheetHeader>
-              <div className='flex flex-col gap-4 py-8'>
+              <div className='flex flex-1 flex-col gap-1 py-6'>
                 {items.map((item) => (
                   <Link
                     key={item.url}
                     to={item.url}
-                    className='hover:text-primary text-lg font-medium'
+                    className='hover:bg-accent hover:text-accent-foreground flex h-12 items-center rounded-lg px-4 text-base font-medium transition-colors'
                     onClick={() => setIsOpen(false)}
                   >
                     {item.label}
                   </Link>
                 ))}
-                <div className='mt-4 flex flex-col gap-2'>
-                  {!user && (
+
+                <div className='mt-6 flex flex-col gap-3 border-t pt-6'>
+                  {!user ? (
                     <>
                       <Button
                         variant='outline'
                         asChild
-                        className='w-full'
+                        className='h-11 w-full justify-start px-4'
                       >
                         <Link
                           to='/login'
@@ -94,7 +99,7 @@ export default function LandingNavbar() {
                       </Button>
                       <Button
                         asChild
-                        className='w-full'
+                        className='h-11 w-full justify-start px-4'
                       >
                         <Link
                           to='/register'
@@ -104,12 +109,17 @@ export default function LandingNavbar() {
                         </Link>
                       </Button>
                     </>
+                  ) : (
+                    <div className='bg-accent/50 mb-4 rounded-xl px-4 py-2'>
+                      <p className='text-muted-foreground mb-1 text-xs'>Giriş Yapıldı</p>
+                      <p className='truncate font-semibold'>{user.profile?.name || user.email}</p>
+                    </div>
                   )}
                 </div>
-                <div className='mt-auto flex items-center justify-between'>
-                  <span>Tema</span>
-                  <ThemeSwitcher />
-                </div>
+              </div>
+              <div className='mt-auto flex items-center justify-between border-t px-2 pt-6 pb-6'>
+                <span className='text-sm font-medium'>Görünüm</span>
+                <ThemeSwitcher />
               </div>
             </SheetContent>
           </Sheet>

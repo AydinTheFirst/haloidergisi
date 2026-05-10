@@ -1,17 +1,31 @@
 import { Icon } from "@iconify/react";
 import { useQuery } from "@tanstack/react-query";
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { useMemo } from "react";
+import * as z from "zod";
 
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
 import apiClient from "@/lib/api-client";
 import { News } from "@/types";
 
+const blogSearchSchema = z.object({
+  q: z.string().optional().catch(""),
+  cat: z.string().optional().catch(""),
+  view: z.enum(["grid", "list"]).optional().catch("grid"),
+});
+
 export const Route = createFileRoute("/_landing/blog/")({
+  validateSearch: (search) => blogSearchSchema.parse(search),
   component: BlogLandingPage,
 });
 
 function BlogLandingPage() {
+  const { q: searchQuery, cat: selectedCategory, view: viewMode } = Route.useSearch();
+  const navigate = useNavigate({ from: Route.fullPath });
+
   const { data: news, isLoading } = useQuery({
     queryKey: ["news"],
     queryFn: async () => {
@@ -20,45 +34,149 @@ function BlogLandingPage() {
     },
   });
 
+  const setSearchQuery = (q: string) => {
+    void navigate({ search: (prev: any) => ({ ...prev, q }) });
+  };
+
+  const setSelectedCategory = (cat: string | null) => {
+    void navigate({ search: (prev: any) => ({ ...prev, cat: cat ?? "" }) });
+  };
+
+  const setViewMode = (view: "grid" | "list") => {
+    void navigate({ search: (prev: any) => ({ ...prev, view }) });
+  };
+
+  const allCategories = useMemo(() => {
+    if (!news) return [];
+    const cats = new Set<string>();
+    news.forEach((item) => {
+      item.keywords?.split(",").forEach((k) => cats.add(k.trim()));
+    });
+    return Array.from(cats).filter(Boolean);
+  }, [news]);
+
+  const filteredNews = useMemo(() => {
+    if (!news) return [];
+    const search = searchQuery || "";
+    const category = selectedCategory || "";
+
+    return news.filter((item) => {
+      const matchesSearch =
+        item.title.toLowerCase().includes(search.toLowerCase()) ||
+        item.content.toLowerCase().includes(search.toLowerCase());
+      const matchesCategory = !category || item.keywords?.includes(category);
+      return matchesSearch && matchesCategory;
+    });
+  }, [news, searchQuery, selectedCategory]);
+
   return (
-    <div className='container mx-auto max-w-5xl px-4 py-12'>
-      <div className='mb-12 space-y-4'>
-        <Badge
-          variant='outline'
-          className='px-3 py-1'
+    <div className='container mx-auto max-w-6xl px-4 py-12'>
+      <div className='mb-12 flex flex-col items-start justify-between gap-6 md:flex-row md:items-end'>
+        <div className='space-y-4'>
+          <Badge
+            variant='outline'
+            className='px-3 py-1'
+          >
+            <Icon
+              icon='solar:globus-bold-duotone'
+              className='text-primary mr-2'
+            />
+            HALO Gündem
+          </Badge>
+          <h1 className='text-4xl font-extrabold tracking-tight text-balance md:text-5xl'>
+            Blog & Duyurular
+          </h1>
+          <p className='text-muted-foreground max-xl text-xl'>
+            HALO Dergisi'nden en son haberler, güncellemeler ve topluluk duyuruları.
+          </p>
+        </div>
+
+        <div className='w-full space-y-3 md:w-80'>
+          <div className='relative'>
+            <Icon
+              icon='solar:magnifer-linear'
+              className='text-muted-foreground absolute top-1/2 left-3 -translate-y-1/2'
+            />
+            <Input
+              placeholder='Haberlerde ara...'
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className='focus-visible:ring-primary h-11 rounded-xl border-2 pl-10'
+            />
+          </div>
+          <div className='flex items-center gap-2'>
+            <Button
+              variant={viewMode === "grid" ? "default" : "outline"}
+              size='icon-sm'
+              onClick={() => setViewMode("grid")}
+              className='rounded-lg'
+            >
+              <Icon icon='solar:widget-bold-duotone' />
+            </Button>
+            <Button
+              variant={viewMode === "list" ? "default" : "outline"}
+              size='icon-sm'
+              onClick={() => setViewMode("list")}
+              className='rounded-lg'
+            >
+              <Icon icon='solar:list-bold-duotone' />
+            </Button>
+          </div>
+        </div>
+      </div>
+
+      <div className='mb-10 flex flex-wrap gap-2'>
+        <Button
+          variant={!selectedCategory ? "secondary" : "ghost"}
+          size='sm'
+          onClick={() => setSelectedCategory(null)}
+          className='rounded-full'
         >
-          <Icon
-            icon='solar:globus-bold-duotone'
-            className='text-primary mr-2'
-          />
-          HALO Gündem
-        </Badge>
-        <h1 className='text-4xl font-extrabold tracking-tight md:text-5xl'>Blog & Duyurular</h1>
-        <p className='text-muted-foreground max-w-2xl text-xl'>
-          HALO Dergisi'nden en son haberler, güncellemeler ve topluluk duyuruları.
-        </p>
+          Tümü
+        </Button>
+        {allCategories.map((cat) => (
+          <Button
+            key={cat}
+            variant={selectedCategory === cat ? "secondary" : "ghost"}
+            size='sm'
+            onClick={() => setSelectedCategory(cat)}
+            className='rounded-full'
+          >
+            {cat}
+          </Button>
+        ))}
       </div>
 
       {isLoading ? (
-        <div className='grid gap-8 md:grid-cols-2'>
-          {[1, 2, 3, 4].map((i) => (
+        <div
+          className={
+            viewMode === "grid" ? "grid gap-8 md:grid-cols-2 lg:grid-cols-3" : "flex flex-col gap-6"
+          }
+        >
+          {[1, 2, 3, 4, 5, 6].map((i) => (
             <div
               key={i}
-              className='bg-muted h-64 animate-pulse rounded-xl'
+              className={`bg-muted animate-pulse rounded-2xl ${viewMode === "grid" ? "h-72" : "h-32"}`}
             />
           ))}
         </div>
       ) : (
-        <div className='grid gap-8 md:grid-cols-2'>
-          {news?.map((item) => (
+        <div
+          className={
+            viewMode === "grid" ? "grid gap-8 md:grid-cols-2 lg:grid-cols-3" : "flex flex-col gap-6"
+          }
+        >
+          {filteredNews.map((item) => (
             <Link
               key={item.id}
               to='/blog/$slug'
               params={{ slug: item.slug }}
               className='group'
             >
-              <Card className='group-hover:border-primary group-hover:shadow-primary/5 h-full overflow-hidden border-2 transition-all duration-300 group-hover:shadow-lg'>
-                <CardHeader>
+              <Card
+                className={`group-hover:border-primary group-hover:shadow-primary/5 flex h-full overflow-hidden border-2 transition-all duration-300 group-hover:shadow-xl ${viewMode === "list" ? "h-auto flex-row" : "flex-col"}`}
+              >
+                <CardHeader className={viewMode === "list" ? "w-2/3" : ""}>
                   <div className='mb-3 flex items-center justify-between'>
                     <span className='text-muted-foreground flex items-center gap-1.5 text-xs font-medium'>
                       <Icon icon='solar:calendar-linear' />
@@ -66,55 +184,69 @@ function BlogLandingPage() {
                         ? new Date(item.publishedAt).toLocaleDateString("tr-TR")
                         : "Taslak"}
                     </span>
-                    {item.keywords && (
-                      <div className='flex gap-2'>
-                        {item.keywords
-                          .split(",")
-                          .slice(0, 2)
-                          .map((k) => (
-                            <Badge
-                              key={k}
-                              variant='secondary'
-                              className='text-[10px] tracking-wider uppercase'
-                            >
-                              {k.trim()}
-                            </Badge>
-                          ))}
-                      </div>
-                    )}
                   </div>
-                  <CardTitle className='group-hover:text-primary text-2xl leading-tight transition-colors'>
+                  <CardTitle
+                    className={`${viewMode === "list" ? "text-xl" : "text-2xl"} group-hover:text-primary line-clamp-2 leading-tight transition-colors`}
+                  >
                     {item.title}
                   </CardTitle>
                 </CardHeader>
-                <CardContent>
-                  <p className='text-muted-foreground line-clamp-3 leading-relaxed'>
-                    {item.content.replace(/[#*`]/g, "").slice(0, 160)}...
-                  </p>
-                </CardContent>
-                <CardFooter className='pt-0'>
-                  <div className='text-primary flex items-center text-sm font-bold transition-transform group-hover:translate-x-1'>
-                    Devamını Oku
-                    <Icon
-                      icon='solar:arrow-right-linear'
-                      className='ml-2'
-                    />
-                  </div>
-                </CardFooter>
+                <div
+                  className={`flex flex-1 flex-col ${viewMode === "list" ? "w-1/3 border-l" : ""}`}
+                >
+                  <CardContent className='flex-1'>
+                    <p className='text-muted-foreground line-clamp-3 text-sm leading-relaxed'>
+                      {item.content.replace(/[#*`]/g, "").slice(0, 160)}...
+                    </p>
+                    <div className='mt-4 flex flex-wrap gap-2'>
+                      {item.keywords
+                        ?.split(",")
+                        .slice(0, 3)
+                        .map((k) => (
+                          <span
+                            key={k}
+                            className='text-primary/60 bg-primary/5 rounded px-2 py-0.5 text-[10px] font-bold tracking-tight uppercase'
+                          >
+                            #{k.trim()}
+                          </span>
+                        ))}
+                    </div>
+                  </CardContent>
+                  <CardFooter className='bg-muted/20 mt-auto border-t pt-0'>
+                    <div className='text-primary flex items-center py-3 text-xs font-bold transition-transform group-hover:translate-x-1'>
+                      DEVAMINI OKU
+                      <Icon
+                        icon='solar:arrow-right-linear'
+                        className='ml-2'
+                      />
+                    </div>
+                  </CardFooter>
+                </div>
               </Card>
             </Link>
           ))}
         </div>
       )}
 
-      {!isLoading && news?.length === 0 && (
-        <div className='bg-muted/30 rounded-2xl border-2 border-dashed py-20 text-center'>
+      {!isLoading && filteredNews.length === 0 && (
+        <div className='bg-muted/20 rounded-3xl border-2 border-dashed py-24 text-center'>
           <Icon
-            icon='solar:document-add-bold-duotone'
-            className='text-muted-foreground mx-auto mb-4 h-16 w-16'
+            icon='solar:map-arrow-square-bold-duotone'
+            className='text-muted-foreground/50 mx-auto mb-6 h-20 w-20'
           />
-          <h3 className='text-xl font-bold'>Henüz bir paylaşım yok</h3>
-          <p className='text-muted-foreground mt-2'>Daha sonra tekrar kontrol edin.</p>
+          <h3 className='text-2xl font-bold'>Sonuç Bulunamadı</h3>
+          <p className='text-muted-foreground mt-2 text-lg'>
+            Arama kriterlerinize uygun bir haber mevcut değil.
+          </p>
+          <Button
+            variant='link'
+            onClick={() => {
+              void navigate({ search: {} });
+            }}
+            className='text-primary mt-4 text-lg'
+          >
+            Filtreleri Temizle
+          </Button>
         </div>
       )}
     </div>
