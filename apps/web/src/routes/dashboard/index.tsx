@@ -1,5 +1,8 @@
 import { Icon } from "@iconify/react";
 import { createFileRoute } from "@tanstack/react-router";
+import { subDays, isWithinInterval, startOfDay, endOfDay } from "date-fns";
+import { useState, useMemo } from "react";
+import { DateRange } from "react-day-picker";
 import {
   LineChart,
   Line,
@@ -19,6 +22,7 @@ import {
 } from "recharts";
 
 import { ChartCard, Surface } from "@/components/chart-card";
+import { DatePickerWithRange } from "@/components/date-range-picker";
 import {
   Table,
   TableBody,
@@ -68,24 +72,59 @@ const PIE_COLORS = [COLORS.posts, COLORS.other];
 
 function RouteComponent() {
   const { visits, users, messages } = Route.useLoaderData();
+  const [date, setDate] = useState<DateRange | undefined>({
+    from: subDays(new Date(), 30),
+    to: new Date(),
+  });
+
+  const filteredData = useMemo(() => {
+    if (!date?.from || !date?.to) {
+      return {
+        visits: visits.items,
+        users: users.items,
+        messages: messages.items,
+      };
+    }
+
+    const interval = {
+      start: startOfDay(date.from),
+      end: endOfDay(date.to),
+    };
+
+    return {
+      visits: visits.items.filter((v) => isWithinInterval(new Date(v.date), interval)),
+      users: users.items.filter((u) => isWithinInterval(new Date(u.createdAt!), interval)),
+      messages: messages.items.filter((m) => isWithinInterval(new Date(m.createdAt!), interval)),
+    };
+  }, [visits, users, messages, date]);
 
   // Calculate totals
-  const totalVisits = visits.items.reduce((sum, visit) => sum + visit.count, 0);
-  const totalUsers = users.meta.total;
-  const totalMessages = messages.meta.total;
+  const totalVisits = filteredData.visits.reduce((sum, visit) => sum + visit.count, 0);
+  const totalUsers = filteredData.users.length;
+  const totalMessages = filteredData.messages.length;
 
   // Prepare chart data
-  const visitsOverTime = groupVisitsByDate(visits.items);
-  const usersOverTime = groupUsersByDate(users.items);
-  const messagesOverTime = groupMessagesByDate(messages.items);
-  const topPages = getTopPages(visits.items, 8);
-  const pageCategories = categorizePageVisits(visits.items);
+  const visitsOverTime = groupVisitsByDate(filteredData.visits);
+  const usersOverTime = groupUsersByDate(filteredData.users);
+  const messagesOverTime = groupMessagesByDate(filteredData.messages);
+  const topPages = getTopPages(filteredData.visits, 8);
+  const pageCategories = categorizePageVisits(filteredData.visits);
 
   return (
     <div className='space-y-6'>
-      <div>
-        <h1 className='mb-2 text-3xl font-bold'>Dashboard</h1>
-        <p className='text-muted-foreground'>Genel bakış ve analitik veriler</p>
+      <div className='flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between'>
+        <div>
+          <h1 className='text-3xl font-bold tracking-tight'>Dashboard</h1>
+          <p className='text-muted-foreground'>
+            Uygulamanızın genel istatistikleri ve performans verileri.
+          </p>
+        </div>
+        <div className='flex items-center space-x-2'>
+          <DatePickerWithRange
+            date={date}
+            setDate={setDate}
+          />
+        </div>
       </div>
 
       {/* Overview Cards */}
@@ -93,7 +132,7 @@ function RouteComponent() {
         <Surface className='p-6'>
           <div className='flex items-center justify-between'>
             <div>
-              <p className='text-muted-foreground text-sm font-medium'>Toplam Ziyaret</p>
+              <p className='text-muted-foreground text-sm font-medium'>Seçili Dönem Ziyaretleri</p>
               <h3 className='mt-2 text-3xl font-bold'>{formatNumber(totalVisits)}</h3>
             </div>
             <div className='bg-primary/10 flex h-12 w-12 items-center justify-center rounded-full'>
@@ -108,7 +147,7 @@ function RouteComponent() {
         <Surface className='p-6'>
           <div className='flex items-center justify-between'>
             <div>
-              <p className='text-muted-foreground text-sm font-medium'>Toplam Kullanıcı</p>
+              <p className='text-muted-foreground text-sm font-medium'>Yeni Kullanıcılar</p>
               <h3 className='mt-2 text-3xl font-bold'>{formatNumber(totalUsers)}</h3>
             </div>
             <div className='bg-secondary/10 flex h-12 w-12 items-center justify-center rounded-full'>
@@ -123,7 +162,7 @@ function RouteComponent() {
         <Surface className='p-6'>
           <div className='flex items-center justify-between'>
             <div>
-              <p className='text-muted-foreground text-sm font-medium'>Toplam Mesaj</p>
+              <p className='text-muted-foreground text-sm font-medium'>Gelen Mesajlar</p>
               <h3 className='mt-2 text-3xl font-bold'>{formatNumber(totalMessages)}</h3>
             </div>
             <div className='bg-success/10 flex h-12 w-12 items-center justify-center rounded-full'>
@@ -141,7 +180,7 @@ function RouteComponent() {
         {/* Page Visits Over Time */}
         <ChartCard
           title='Sayfa Ziyaretleri'
-          description='Günlük ziyaret sayıları'
+          description='Seçili dönemdeki günlük ziyaret eğilimi'
         >
           <ResponsiveContainer
             width='100%'
@@ -150,22 +189,37 @@ function RouteComponent() {
             <LineChart data={visitsOverTime}>
               <CartesianGrid
                 strokeDasharray='3 3'
+                vertical={false}
                 opacity={0.3}
               />
               <XAxis
                 dataKey='date'
                 tick={{ fontSize: 12 }}
+                tickLine={false}
+                axisLine={false}
               />
-              <YAxis tick={{ fontSize: 12 }} />
-              <Tooltip />
-              <Legend />
+              <YAxis
+                tick={{ fontSize: 12 }}
+                tickLine={false}
+                axisLine={false}
+                tickFormatter={(value) => `${value}`}
+              />
+              <Tooltip
+                contentStyle={{
+                  borderRadius: "8px",
+                  border: "none",
+                  boxShadow: "0 4px 6px -1px rgb(0 0 0 / 0.1)",
+                }}
+              />
+              <Legend iconType='circle' />
               <Line
                 type='monotone'
                 dataKey='count'
                 stroke={COLORS.primary}
-                strokeWidth={2}
+                strokeWidth={3}
                 name='Ziyaret'
-                dot={{ fill: COLORS.primary }}
+                dot={false}
+                activeDot={{ r: 6, fill: COLORS.primary }}
               />
             </LineChart>
           </ResponsiveContainer>
@@ -174,7 +228,7 @@ function RouteComponent() {
         {/* User Registrations Over Time */}
         <ChartCard
           title='Kullanıcı Kayıtları'
-          description='Günlük kayıt sayıları'
+          description='Seçili dönemdeki yeni kayıt olan kullanıcılar'
         >
           <ResponsiveContainer
             width='100%'
@@ -192,31 +246,44 @@ function RouteComponent() {
                   <stop
                     offset='5%'
                     stopColor={COLORS.secondary}
-                    stopOpacity={0.8}
+                    stopOpacity={0.4}
                   />
                   <stop
                     offset='95%'
                     stopColor={COLORS.secondary}
-                    stopOpacity={0.1}
+                    stopOpacity={0.0}
                   />
                 </linearGradient>
               </defs>
               <CartesianGrid
                 strokeDasharray='3 3'
+                vertical={false}
                 opacity={0.3}
               />
               <XAxis
                 dataKey='date'
                 tick={{ fontSize: 12 }}
+                tickLine={false}
+                axisLine={false}
               />
-              <YAxis tick={{ fontSize: 12 }} />
-              <Tooltip />
-              <Legend />
+              <YAxis
+                tick={{ fontSize: 12 }}
+                tickLine={false}
+                axisLine={false}
+              />
+              <Tooltip
+                contentStyle={{
+                  borderRadius: "8px",
+                  border: "none",
+                  boxShadow: "0 4px 6px -1px rgb(0 0 0 / 0.1)",
+                }}
+              />
+              <Legend iconType='circle' />
               <Area
                 type='monotone'
                 dataKey='count'
                 stroke={COLORS.secondary}
-                strokeWidth={2}
+                strokeWidth={3}
                 fillOpacity={1}
                 fill='url(#colorUsers)'
                 name='Kayıt'
@@ -228,7 +295,7 @@ function RouteComponent() {
         {/* Top Pages */}
         <ChartCard
           title='En Çok Ziyaret Edilen Sayfalar'
-          description='İlk 8 sayfa'
+          description='Seçili dönemde en popüler 8 sayfa'
         >
           <ResponsiveContainer
             width='100%'
@@ -237,30 +304,45 @@ function RouteComponent() {
             <BarChart
               data={topPages}
               layout='vertical'
+              margin={{ left: 20 }}
             >
               <CartesianGrid
                 strokeDasharray='3 3'
+                horizontal={false}
                 opacity={0.3}
               />
               <XAxis
                 type='number'
                 tick={{ fontSize: 12 }}
+                tickLine={false}
+                axisLine={false}
               />
               <YAxis
                 dataKey='url'
                 type='category'
-                width={150}
+                width={120}
                 tick={{ fontSize: 11 }}
+                tickLine={false}
+                axisLine={false}
                 tickFormatter={(value) => {
-                  if (value.length > 20) return value.substring(0, 20) + "...";
+                  if (value.length > 18) return value.substring(0, 18) + "...";
                   return value;
                 }}
               />
-              <Tooltip />
+              <Tooltip
+                contentStyle={{
+                  borderRadius: "8px",
+                  border: "none",
+                  boxShadow: "0 4px 6px -1px rgb(0 0 0 / 0.1)",
+                }}
+                cursor={{ fill: "rgba(0,0,0,0.05)" }}
+              />
               <Bar
                 dataKey='count'
                 fill={COLORS.primary}
                 name='Ziyaret'
+                radius={[0, 4, 4, 0]}
+                barSize={20}
               />
             </BarChart>
           </ResponsiveContainer>
@@ -268,8 +350,8 @@ function RouteComponent() {
 
         {/* Page Categories */}
         <ChartCard
-          title='Sayfa Kategorileri'
-          description='Yazılar vs diğer sayfalar'
+          title='Sayfa Kategorileri Dağılımı'
+          description='Yazılar vs diğer sayfaların oransal gösterimi'
         >
           <ResponsiveContainer
             width='100%'
@@ -280,11 +362,12 @@ function RouteComponent() {
                 data={pageCategories}
                 cx='50%'
                 cy='50%'
-                labelLine={false}
-                label={({ name, percent }) => `${name}: ${((percent || 0) * 100).toFixed(0)}%`}
+                innerRadius={60}
                 outerRadius={100}
-                fill='#8884d8'
+                paddingAngle={5}
                 dataKey='value'
+                label={({ name, percent }) => `${name} (${((percent || 0) * 100).toFixed(0)}%)`}
+                labelLine={false}
               >
                 {pageCategories.map((_entry, index) => (
                   <Cell
@@ -293,18 +376,24 @@ function RouteComponent() {
                   />
                 ))}
               </Pie>
-              <Tooltip />
-              <Legend />
+              <Tooltip
+                contentStyle={{
+                  borderRadius: "8px",
+                  border: "none",
+                  boxShadow: "0 4px 6px -1px rgb(0 0 0 / 0.1)",
+                }}
+              />
+              <Legend iconType='circle' />
             </PieChart>
           </ResponsiveContainer>
         </ChartCard>
       </div>
 
-      {/* Messages Over Time - Full Width */}
-      <div className='grid grid-cols-1 gap-6'>
+      {/* Messages & Table */}
+      <div className='grid grid-cols-1 gap-6 xl:grid-cols-2'>
         <ChartCard
-          title='Gelen Mesajlar'
-          description='Günlük mesaj sayıları'
+          title='Gelen Mesaj Aktivitesi'
+          description='Seçili dönemdeki günlük mesaj hacmi'
         >
           <ResponsiveContainer
             width='100%'
@@ -313,20 +402,35 @@ function RouteComponent() {
             <BarChart data={messagesOverTime}>
               <CartesianGrid
                 strokeDasharray='3 3'
+                vertical={false}
                 opacity={0.3}
               />
               <XAxis
                 dataKey='date'
                 tick={{ fontSize: 12 }}
+                tickLine={false}
+                axisLine={false}
               />
-              <YAxis tick={{ fontSize: 12 }} />
-              <Tooltip />
-              <Legend />
+              <YAxis
+                tick={{ fontSize: 12 }}
+                tickLine={false}
+                axisLine={false}
+              />
+              <Tooltip
+                contentStyle={{
+                  borderRadius: "8px",
+                  border: "none",
+                  boxShadow: "0 4px 6px -1px rgb(0 0 0 / 0.1)",
+                }}
+                cursor={{ fill: "rgba(0,0,0,0.05)" }}
+              />
+              <Legend iconType='circle' />
               <Bar
                 dataKey='count'
                 fill={COLORS.success}
                 name='Mesaj'
-                radius={[8, 8, 0, 0]}
+                radius={[4, 4, 0, 0]}
+                barSize={30}
               />
             </BarChart>
           </ResponsiveContainer>
@@ -334,27 +438,39 @@ function RouteComponent() {
 
         {/* Detailed Table */}
         <ChartCard
-          title='Tüm Sayfa Ziyaretleri'
-          description='Detaylı liste'
+          title='Detaylı Sayfa Ziyaretleri'
+          description='Seçili döneme ait sayfa başına ziyaret istatistikleri'
         >
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Sayfa</TableHead>
-                <TableHead>Ziyaret Sayısı</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {visits.items
-                .sort((a, b) => b.count - a.count)
-                .map((visit) => (
-                  <TableRow key={visit.url}>
-                    <TableCell>{visit.url}</TableCell>
-                    <TableCell>{visit.count}</TableCell>
+          <div className='max-h-[300px] overflow-auto'>
+            <Table>
+              <TableHeader className='bg-background/95 sticky top-0 backdrop-blur'>
+                <TableRow>
+                  <TableHead>Sayfa</TableHead>
+                  <TableHead className='text-right'>Ziyaret Sayısı</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {filteredData.visits
+                  .sort((a, b) => b.count - a.count)
+                  .map((visit) => (
+                    <TableRow key={visit.url}>
+                      <TableCell className='text-sm font-medium'>{visit.url}</TableCell>
+                      <TableCell className='text-right'>{visit.count}</TableCell>
+                    </TableRow>
+                  ))}
+                {filteredData.visits.length === 0 && (
+                  <TableRow>
+                    <TableCell
+                      colSpan={2}
+                      className='text-muted-foreground h-24 text-center'
+                    >
+                      Bu tarih aralığında ziyaret verisi bulunamadı.
+                    </TableCell>
                   </TableRow>
-                ))}
-            </TableBody>
-          </Table>
+                )}
+              </TableBody>
+            </Table>
+          </div>
         </ChartCard>
       </div>
     </div>

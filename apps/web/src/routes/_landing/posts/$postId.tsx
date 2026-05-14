@@ -172,7 +172,7 @@ function FeaturedPosts() {
   const { post } = Route.useLoaderData();
 
   const { data: posts } = useQuery({
-    queryKey: ["featured-posts"],
+    queryKey: ["featured-posts", post.id],
     queryFn: async () => {
       const { data } = await apiClient.get<QueryRes<Post>>("/posts", {
         params: { limit: 3, filter: JSON.stringify({ id: { not: post.id } }) },
