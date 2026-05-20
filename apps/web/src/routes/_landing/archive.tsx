@@ -109,7 +109,7 @@ function MagazineNode({ magazine }: { magazine: ArchiveMagazine }) {
           <h2 className='truncate text-xl font-bold'>{magazine.title}</h2>
           <Link
             to='/posts/$postId'
-            params={{ postId: magazine.id }}
+            params={{ postId: magazine.slug }}
             className='text-primary mt-1 flex items-center gap-1 text-xs hover:underline'
             onClick={(e) => e.stopPropagation()}
           >

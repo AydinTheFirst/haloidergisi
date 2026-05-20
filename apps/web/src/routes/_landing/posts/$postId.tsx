@@ -41,14 +41,9 @@ import { generateCanonicalUrl, generateMetaTags, generateStructuredData } from "
 export const Route = createFileRoute("/_landing/posts/$postId")({
   component: RouteComponent,
   loader: async ({ params }) => {
-    const { data: post } = await apiClient.get<QueryRes<Post>>("/posts", {
-      params: {
-        slug: params.postId,
-        fields: JSON.stringify({ category: true }),
-      },
-    });
+    const { data: post } = await apiClient.get<Post>(`/posts/${params.postId}`);
 
-    return { post: post.items[0] };
+    return { post };
   },
   head: ({ loaderData }) => {
     const post = loaderData?.post;
