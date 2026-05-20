@@ -36,6 +36,7 @@ import { feedbackSchema, FeedbackSchema } from "@/schemas/message";
 import { Post } from "@/types";
 import { QueryRes } from "@/types";
 import { getCdnUrl } from "@/utils/cdn";
+import { generateCanonicalUrl, generateMetaTags, generateStructuredData } from "@/utils/seo";
 
 export const Route = createFileRoute("/_landing/posts/$postId")({
   component: RouteComponent,
@@ -48,6 +49,52 @@ export const Route = createFileRoute("/_landing/posts/$postId")({
     });
 
     return { post: post.items[0] };
+  },
+  head: ({ loaderData }) => {
+    const post = loaderData?.post;
+    if (!post) return { meta: [] };
+
+    const canonicalUrl = generateCanonicalUrl(`/posts/${post.slug}`);
+    const coverImageUrl = post.coverImage ? getCdnUrl(post.coverImage) : undefined;
+
+    const meta = generateMetaTags({
+      title: post.title,
+      description:
+        post.content?.replace(/[#*`]/g, "").slice(0, 160) || `${post.title} - HALO Dergisi`,
+      keywords: [post.category?.name || "Dergi", "HALO Dergisi", "edebiyat", "sanat"],
+      canonical: canonicalUrl,
+      type: "article",
+      image: coverImageUrl,
+      imageAlt: post.title,
+      publishedTime: post.createdAt || undefined,
+      modifiedTime: post.updatedAt || undefined,
+      section: post.category?.name,
+    });
+
+    const structuredData = generateStructuredData("Article", {
+      headline: post.title,
+      description: post.content?.slice(0, 160) || post.title,
+      image: coverImageUrl,
+      datePublished: post.createdAt,
+      dateModified: post.updatedAt || post.createdAt,
+      author: "HALO Dergisi Editörleri",
+      authorType: "Organization",
+      url: canonicalUrl,
+      publisherLogo: `${typeof window !== "undefined" ? window.location.origin : ""}/logo.png`,
+    });
+
+    return {
+      meta,
+      links: [{ rel: "canonical", href: canonicalUrl }],
+      scripts: structuredData
+        ? [
+            {
+              type: "application/ld+json",
+              children: JSON.stringify(structuredData),
+            },
+          ]
+        : [],
+    };
   },
 });
 

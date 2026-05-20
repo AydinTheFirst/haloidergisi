@@ -24,7 +24,6 @@ apps/
 └── web/          # React frontend (TanStack Start)
 
 packages/
-├── db/           # Shared Drizzle schema and client
 └── emails/       # Shared React Email templates
 ```
 
@@ -77,7 +76,6 @@ packages/
 
 ### Shared Packages
 
-- **`packages/db/`** - Drizzle schema and generated client used by both backend and frontend
 - **`packages/emails/`** - React Email templates for transactional emails used by the backend
 
 ## Development Commands
@@ -120,7 +118,7 @@ bun run test --filter=web                # Run all web tests
 ```bash
 bun run lint                  # Lint all files (oxlint)
 bun run format                # Format all files (oxfmt)
-bun run type-check            # Type check all files (oxlint --type-check)
+bun run check-types           # Type check all files (tsc --noEmit)
 ```
 
 ### Production
@@ -132,19 +130,20 @@ bun run start                 # Build and start apps in production mode
 ### Database
 
 ```bash
-bun run db:generate           # Generate Drizzle client (runs automatically during dev)
-bun run db:update             # Apply migrations and sync schema
+bun run db:update             # Apply migrations and sync schema (generate + push)
+bun run --filter=api db:studio  # Open Drizzle Studio for database GUI
 ```
 
 ## Database & Migrations
 
-- **Schema Location**: `packages/db/drizzle/schema.drizzle`
+- **Schema Location**: `apps/api/src/database/schema/index.ts`
 - **Database**: PostgreSQL managed via Drizzle
-- **Client**: Generated Drizzle client exported from `@repo/db`
-- **Migrations**: Drizzle migrations run via `db:update` task
+- **Config**: `apps/api/drizzle.config.ts` defines schema and migration output
+- **Migrations**: Generated and pushed via `bun run db:update` (runs `drizzle-kit generate && drizzle-kit push`)
 - **Environment Setup**: Uses `dotenvx` to load database credentials from `.env`
+- **Database GUI**: Use `bun run --filter=api db:studio` to open Drizzle Studio
 
-**Important**: The database client is generated from the shared schema, so both frontend and backend use the same types.
+**Important**: The database schema is defined in the API app and accessed via the Drizzle client initialized in `apps/api/src/database/db-client.ts`.
 
 ## Code Organization & Patterns
 
@@ -211,7 +210,7 @@ Each backend module follows a standard pattern:
 ### Adding a New Feature
 
 1. **Backend**: Create a new module in `apps/api/src/modules/` with controller, service, DTO, and entity files
-2. **Database**: Update schema in `packages/db/drizzle/schema.drizzle`, then run `bun run db:update`
+2. **Database**: Update schema in `apps/api/src/database/schema/`, then run `bun run db:update`
 3. **Frontend**: Create routes and components in `apps/web/src/routes/` and `apps/web/src/components/`
 4. **Validation**: Use Zod schemas in `apps/web/src/schemas/` for form/request validation
 
@@ -231,14 +230,14 @@ bun run debug --filter=api    # Starts with Node debugger enabled
 
 ## Key Dependencies
 
-- **Backend**: NestJS, Drizzle, JWT, Argon2 (password hashing), AWS SDK, Nodemailer, Google Auth Library
-- **Frontend**: React, TanStack Router/Query, Tailwind, Shadcn UI, Zod, React Hook Form, Zustand, Recharts, Framer Motion
-- **Shared**: Drizzle client, React Email
+- **Backend**: NestJS, Drizzle, JWT, Argon2 (password hashing), AWS SDK, Nodemailer, Google Auth Library, React Email
+- **Frontend**: React, TanStack Router/Query, Tailwind v4, Shadcn UI, Zod, React Hook Form, Zustand, Recharts, Framer Motion
+- **Shared**: React Email templates
 
 ## Notes for Contributors
 
-- Ensure all TypeScript files pass `bun run type-check` before committing
+- Ensure all TypeScript files pass `bun run check-types` before committing
 - Follow the established module/component structure for consistency
 - Run `bun run format` before committing code (Husky pre-commit hooks will enforce this)
-- Database changes require schema updates followed by `bun run db:update`
+- Database changes require schema updates in `apps/api/src/database/schema/` followed by `bun run db:update`
 - New routes in the frontend require regeneration of the route tree (automatic with file changes during dev)

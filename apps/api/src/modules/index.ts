@@ -10,6 +10,7 @@ import { MessagesModule } from "./messages/messages.module";
 import { NewsModule } from "./news/news.module";
 import { PostsModule } from "./posts/posts.module";
 import { ProfileModule } from "./profile/profile.module";
+import { SitemapModule } from "./sitemap/sitemap.module";
 import { SubmissionCallsModule } from "./submission-calls/submission-calls.module";
 import { ThemesModule } from "./themes/themes.module";
 import { UsersModule } from "./users/users.module";
@@ -30,6 +31,7 @@ const modules = {
   SubmissionCallsModule,
   ArticlesModule,
   NewsModule,
+  SitemapModule,
 };
 
 export default Object.values(modules);

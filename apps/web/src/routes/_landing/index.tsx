@@ -11,9 +11,50 @@ import { Button } from "@/components/ui/button";
 import { socialLinks } from "@/constants";
 import apiClient from "@/lib/api-client";
 import { QueryRes } from "@/types";
+import { generateCanonicalUrl, generateMetaTags, generateStructuredData } from "@/utils/seo";
 
 export const Route = createFileRoute("/_landing/")({
   component: RouteComponent,
+  head: () => {
+    const canonicalUrl = generateCanonicalUrl("/");
+    const meta = generateMetaTags({
+      title: "Ana Sayfa - Aylık Fikir, Sanat ve Edebiyat Dergisi",
+      description:
+        "HALO Dergisi, öğrenciler tarafından hazırlanan aylık fikir, sanat ve edebiyat dergisidir. Dergilerimize göz atın, makalelerimizi okuyun ve topluluğumuza katılın.",
+      keywords: [
+        "HALO Dergisi",
+        "edebiyat dergisi",
+        "sanat dergisi",
+        "öğrenci dergisi",
+        "fikir platformu",
+        "dergi arşivi",
+      ],
+      canonical: canonicalUrl,
+      type: "website",
+      image: `${typeof window !== "undefined" ? window.location.origin : ""}/logo.png`,
+      imageAlt: "HALO Dergisi Logo",
+    });
+
+    const structuredData = generateStructuredData("WebSite", {
+      name: "HALO Dergisi",
+      url: canonicalUrl,
+      description:
+        "Aylık fikir, sanat ve edebiyat dergisi. Öğrenciler tarafından, öğrenciler için hazırlanan özgün içerikler.",
+    });
+
+    return {
+      meta,
+      links: [{ rel: "canonical", href: canonicalUrl }],
+      scripts: structuredData
+        ? [
+            {
+              type: "application/ld+json",
+              children: JSON.stringify(structuredData),
+            },
+          ]
+        : [],
+    };
+  },
 });
 
 function RouteComponent() {

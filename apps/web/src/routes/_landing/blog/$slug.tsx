@@ -8,24 +8,69 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import apiClient from "@/lib/api-client";
 import { News } from "@/types";
+import { generateCanonicalUrl, generateMetaTags, generateStructuredData } from "@/utils/seo";
 
 export const Route = createFileRoute("/_landing/blog/$slug")({
   component: BlogDetailPage,
+  loader: async ({ params }) => {
+    const { data } = await apiClient.get<News>(`/news/${params.slug}`);
+    return { news: data };
+  },
+  head: ({ loaderData }) => {
+    const news = loaderData?.news;
+    if (!news) return { meta: [] };
+
+    const canonicalUrl = generateCanonicalUrl(`/blog/${news.slug}`);
+    const meta = generateMetaTags({
+      title: news.title,
+      description: news.content.replace(/[#*`]/g, "").slice(0, 160),
+      keywords: news.keywords?.split(",").map((k) => k.trim()),
+      author: news.author?.profile?.name || "HALO Editör",
+      canonical: canonicalUrl,
+      type: "article",
+      publishedTime: news.publishedAt || undefined,
+      modifiedTime: news.updatedAt || undefined,
+      section: "Blog",
+      tags: news.keywords?.split(",").map((k) => k.trim()),
+    });
+
+    const structuredData = generateStructuredData("Article", {
+      headline: news.title,
+      description: news.content.replace(/[#*`]/g, "").slice(0, 160),
+      datePublished: news.publishedAt,
+      dateModified: news.updatedAt || news.publishedAt,
+      author: news.author?.profile?.name || "HALO Editör",
+      authorType: "Person",
+      url: canonicalUrl,
+      publisherLogo: `${typeof window !== "undefined" ? window.location.origin : ""}/logo.png`,
+    });
+
+    return {
+      meta,
+      links: [{ rel: "canonical", href: canonicalUrl }],
+      scripts: structuredData
+        ? [
+            {
+              type: "application/ld+json",
+              children: JSON.stringify(structuredData),
+            },
+          ]
+        : [],
+    };
+  },
 });
 
 function BlogDetailPage() {
+  const { news: item } = Route.useLoaderData();
   const { slug } = Route.useParams();
 
-  const {
-    data: item,
-    isLoading,
-    isError,
-  } = useQuery({
+  const { isLoading, isError } = useQuery({
     queryKey: ["news", slug],
     queryFn: async () => {
       const { data } = await apiClient.get<News>(`/news/${slug}`);
       return data;
     },
+    initialData: item,
   });
 
   if (isLoading) {

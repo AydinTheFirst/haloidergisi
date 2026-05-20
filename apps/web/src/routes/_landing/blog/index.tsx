@@ -10,6 +10,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/componen
 import { Input } from "@/components/ui/input";
 import apiClient from "@/lib/api-client";
 import { News } from "@/types";
+import { generateCanonicalUrl, generateMetaTags } from "@/utils/seo";
 
 const blogSearchSchema = z.object({
   q: z.string().optional().catch(""),
@@ -20,6 +21,22 @@ const blogSearchSchema = z.object({
 export const Route = createFileRoute("/_landing/blog/")({
   validateSearch: (search) => blogSearchSchema.parse(search),
   component: BlogLandingPage,
+  head: () => {
+    const canonicalUrl = generateCanonicalUrl("/blog");
+    const meta = generateMetaTags({
+      title: "Blog & Duyurular",
+      description:
+        "HALO Dergisi'nden en son haberler, güncellemeler ve topluluk duyuruları. Dergimizle ilgili gelişmeleri takip edin.",
+      keywords: ["HALO blog", "dergi duyuruları", "gündem", "haberler", "topluluk"],
+      canonical: canonicalUrl,
+      type: "website",
+    });
+
+    return {
+      meta,
+      links: [{ rel: "canonical", href: canonicalUrl }],
+    };
+  },
 });
 
 function BlogLandingPage() {

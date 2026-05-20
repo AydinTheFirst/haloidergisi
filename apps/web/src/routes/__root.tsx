@@ -25,11 +25,66 @@ export const Route = createRootRoute({
         content: "width=device-width, initial-scale=1",
       },
       {
-        title: "HALO Dergisi",
+        title: "HALO Dergisi - Aylık Fikir, Sanat ve Edebiyat Dergisi",
       },
       {
         name: "description",
-        content: "HALO Dergisi resmi web sitesi.",
+        content:
+          "HALO Dergisi, fikir, sanat ve edebiyat alanlarında özgün içerikler sunan aylık bir öğrenci dergisidir. Dergilerimize göz atın, blog yazılarımızı okuyun.",
+      },
+      {
+        name: "keywords",
+        content: "HALO Dergisi, edebiyat dergisi, sanat, fikir, öğrenci dergisi, dergi arşivi",
+      },
+      {
+        name: "author",
+        content: "HALO Dergisi Editörleri",
+      },
+      {
+        property: "og:type",
+        content: "website",
+      },
+      {
+        property: "og:site_name",
+        content: "HALO Dergisi",
+      },
+      {
+        property: "og:title",
+        content: "HALO Dergisi - Aylık Fikir, Sanat ve Edebiyat Dergisi",
+      },
+      {
+        property: "og:description",
+        content:
+          "HALO Dergisi, fikir, sanat ve edebiyat alanlarında özgün içerikler sunan aylık bir öğrenci dergisidir.",
+      },
+      {
+        property: "og:image",
+        content: "/logo.png",
+      },
+      {
+        property: "og:locale",
+        content: "tr_TR",
+      },
+      {
+        name: "twitter:card",
+        content: "summary_large_image",
+      },
+      {
+        name: "twitter:title",
+        content: "HALO Dergisi - Aylık Fikir, Sanat ve Edebiyat Dergisi",
+      },
+      {
+        name: "twitter:description",
+        content:
+          "HALO Dergisi, fikir, sanat ve edebiyat alanlarında özgün içerikler sunan aylık bir öğrenci dergisidir.",
+      },
+      {
+        name: "twitter:image",
+        content: "/logo.png",
+      },
+      {
+        name: "theme-color",
+        content: "#000000",
       },
     ],
     scripts: [
@@ -47,6 +102,14 @@ export const Route = createRootRoute({
       {
         rel: "icon",
         href: "/logo.png",
+      },
+      {
+        rel: "apple-touch-icon",
+        href: "/logo.png",
+      },
+      {
+        rel: "manifest",
+        href: "/manifest.json",
       },
     ],
   }),
