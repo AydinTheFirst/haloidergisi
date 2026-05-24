@@ -15,7 +15,13 @@ interface FileInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   onUploadSuccess?: (url: string) => void;
 }
 
-export default function FileInput({ className, onUploadSuccess, value, ...props }: FileInputProps) {
+export default function FileInput({
+  className,
+  onUploadSuccess,
+  value,
+  name,
+  ...props
+}: FileInputProps) {
   const [fileUrl, setFileUrl] = React.useState<string>(String(value || ""));
   const [progress, setProgress] = React.useState<AxiosProgressEvent | null>(null);
 
@@ -65,7 +71,7 @@ export default function FileInput({ className, onUploadSuccess, value, ...props 
       <input
         type='hidden'
         value={fileUrl}
-        name={props.name}
+        name={name}
       />
 
       <div className='relative'>
@@ -73,8 +79,8 @@ export default function FileInput({ className, onUploadSuccess, value, ...props 
           type='file'
           disabled={uploadMutation.isPending}
           className={cn("pr-10", className)}
-          onChange={handleFileChange}
           {...props}
+          onChange={handleFileChange}
           value={undefined}
         />
         <div className='absolute top-1/2 right-3 -translate-y-1/2'>
@@ -119,7 +125,7 @@ export function FieldFileInput({ name, ...props }: FileInputProps) {
         <FileInput
           id={name}
           {...props}
-          {...field}
+          value={field.value}
           onUploadSuccess={(url) => field.onChange(url)}
           data-invalid={Boolean(invalid)}
           data-error={Boolean(error)}
