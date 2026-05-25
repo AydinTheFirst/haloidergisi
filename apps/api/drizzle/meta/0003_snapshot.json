@@ -35,9 +35,7 @@
         "Category_name_unique": {
           "name": "Category_name_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "name"
-          ]
+          "columns": ["name"]
         }
       },
       "policies": {},
@@ -82,9 +80,7 @@
         "Crew_name_unique": {
           "name": "Crew_name_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "name"
-          ]
+          "columns": ["name"]
         }
       },
       "policies": {},
@@ -226,9 +222,7 @@
         "NotificationSettings_userId_unique": {
           "name": "NotificationSettings_userId_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "userId"
-          ]
+          "columns": ["userId"]
         }
       },
       "policies": {},
@@ -272,10 +266,7 @@
         "PageVisit_url_date_unique": {
           "name": "PageVisit_url_date_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "url",
-            "date"
-          ]
+          "columns": ["url", "date"]
         }
       },
       "policies": {},
@@ -326,11 +317,7 @@
         "PostReaction_postId_userId_type_unique": {
           "name": "PostReaction_postId_userId_type_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "postId",
-            "userId",
-            "type"
-          ]
+          "columns": ["postId", "userId", "type"]
         }
       },
       "policies": {},
@@ -413,9 +400,7 @@
         "Post_slug_unique": {
           "name": "Post_slug_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "slug"
-          ]
+          "columns": ["slug"]
         }
       },
       "policies": {},
@@ -483,9 +468,7 @@
         "Profile_userId_unique": {
           "name": "Profile_userId_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "userId"
-          ]
+          "columns": ["userId"]
         }
       },
       "policies": {},
@@ -529,10 +512,7 @@
         "Provider_provider_providerId_unique": {
           "name": "Provider_provider_providerId_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "provider",
-            "providerId"
-          ]
+          "columns": ["provider", "providerId"]
         }
       },
       "policies": {},
@@ -582,9 +562,7 @@
         "Theme_title_unique": {
           "name": "Theme_title_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "title"
-          ]
+          "columns": ["title"]
         }
       },
       "policies": {},
@@ -634,9 +612,7 @@
         "Token_token_unique": {
           "name": "Token_token_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "token"
-          ]
+          "columns": ["token"]
         }
       },
       "policies": {},
@@ -707,9 +683,7 @@
         "User_email_unique": {
           "name": "User_email_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "email"
-          ]
+          "columns": ["email"]
         }
       },
       "policies": {},
@@ -721,34 +695,22 @@
     "public.PostReactionType": {
       "name": "PostReactionType",
       "schema": "public",
-      "values": [
-        "LIKE",
-        "DISLIKE"
-      ]
+      "values": ["LIKE", "DISLIKE"]
     },
     "public.PostStatus": {
       "name": "PostStatus",
       "schema": "public",
-      "values": [
-        "DRAFT",
-        "PUBLISHED",
-        "ARCHIVED"
-      ]
+      "values": ["DRAFT", "PUBLISHED", "ARCHIVED"]
     },
     "public.ProviderType": {
       "name": "ProviderType",
       "schema": "public",
-      "values": [
-        "GOOGLE"
-      ]
+      "values": ["GOOGLE"]
     },
     "public.Role": {
       "name": "Role",
       "schema": "public",
-      "values": [
-        "USER",
-        "ADMIN"
-      ]
+      "values": ["USER", "ADMIN"]
     }
   },
   "schemas": {},

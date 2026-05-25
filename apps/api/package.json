@@ -7,18 +7,18 @@
   "author": "",
   "scripts": {
     "build": "nest build",
+    "db:studio": "bun x drizzle-kit studio",
+    "db:update": "bun x drizzle-kit generate && bun x drizzle-kit push",
     "debug": "nest start --debug --watch",
     "dev": "nest start --watch",
-    "db:update": "bun x drizzle-kit generate && bun x drizzle-kit push",
-    "db:studio": "bun x drizzle-kit studio",
     "prod": "node dist/main",
     "start": "nest start",
-    "type-check": "tsc --noEmit",
     "test": "jest",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
-    "test:watch": "jest --watch"
+    "test:watch": "jest --watch",
+    "type-check": "tsc --noEmit"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.971.0",

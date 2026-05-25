@@ -61,8 +61,8 @@ export const Route = createFileRoute("/_landing/posts/$postId")({
       type: "article",
       image: coverImageUrl,
       imageAlt: post.title,
-      publishedTime: post.createdAt || undefined,
-      modifiedTime: post.updatedAt || undefined,
+      publishedTime: post.createdAt ? new Date(post.createdAt).toISOString() : undefined,
+      modifiedTime: post.updatedAt ? new Date(post.updatedAt).toISOString() : undefined,
       section: post.category?.name,
     });
 

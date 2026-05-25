@@ -6,9 +6,9 @@
     "build": "vite build",
     "dev": "vite dev --port 5173",
     "preview": "vite preview",
-    "type-check": "tsc --noEmit",
     "start": "PORT=5173 node .output/server/index.mjs",
-    "test": "vitest run"
+    "test": "vitest run",
+    "type-check": "tsc --noEmit"
   },
   "dependencies": {
     "@fontsource-variable/inter": "^5.2.8",

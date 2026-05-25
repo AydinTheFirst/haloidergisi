@@ -1,8 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Icon } from "@iconify/react";
 import { Category } from "@repo/db";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useFieldArray, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
 import CdnImage from "@/components/cdn-image";
@@ -54,13 +53,7 @@ function RouteComponent() {
     resolver: zodResolver(postSchema),
     defaultValues: {
       status: "DRAFT",
-      themes: [],
     },
-  });
-
-  const { fields, append, remove } = useFieldArray({
-    control: form.control,
-    name: "themes",
   });
 
   const onSubmit = async (data: PostSchema) => {
@@ -185,80 +178,6 @@ function RouteComponent() {
                     </SelectContent>
                   </Select>
                   <FormDescription>Geçerli bir kategori ID'si giriniz.</FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name='themes'
-              render={() => (
-                <FormItem>
-                  <FormLabel>Tematik Arşiv (Eserler)</FormLabel>
-                  <div className='space-y-4 rounded-md border p-4'>
-                    {fields.map((field, index) => (
-                      <div
-                        key={field.id}
-                        className='relative grid grid-cols-1 gap-4 rounded-lg border p-4 md:grid-cols-2'
-                      >
-                        <FormField
-                          control={form.control}
-                          name={`themes.${index}.category`}
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel>Konu (Tür)</FormLabel>
-                              <FormControl>
-                                <Input
-                                  placeholder='Örn: Kitap'
-                                  {...field}
-                                />
-                              </FormControl>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-                        <FormField
-                          control={form.control}
-                          name={`themes.${index}.work`}
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel>Başlık (Eser)</FormLabel>
-                              <FormControl>
-                                <Input
-                                  placeholder='Örn: Issız Adam'
-                                  {...field}
-                                />
-                              </FormControl>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-                        <Button
-                          type='button'
-                          variant='ghost'
-                          size='icon'
-                          className='text-destructive absolute -top-2 -right-2'
-                          onClick={() => remove(index)}
-                        >
-                          <Icon icon='mdi:close-circle' />
-                        </Button>
-                      </div>
-                    ))}
-                    <Button
-                      type='button'
-                      variant='outline'
-                      size='sm'
-                      onClick={() => append({ work: "", category: "" })}
-                    >
-                      <Icon
-                        icon='mdi:plus'
-                        className='mr-2'
-                      />
-                      Eser Ekle
-                    </Button>
-                  </div>
-                  <FormDescription>Bu yazıda işlenen eserleri ekleyin.</FormDescription>
                   <FormMessage />
                 </FormItem>
               )}

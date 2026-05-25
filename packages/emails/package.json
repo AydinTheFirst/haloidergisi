@@ -11,9 +11,9 @@
   },
   "scripts": {
     "build": "tsdown",
-    "type-check": "tsc --noEmit",
     "export": "email export",
-    "start:dev": "email dev --port 3030 --dir src/emails"
+    "start:dev": "email dev --port 3030 --dir src/emails",
+    "type-check": "tsc --noEmit"
   },
   "dependencies": {
     "@react-email/components": "1.0.6"

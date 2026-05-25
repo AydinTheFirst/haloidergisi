@@ -28,8 +28,8 @@ export const Route = createFileRoute("/_landing/blog/$slug")({
       author: news.author?.profile?.name || "HALO Editör",
       canonical: canonicalUrl,
       type: "article",
-      publishedTime: news.publishedAt || undefined,
-      modifiedTime: news.updatedAt || undefined,
+      publishedTime: news.publishedAt ? new Date(news.publishedAt).toISOString() : undefined,
+      modifiedTime: news.updatedAt ? new Date(news.updatedAt).toISOString() : undefined,
       section: "Blog",
       tags: news.keywords?.split(",").map((k) => k.trim()),
     });

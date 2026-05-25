@@ -7,14 +7,14 @@
   ],
   "scripts": {
     "build": "dotenvx run -- turbo run build",
+    "check-types": "turbo run type-check",
     "db:update": "bun run --filter=api db:update",
     "dev": "turbo run dev",
     "dotenvx": "dotenvx",
     "format": "oxfmt",
     "lint": "oxlint",
     "prepare": "husky",
-    "start": "NODE_ENV=production dotenvx run -- turbo run start",
-    "check-types": "turbo run type-check"
+    "start": "NODE_ENV=production dotenvx run -- turbo run start"
   },
   "dependencies": {
     "@dotenvx/dotenvx": "^1.52.0",

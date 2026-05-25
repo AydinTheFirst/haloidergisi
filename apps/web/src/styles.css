@@ -198,6 +198,6 @@
   --sidebar-ring: oklch(0.556 0 0);
 }
 
-    .link {
-        @apply text-muted-foreground hover:text-primary flex gap-2 items-center;
-    }
+.link {
+  @apply text-muted-foreground hover:text-primary flex items-center gap-2;
+}

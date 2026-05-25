@@ -1,6 +1,6 @@
 import { BadRequestException, Injectable } from "@nestjs/common";
 import { EventEmitter2 } from "@nestjs/event-emitter";
-import { posts, themes } from "@repo/db";
+import { posts } from "@repo/db";
 import { eq, or, sql } from "drizzle-orm";
 import slugify from "slugify";
 
@@ -25,29 +25,15 @@ export class PostsService {
   }
 
   async create(createPostDto: CreatePostDto) {
-    const { themes: themesData, ...rest } = createPostDto;
+    const generatedSlug = this.makeSlug(createPostDto.title);
 
-    const post = await this.drizzle.db.transaction(async (tx) => {
-      const [newPost] = await tx
-        .insert(posts)
-        .values({
-          ...rest,
-          slug: this.makeSlug(createPostDto.title),
-        })
-        .returning();
-
-      if (themesData && themesData.length > 0) {
-        await tx.insert(themes).values(
-          themesData.map((t) => ({
-            postId: newPost.id,
-            work: t.work,
-            category: t.category,
-          })),
-        );
-      }
-
-      return newPost;
-    });
+    const [post] = await this.drizzle.db
+      .insert(posts)
+      .values({
+        ...createPostDto,
+        slug: generatedSlug,
+      })
+      .returning();
 
     this.eventEmitter.emit(
       EMAIL_EVENTS.NEW_POST,
@@ -101,27 +87,13 @@ export class PostsService {
   }
 
   async update(id: string, updatePostDto: UpdatePostDto) {
-    const { themes: themesData, ...rest } = updatePostDto;
     const post = await this.findOne(id);
 
-    const updatedPost = await this.drizzle.db.transaction(async (tx) => {
-      const [res] = await tx.update(posts).set(rest).where(eq(posts.id, post.id)).returning();
-
-      if (themesData !== undefined) {
-        await tx.delete(themes).where(eq(themes.postId, post.id));
-        if (themesData.length > 0) {
-          await tx.insert(themes).values(
-            themesData.map((t) => ({
-              postId: post.id,
-              work: t.work,
-              category: t.category,
-            })),
-          );
-        }
-      }
-
-      return res;
-    });
+    const [updatedPost] = await this.drizzle.db
+      .update(posts)
+      .set(updatePostDto)
+      .where(eq(posts.id, post.id))
+      .returning();
 
     return updatedPost;
   }

@@ -27,16 +27,19 @@ Created a comprehensive SEO utility module with the following functions:
 Added SEO meta tags to key routes:
 
 #### **Homepage** (`apps/web/src/routes/_landing/index.tsx`)
+
 - Title: "Ana Sayfa - Aylık Fikir, Sanat ve Edebiyat Dergisi"
 - Rich description with keywords
 - WebSite structured data with search action
 - Open Graph and Twitter Cards
 
 #### **Blog Listing** (`apps/web/src/routes/_landing/blog/index.tsx`)
+
 - Page-specific title and description
 - Keywords targeting blog and announcements
 
 #### **Blog Post Detail** (`apps/web/src/routes/_landing/blog/$slug.tsx`)
+
 - Dynamic title and description from post content
 - Article structured data
 - Author information
@@ -45,6 +48,7 @@ Added SEO meta tags to key routes:
 - Canonical URL for each post
 
 #### **Magazine Post Detail** (`apps/web/src/routes/_landing/posts/$postId.tsx`)
+
 - Dynamic title and description from post
 - Article structured data
 - Cover image as Open Graph image
@@ -52,6 +56,7 @@ Added SEO meta tags to key routes:
 - Canonical URL for each magazine
 
 #### **Root Layout** (`apps/web/src/routes/__root.tsx`)
+
 - Enhanced default meta tags with:
   - Comprehensive site description
   - Keywords
@@ -64,6 +69,7 @@ Added SEO meta tags to key routes:
 ### 3. **Sitemap Generation**
 
 #### Backend (`apps/api/src/modules/sitemap/`)
+
 Created a new sitemap module:
 
 - **Controller** (`sitemap.controller.ts`): Exposes `/sitemap/xml` endpoint
@@ -74,6 +80,7 @@ Created a new sitemap module:
   - Proper priority and change frequency for each URL type
 
 #### Frontend Proxy (`apps/web/app/routes/sitemap.xml.ts`)
+
 - Nitro server route that proxies sitemap from backend
 - Accessible at `/sitemap.xml`
 - Caches response for 1 hour
@@ -81,6 +88,7 @@ Created a new sitemap module:
 ### 4. **Manifest.json Updates** (`apps/web/public/manifest.json`)
 
 Updated PWA manifest with:
+
 - Proper app name: "HALO Dergisi"
 - Descriptive name and description
 - Correct icon configuration
@@ -91,6 +99,7 @@ Updated PWA manifest with:
 ### 5. **Robots.txt Updates** (`apps/web/public/robots.txt`)
 
 Enhanced robots.txt with:
+
 - Allow all public pages
 - Disallow dashboard and API routes
 - Sitemap reference: `https://haloidergisi.com/sitemap.xml`
@@ -98,6 +107,7 @@ Enhanced robots.txt with:
 ## Technical Features
 
 ### Meta Tags Coverage
+
 - ✅ Title tags (unique per page)
 - ✅ Meta descriptions (unique per page)
 - ✅ Keywords
@@ -111,11 +121,13 @@ Enhanced robots.txt with:
 - ✅ Character set
 
 ### Structured Data (JSON-LD)
+
 - ✅ WebSite schema with search action
 - ✅ Article schema for blog posts and magazines
 - ✅ Organization schema ready (can be added to about page)
 
 ### Sitemap
+
 - ✅ XML sitemap with all public URLs
 - ✅ Dynamic content from database
 - ✅ Last modified dates
@@ -123,6 +135,7 @@ Enhanced robots.txt with:
 - ✅ Proper caching
 
 ### Additional SEO Elements
+
 - ✅ Semantic HTML (lang="tr" in root)
 - ✅ Mobile-friendly viewport
 - ✅ PWA manifest
@@ -175,6 +188,7 @@ export const Route = createFileRoute("/your-route")({
 ## Future Improvements
 
 Consider adding:
+
 - [ ] Breadcrumb structured data
 - [ ] Organization schema on about page
 - [ ] Person schema for team members

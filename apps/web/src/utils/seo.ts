@@ -55,7 +55,7 @@ export function generateMetaTags(config: SEOConfig) {
 
   const fullTitle = title ? `${title} | ${siteName}` : siteName;
 
-  const meta: Array<{ name?: string; property?: string; content: string; charset?: string }> = [
+  const meta: Array<{ name?: string; property?: string; content?: string; charset?: string }> = [
     { charset: "utf-8" },
     { name: "viewport", content: "width=device-width, initial-scale=1" },
   ];
