@@ -3,22 +3,30 @@ import { Injectable, Logger } from "@nestjs/common";
 import { OnEvent } from "@nestjs/event-emitter";
 import { render } from "@react-email/render";
 import { notificationSettings, profiles, users } from "@repo/db";
-import { NewPostEmail, ResetPasswordEmail, VerifyEmail, WelcomeEmail } from "@repo/emails";
-import { eq } from "drizzle-orm";
+import {
+  ArticleStatusUpdatedEmail,
+  ArticleSubmittedAdminEmail,
+  ArticleSubmittedAuthorEmail,
+  NewPostEmail,
+  ResetPasswordEmail,
+  VerifyEmail,
+  WelcomeEmail,
+} from "@repo/emails";
+import { eq, sql } from "drizzle-orm";
 
 import { EMAIL_EVENTS } from "@/constants";
 import { DrizzleService } from "@/database";
 import { sleep } from "@/utils";
 
 export class BaseEmailDto {
-  to: string;
+  to!: string;
   constructor(data: BaseEmailDto) {
     Object.assign(this, data);
   }
 }
 
 export class WelcomeEmailDto extends BaseEmailDto {
-  name: string;
+  name!: string;
   constructor(data: WelcomeEmailDto) {
     super(data);
     Object.assign(this, data);
@@ -26,8 +34,8 @@ export class WelcomeEmailDto extends BaseEmailDto {
 }
 
 export class VerifyEmailDto extends BaseEmailDto {
-  name: string;
-  token: string;
+  name!: string;
+  token!: string;
   constructor(data: VerifyEmailDto) {
     super(data);
     Object.assign(this, data);
@@ -35,8 +43,8 @@ export class VerifyEmailDto extends BaseEmailDto {
 }
 
 export class ResetPasswordEmailDto extends BaseEmailDto {
-  name: string;
-  token: string;
+  name!: string;
+  token!: string;
   constructor(data: ResetPasswordEmailDto) {
     super(data);
     Object.assign(this, data);
@@ -44,12 +52,45 @@ export class ResetPasswordEmailDto extends BaseEmailDto {
 }
 
 export class NewPostEmailDto {
-  title: string;
-  content: string;
-  slug: string;
-  coverImage: string;
+  title!: string;
+  content!: string;
+  slug!: string;
+  coverImage!: string;
 
   constructor(data: NewPostEmailDto) {
+    Object.assign(this, data);
+  }
+}
+
+export class ArticleSubmittedAuthorEmailDto extends BaseEmailDto {
+  authorName!: string;
+  articleTitle!: string;
+  callTitle!: string;
+  constructor(data: ArticleSubmittedAuthorEmailDto) {
+    super(data);
+    Object.assign(this, data);
+  }
+}
+
+export class ArticleSubmittedAdminEmailDto {
+  authorName!: string;
+  authorEmail!: string;
+  articleTitle!: string;
+  callTitle!: string;
+  articleId!: string;
+  constructor(data: ArticleSubmittedAdminEmailDto) {
+    Object.assign(this, data);
+  }
+}
+
+export class ArticleStatusUpdatedEmailDto extends BaseEmailDto {
+  authorName!: string;
+  articleTitle!: string;
+  status!: string;
+  statusText!: string;
+  adminNote?: string;
+  constructor(data: ArticleStatusUpdatedEmailDto) {
+    super(data);
     Object.assign(this, data);
   }
 }
@@ -136,5 +177,57 @@ export class MailService {
 
       await sleep(Math.random() * 1000 + 500);
     }
+  }
+
+  @OnEvent(EMAIL_EVENTS.ARTICLE_SUBMITTED_AUTHOR)
+  async sendArticleSubmittedAuthorEmail({ to, ...rest }: ArticleSubmittedAuthorEmailDto) {
+    await this.send({
+      to,
+      subject: "Yazınız Başarıyla Alındı - HALO Dergisi",
+      html: await render(
+        ArticleSubmittedAuthorEmail({
+          ...rest,
+        }),
+      ),
+    });
+  }
+
+  @OnEvent(EMAIL_EVENTS.ARTICLE_SUBMITTED_ADMIN)
+  async sendArticleSubmittedAdminEmail({ ...rest }: ArticleSubmittedAdminEmailDto) {
+    const adminUsers = await this.drizzle.db
+      .select({
+        email: users.email,
+        name: profiles.name,
+      })
+      .from(users)
+      .leftJoin(profiles, eq(profiles.userId, users.id))
+      .where(sql`${users.roles} @> ARRAY['ADMIN']::"Role"[]`);
+
+    for (const admin of adminUsers) {
+      await this.send({
+        to: admin.email,
+        subject: "Yeni Bir Yazı Gönderimi Yapıldı!",
+        html: await render(
+          ArticleSubmittedAdminEmail({
+            ...rest,
+            adminName: admin.name || "Editör",
+          }),
+        ),
+      });
+      await sleep(500);
+    }
+  }
+
+  @OnEvent(EMAIL_EVENTS.ARTICLE_STATUS_UPDATED)
+  async sendArticleStatusUpdatedEmail({ to, ...rest }: ArticleStatusUpdatedEmailDto) {
+    await this.send({
+      to,
+      subject: `Yazı Durumu Güncellendi: ${rest.statusText}`,
+      html: await render(
+        ArticleStatusUpdatedEmail({
+          ...rest,
+        }),
+      ),
+    });
   }
 }

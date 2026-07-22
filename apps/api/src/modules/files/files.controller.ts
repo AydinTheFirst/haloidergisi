@@ -16,7 +16,6 @@ import { FilesService } from "./files.service";
 
 @Controller("files")
 @UseGuards(AuthGuard)
-@Roles("ADMIN")
 export class FilesController {
   constructor(private readonly filesService: FilesService) {}
 
@@ -27,6 +26,7 @@ export class FilesController {
   }
 
   @Delete()
+  @Roles("ADMIN")
   remove(@Body("key") key: string) {
     return this.filesService.remove(key);
   }

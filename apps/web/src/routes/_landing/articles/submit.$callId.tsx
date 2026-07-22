@@ -7,6 +7,7 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import * as z from "zod";
 
+import { FieldFileInput } from "@/components/file-input";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -24,13 +25,15 @@ import { Textarea } from "@/components/ui/textarea";
 import { useAuth } from "@/hooks/use-auth";
 import apiClient from "@/lib/api-client";
 import { SubmissionCall, Article } from "@/types";
+import { getCdnUrl } from "@/utils/cdn";
 
 const formSchema = z.object({
   title: z
     .string()
     .min(3, "Başlık en az 3 karakter olmalıdır.")
     .max(100, "Başlık 100 karakteri geçemez."),
-  content: z.string().min(50, "İçerik en az 50 karakter olmalıdır."),
+  fileUrl: z.string().min(1, "Lütfen makalenizin/yazınızın dosyasını yükleyin."),
+  content: z.string().optional(),
 });
 
 type FormValues = z.infer<typeof formSchema>;
@@ -78,6 +81,7 @@ function SubmitArticlePage() {
     resolver: zodResolver(formSchema),
     defaultValues: {
       title: "",
+      fileUrl: "",
       content: "",
     },
   });
@@ -86,7 +90,8 @@ function SubmitArticlePage() {
     if (existingArticle) {
       form.reset({
         title: existingArticle.title,
-        content: existingArticle.content,
+        fileUrl: existingArticle.fileUrl || "",
+        content: existingArticle.content || "",
       });
     }
   }, [existingArticle, form]);
@@ -206,7 +211,7 @@ function SubmitArticlePage() {
   }
 
   const titleLength = form.watch("title")?.length || 0;
-  const contentCharCount = form.watch("content")?.length || 0;
+  const fileUrlValue = form.watch("fileUrl");
 
   return (
     <div className='container mx-auto max-w-4xl px-4 py-12'>
@@ -270,9 +275,10 @@ function SubmitArticlePage() {
             >
               <Card className='border-2 shadow-sm'>
                 <CardHeader>
-                  <CardTitle>Yazı Detayları</CardTitle>
+                  <CardTitle>Yazı Detayları ve Dosya Yükleme</CardTitle>
                   <CardDescription>
-                    Okuyucularımızın ilgisini çekecek etkileyici bir başlık ve içerik oluşturun.
+                    Yazınızın başlığını girin ve zengin metin formatında (DOCX, PDF, RTF, ODT, TXT,
+                    MD, HTML) dosyanızı yükleyin.
                   </CardDescription>
                 </CardHeader>
                 <CardContent className='space-y-6'>
@@ -302,28 +308,77 @@ function SubmitArticlePage() {
                     )}
                   />
 
+                  <FormItem>
+                    <FormLabel className='text-base font-semibold'>
+                      Yazı Dosyası (Zengin Metin / Document Format)
+                    </FormLabel>
+                    <FormDescription className='text-xs'>
+                      Desteklenen Formatlar:{" "}
+                      <strong>DOCX, DOC, PDF, RTF, ODT, TXT, MD, HTML</strong>
+                    </FormDescription>
+                    <FormControl>
+                      <FieldFileInput
+                        name='fileUrl'
+                        accept='.docx,.doc,.pdf,.rtf,.odt,.txt,.md,.html,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/msword,application/pdf,application/rtf,text/rtf,application/vnd.oasis.opendocument.text,text/plain,text/markdown,text/html'
+                        disabled={!canEdit}
+                      />
+                    </FormControl>
+
+                    {fileUrlValue && (
+                      <div className='bg-primary/5 border-primary/20 mt-3 flex items-center justify-between rounded-lg border p-3 text-sm'>
+                        <div className='flex items-center gap-2 overflow-hidden'>
+                          <Icon
+                            icon='solar:document-bold-duotone'
+                            className='text-primary h-6 w-6 shrink-0'
+                          />
+                          <span className='text-foreground truncate font-medium'>
+                            {fileUrlValue}
+                          </span>
+                        </div>
+                        <Button
+                          asChild
+                          variant='outline'
+                          size='sm'
+                          className='shrink-0'
+                        >
+                          <a
+                            href={getCdnUrl(fileUrlValue)}
+                            target='_blank'
+                            rel='noreferrer'
+                          >
+                            <Icon
+                              icon='solar:file-download-bold-duotone'
+                              className='mr-1.5 h-4 w-4'
+                            />
+                            Görüntüle / İndir
+                          </a>
+                        </Button>
+                      </div>
+                    )}
+                    <FormMessage />
+                  </FormItem>
+
                   <FormField
                     control={form.control}
                     name='content'
                     render={({ field }) => (
                       <FormItem>
                         <div className='flex justify-between'>
-                          <FormLabel className='text-base font-semibold'>Yazı İçeriği</FormLabel>
-                          <span
-                            className={`text-xs font-medium ${contentCharCount < 50 ? "text-amber-600" : "text-muted-foreground"}`}
-                          >
-                            Min. 50 karakter: {contentCharCount}
-                          </span>
+                          <FormLabel className='text-base font-semibold'>
+                            Ek Notlar / Özet (İsteğe Bağlı)
+                          </FormLabel>
                         </div>
                         <FormControl>
                           <Textarea
-                            placeholder='Yazınızın dünyasını burada kurun...'
-                            className='min-h-[400px] resize-none p-4 text-base leading-relaxed'
+                            placeholder='Editörlerimize iletmek istediğiniz ek açıklama veya özet notu...'
+                            className='min-h-[120px] resize-none p-4 text-base leading-relaxed'
                             {...field}
                             disabled={!canEdit}
                           />
                         </FormControl>
-                        <FormDescription>Markdown formatını kullanabilirsiniz.</FormDescription>
+                        <FormDescription>
+                          İsteğe bağlı olarak ek notlarınızı buraya yazabilirsiniz.
+                        </FormDescription>
                         <FormMessage />
                       </FormItem>
                     )}

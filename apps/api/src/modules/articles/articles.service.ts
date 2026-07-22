@@ -1,13 +1,32 @@
 import { BadRequestException, Injectable, NotFoundException } from "@nestjs/common";
+import { EventEmitter2 } from "@nestjs/event-emitter";
 import { articles } from "@repo/db";
 import { eq } from "drizzle-orm";
 
-import { DrizzleService } from "../../database/drizzle.service";
+import { EMAIL_EVENTS } from "@/constants";
+import { DrizzleService } from "@/database/drizzle.service";
+import {
+  ArticleStatusUpdatedEmailDto,
+  ArticleSubmittedAdminEmailDto,
+  ArticleSubmittedAuthorEmailDto,
+} from "@/services/mail.service";
+
 import { CreateArticleDto, UpdateArticleDto, UpdateArticleStatusDto } from "./dto/article.dto";
+
+const STATUS_TEXT_MAP: Record<string, string> = {
+  PENDING: "Beklemede",
+  REVIEWING: "İnceleniyor",
+  APPROVED: "Onaylandı",
+  REJECTED: "Reddedildi",
+  REVISION_REQ: "Revize Gerekli",
+};
 
 @Injectable()
 export class ArticlesService {
-  constructor(private readonly drizzle: DrizzleService) {}
+  constructor(
+    private readonly drizzle: DrizzleService,
+    private readonly eventEmitter: EventEmitter2,
+  ) {}
 
   async findAll(filters: { callId?: string; status?: string; authorId?: string }) {
     return await this.drizzle.db.query.articles.findMany({
@@ -92,21 +111,61 @@ export class ArticlesService {
         callId: dto.callId,
         authorId,
         title: dto.title,
-        content: dto.content,
+        content: dto.content || "",
+        fileUrl: dto.fileUrl || null,
         status: "PENDING",
       })
       .returning();
-    return result[0];
+
+    const created = result[0];
+
+    // Fetch author details for email
+    const authorUser = await this.drizzle.db.query.users.findFirst({
+      where: (users, { eq }) => eq(users.id, authorId),
+      with: { profile: true },
+    });
+
+    if (authorUser) {
+      const authorName = authorUser.profile?.name || authorUser.email;
+
+      // 1. Send confirmation email to author
+      this.eventEmitter.emit(
+        EMAIL_EVENTS.ARTICLE_SUBMITTED_AUTHOR,
+        new ArticleSubmittedAuthorEmailDto({
+          to: authorUser.email,
+          authorName,
+          articleTitle: created.title,
+          callTitle: activeCall.title,
+        }),
+      );
+
+      // 2. Send notification email to admins
+      this.eventEmitter.emit(
+        EMAIL_EVENTS.ARTICLE_SUBMITTED_ADMIN,
+        new ArticleSubmittedAdminEmailDto({
+          authorName,
+          authorEmail: authorUser.email,
+          articleTitle: created.title,
+          callTitle: activeCall.title,
+          articleId: created.id,
+        }),
+      );
+    }
+
+    return created;
   }
 
   async update(id: string, dto: UpdateArticleDto) {
+    const updatePayload: Record<string, any> = {
+      title: dto.title,
+      updatedAt: new Date(),
+    };
+    if (dto.content !== undefined) updatePayload.content = dto.content;
+    if (dto.fileUrl !== undefined) updatePayload.fileUrl = dto.fileUrl;
+
     const result = await this.drizzle.db
       .update(articles)
-      .set({
-        title: dto.title,
-        content: dto.content,
-        updatedAt: new Date(),
-      })
+      .set(updatePayload)
       .where(eq(articles.id, id))
       .returning();
     return result[0];
@@ -129,7 +188,37 @@ export class ArticlesService {
       })
       .where(eq(articles.id, id))
       .returning();
-    return result[0];
+
+    const updated = result[0];
+
+    // Fetch author info to send status update email
+    const articleInfo = await this.drizzle.db.query.articles.findFirst({
+      where: (articles, { eq }) => eq(articles.id, id),
+      with: {
+        author: {
+          with: { profile: true },
+        },
+      },
+    });
+
+    if (articleInfo?.author) {
+      const authorName = articleInfo.author.profile?.name || articleInfo.author.email;
+      const statusText = STATUS_TEXT_MAP[updated.status] || updated.status;
+
+      this.eventEmitter.emit(
+        EMAIL_EVENTS.ARTICLE_STATUS_UPDATED,
+        new ArticleStatusUpdatedEmailDto({
+          to: articleInfo.author.email,
+          authorName,
+          articleTitle: updated.title,
+          status: updated.status,
+          statusText,
+          adminNote: updated.adminNote || undefined,
+        }),
+      );
+    }
+
+    return updated;
   }
 
   async remove(id: string) {

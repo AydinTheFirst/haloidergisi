@@ -9,6 +9,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import apiClient from "@/lib/api-client";
 import { Article, SubmissionCall } from "@/types";
+import { getCdnUrl } from "@/utils/cdn";
 
 export const Route = createFileRoute("/_landing/articles/$articleId")({
   component: ArticleDetailPage,
@@ -150,28 +151,56 @@ function ArticleDetailPage() {
             </div>
           </div>
         </CardHeader>
-        <CardContent>
-          <div className='prose prose-lg dark:prose-invert max-w-none leading-relaxed whitespace-pre-wrap'>
-            {article.content}
-          </div>
-
+        <CardContent className='space-y-6'>
           {article.fileUrl && (
-            <div className='bg-muted/50 border-muted-foreground/30 mt-10 rounded-lg border border-dashed p-4'>
-              <h3 className='mb-2 flex items-center gap-2 text-sm font-semibold'>
-                <Icon
-                  icon='solar:link-bold-duotone'
-                  className='text-primary'
-                />
-                Ekli Dosya
+            <div className='bg-primary/5 border-primary/20 rounded-xl border p-5'>
+              <div className='flex flex-col justify-between gap-4 sm:flex-row sm:items-center'>
+                <div className='flex items-center gap-3 overflow-hidden'>
+                  <div className='bg-primary/10 text-primary flex h-10 w-10 shrink-0 items-center justify-center rounded-lg'>
+                    <Icon
+                      icon='solar:document-bold-duotone'
+                      className='h-6 w-6'
+                    />
+                  </div>
+                  <div className='min-w-0'>
+                    <p className='text-muted-foreground text-xs font-semibold tracking-wider uppercase'>
+                      Gönderilen Dosya
+                    </p>
+                    <p className='text-foreground truncate text-sm font-medium'>
+                      {article.fileUrl}
+                    </p>
+                  </div>
+                </div>
+                <Button
+                  asChild
+                  variant='default'
+                  size='sm'
+                  className='shrink-0 shadow-sm'
+                >
+                  <a
+                    href={getCdnUrl(article.fileUrl)}
+                    target='_blank'
+                    rel='noopener noreferrer'
+                  >
+                    <Icon
+                      icon='solar:file-download-bold-duotone'
+                      className='mr-1.5 h-4 w-4'
+                    />
+                    Görüntüle / İndir
+                  </a>
+                </Button>
+              </div>
+            </div>
+          )}
+
+          {article.content && (
+            <div className='space-y-2'>
+              <h3 className='text-muted-foreground text-xs font-semibold tracking-wider uppercase'>
+                Ek Notlar / Özet
               </h3>
-              <a
-                href={article.fileUrl}
-                target='_blank'
-                rel='noopener noreferrer'
-                className='text-primary text-sm font-medium break-all hover:underline'
-              >
-                {article.fileUrl}
-              </a>
+              <div className='prose prose-base dark:prose-invert text-muted-foreground max-w-none leading-relaxed whitespace-pre-wrap'>
+                {article.content}
+              </div>
             </div>
           )}
         </CardContent>

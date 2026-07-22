@@ -11,9 +11,12 @@ export class CreateArticleDto {
   title: string;
 
   @IsString()
-  @IsNotEmpty()
-  @MinLength(50)
-  content: string;
+  @IsOptional()
+  content?: string;
+
+  @IsString()
+  @IsOptional()
+  fileUrl?: string;
 }
 
 export class UpdateArticleDto {
@@ -23,9 +26,12 @@ export class UpdateArticleDto {
   title: string;
 
   @IsString()
-  @IsNotEmpty()
-  @MinLength(50)
-  content: string;
+  @IsOptional()
+  content?: string;
+
+  @IsString()
+  @IsOptional()
+  fileUrl?: string;
 }
 
 export class UpdateArticleStatusDto {

@@ -28,6 +28,7 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import apiClient from "@/lib/api-client";
 import { Article } from "@/types";
+import { getCdnUrl } from "@/utils/cdn";
 
 const statusFormSchema = z.object({
   status: z.enum(["PENDING", "REVIEWING", "APPROVED", "REJECTED", "REVISION_REQ"]),
@@ -36,7 +37,8 @@ const statusFormSchema = z.object({
 
 const contentFormSchema = z.object({
   title: z.string().min(3, "Başlık en az 3 karakter olmalıdır."),
-  content: z.string().min(50, "İçerik en az 50 karakter olmalıdır."),
+  content: z.string().optional(),
+  fileUrl: z.string().optional(),
 });
 
 type StatusFormValues = z.infer<typeof statusFormSchema>;
@@ -78,7 +80,8 @@ function SubmissionDetailPage() {
       });
       contentForm.reset({
         title: article.title,
-        content: article.content,
+        content: article.content || "",
+        fileUrl: article.fileUrl || "",
       });
     }
   }, [article, statusForm, contentForm]);
@@ -235,23 +238,54 @@ function SubmissionDetailPage() {
               ) : (
                 <>
                   <h3 className='mb-4 text-xl font-bold'>{article.title}</h3>
-                  <div className='prose prose-sm max-w-none whitespace-pre-wrap'>
-                    {article.content}
-                  </div>
                   {article.fileUrl && (
-                    <div className='mt-8 border-t pt-4'>
-                      <Button
-                        asChild
-                        variant='outline'
-                      >
-                        <a
-                          href={article.fileUrl}
-                          target='_blank'
-                          rel='noreferrer'
+                    <div className='bg-primary/5 border-primary/20 mt-6 rounded-xl border p-5'>
+                      <div className='flex items-center justify-between gap-4'>
+                        <div className='flex items-center gap-3 overflow-hidden'>
+                          <div className='bg-primary/10 text-primary flex h-10 w-10 shrink-0 items-center justify-center rounded-lg'>
+                            <Icon
+                              icon='solar:document-bold-duotone'
+                              className='h-6 w-6'
+                            />
+                          </div>
+                          <div className='min-w-0'>
+                            <p className='text-muted-foreground text-xs font-semibold tracking-wider uppercase'>
+                              Gönderilen Makale Dosyası
+                            </p>
+                            <p className='text-foreground truncate text-sm font-medium'>
+                              {article.fileUrl}
+                            </p>
+                          </div>
+                        </div>
+                        <Button
+                          asChild
+                          variant='default'
+                          size='sm'
+                          className='shrink-0 shadow-sm'
                         >
-                          Ekli Dosyayı Görüntüle
-                        </a>
-                      </Button>
+                          <a
+                            href={getCdnUrl(article.fileUrl)}
+                            target='_blank'
+                            rel='noreferrer'
+                          >
+                            <Icon
+                              icon='solar:file-download-bold-duotone'
+                              className='mr-1.5 h-4 w-4'
+                            />
+                            İndir / Görüntüle
+                          </a>
+                        </Button>
+                      </div>
+                    </div>
+                  )}
+                  {article.content && (
+                    <div className='mt-6 border-t pt-4'>
+                      <p className='text-muted-foreground mb-2 text-xs font-semibold tracking-wider uppercase'>
+                        Ek Notlar / Açıklama
+                      </p>
+                      <div className='prose prose-sm text-muted-foreground max-w-none leading-relaxed whitespace-pre-wrap'>
+                        {article.content}
+                      </div>
                     </div>
                   )}
                 </>

@@ -3,6 +3,7 @@
     "module": "ESNext",
     "moduleResolution": "bundler",
     "target": "ES2022",
+    "rootDir": "./src",
     "sourceMap": true,
     "outDir": "./dist",
     "incremental": true,
@@ -17,12 +18,23 @@
     "strictBindCallApply": false,
     "noFallthroughCasesInSwitch": false,
     "resolveJsonModule": true,
-    "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"],
-      "@repo/db": ["./src/database/db-client"]
+      "*": [
+        "./*"
+      ],
+      "@/*": [
+        "./src/*"
+      ],
+      "@repo/db": [
+        "./src/database/db-client"
+      ]
     }
   },
-  "include": ["src"],
-  "exclude": ["node_modules", "dist"]
+  "include": [
+    "src"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist"
+  ]
 }
