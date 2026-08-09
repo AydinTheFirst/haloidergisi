@@ -117,7 +117,7 @@ function SubmissionDetailPage() {
     },
     onSuccess: () => {
       toast.success("Yazı silindi.");
-      void navigate({ to: "/dashboard/submissions" });
+      void navigate({ to: "/dashboard/submissions", search: {} as never });
       void queryClient.invalidateQueries({ queryKey: ["submissions"] });
     },
     onError: (error) => toast.error(apiClient.resolveApiError(error).message),

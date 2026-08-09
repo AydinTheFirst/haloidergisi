@@ -1,6 +1,7 @@
 import { CanActivate, ExecutionContext } from "@nestjs/common";
 import { ForbiddenException, Inject, Injectable, UnauthorizedException } from "@nestjs/common";
 import { Reflector } from "@nestjs/core";
+import { GqlExecutionContext } from "@nestjs/graphql";
 import { tokens } from "@repo/db";
 import { eq } from "drizzle-orm";
 
@@ -21,7 +22,7 @@ export class AuthGuard implements CanActivate {
       context.getClass(),
     ]);
 
-    const request = context.switchToHttp().getRequest();
+    const request = this.getRequest(context);
     const authHeader = request.headers["authorization"];
     const token = this.extractTokenFromHeader(authHeader);
 
@@ -59,6 +60,15 @@ export class AuthGuard implements CanActivate {
     }
 
     return true;
+  }
+
+  getRequest(context: ExecutionContext) {
+    const contextType = context.getType<string>();
+    if (contextType === "graphql") {
+      const gqlCtx = GqlExecutionContext.create(context);
+      return gqlCtx.getContext<{ req: Request }>().req;
+    }
+    return context.switchToHttp().getRequest();
   }
 
   extractTokenFromHeader(header?: string): string | null {

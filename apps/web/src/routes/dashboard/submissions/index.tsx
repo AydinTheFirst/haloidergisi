@@ -154,8 +154,8 @@ function RouteComponent() {
           <Select
             value={callId ?? "all"}
             onValueChange={(value) =>
-              // @ts-ignore
               navigate({
+                // @ts-expect-error -- TanStack Router strict search typing
                 search: (old) => ({
                   ...old,
                   callId: value === "all" ? undefined : value,
