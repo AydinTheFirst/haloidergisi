@@ -1,6 +1,6 @@
 import { Icon } from "@iconify/react";
 import { useQuery } from "@tanstack/react-query";
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import {
   ColumnDef,
   getCoreRowModel,
@@ -38,7 +38,7 @@ export const Route = createFileRoute("/dashboard/submissions/")({
 
 function RouteComponent() {
   const { status, callId, page, limit } = Route.useSearch();
-  const navigate = useNavigate();
+  const navigate = Route.useNavigate();
   const sorting = useMemo<SortingState>(() => [], []);
 
   const pagination = useMemo(() => ({ pageIndex: page - 1, pageSize: limit }), [page, limit]);
@@ -134,8 +134,9 @@ function RouteComponent() {
     onSortingChange: () => {},
     onPaginationChange: (updater) => {
       const next = typeof updater === "function" ? updater(pagination) : updater;
-      // @ts-ignore
-      navigate({ search: (old) => ({ ...old, page: next.pageIndex + 1, limit: next.pageSize }) });
+      void navigate({
+        search: (old) => ({ ...old, page: next.pageIndex + 1, limit: next.pageSize }),
+      });
     },
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
@@ -154,8 +155,7 @@ function RouteComponent() {
           <Select
             value={callId ?? "all"}
             onValueChange={(value) =>
-              navigate({
-                // @ts-expect-error -- TanStack Router strict search typing
+              void navigate({
                 search: (old) => ({
                   ...old,
                   callId: value === "all" ? undefined : value,
@@ -187,8 +187,7 @@ function RouteComponent() {
             size='sm'
             className='mt-5'
             onClick={() =>
-              // @ts-ignore
-              navigate({ search: (old) => ({ ...old, callId: undefined, page: 1 }) })
+              void navigate({ search: (old) => ({ ...old, callId: undefined, page: 1 }) })
             }
           >
             <Icon

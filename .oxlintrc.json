@@ -25,6 +25,7 @@
     }
   },
   "rules": {
-    "typescript/no-misused-spread": "off"
+    "typescript/no-misused-spread": "off",
+    "no-useless-default-assignment": "off"
   }
 }

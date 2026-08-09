@@ -19,22 +19,11 @@
     "noFallthroughCasesInSwitch": false,
     "resolveJsonModule": true,
     "paths": {
-      "*": [
-        "./*"
-      ],
-      "@/*": [
-        "./src/*"
-      ],
-      "@repo/db": [
-        "./src/database/db-client"
-      ]
+      "*": ["./*"],
+      "@/*": ["./src/*"],
+      "@repo/db": ["./src/database/db-client"]
     }
   },
-  "include": [
-    "src"
-  ],
-  "exclude": [
-    "node_modules",
-    "dist"
-  ]
+  "include": ["src"],
+  "exclude": ["node_modules", "dist"]
 }
