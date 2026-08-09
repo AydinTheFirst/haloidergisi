@@ -7,7 +7,6 @@ import { useWindowSize } from "usehooks-ts";
 import ThemeSwitcher from "@/components/theme-switcher";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import {
   Sidebar,
   SidebarContent,
@@ -110,19 +109,17 @@ function RouteComponent() {
         </SidebarFooter>
       </Sidebar>
       <SidebarInset className='flex flex-1 flex-col'>
-        <Card className='flex w-full max-w-none flex-row items-center justify-between rounded-none border-x-0 border-t-0'>
-          <CardHeader className='flex-row p-4'>
-            <SidebarTrigger />
-          </CardHeader>
-          <CardContent className='flex-row items-center justify-end gap-4 p-4'>
-            <div className='flex gap-2'>
+        <header className='bg-background/95 supports-[backdrop-filter]:bg-background/60 sticky top-0 z-10 flex h-14 w-full items-center justify-between border-b px-4 backdrop-blur'>
+          <SidebarTrigger />
+          <div className='flex items-center gap-3'>
+            <div className='flex items-center gap-2'>
               <Avatar className='size-8'>
                 <AvatarImage src={user?.profile?.avatarUrl || undefined} />
                 <AvatarFallback>AD</AvatarFallback>
               </Avatar>
               <div className='hidden md:block'>
-                <div className='text-sm font-medium'>{user?.profile?.name}</div>
-                <div className='text-muted-foreground text-xs'>{user?.email}</div>
+                <div className='text-sm leading-none font-medium'>{user?.profile?.name}</div>
+                <div className='text-muted-foreground mt-0.5 text-xs'>{user?.email}</div>
               </div>
             </div>
             <Button
@@ -132,8 +129,8 @@ function RouteComponent() {
             >
               <Icon icon='mdi:logout' />
             </Button>
-          </CardContent>
-        </Card>
+          </div>
+        </header>
         <div className='container max-w-none py-10'>
           <Outlet />
         </div>
