@@ -5,6 +5,7 @@ import { AuthGuard } from "@/guards";
 
 import { CreateUserDto } from "./dto/create-user.dto";
 import { UpdateUserDto } from "./dto/update-user.dto";
+import { UserRoleGuard } from "./guards/user-role.guard";
 import { UsersService } from "./users.service";
 
 @Controller("users")
@@ -14,6 +15,7 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Post()
+  @UseGuards(UserRoleGuard)
   create(@Body() createUserDto: CreateUserDto) {
     return this.usersService.create(createUserDto);
   }
@@ -29,6 +31,7 @@ export class UsersController {
   }
 
   @Patch(":id")
+  @UseGuards(UserRoleGuard)
   update(@Param("id") id: string, @Body() updateUserDto: UpdateUserDto) {
     return this.usersService.update(id, updateUserDto);
   }

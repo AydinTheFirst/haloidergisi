@@ -7,6 +7,7 @@ import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   Form,
   FormControl,
@@ -24,9 +25,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useAuth } from "@/hooks/use-auth";
 import apiClient from "@/lib/api-client";
 import { userSchema, UserSchema } from "@/schemas/user";
-import { List, User } from "@/types";
+import { List, Role, User } from "@/types";
+
+const ASSIGNABLE_ROLES: Role[] = ["USER", "ADMIN", "SUPER_ADMIN"];
+const PRIVILEGED_ROLES: Role[] = ["ADMIN", "SUPER_ADMIN"];
 
 export const Route = createFileRoute("/dashboard/users/$userId")({
   component: RouteComponent,
@@ -42,6 +47,8 @@ function RouteComponent() {
   const { userId } = Route.useParams();
   const { crews } = Route.useLoaderData();
 
+  const { data: viewer } = useAuth();
+
   const { data: user } = useQuery({
     queryKey: ["user", userId],
     queryFn: async () => {
@@ -52,6 +59,12 @@ function RouteComponent() {
 
   const navigate = useNavigate({ from: Route.id });
 
+  const canEditRoles = Boolean(
+    viewer?.roles.includes("SUPER_ADMIN") ||
+    (viewer?.roles.includes("ADMIN") &&
+      !user?.roles.some((role) => PRIVILEGED_ROLES.includes(role))),
+  );
+
   const form = useForm<UserSchema>({
     resolver: zodResolver(userSchema),
     values: {
@@ -59,12 +72,15 @@ function RouteComponent() {
       email: user?.email ?? "",
       password: undefined,
       crewId: user?.crewId ?? undefined,
+      roles: user?.roles ?? [],
     },
   });
 
   const onSubmit = async (data: UserSchema) => {
+    const { roles, ...rest } = data;
+    const payload = canEditRoles ? { ...rest, roles } : rest;
     try {
-      await apiClient.patch(`/users/${userId}`, data);
+      await apiClient.patch(`/users/${userId}`, payload);
       toast.success("Kullanıcı başarıyla güncellendi.");
       void navigate({ to: "/dashboard/users" });
     } catch (error) {
@@ -175,6 +191,47 @@ function RouteComponent() {
                     </Select>
                     <FormDescription>
                       Kullanıcıyı bir crew'e atamak için crew ID'si giriniz.
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name='roles'
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Roller</FormLabel>
+                    {canEditRoles ? (
+                      <div className='flex flex-col gap-2'>
+                        {ASSIGNABLE_ROLES.map((role) => (
+                          <div
+                            key={role}
+                            className='flex items-center gap-2'
+                          >
+                            <Checkbox
+                              checked={field.value?.includes(role) ?? false}
+                              onCheckedChange={(checked) => {
+                                const current = field.value ?? [];
+                                field.onChange(
+                                  checked ? [...current, role] : current.filter((r) => r !== role),
+                                );
+                              }}
+                            />
+                            <span className='text-sm'>{role}</span>
+                          </div>
+                        ))}
+                      </div>
+                    ) : (
+                      <p className='text-muted-foreground text-sm'>
+                        {user?.roles.join(", ") || "-"}
+                      </p>
+                    )}
+                    <FormDescription>
+                      {canEditRoles
+                        ? "Kullanıcıya atanacak rolleri seçiniz."
+                        : "Bu kullanıcının rollerini değiştirme yetkiniz yok."}
                     </FormDescription>
                     <FormMessage />
                   </FormItem>

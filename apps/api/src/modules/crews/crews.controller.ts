@@ -20,7 +20,7 @@ export class CrewsController {
 
   @Get()
   @AllowAnonymous()
-  findAll(@DrizzleQuery() query: DrizzleQueryParams) {
+  findAll(@DrizzleQuery(["name"]) query: DrizzleQueryParams) {
     return this.crewsService.findAll(query);
   }
 

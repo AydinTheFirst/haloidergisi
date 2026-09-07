@@ -1,10 +1,20 @@
 import { Icon } from "@iconify/react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
+import {
+  ColumnDef,
+  getCoreRowModel,
+  getPaginationRowModel,
+  getSortedRowModel,
+  SortingState,
+  useReactTable,
+} from "@tanstack/react-table";
 import { Check, ChevronsUpDown } from "lucide-react";
 import { useId, useState } from "react";
 import { toast } from "sonner";
+import { z } from "zod";
 
+import { DataGrid } from "@/components/data-grid";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
@@ -17,20 +27,18 @@ import {
 } from "@/components/ui/command";
 import { Input } from "@/components/ui/input";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
 import apiClient from "@/lib/api-client";
 import { cn } from "@/lib/utils";
 import { List, Post } from "@/types";
 
+const searchSchema = z.object({
+  page: z.number().optional(),
+  limit: z.number().optional(),
+});
+
 export const Route = createFileRoute("/dashboard/themes/")({
   component: ThemesDashboard,
+  validateSearch: (search) => searchSchema.parse(search),
 });
 
 type Theme = {
@@ -42,6 +50,9 @@ type Theme = {
 };
 
 function ThemesDashboard() {
+  const { page = 1, limit = 10 } = Route.useSearch();
+  const navigate = Route.useNavigate();
+
   const queryClient = useQueryClient();
   const [newThemes, setNewThemes] = useState([{ work: "", category: "", postId: "" }]);
 
@@ -86,6 +97,53 @@ function ThemesDashboard() {
       queryClient.invalidateQueries({ queryKey: ["dashboard", "themes"] });
       toast.success("Eser silindi.");
     },
+  });
+
+  const columns: ColumnDef<Theme>[] = [
+    { accessorKey: "work", header: "Başlık (Eser)" },
+    { accessorKey: "category", header: "Konu (Tür)" },
+    {
+      id: "post",
+      header: "İlgili Dergi",
+      cell: ({ row }) => row.original.post?.title || "Bulunamadı",
+    },
+    {
+      id: "actions",
+      header: "İşlemler",
+      cell: ({ row }) => (
+        <Button
+          variant='ghost'
+          size='icon'
+          className='text-destructive'
+          onClick={() => deleteMutation.mutate(row.original.id)}
+          disabled={deleteMutation.isPending}
+        >
+          <Icon icon='mdi:trash-can-outline' />
+        </Button>
+      ),
+    },
+  ];
+
+  const [sorting, setSorting] = useState<SortingState>([]);
+
+  const table = useReactTable({
+    data: themes || [],
+    columns,
+    state: {
+      sorting,
+      pagination: { pageIndex: page - 1, pageSize: limit },
+    },
+    onSortingChange: setSorting,
+    onPaginationChange: (updater) => {
+      const current = { pageIndex: page - 1, pageSize: limit };
+      const next = typeof updater === "function" ? updater(current) : updater;
+      void navigate({
+        search: (old) => ({ ...old, page: next.pageIndex + 1, limit: next.pageSize }),
+      });
+    },
+    getCoreRowModel: getCoreRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
   });
 
   const handleAddRow = () => {
@@ -207,56 +265,11 @@ function ThemesDashboard() {
           <CardTitle>Mevcut Eserler</CardTitle>
         </CardHeader>
         <CardContent>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Başlık (Eser)</TableHead>
-                <TableHead>Konu (Tür)</TableHead>
-                <TableHead>İlgili Dergi</TableHead>
-                <TableHead className='w-[100px]'>İşlemler</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {isThemesLoading && (
-                <TableRow>
-                  <TableCell
-                    colSpan={4}
-                    className='text-center'
-                  >
-                    Yükleniyor...
-                  </TableCell>
-                </TableRow>
-              )}
-              {themes?.map((theme) => (
-                <TableRow key={theme.id}>
-                  <TableCell>{theme.work}</TableCell>
-                  <TableCell>{theme.category}</TableCell>
-                  <TableCell>{theme.post?.title || "Bulunamadı"}</TableCell>
-                  <TableCell>
-                    <Button
-                      variant='ghost'
-                      size='icon'
-                      className='text-destructive'
-                      onClick={() => deleteMutation.mutate(theme.id)}
-                      disabled={deleteMutation.isPending}
-                    >
-                      <Icon icon='mdi:trash-can-outline' />
-                    </Button>
-                  </TableCell>
-                </TableRow>
-              ))}
-              {!isThemesLoading && themes?.length === 0 && (
-                <TableRow>
-                  <TableCell
-                    colSpan={4}
-                    className='text-center'
-                  >
-                    Henüz eser eklenmemiş.
-                  </TableCell>
-                </TableRow>
-              )}
-            </TableBody>
-          </Table>
+          {isThemesLoading ? (
+            <p className='text-muted-foreground py-4 text-center text-sm'>Yükleniyor...</p>
+          ) : (
+            <DataGrid table={table} />
+          )}
         </CardContent>
       </Card>
     </div>

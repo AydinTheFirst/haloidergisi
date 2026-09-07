@@ -13,9 +13,10 @@ import {
 export const Role = {
   USER: "USER",
   ADMIN: "ADMIN",
+  SUPER_ADMIN: "SUPER_ADMIN",
 } as const;
 export type Role = (typeof Role)[keyof typeof Role];
-export const roleEnum = pgEnum("Role", ["USER", "ADMIN"]);
+export const roleEnum = pgEnum("Role", ["USER", "ADMIN", "SUPER_ADMIN"]);
 
 export const PostStatus = {
   DRAFT: "DRAFT",
@@ -400,3 +401,19 @@ export const newsRelations = relations(news, ({ one }) => ({
 
 export type News = typeof news.$inferSelect;
 export type NewNews = typeof news.$inferInsert;
+
+export const themeConfigs = pgTable("ThemeConfig", {
+  id: text("id")
+    .primaryKey()
+    .$defaultFn(() => crypto.randomUUID()),
+  primaryColor: text("primaryColor").notNull().default("oklch(0.205 0 0)"),
+  primaryDarkColor: text("primaryDarkColor").notNull().default("oklch(0.922 0 0)"),
+  accentColor: text("accentColor"),
+  radius: text("radius").notNull().default("0.625rem"),
+  fontFamily: text("fontFamily").notNull().default("Inter Variable, sans-serif"),
+  preset: text("preset").notNull().default("default"),
+  updatedAt: timestamp("updatedAt").defaultNow().notNull(),
+});
+
+export type ThemeConfig = typeof themeConfigs.$inferSelect;
+export type NewThemeConfig = typeof themeConfigs.$inferInsert;

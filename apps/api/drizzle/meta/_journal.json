@@ -64,6 +64,20 @@
       "when": 1778413073502,
       "tag": "0008_nasty_scalphunter",
       "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1786311953328,
+      "tag": "0009_fine_polaris",
+      "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1788798217144,
+      "tag": "0010_rich_miss_america",
+      "breakpoints": true
     }
   ]
 }

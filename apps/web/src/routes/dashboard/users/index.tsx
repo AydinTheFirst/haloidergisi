@@ -30,6 +30,7 @@ const searchSchema = z.object({
   page: z.number().optional(),
   limit: z.number().optional(),
   q: z.string().optional(),
+  sort: z.string().optional(),
 });
 
 type SearchSchema = z.infer<typeof searchSchema>;
@@ -40,7 +41,7 @@ export const Route = createFileRoute("/dashboard/users/")({
 });
 
 function RouteComponent() {
-  const { page = 1, limit = 10, q = "" } = Route.useSearch();
+  const { page = 1, limit = 10, q = "", sort } = Route.useSearch();
 
   const navigate = useNavigate({ from: Route.id });
 
@@ -75,7 +76,7 @@ function RouteComponent() {
   });
 
   const { data: users } = useQuery({
-    queryKey: ["users", { page, limit, q }],
+    queryKey: ["users", { page, limit, q, sort }],
     queryFn: async () => {
       const { data } = await apiClient.get<QueryRes<_User>>("/users", {
         params: {
@@ -83,6 +84,7 @@ function RouteComponent() {
           page,
           limit,
           search: q,
+          sort,
         },
       });
       return data;
@@ -156,7 +158,9 @@ function RouteComponent() {
     },
   ];
 
-  const [sorting, setSorting] = useState<SortingState>([]);
+  const [sorting, setSorting] = useState<SortingState>(() =>
+    sort ? [{ id: sort.split(":")[0], desc: sort.split(":")[1] === "desc" }] : [],
+  );
 
   const table = useReactTable({
     data: users?.items || [],
@@ -169,8 +173,14 @@ function RouteComponent() {
       },
     },
     manualPagination: true,
+    manualSorting: true,
     pageCount: users ? Math.ceil(users.meta.total / (limit || 10)) : 0,
-    onSortingChange: setSorting,
+    onSortingChange: (updater) => {
+      const next = typeof updater === "function" ? updater(sorting) : updater;
+      setSorting(next);
+      const nextSort = next[0] ? `${next[0].id}:${next[0].desc ? "desc" : "asc"}` : undefined;
+      void navigate({ search: (old) => ({ ...old, sort: nextSort, page: 1 }) });
+    },
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getPaginationRowModel: getPaginationRowModel(),

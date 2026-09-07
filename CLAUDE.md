@@ -31,19 +31,25 @@ packages/
 
 **NestJS application** with the following structure:
 
-- `src/modules/` - Feature modules (auth, posts, categories, crews, analytics, files, messages, account, profile)
-- `src/app/` - Application configuration
-- `src/database/` - Database connection setup
+- `src/modules/` - Feature modules (auth, auth-google, posts, articles, categories, crews, analytics, stats, files, messages, account, profile, news, sitemap, submission-calls, themes, theme-config, tokens, users)
+- `src/app/` - Application configuration (`app.module.ts` wires up all feature modules plus GraphQL, JWT, mailer, and scheduling)
+- `src/database/` - Drizzle client/schema; also exposed via the `@repo/db` path alias (see below)
 - `src/decorators/` - Custom NestJS decorators
-- `src/guards/` - Authentication and authorization guards
+- `src/guards/` - Authentication/authorization and Cloudflare Turnstile guards
 - `src/middlewares/` - HTTP middlewares
 - `src/services/` - Shared business logic services
 - `src/types/` - TypeScript types and interfaces
 - `src/utils/` - Helper functions
 
+**API style**: the API is primarily **REST** (one `*.controller.ts` per module). A **GraphQL** layer (`@nestjs/graphql` + Apollo, code-first) is used for newer modules (e.g. `stats`) — schema is auto-generated to `src/schema.gql` via `autoSchemaFile` in `app.module.ts`; do not hand-edit `schema.gql`. `AuthGuard` is context-aware and applies to both HTTP and GraphQL requests.
+
 **Key Features**:
 
-- JWT-based authentication (Email/Password and Google OAuth)
+- Opaque session-token authentication: login issues a random token stored in the `tokens` table (`TokensService`); `AuthGuard` looks up the bearer token on every request rather than verifying a signed JWT. `@nestjs/jwt` is only used for one-off signed tokens (e.g. password-reset links), not for session auth.
+- Google OAuth login via `auth-google` module
+- Route-level auth decorators: `@AllowAnonymous()`, `@OptionalAuth()`, `@Roles(...)`, and the `@Auth()` param decorator to pull the current user (or a field of it) out of the request
+- `@DrizzleQuery()` param decorator parses list-endpoint query params (`page`, `limit`, `sort`, `fields`, `filter`, `search`) into a Drizzle-friendly where/order/pagination shape
+- Cloudflare Turnstile guard for bot protection on public-facing endpoints
 - Drizzle ORM with PostgreSQL
 - AWS S3 for file management
 - Event-driven architecture with `@nestjs/event-emitter` for email notifications
@@ -68,6 +74,7 @@ packages/
 
 - TanStack Router for file-based routing
 - TanStack Query for server state management
+- Two API clients: `src/lib/api-client.ts` (axios, used for most REST endpoints — attaches the bearer token from `localStorage` and drives a global loading indicator via the Zustand `loader-store`) and `src/lib/graphql-client.ts` (`graphql-request`, used for GraphQL-backed queries like dashboard stats)
 - Tailwind CSS v4 + Shadcn UI for styling
 - Zustand for client state management
 - React Hook Form + Zod for form validation
@@ -143,7 +150,7 @@ bun run --filter=api db:studio  # Open Drizzle Studio for database GUI
 - **Environment Setup**: Uses `dotenvx` to load database credentials from `.env`
 - **Database GUI**: Use `bun run --filter=api db:studio` to open Drizzle Studio
 
-**Important**: The database schema is defined in the API app and accessed via the Drizzle client initialized in `apps/api/src/database/db-client.ts`.
+**Important**: The database schema is defined in the API app and accessed via the Drizzle client initialized in `apps/api/src/database/db-client.ts`. That file is also re-exported under the `@repo/db` path alias (`apps/api/tsconfig.json`), so most API code imports tables/types/enums (e.g. `Role`, `PostStatus`) as `from "@repo/db"` rather than a relative path — it is a tsconfig alias, not a real workspace package.
 
 ## Code Organization & Patterns
 
@@ -152,7 +159,7 @@ bun run --filter=api db:studio  # Open Drizzle Studio for database GUI
 Each backend module follows a standard pattern:
 
 - `module.ts` - Module definition with imports/exports
-- `controller.ts` - HTTP endpoints and request handling
+- `controller.ts` - REST endpoints and request handling (or `resolver.ts` for GraphQL modules, e.g. `stats`)
 - `service.ts` - Business logic
 - `dto/` - Data Transfer Objects for validation
 - `entities/` - Database entity models
@@ -230,7 +237,7 @@ bun run debug --filter=api    # Starts with Node debugger enabled
 
 ## Key Dependencies
 
-- **Backend**: NestJS, Drizzle, JWT, Argon2 (password hashing), AWS SDK, Nodemailer, Google Auth Library, React Email
+- **Backend**: NestJS, Drizzle, Apollo/GraphQL, Argon2 (password hashing), AWS SDK, Nodemailer, Google Auth Library, React Email
 - **Frontend**: React, TanStack Router/Query, Tailwind v4, Shadcn UI, Zod, React Hook Form, Zustand, Recharts, Framer Motion
 - **Shared**: React Email templates
 

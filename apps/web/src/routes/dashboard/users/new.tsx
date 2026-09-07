@@ -7,6 +7,7 @@ import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   Form,
   FormControl,
@@ -24,9 +25,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useAuth } from "@/hooks/use-auth";
 import apiClient from "@/lib/api-client";
 import { userSchema, UserSchema } from "@/schemas/user";
-import { List } from "@/types";
+import { List, Role } from "@/types";
+
+const ASSIGNABLE_ROLES: Role[] = ["USER", "ADMIN", "SUPER_ADMIN"];
 
 export const Route = createFileRoute("/dashboard/users/new")({
   component: RouteComponent,
@@ -41,6 +45,8 @@ export const Route = createFileRoute("/dashboard/users/new")({
 function RouteComponent() {
   const navigate = useNavigate({ from: Route.id });
   const { crews } = Route.useLoaderData();
+  const { data: viewer } = useAuth();
+  const canSetRoles = Boolean(viewer?.roles.includes("SUPER_ADMIN"));
 
   const form = useForm<UserSchema>({
     resolver: zodResolver(userSchema),
@@ -49,6 +55,7 @@ function RouteComponent() {
       email: "",
       password: "",
       crewId: undefined,
+      roles: ["USER"],
     },
   });
 
@@ -71,7 +78,8 @@ function RouteComponent() {
   });
 
   const onSubmit = (data: UserSchema) => {
-    createMutation.mutate(data);
+    const { roles, ...rest } = data;
+    createMutation.mutate(canSetRoles ? { ...rest, roles } : rest);
   };
 
   return (
@@ -175,6 +183,39 @@ function RouteComponent() {
                 </FormItem>
               )}
             />
+
+            {canSetRoles && (
+              <FormField
+                control={form.control}
+                name='roles'
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Roller</FormLabel>
+                    <div className='flex flex-col gap-2'>
+                      {ASSIGNABLE_ROLES.map((role) => (
+                        <div
+                          key={role}
+                          className='flex items-center gap-2'
+                        >
+                          <Checkbox
+                            checked={field.value?.includes(role) ?? false}
+                            onCheckedChange={(checked) => {
+                              const current = field.value ?? [];
+                              field.onChange(
+                                checked ? [...current, role] : current.filter((r) => r !== role),
+                              );
+                            }}
+                          />
+                          <span className='text-sm'>{role}</span>
+                        </div>
+                      ))}
+                    </div>
+                    <FormDescription>Kullanıcıya atanacak rolleri seçiniz.</FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            )}
 
             <Button
               type='submit'

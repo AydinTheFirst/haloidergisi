@@ -41,6 +41,7 @@ const pages = [
     to: "/dashboard/submissions",
     icon: "mdi:file-document-edit-outline",
   },
+  { name: "Tema Ayarları", to: "/dashboard/theme-config", icon: "mdi:palette-outline" },
   { name: "Analitik", to: "/dashboard/analytics", icon: "mdi:chart-bar" },
 ];
 
@@ -59,9 +60,7 @@ function RouteComponent() {
 
   if (isLoading) return null;
 
-  console.log(user);
-
-  if (!user || !user.roles.includes("ADMIN")) {
+  if (!user || !(user.roles.includes("ADMIN") || user.roles.includes("SUPER_ADMIN"))) {
     return redirect({ to: "/" });
   }
 

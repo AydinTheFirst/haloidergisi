@@ -14,7 +14,6 @@ import { generateCanonicalUrl, generateMetaTags } from "@/utils/seo";
 
 const blogSearchSchema = z.object({
   q: z.string().optional().catch(""),
-  cat: z.string().optional().catch(""),
   view: z.enum(["grid", "list"]).optional().catch("grid"),
 });
 
@@ -40,7 +39,7 @@ export const Route = createFileRoute("/_landing/blog/")({
 });
 
 function BlogLandingPage() {
-  const { q: searchQuery, cat: selectedCategory, view: viewMode } = Route.useSearch();
+  const { q: searchQuery, view: viewMode } = Route.useSearch();
   const navigate = useNavigate({ from: Route.fullPath });
 
   const { data: news, isLoading } = useQuery({
@@ -55,36 +54,21 @@ function BlogLandingPage() {
     void navigate({ search: (prev: any) => ({ ...prev, q }) });
   };
 
-  const setSelectedCategory = (cat: string | null) => {
-    void navigate({ search: (prev: any) => ({ ...prev, cat: cat ?? "" }) });
-  };
-
   const setViewMode = (view: "grid" | "list") => {
     void navigate({ search: (prev: any) => ({ ...prev, view }) });
   };
 
-  const allCategories = useMemo(() => {
-    if (!news) return [];
-    const cats = new Set<string>();
-    news.forEach((item) => {
-      item.keywords?.split(",").forEach((k) => cats.add(k.trim()));
-    });
-    return Array.from(cats).filter(Boolean);
-  }, [news]);
-
   const filteredNews = useMemo(() => {
     if (!news) return [];
     const search = searchQuery || "";
-    const category = selectedCategory || "";
 
     return news.filter((item) => {
-      const matchesSearch =
+      return (
         item.title.toLowerCase().includes(search.toLowerCase()) ||
-        item.content.toLowerCase().includes(search.toLowerCase());
-      const matchesCategory = !category || item.keywords?.includes(category);
-      return matchesSearch && matchesCategory;
+        item.content.toLowerCase().includes(search.toLowerCase())
+      );
     });
-  }, [news, searchQuery, selectedCategory]);
+  }, [news, searchQuery]);
 
   return (
     <div className='container mx-auto max-w-6xl px-4 py-12'>
@@ -140,28 +124,6 @@ function BlogLandingPage() {
             </Button>
           </div>
         </div>
-      </div>
-
-      <div className='mb-10 flex flex-wrap gap-2'>
-        <Button
-          variant={!selectedCategory ? "secondary" : "ghost"}
-          size='sm'
-          onClick={() => setSelectedCategory(null)}
-          className='rounded-full'
-        >
-          Tümü
-        </Button>
-        {allCategories.map((cat) => (
-          <Button
-            key={cat}
-            variant={selectedCategory === cat ? "secondary" : "ghost"}
-            size='sm'
-            onClick={() => setSelectedCategory(cat)}
-            className='rounded-full'
-          >
-            {cat}
-          </Button>
-        ))}
       </div>
 
       {isLoading ? (
@@ -262,7 +224,7 @@ function BlogLandingPage() {
             }}
             className='text-primary mt-4 text-lg'
           >
-            Filtreleri Temizle
+            Aramayı Temizle
           </Button>
         </div>
       )}

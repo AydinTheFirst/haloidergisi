@@ -13,6 +13,7 @@ import { ProfileModule } from "./profile/profile.module";
 import { SitemapModule } from "./sitemap/sitemap.module";
 import { StatsModule } from "./stats/stats.module";
 import { SubmissionCallsModule } from "./submission-calls/submission-calls.module";
+import { ThemeConfigModule } from "./theme-config/theme-config.module";
 import { ThemesModule } from "./themes/themes.module";
 import { UsersModule } from "./users/users.module";
 
@@ -28,6 +29,7 @@ const modules = {
   PostsModule,
   ProfileModule,
   ThemesModule,
+  ThemeConfigModule,
   UsersModule,
   SubmissionCallsModule,
   ArticlesModule,

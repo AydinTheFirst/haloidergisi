@@ -4,27 +4,41 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import {
   ColumnDef,
   getCoreRowModel,
+  getPaginationRowModel,
   getSortedRowModel,
   SortingState,
   useReactTable,
 } from "@tanstack/react-table";
 import { useState } from "react";
 import { toast } from "sonner";
+import { z } from "zod";
 
 import { DataGrid } from "@/components/data-grid";
 import { Button } from "@/components/ui/button";
 import apiClient from "@/lib/api-client";
-import { SubmissionCall } from "@/types";
+import { QueryRes, SubmissionCall } from "@/types";
+
+const searchSchema = z.object({
+  page: z.coerce.number().min(1).optional().default(1),
+  limit: z.coerce.number().min(1).optional().default(10),
+  sort: z.string().optional(),
+});
 
 export const Route = createFileRoute("/dashboard/calls/")({
   component: RouteComponent,
+  validateSearch: (search) => searchSchema.parse(search),
 });
 
 function RouteComponent() {
+  const { page, limit, sort } = Route.useSearch();
+  const navigate = Route.useNavigate();
+
   const { data: calls } = useQuery({
-    queryKey: ["submission-calls"],
+    queryKey: ["submission-calls", { page, limit, sort }],
     queryFn: async () => {
-      const { data } = await apiClient.get<SubmissionCall[]>("/submission-calls");
+      const { data } = await apiClient.get<QueryRes<SubmissionCall>>("/submission-calls", {
+        params: { page, limit, sort },
+      });
       return data;
     },
   });
@@ -125,17 +139,36 @@ function RouteComponent() {
     },
   ];
 
-  const [sorting, setSorting] = useState<SortingState>([]);
+  const [sorting, setSorting] = useState<SortingState>(() =>
+    sort ? [{ id: sort.split(":")[0], desc: sort.split(":")[1] === "desc" }] : [],
+  );
 
   const table = useReactTable({
-    data: calls || [],
+    data: calls?.items || [],
     columns,
     state: {
       sorting,
+      pagination: { pageIndex: page - 1, pageSize: limit },
     },
-    onSortingChange: setSorting,
+    manualPagination: true,
+    manualSorting: true,
+    pageCount: calls ? Math.ceil(calls.meta.total / limit) : 0,
+    onSortingChange: (updater) => {
+      const next = typeof updater === "function" ? updater(sorting) : updater;
+      setSorting(next);
+      const nextSort = next[0] ? `${next[0].id}:${next[0].desc ? "desc" : "asc"}` : undefined;
+      void navigate({ search: (old) => ({ ...old, sort: nextSort, page: 1 }) });
+    },
+    onPaginationChange: (updater) => {
+      const current = { pageIndex: page - 1, pageSize: limit };
+      const next = typeof updater === "function" ? updater(current) : updater;
+      void navigate({
+        search: (old) => ({ ...old, page: next.pageIndex + 1, limit: next.pageSize }),
+      });
+    },
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
   });
 
   return (

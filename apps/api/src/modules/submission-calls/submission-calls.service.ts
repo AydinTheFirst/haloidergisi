@@ -1,6 +1,9 @@
 import { Injectable } from "@nestjs/common";
 import { submissionCalls } from "@repo/db";
-import { eq } from "drizzle-orm";
+import { eq, sql } from "drizzle-orm";
+
+import { DrizzleQueryParams } from "@/decorators";
+import { applyQuery } from "@/utils";
 
 import { DrizzleService } from "../../database/drizzle.service";
 import { CreateSubmissionCallDto, UpdateSubmissionCallDto } from "./dto/submission-call.dto";
@@ -9,10 +12,22 @@ import { CreateSubmissionCallDto, UpdateSubmissionCallDto } from "./dto/submissi
 export class SubmissionCallsService {
   constructor(private readonly drizzle: DrizzleService) {}
 
-  async findAll() {
-    return await this.drizzle.db.query.submissionCalls.findMany({
-      orderBy: (calls, { desc }) => [desc(calls.createdAt)],
+  async findAll(query: DrizzleQueryParams) {
+    const { where, orderBy, limit, offset } = applyQuery(submissionCalls, query);
+
+    const items = await this.drizzle.db.query.submissionCalls.findMany({
+      where,
+      orderBy,
+      limit,
+      offset,
     });
+
+    const [{ total }] = await this.drizzle.db
+      .select({ total: sql<number>`count(*)` })
+      .from(submissionCalls)
+      .where(where);
+
+    return { items, meta: { total: Number(total), take: query.take, skip: query.skip } };
   }
 
   async findActive() {

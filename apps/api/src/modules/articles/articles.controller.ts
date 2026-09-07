@@ -11,6 +11,8 @@ import {
 } from "@nestjs/common";
 import { Role } from "@repo/db";
 
+import { DrizzleQuery, type DrizzleQueryParams } from "@/decorators";
+
 import { Auth, Roles } from "../../decorators/auth.decorators";
 import { ArticlesService } from "./articles.service";
 import { CreateArticleDto, UpdateArticleDto, UpdateArticleStatusDto } from "./dto/article.dto";
@@ -25,11 +27,17 @@ export class ArticlesController {
   @Get()
   @Roles(Role.ADMIN)
   findAll(
+    @DrizzleQuery(["title", "content"]) query: DrizzleQueryParams,
     @Query("callId") callId?: string,
     @Query("status") status?: string,
     @Query("authorId") authorId?: string,
   ) {
-    return this.articlesService.findAll({ callId, status, authorId });
+    const where: Record<string, any> = { ...query.where };
+    if (callId) where.callId = callId;
+    if (status) where.status = status;
+    if (authorId) where.authorId = authorId;
+
+    return this.articlesService.findAll({ ...query, where });
   }
 
   @Get("my")

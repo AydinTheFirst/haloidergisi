@@ -1,6 +1,8 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post } from "@nestjs/common";
 import { Role } from "@repo/db";
 
+import { DrizzleQuery, type DrizzleQueryParams } from "@/decorators";
+
 import { Auth, AllowAnonymous, OptionalAuth, Roles } from "../../decorators/auth.decorators";
 import { CreateSubmissionCallDto, UpdateSubmissionCallDto } from "./dto/submission-call.dto";
 import { SubmissionCallsService } from "./submission-calls.service";
@@ -10,8 +12,8 @@ export class SubmissionCallsController {
   constructor(private readonly submissionCallsService: SubmissionCallsService) {}
 
   @Get()
-  findAll() {
-    return this.submissionCallsService.findAll();
+  findAll(@DrizzleQuery(["title", "description"]) query: DrizzleQueryParams) {
+    return this.submissionCallsService.findAll(query);
   }
 
   @Get("active")

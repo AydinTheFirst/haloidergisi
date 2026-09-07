@@ -9,7 +9,7 @@ import {
   SortingState,
   useReactTable,
 } from "@tanstack/react-table";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { z } from "zod";
 
 import { DataGrid } from "@/components/data-grid";
@@ -22,13 +22,14 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import apiClient from "@/lib/api-client";
-import { Article, ArticleStatus, SubmissionCall } from "@/types";
+import { Article, ArticleStatus, QueryRes, SubmissionCall } from "@/types";
 
 const searchSchema = z.object({
   status: z.string().optional(),
   callId: z.string().optional(),
   page: z.coerce.number().min(1).optional().default(1),
   limit: z.coerce.number().min(1).optional().default(10),
+  sort: z.string().optional(),
 });
 
 export const Route = createFileRoute("/dashboard/submissions/")({
@@ -37,25 +38,30 @@ export const Route = createFileRoute("/dashboard/submissions/")({
 });
 
 function RouteComponent() {
-  const { status, callId, page, limit } = Route.useSearch();
+  const { status, callId, page, limit, sort } = Route.useSearch();
   const navigate = Route.useNavigate();
-  const sorting = useMemo<SortingState>(() => [], []);
+
+  const [sorting, setSorting] = useState<SortingState>(() =>
+    sort ? [{ id: sort.split(":")[0], desc: sort.split(":")[1] === "desc" }] : [],
+  );
 
   const pagination = useMemo(() => ({ pageIndex: page - 1, pageSize: limit }), [page, limit]);
 
   const { data: calls } = useQuery({
-    queryKey: ["submission-calls"],
+    queryKey: ["submission-calls", "all"],
     queryFn: async () => {
-      const { data } = await apiClient.get<SubmissionCall[]>("/submission-calls");
-      return data;
+      const { data } = await apiClient.get<QueryRes<SubmissionCall>>("/submission-calls", {
+        params: { limit: -1 },
+      });
+      return data.items;
     },
   });
 
   const { data: submissions } = useQuery({
-    queryKey: ["submissions", { status, callId }],
+    queryKey: ["submissions", { status, callId, page, limit, sort }],
     queryFn: async () => {
-      const { data } = await apiClient.get<Article[]>("/articles", {
-        params: { status, callId },
+      const { data } = await apiClient.get<QueryRes<Article>>("/articles", {
+        params: { status, callId, page, limit, sort },
       });
       return data;
     },
@@ -128,10 +134,18 @@ function RouteComponent() {
   ];
 
   const table = useReactTable({
-    data: submissions || [],
+    data: submissions?.items || [],
     columns,
     state: { sorting, pagination },
-    onSortingChange: () => {},
+    manualPagination: true,
+    manualSorting: true,
+    pageCount: submissions ? Math.ceil(submissions.meta.total / limit) : 0,
+    onSortingChange: (updater) => {
+      const next = typeof updater === "function" ? updater(sorting) : updater;
+      setSorting(next);
+      const nextSort = next[0] ? `${next[0].id}:${next[0].desc ? "desc" : "asc"}` : undefined;
+      void navigate({ search: (old) => ({ ...old, sort: nextSort, page: 1 }) });
+    },
     onPaginationChange: (updater) => {
       const next = typeof updater === "function" ? updater(pagination) : updater;
       void navigate({

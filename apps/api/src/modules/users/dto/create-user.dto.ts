@@ -1,5 +1,14 @@
-import { User } from "@repo/db";
-import { IsDateString, IsEmail, IsOptional, IsString, MaxLength, MinLength } from "class-validator";
+import { Role, User } from "@repo/db";
+import {
+  IsArray,
+  IsDateString,
+  IsEmail,
+  IsEnum,
+  IsOptional,
+  IsString,
+  MaxLength,
+  MinLength,
+} from "class-validator";
 
 export class CreateUserDto implements Partial<User> {
   @IsEmail()
@@ -22,4 +31,9 @@ export class CreateUserDto implements Partial<User> {
   @IsOptional()
   @IsString()
   crewId?: string | null | undefined;
+
+  @IsOptional()
+  @IsArray()
+  @IsEnum(Role, { each: true })
+  roles?: Role[];
 }

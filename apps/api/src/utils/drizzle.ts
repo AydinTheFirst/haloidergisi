@@ -1,3 +1,4 @@
+import { categories, crews, db, profiles, users } from "@repo/db";
 import {
   and,
   asc,
@@ -14,50 +15,92 @@ import {
   or,
 } from "drizzle-orm";
 
+// Maps a relation key (as used in dotted `searchableFields`, e.g. "category.name")
+// to the foreign table and the columns that join it to the table being queried.
+const RELATION_MAP: Record<string, { table: any; localKey: string; foreignKey: string }> = {
+  category: { table: categories, localKey: "categoryId", foreignKey: "id" },
+  profile: { table: profiles, localKey: "id", foreignKey: "userId" },
+  crew: { table: crews, localKey: "crewId", foreignKey: "id" },
+  user: { table: users, localKey: "userId", foreignKey: "id" },
+};
+
+function buildCondition(table: any, key: string, val: any): any {
+  const relation = RELATION_MAP[key];
+
+  if (
+    relation &&
+    typeof val === "object" &&
+    val !== null &&
+    !("contains" in val) &&
+    !("not" in val)
+  ) {
+    const [relationField] = Object.keys(val);
+    const relationVal = val[relationField];
+
+    if (!table[relation.localKey] || !relation.table[relationField]) return undefined;
+
+    const subquery = db
+      .select({ id: relation.table[relation.foreignKey] })
+      .from(relation.table)
+      .where(
+        typeof relationVal === "object" && relationVal !== null && "contains" in relationVal
+          ? ilike(relation.table[relationField], `%${relationVal.contains}%`)
+          : eq(relation.table[relationField], relationVal),
+      );
+
+    return inArray(table[relation.localKey], subquery);
+  }
+
+  if (!table[key]) return undefined;
+
+  if (typeof val === "object" && val !== null && !Array.isArray(val)) {
+    if ("not" in val) return ne(table[key], val.not);
+    if ("contains" in val) return ilike(table[key], `%${val.contains}%`);
+    if ("gt" in val) return gt(table[key], val.gt);
+    if ("gte" in val) return gte(table[key], val.gte);
+    if ("lt" in val) return lt(table[key], val.lt);
+    if ("lte" in val) return lte(table[key], val.lte);
+    if ("in" in val && Array.isArray(val.in)) return inArray(table[key], val.in);
+    if ("notIn" in val && Array.isArray(val.notIn)) return notInArray(table[key], val.notIn);
+    return eq(table[key], val);
+  }
+
+  return eq(table[key], val);
+}
+
+function buildOrGroup(table: any, entries: any[]): any {
+  const orFilters: any[] = [];
+  entries.forEach((entry) => {
+    const key = Object.keys(entry)[0];
+    const condition = buildCondition(table, key, entry[key]);
+    if (condition) orFilters.push(condition);
+  });
+  return orFilters.length > 0 ? or(...orFilters) : undefined;
+}
+
 export function applyQuery(table: any, query: any) {
   const filters: any[] = [];
+
   if (query.where) {
     Object.entries(query.where).forEach(([key, value]) => {
       if (key === "OR" && Array.isArray(value)) {
-        const orFilters: any[] = [];
-        value.forEach((v) => {
-          const k = Object.keys(v)[0];
-          const val = v[k];
-          if (table[k]) {
-            if (typeof val === "object" && val !== null && "contains" in val) {
-              orFilters.push(ilike(table[k], `%${val.contains}%`));
-            } else if (typeof val === "object" && val !== null && "not" in val) {
-              orFilters.push(ne(table[k], val.not));
+        const orCondition = buildOrGroup(table, value);
+        if (orCondition) filters.push(orCondition);
+      } else if (key === "AND" && Array.isArray(value)) {
+        value.forEach((entry: any) => {
+          Object.entries(entry).forEach(([entryKey, entryValue]) => {
+            if (entryKey === "OR" && Array.isArray(entryValue)) {
+              const orCondition = buildOrGroup(table, entryValue);
+              if (orCondition) filters.push(orCondition);
             } else {
-              orFilters.push(eq(table[k], val));
+              const condition = buildCondition(table, entryKey, entryValue);
+              if (condition) filters.push(condition);
             }
-          }
+          });
         });
-        if (orFilters.length > 0) filters.push(or(...orFilters));
-      } else if (table[key]) {
-        if (typeof value === "object" && value !== null && !Array.isArray(value)) {
-          if ("not" in value) {
-            filters.push(ne(table[key], value.not));
-          } else if ("contains" in value) {
-            filters.push(ilike(table[key], `%${value.contains}%`));
-          } else if ("gt" in value) {
-            filters.push(gt(table[key], value.gt));
-          } else if ("gte" in value) {
-            filters.push(gte(table[key], value.gte));
-          } else if ("lt" in value) {
-            filters.push(lt(table[key], value.lt));
-          } else if ("lte" in value) {
-            filters.push(lte(table[key], value.lte));
-          } else if ("in" in value && Array.isArray(value.in)) {
-            filters.push(inArray(table[key], value.in));
-          } else if ("notIn" in value && Array.isArray(value.notIn)) {
-            filters.push(notInArray(table[key], value.notIn));
-          } else {
-            filters.push(eq(table[key], value));
-          }
-        } else {
-          filters.push(eq(table[key], value));
-        }
+      } else {
+        const condition = buildCondition(table, key, value);
+        if (condition) filters.push(condition);
       }
     });
   }

@@ -1,15 +1,17 @@
 import { BadRequestException, Injectable, NotFoundException } from "@nestjs/common";
 import { EventEmitter2 } from "@nestjs/event-emitter";
 import { articles } from "@repo/db";
-import { eq } from "drizzle-orm";
+import { eq, sql } from "drizzle-orm";
 
 import { EMAIL_EVENTS } from "@/constants";
 import { DrizzleService } from "@/database/drizzle.service";
+import { DrizzleQueryParams } from "@/decorators";
 import {
   ArticleStatusUpdatedEmailDto,
   ArticleSubmittedAdminEmailDto,
   ArticleSubmittedAuthorEmailDto,
 } from "@/services/mail.service";
+import { applyQuery } from "@/utils";
 
 import { CreateArticleDto, UpdateArticleDto, UpdateArticleStatusDto } from "./dto/article.dto";
 
@@ -28,15 +30,14 @@ export class ArticlesService {
     private readonly eventEmitter: EventEmitter2,
   ) {}
 
-  async findAll(filters: { callId?: string; status?: string; authorId?: string }) {
-    return await this.drizzle.db.query.articles.findMany({
-      where: (articles, { eq, and }) => {
-        const conditions: any[] = [];
-        if (filters.callId) conditions.push(eq(articles.callId, filters.callId));
-        if (filters.status) conditions.push(eq(articles.status, filters.status as any));
-        if (filters.authorId) conditions.push(eq(articles.authorId, filters.authorId));
-        return and(...conditions);
-      },
+  async findAll(query: DrizzleQueryParams) {
+    const { where, orderBy, limit, offset } = applyQuery(articles, query);
+
+    const items = await this.drizzle.db.query.articles.findMany({
+      where,
+      orderBy,
+      limit,
+      offset,
       with: {
         author: {
           with: {
@@ -45,8 +46,14 @@ export class ArticlesService {
         },
         call: true,
       },
-      orderBy: (articles, { desc }) => [desc(articles.createdAt)],
     });
+
+    const [{ total }] = await this.drizzle.db
+      .select({ total: sql<number>`count(*)` })
+      .from(articles)
+      .where(where);
+
+    return { items, meta: { total: Number(total), take: query.take, skip: query.skip } };
   }
 
   async findMyArticles(authorId: string) {

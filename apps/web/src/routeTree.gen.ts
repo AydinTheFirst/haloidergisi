@@ -28,6 +28,7 @@ import { Route as AuthForgotPasswordRouteImport } from './routes/_auth/forgot-pa
 import { Route as LandingAccountRouteRouteImport } from './routes/_landing/account/route'
 import { Route as DashboardUsersIndexRouteImport } from './routes/dashboard/users/index'
 import { Route as DashboardThemesIndexRouteImport } from './routes/dashboard/themes/index'
+import { Route as DashboardThemeConfigIndexRouteImport } from './routes/dashboard/theme-config/index'
 import { Route as DashboardSubmissionsIndexRouteImport } from './routes/dashboard/submissions/index'
 import { Route as DashboardProfilesIndexRouteImport } from './routes/dashboard/profiles/index'
 import { Route as DashboardPostsIndexRouteImport } from './routes/dashboard/posts/index'
@@ -160,6 +161,12 @@ const DashboardThemesIndexRoute = DashboardThemesIndexRouteImport.update({
   path: '/themes/',
   getParentRoute: () => DashboardRouteRoute,
 } as any)
+const DashboardThemeConfigIndexRoute =
+  DashboardThemeConfigIndexRouteImport.update({
+    id: '/theme-config/',
+    path: '/theme-config/',
+    getParentRoute: () => DashboardRouteRoute,
+  } as any)
 const DashboardSubmissionsIndexRoute =
   DashboardSubmissionsIndexRouteImport.update({
     id: '/submissions/',
@@ -414,6 +421,7 @@ export interface FileRoutesByFullPath {
   '/dashboard/posts/': typeof DashboardPostsIndexRoute
   '/dashboard/profiles/': typeof DashboardProfilesIndexRoute
   '/dashboard/submissions/': typeof DashboardSubmissionsIndexRoute
+  '/dashboard/theme-config/': typeof DashboardThemeConfigIndexRoute
   '/dashboard/themes/': typeof DashboardThemesIndexRoute
   '/dashboard/users/': typeof DashboardUsersIndexRoute
   '/articles/submit/$callId': typeof LandingArticlesSubmitCallIdRoute
@@ -469,6 +477,7 @@ export interface FileRoutesByTo {
   '/dashboard/posts': typeof DashboardPostsIndexRoute
   '/dashboard/profiles': typeof DashboardProfilesIndexRoute
   '/dashboard/submissions': typeof DashboardSubmissionsIndexRoute
+  '/dashboard/theme-config': typeof DashboardThemeConfigIndexRoute
   '/dashboard/themes': typeof DashboardThemesIndexRoute
   '/dashboard/users': typeof DashboardUsersIndexRoute
   '/articles/submit/$callId': typeof LandingArticlesSubmitCallIdRoute
@@ -529,6 +538,7 @@ export interface FileRoutesById {
   '/dashboard/posts/': typeof DashboardPostsIndexRoute
   '/dashboard/profiles/': typeof DashboardProfilesIndexRoute
   '/dashboard/submissions/': typeof DashboardSubmissionsIndexRoute
+  '/dashboard/theme-config/': typeof DashboardThemeConfigIndexRoute
   '/dashboard/themes/': typeof DashboardThemesIndexRoute
   '/dashboard/users/': typeof DashboardUsersIndexRoute
   '/_landing/articles/submit/$callId': typeof LandingArticlesSubmitCallIdRoute
@@ -588,6 +598,7 @@ export interface FileRouteTypes {
     | '/dashboard/posts/'
     | '/dashboard/profiles/'
     | '/dashboard/submissions/'
+    | '/dashboard/theme-config/'
     | '/dashboard/themes/'
     | '/dashboard/users/'
     | '/articles/submit/$callId'
@@ -643,6 +654,7 @@ export interface FileRouteTypes {
     | '/dashboard/posts'
     | '/dashboard/profiles'
     | '/dashboard/submissions'
+    | '/dashboard/theme-config'
     | '/dashboard/themes'
     | '/dashboard/users'
     | '/articles/submit/$callId'
@@ -702,6 +714,7 @@ export interface FileRouteTypes {
     | '/dashboard/posts/'
     | '/dashboard/profiles/'
     | '/dashboard/submissions/'
+    | '/dashboard/theme-config/'
     | '/dashboard/themes/'
     | '/dashboard/users/'
     | '/_landing/articles/submit/$callId'
@@ -846,6 +859,13 @@ declare module '@tanstack/react-router' {
       path: '/themes'
       fullPath: '/dashboard/themes/'
       preLoaderRoute: typeof DashboardThemesIndexRouteImport
+      parentRoute: typeof DashboardRouteRoute
+    }
+    '/dashboard/theme-config/': {
+      id: '/dashboard/theme-config/'
+      path: '/theme-config'
+      fullPath: '/dashboard/theme-config/'
+      preLoaderRoute: typeof DashboardThemeConfigIndexRouteImport
       parentRoute: typeof DashboardRouteRoute
     }
     '/dashboard/submissions/': {
@@ -1226,6 +1246,7 @@ interface DashboardRouteRouteChildren {
   DashboardPostsIndexRoute: typeof DashboardPostsIndexRoute
   DashboardProfilesIndexRoute: typeof DashboardProfilesIndexRoute
   DashboardSubmissionsIndexRoute: typeof DashboardSubmissionsIndexRoute
+  DashboardThemeConfigIndexRoute: typeof DashboardThemeConfigIndexRoute
   DashboardThemesIndexRoute: typeof DashboardThemesIndexRoute
   DashboardUsersIndexRoute: typeof DashboardUsersIndexRoute
 }
@@ -1256,6 +1277,7 @@ const DashboardRouteRouteChildren: DashboardRouteRouteChildren = {
   DashboardPostsIndexRoute: DashboardPostsIndexRoute,
   DashboardProfilesIndexRoute: DashboardProfilesIndexRoute,
   DashboardSubmissionsIndexRoute: DashboardSubmissionsIndexRoute,
+  DashboardThemeConfigIndexRoute: DashboardThemeConfigIndexRoute,
   DashboardThemesIndexRoute: DashboardThemesIndexRoute,
   DashboardUsersIndexRoute: DashboardUsersIndexRoute,
 }

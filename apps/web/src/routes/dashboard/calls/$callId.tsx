@@ -75,7 +75,7 @@ function EditCallPage() {
     },
     onSuccess: () => {
       toast.success("İlan başarıyla güncellendi.");
-      void navigate({ to: "/dashboard/calls" });
+      void navigate({ to: "/dashboard/calls", search: {} as never });
     },
     onError: (error) => {
       const resolved = apiClient.resolveApiError(error);

@@ -1,4 +1,4 @@
-import { createParamDecorator, ExecutionContext } from "@nestjs/common";
+import { BadRequestException, createParamDecorator, ExecutionContext } from "@nestjs/common";
 import { Request } from "express";
 
 export interface DrizzleQueryParams {
@@ -7,6 +7,17 @@ export interface DrizzleQueryParams {
   take?: number;
   orderBy?: Record<string, "asc" | "desc">;
   include?: Record<string, boolean>;
+}
+
+const MAX_LIMIT = 1000;
+
+function parseJson(value: string | undefined, paramName: string): Record<string, any> {
+  if (!value) return {};
+  try {
+    return JSON.parse(value);
+  } catch {
+    throw new BadRequestException(`Invalid '${paramName}' query parameter: must be valid JSON.`);
+  }
 }
 
 export const DrizzleQuery = createParamDecorator(
@@ -18,35 +29,64 @@ export const DrizzleQuery = createParamDecorator(
       string
     >;
 
-    const limitVal = parseInt(limit || "10", 10);
-    const take = limitVal === -1 ? undefined : limitVal;
-    const skip = page && take ? (parseInt(page, 10) - 1) * take : 0;
+    let take: number | undefined = 10;
+    if (limit !== undefined) {
+      const limitNum = parseInt(limit, 10);
+      if (limitNum === -1) {
+        take = undefined;
+      } else {
+        if (Number.isNaN(limitNum) || limitNum < 1) {
+          throw new BadRequestException("Invalid 'limit' query parameter.");
+        }
+        take = Math.min(limitNum, MAX_LIMIT);
+      }
+    }
+
+    let pageNum = 1;
+    if (page !== undefined) {
+      pageNum = parseInt(page, 10);
+      if (Number.isNaN(pageNum) || pageNum < 1) {
+        throw new BadRequestException("Invalid 'page' query parameter.");
+      }
+    }
+
+    const skip = take ? (pageNum - 1) * take : 0;
 
     // createdAt:desc
     const orderBy = sort ? { [sort.split(":")[0]]: sort.split(":")[1] } : { createdAt: "desc" };
 
-    const include = fields && JSON.parse(fields);
+    const include = fields ? parseJson(fields, "fields") : undefined;
 
-    let where = {
-      ...JSON.parse(filter || "{}"),
-      ...rest,
-    };
+    const parsedFilter = parseJson(filter, "filter");
+    const where: Record<string, any> = { ...parsedFilter, ...rest };
 
     if (search && searchableFields && searchableFields.length > 0) {
-      where.OR = searchableFields.map((field) => {
+      const searchOr = searchableFields.map((field) => {
         if (field.includes(".")) {
           const [relation, relationField] = field.split(".");
           return {
             [relation]: {
-              [relationField]: { contains: search, mode: "insensitive" },
+              [relationField]: { contains: search },
             },
           };
         }
 
         return {
-          [field]: { contains: search, mode: "insensitive" },
+          [field]: { contains: search },
         };
       });
+
+      if (where.OR) {
+        // Preserve the caller's own OR clause (from `filter`) instead of clobbering it.
+        const existingOr = where.OR;
+        delete where.OR;
+        where.AND = [{ ...where }, { OR: existingOr }, { OR: searchOr }];
+        Object.keys(where).forEach((key) => {
+          if (key !== "AND") delete where[key];
+        });
+      } else {
+        where.OR = searchOr;
+      }
     }
 
     return {

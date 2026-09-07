@@ -1,30 +1,44 @@
+import {
+  closestCenter,
+  DndContext,
+  DragEndEvent,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+} from "@dnd-kit/core";
+import {
+  arrayMove,
+  SortableContext,
+  sortableKeyboardCoordinates,
+  useSortable,
+  verticalListSortingStrategy,
+} from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
 import { Icon } from "@iconify/react";
 import { Crew } from "@repo/db";
 import { useQuery } from "@tanstack/react-query";
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import {
-  ColumnDef,
-  getCoreRowModel,
-  getPaginationRowModel,
-  getSortedRowModel,
-  SortingState,
-  useReactTable,
-} from "@tanstack/react-table";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { z } from "zod";
 
-import { DataGrid } from "@/components/data-grid";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import useDebounce from "@/hooks/use-debounce";
 import apiClient from "@/lib/api-client";
 import { queryClient } from "@/lib/query-client";
 import { QueryRes } from "@/types";
 
 const searchSchema = z.object({
-  page: z.number().optional(),
-  limit: z.number().optional(),
   q: z.string().optional(),
 });
 
@@ -36,38 +50,36 @@ export const Route = createFileRoute("/dashboard/crews/")({
 });
 
 function RouteComponent() {
-  const { page = 1, limit = 10, q = "" } = Route.useSearch();
-
-  const navigate = useNavigate({ from: Route.id });
+  const { q = "" } = Route.useSearch();
+  const navigate = Route.useNavigate();
 
   const [searchTerm, setSearchTerm] = useState(q || "");
-
   const debouncedSearch = useDebounce(searchTerm, 500);
 
   useEffect(() => {
     void navigate({
-      search: (old) => ({
-        ...old,
-        q: debouncedSearch,
-        page: 1,
-      }),
+      search: (old) => ({ ...old, q: debouncedSearch || undefined }),
       replace: true,
     });
   }, [debouncedSearch, navigate]);
 
+  const isFiltered = Boolean(q);
+
   const { data: crews } = useQuery({
-    queryKey: ["crews", { page, limit, q }],
+    queryKey: ["crews", "all", { q }],
     queryFn: async () => {
       const { data } = await apiClient.get<QueryRes<Crew>>("/crews", {
-        params: {
-          page,
-          limit,
-          search: q,
-        },
+        params: { limit: -1, search: q, sort: "sort:asc" },
       });
       return data;
     },
   });
+
+  const [items, setItems] = useState<Crew[]>([]);
+
+  useEffect(() => {
+    if (crews) setItems(crews.items);
+  }, [crews]);
 
   const onDelete = async (id: string) => {
     try {
@@ -81,75 +93,37 @@ function RouteComponent() {
     }
   };
 
-  const columns: ColumnDef<Crew>[] = [
-    {
-      accessorKey: "id",
-      header: "ID",
-      cell: ({ getValue }) => <code>{getValue<string>().split("-")[0]}</code>,
-    },
-    {
-      accessorKey: "name",
-      header: "Name",
-    },
-    {
-      accessorKey: "sort",
-      header: "Sort Order",
-    },
-    {
-      accessorKey: "createdAt",
-      header: "Created At",
-      cell: ({ getValue }) => new Date(getValue<string>()).toLocaleDateString(),
-    },
-    {
-      id: "actions",
-      header: "Actions",
-      cell: ({ row }) => {
-        const item = row.original;
-        return (
-          <div className='space-x-4'>
-            <button
-              className='link text-danger'
-              onClick={() => onDelete(item.id)}
-            >
-              <Icon icon='mdi:delete-outline' />
-            </button>
-            <Link
-              to='/dashboard/crews/$crewId'
-              params={{ crewId: String(item.id) }}
-              className='link text-blue-600'
-            >
-              <Icon icon='mdi:pencil-outline' />
-            </Link>
-          </div>
-        );
-      },
-    },
-  ];
+  const sensors = useSensors(
+    useSensor(PointerSensor),
+    useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates }),
+  );
 
-  const [sorting, setSorting] = useState<SortingState>([
-    {
-      id: "sort",
-      desc: false,
-    },
-  ]);
+  const onDragEnd = async (event: DragEndEvent) => {
+    const { active, over } = event;
+    if (!over || active.id === over.id) return;
 
-  const table = useReactTable({
-    data: crews?.items || [],
-    columns,
-    state: {
-      sorting,
-      pagination: {
-        pageIndex: (page || 1) - 1,
-        pageSize: limit || 10,
-      },
-    },
-    manualPagination: true,
-    pageCount: crews ? Math.ceil(crews.meta.total / (limit || 10)) : 0,
-    onSortingChange: setSorting,
-    getCoreRowModel: getCoreRowModel(),
-    getSortedRowModel: getSortedRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
-  });
+    const oldIndex = items.findIndex((item) => item.id === active.id);
+    const newIndex = items.findIndex((item) => item.id === over.id);
+    const reordered = arrayMove(items, oldIndex, newIndex);
+    setItems(reordered);
+
+    const changed = reordered
+      .map((item, index) => ({ item, index }))
+      .filter(({ item, index }) => item.sort !== index);
+
+    try {
+      await Promise.all(
+        changed.map(({ item, index }) => apiClient.patch(`/crews/${item.id}`, { sort: index })),
+      );
+      await queryClient.invalidateQueries({ queryKey: ["crews"] });
+    } catch (error) {
+      const resolved = apiClient.resolveApiError(error);
+      toast.error(resolved.message, {
+        description: resolved.error,
+      });
+      setItems(items);
+    }
+  };
 
   return (
     <section className='space-y-4'>
@@ -180,7 +154,119 @@ function RouteComponent() {
           </button>
         </div>
       </div>
-      <DataGrid table={table} />
+
+      {isFiltered && (
+        <p className='text-muted-foreground text-sm'>
+          Sıralamayı değiştirmek için aramayı temizleyin.
+        </p>
+      )}
+
+      <div className='rounded-md border'>
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead className='w-10' />
+              <TableHead>Name</TableHead>
+              <TableHead>Sort Order</TableHead>
+              <TableHead>Created At</TableHead>
+              <TableHead className='w-24'>Actions</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            <DndContext
+              sensors={sensors}
+              collisionDetection={closestCenter}
+              onDragEnd={onDragEnd}
+            >
+              <SortableContext
+                items={items.map((item) => item.id)}
+                strategy={verticalListSortingStrategy}
+              >
+                {items.map((crew) => (
+                  <SortableCrewRow
+                    key={crew.id}
+                    crew={crew}
+                    disabled={isFiltered}
+                    onDelete={onDelete}
+                  />
+                ))}
+              </SortableContext>
+            </DndContext>
+            {items.length === 0 && (
+              <TableRow>
+                <TableCell
+                  colSpan={5}
+                  className='py-4 text-center'
+                >
+                  No data found.
+                </TableCell>
+              </TableRow>
+            )}
+          </TableBody>
+        </Table>
+      </div>
     </section>
+  );
+}
+
+function SortableCrewRow({
+  crew,
+  disabled,
+  onDelete,
+}: {
+  crew: Crew;
+  disabled: boolean;
+  onDelete: (id: string) => void;
+}) {
+  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
+    id: crew.id,
+    disabled,
+  });
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+    opacity: isDragging ? 0.5 : 1,
+  };
+
+  return (
+    <TableRow
+      ref={setNodeRef}
+      style={style}
+    >
+      <TableCell>
+        <button
+          {...attributes}
+          {...listeners}
+          disabled={disabled}
+          className='text-muted-foreground cursor-grab touch-none disabled:cursor-not-allowed disabled:opacity-30'
+        >
+          <Icon
+            icon='mdi:drag-vertical'
+            className='size-5'
+          />
+        </button>
+      </TableCell>
+      <TableCell>{crew.name}</TableCell>
+      <TableCell>{crew.sort}</TableCell>
+      <TableCell>{new Date(crew.createdAt).toLocaleDateString()}</TableCell>
+      <TableCell>
+        <div className='space-x-4'>
+          <button
+            className='link text-danger'
+            onClick={() => onDelete(crew.id)}
+          >
+            <Icon icon='mdi:delete-outline' />
+          </button>
+          <Link
+            to='/dashboard/crews/$crewId'
+            params={{ crewId: String(crew.id) }}
+            className='link text-blue-600'
+          >
+            <Icon icon='mdi:pencil-outline' />
+          </Link>
+        </div>
+      </TableCell>
+    </TableRow>
   );
 }

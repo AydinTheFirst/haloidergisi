@@ -46,7 +46,7 @@ export default function AccountDropdown() {
               Yazılarım
             </Link>
           </DropdownMenuItem>
-          {user.roles.includes("ADMIN") && (
+          {(user.roles.includes("ADMIN") || user.roles.includes("SUPER_ADMIN")) && (
             <DropdownMenuItem asChild>
               <Link to='/dashboard'>
                 <Icon icon='mdi:shield-account-outline' />

@@ -6,6 +6,7 @@
 @import "shadcn/tailwind.css";
 
 @import "@fontsource-variable/inter";
+@import url("https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Roboto:wght@400;500;700&display=swap");
 
 @custom-variant dark (.dark &);
 
@@ -16,7 +17,7 @@
   }
 
   body {
-    font-family: "Poppins", sans-serif;
+    font-family: var(--font-sans), sans-serif;
     @apply bg-background text-foreground;
   }
   * {
@@ -33,20 +34,23 @@
   }
 
   .breadcrumb {
-    @apply flex flex-wrap items-center gap-2 text-sm;
+    @apply m-0 flex list-none flex-wrap items-center gap-2 p-0 text-sm;
   }
 
   .breadcrumb__item {
-    @apply text-muted-foreground;
+    @apply text-muted-foreground inline-flex items-center gap-2;
   }
 
   .breadcrumb__item:not(:last-child)::after {
-    @apply text-muted-foreground ms-2 inline-block;
-    content: ">";
+    @apply text-muted-foreground/60 text-xs content-['>'] select-none;
   }
 
   .breadcrumb__item:last-child {
     @apply text-primary font-semibold;
+  }
+
+  .breadcrumb .link {
+    @apply inline-flex items-center;
   }
 
   .button {
